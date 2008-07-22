@@ -90,7 +90,8 @@ function CreateMedalsSQLCode( $serverid )
 
 	if (	$content['gen_gameversion'] == COD || 
 			$content['gen_gameversion'] == CODUO || 
-			$content['gen_gameversion'] == COD2 )
+			$content['gen_gameversion'] == COD2 || 
+			$content['gen_gameversion'] == COD5 )
 	{
 		$content['medals']['medal_pro_slappyhappy']['sql'] = "SELECT " .
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
@@ -341,7 +342,8 @@ function CreateAllMedals( $serverid )
 
 	if (	$content['gen_gameversion'] == COD || 
 			$content['gen_gameversion'] == CODUO || 
-			$content['gen_gameversion'] == COD2 )
+			$content['gen_gameversion'] == COD2 ||
+			$content['gen_gameversion'] == COD5 )
 	{
 		// --- Calc: medal_pro_slappyhappy
 		if ( $content["medal_pro_slappyhappy"] == "yes" ) 

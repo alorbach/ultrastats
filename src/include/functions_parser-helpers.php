@@ -750,7 +750,8 @@ function ParsePlayerGuid( $myArray, $arraynum, $arraynum_playername )
 
 	if ( $content['gen_parseby'] == PARSEBY_GUIDS )
 	{
-		if ( $content['gen_gameversion'] == COD4 )
+		if (	$content['gen_gameversion'] == COD4 ||
+				$content['gen_gameversion'] == COD5 )
 		{
 			// Calc Guid!
 			$checksum = sprintf( "%u", crc32 ( $myArray[$arraynum] ));

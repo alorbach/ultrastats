@@ -46,11 +46,13 @@ define('COD', 0);
 define('CODUO', 1);
 define('COD2', 2);
 define('COD4', 3);
+define('COD5', 4);
 
 define('LN_GEN_COD', "Call of Duty");
 define('LN_GEN_CODUO', "Call of Duty - United Offense");
 define('LN_GEN_COD2', "Call of Duty 2");
 define('LN_GEN_COD4', "Call of Duty 4 - Modern Warfare");
+define('LN_GEN_COD5', "Call of Duty 5 - World at War");
 // --- 
 
 // ---

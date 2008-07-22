@@ -40,7 +40,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.2.144";
+$content['BUILDNUMBER'] = "0.3.1";
 $content['TITLE'] = "Ultrastats - Release " . $content['BUILDNUMBER'];	// Title of the Page 
 $content['BASEPATH'] = $gl_root_path;
 $content['EXTRA_METATAGS'] = "";
@@ -200,6 +200,10 @@ function CreateGameVersionsList()
 	$content['GAMEVERSIONS'][COD4]['gamever'] = COD4;
 	$content['GAMEVERSIONS'][COD4]['gamevertitle'] = LN_GEN_COD4;
 	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][COD4]['gamever'] ) { $content['GAMEVERSIONS'][COD4]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][COD4]['selected'] = ""; }
+
+	$content['GAMEVERSIONS'][COD5]['gamever'] = COD5;
+	$content['GAMEVERSIONS'][COD5]['gamevertitle'] = LN_GEN_COD5;
+	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][COD5]['gamever'] ) { $content['GAMEVERSIONS'][COD5]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][COD5]['selected'] = ""; }
 	// ---
 }
 
@@ -397,7 +401,8 @@ function InitConfigurationValues()
 	{
 		if (	$content['gen_gameversion'] == COD || 
 				$content['gen_gameversion'] == CODUO || 
-				$content['gen_gameversion'] == COD2 )
+				$content['gen_gameversion'] == COD2 ||
+				$content['gen_gameversion'] == COD5 )
 			$content['gen_gameversion_picpath'] = "cod"; 
 		else if($content['gen_gameversion'] == COD4)
 			$content['gen_gameversion_picpath'] = "cod4"; 

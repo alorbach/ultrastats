@@ -134,7 +134,8 @@ function CreateWeaponArray()
 
 	// Predefine WeaponTypes
 	if (	$content['gen_gameversion'] == COD || 
-			$content['gen_gameversion'] == COD2 )
+			$content['gen_gameversion'] == COD2 ||
+			$content['gen_gameversion'] == COD5 )
 	{
 		AddToWeaponArray(WEAPONTYPE_MACHINEGUN, $content['LN_WEAPONTYPE_MACHINEGUN']);
 		AddToWeaponArray(WEAPONTYPE_SNIPER, $content['LN_WEAPONTYPE_SNIPER']);
