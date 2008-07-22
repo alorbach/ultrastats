@@ -224,7 +224,7 @@ if ( isset($_GET['op']) )
 				else
 				{
 					// Add new Server now!
-					$result = DB_Query("INSERT INTO " . STATS_SERVERS . " (Name, IP, Port, Description, ModName, AdminName, AdminEmail, ClanName,  GameLogLocation, ServerLogo, ftppath, ServerEnabled, ParsingEnabled, FTPPassiveMode ) 
+					$result = DB_Query("INSERT INTO " . STATS_SERVERS . " (Name, IP, Port, Description, ModName, AdminName, AdminEmail, ClanName,  GameLogLocation, ftppath, ServerLogo, ServerEnabled, ParsingEnabled, FTPPassiveMode ) 
 					VALUES ('" . $content['SERVERNAME'] . "', 
 							'" . $content['SERVERIP'] . "',
 							 " . $content['PORT'] . ",
