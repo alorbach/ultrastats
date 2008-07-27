@@ -235,7 +235,7 @@ function GetSingleDBEntryOnly( $myqry )
 {
 	$result = DB_Query( $myqry );
 	$row = DB_GetRow($result);
-	DB_FreeQuery ($query_id); 
+	DB_FreeQuery ($result); 
 
 	if ( isset($row) )
 		return $row[0];

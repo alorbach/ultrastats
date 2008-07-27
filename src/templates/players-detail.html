@@ -68,11 +68,13 @@
 				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
 				<td width="100%" colspan="2" class="line0" align="center" nowrap><A HREF="players-detail.php?id={playerguid}{additional_url}" title="{Alias}">{AliasAsHtml}</A></td>
 			</tr>
+			<!-- IF EnableShowPBGuid="true" -->
 			<tr>
 				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_PBGUID}</B></td>
 				
 				<td width="100%" colspan="2" class="line1" align="center" nowrap><A HREF="http://www.punksbusted.com/cgi-bin/membership/rpi.cgi?par={PBGuid}&limit=20&query=Search" title="{Alias}">... {PBGuid} </a><i>({LN_TOPPLAY_PBGUIDLAST8})</i></td>
 			</tr>
+			<!-- ENDIF EnableShowPBGuid="true" -->
 			<tr>
 				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_KILLS}</B></td>
 				<td width="100%" colspan="2" class="line0" align="center" nowrap><b>{Kills}</b></td>
