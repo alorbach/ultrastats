@@ -141,6 +141,10 @@ if ( isset($_GET['id']) )
 				$content['mostkills'][$i]['Number'] = $i+1 + $content['current_mostkills_pagebegin'];
 				// ---
 
+				// Copy ENEMYID if set!
+				if ( isset($content['mostkills'][$i]['ENEMYID']) )
+					$content['mostkills'][$i]['PLAYERID'] = $content['mostkills'][$i]['ENEMYID'];
+
 				// --- Set CSS Class
 				if ( $i % 2 == 0 )
 					$content['mostkills'][$i]['cssclass'] = "line1";
