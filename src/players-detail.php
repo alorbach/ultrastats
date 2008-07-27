@@ -90,7 +90,7 @@ if ( isset($_GET['id']) )
 //								STATS_ALIASES . ".Alias, " .
 //								STATS_ALIASES . ".AliasAsHtml " .
 								" FROM " . STATS_PLAYERS . 
-								" INNER JOIN (" . STATS_PLAYERS_STATIC . 
+								" LEFT OUTER JOIN (" . STATS_PLAYERS_STATIC . 
 								") ON (" . 
 								STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS . ".GUID) " . 
 								" WHERE " . STATS_PLAYERS . ".GUID = " . $content['playerguid'] . " " . 
@@ -101,6 +101,7 @@ if ( isset($_GET['id']) )
 //								" ORDER BY AliasCount DESC";
 			$result = DB_Query($sqlquery);
 			$playervars = DB_GetSingleRow($result, true);
+
 			if ( isset($playervars['GUID']) )
 			{
 				// Extend Array with Aliases
@@ -113,7 +114,18 @@ if ( isset($_GET['id']) )
 				$content['playerenabled'] = "true";
 
 				// Set Playervars 
-				$content['PBGuid'] = substr($playervars['PBGuid'], 24); // Only show last 8 digits for security reasons!
+				if ( isset($playervars['PBGuid']) && strlen($playervars['PBGuid']) > 0 )
+				{
+					// Enable Showing GUID
+					$content['EnableShowPBGuid'] = true;
+					$content['PBGuid'] = substr($playervars['PBGuid'], 24); // Only show last 8 digits for security reasons!
+				}
+				else
+				{
+					// Disable Showing GUID
+					$content['EnableShowPBGuid'] = false;
+					$content['PBGuid'] = "";
+				}
 				$content['Kills'] = $playervars['Kills'];
 				$content['Deaths'] = $playervars['Deaths'];
 				$content['Teamkills'] = $playervars['Teamkills'];
