@@ -78,7 +78,7 @@ if ( isset($_GET['id']) )
 						GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true); 
 	$result = DB_Query($sqlquery);
 	$tmpvars = DB_GetSingleRow($result, true);
-	if ( isset($tmpvars) )
+	if ( isset($tmpvars) && count($tmpvars) > 1 )
 	{
 		// Enable Stats
 		$content['medalsenabled'] = "true";
@@ -141,9 +141,11 @@ if ( isset($_GET['id']) )
 				$content['mostkills'][$i]['Number'] = $i+1 + $content['current_mostkills_pagebegin'];
 				// ---
 
-				// Copy ENEMYID if set!
+				// Copy ENEMYID or GUID field if set!
 				if ( isset($content['mostkills'][$i]['ENEMYID']) )
 					$content['mostkills'][$i]['PLAYERID'] = $content['mostkills'][$i]['ENEMYID'];
+				else if ( isset($content['mostkills'][$i]['GUID']) )
+					$content['mostkills'][$i]['PLAYERID'] = $content['mostkills'][$i]['GUID'];
 
 				// --- Set CSS Class
 				if ( $i % 2 == 0 )
