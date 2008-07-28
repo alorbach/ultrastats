@@ -744,14 +744,14 @@ else
 // --- CONTENT Vars
 if ( $content['iserror'] == "true" )
 {
-		$content['TITLE'] = "Ultrastats :: Player Derails :: Error invalid GUID";
+		$content['TITLE'] = "Ultrastats :: Player Details :: Error invalid GUID";
 }
 else
 {
 	if ( isset($content['myserver']) ) 
-		$content['TITLE'] = "Ultrastats :: Player Derails for '" . $playervars['Alias'] . "' :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
+		$content['TITLE'] = "Ultrastats :: Player Details for '" . $playervars['Alias'] . "' :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
 	else
-		$content['TITLE'] = "Ultrastats :: Player Derails for '" . $playervars['Alias'] . "'";
+		$content['TITLE'] = "Ultrastats :: Player Details for '" . $playervars['Alias'] . "'";
 }
 // --- 
 
