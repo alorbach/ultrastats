@@ -470,6 +470,9 @@ if ( isset($content['medals_pro']) )
 		// --- Get Description 
 		$content['medals_pro'][$i]['Description'] = GetTextFromDescriptionID( $content['medals_pro'][$i]['DescriptionID'], $content['LN_NODESCRIPTION'] );
 
+		// --- Set MousrOver Text
+		$content['medals_pro'][$i]['MEDAL_DETAILTXT'] = GetAndReplaceLangStr($content['LN_MEDAL_DETAILS'], $content['medals_pro'][$i]['DisplayName']);
+
 		// --- Set Number
 		$content['medals_pro'][$i]['Number'] = $i+1;
 		// ---
@@ -515,6 +518,9 @@ if ( isset($content['medals_anti']) )
 	{
 		// --- Get Description 
 		$content['medals_anti'][$i]['Description'] = GetTextFromDescriptionID( $content['medals_anti'][$i]['DescriptionID'], $content['LN_NODESCRIPTION'] );
+
+		// --- Set MousrOver Text
+		$content['medals_anti'][$i]['MEDAL_DETAILTXT'] = GetAndReplaceLangStr($content['LN_MEDAL_DETAILS'], $content['medals_anti'][$i]['DisplayName']);
 
 		// --- Set Number
 		$content['medals_anti'][$i]['Number'] = $i+1;
