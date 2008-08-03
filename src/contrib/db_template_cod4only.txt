@@ -209,6 +209,9 @@ INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_mtl_the_rock', 'MTL The Rock', 'mp_mtl_the_rock_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_snow_final', 'Snow', 'mp_snow_final_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_mtl_havoc', 'MTL Havoc', 'mp_mtl_havoc_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_creek', 'Creek', 'mp_creek_description', 'DM, WAR, KOTH, SAB, DOM, SD');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_broadcast', 'Broadcast', 'mp_broadcast_description', 'DM, WAR, KOTH, SAB, DOM, SD');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_killhouse', 'Killhouse', 'mp_killhouse_description', 'DM, WAR, KOTH, SAB, DOM, SD');
 
 -- Change some things in the DB which are different for Cod4
 UPDATE `stats_damagetypes` SET `DisplayName` = 'Knife kill' WHERE `stats_damagetypes`.`ID` =5 LIMIT 1;
