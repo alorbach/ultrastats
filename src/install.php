@@ -336,7 +336,7 @@ else if ( $content['INSTALL_STEP'] == 5 )
 
 	// Append INSERT Statement for Config Table to set the GameVersion and Database Version ^^!
 	$mycommands[count($mycommands)] = "INSERT INTO `" . $_SESSION["DB_PREFIX"] . "config` (`name`, `value`) VALUES ('gen_gameversion', '" . $_SESSION['GEN_GAMEVER'] . "')";
-	$mycommands[count($mycommands)] = "INSERT INTO `" . $_SESSION["DB_PREFIX"] . "config` (`name`, `value`) VALUES ('database_installedversion', '4')";
+	$mycommands[count($mycommands)] = "INSERT INTO `" . $_SESSION["DB_PREFIX"] . "config` (`name`, `value`) VALUES ('database_installedversion', " . $content['database_internalversion'] . ")";
 
 	// --- Now execute all commands
 	ini_set('error_reporting', E_WARNING); // Enable Warnings!
