@@ -324,6 +324,7 @@ function InitFrontEndVariables()
 	$content['MENU_ADMINUSERS'] = "image=" . $content['BASEPATH'] . "images/icons/businessmen.png";
 	$content['MENU_ADMINPLAYERS'] = "image=" . $content['BASEPATH'] . "images/icons/businessman_preferences.png";
 	$content['MENU_ADMINSERVERS'] = "image=" . $content['BASEPATH'] . "images/icons/server.png";
+	$content['MENU_ADMINSTREDITOR'] = "image=" . $content['BASEPATH'] . "images/icons/preferences.png";
 	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
 	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
 	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
