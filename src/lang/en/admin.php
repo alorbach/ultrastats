@@ -184,4 +184,27 @@ $content['LN_DBUPGRADE_ONESTATEMENTFAILED'] = "At least one statement failed, se
 $content['LN_DBUPGRADE_ERRMSG'] = "Error Message";
 $content['LN_DBUPGRADE_ULTRASTATSDBVERSION'] = "UltraStats Database Version";
 
+// String Editor
+$content['LN_ADMIN_STREDITOR'] = "String Editor";
+$content['LN_STRING_EDIT'] = "Edit String";
+$content['LN_STRING_FILTER'] = "Stringfilter";
+$content['LN_STRED_DOFILTER'] = "Do filtering";
+$content['LN_STRED_LANG'] = "Language";
+$content['LN_STRED_STRINGID'] = "StringID";
+$content['LN_STRED_TEXT'] = "Text";
+$content['LN_STRED_ACTION'] = "Available Actions";
+$content['LN_WARNING_DELETESTRING'] = "Do you really want to delete this string?";
+$content['LN_STRING_BACKSTRINGLIST'] = "Back to stringlist";
+$content['LN_STRING_ERROR_NOTFOUND'] = "No string with id '%1' found!";
+$content['LN_STRING_ERROR_INVID'] = "Invalid StringID";
+$content['LN_STRING_ERROR_IDEMPTY'] = "StringID is empty!";
+$content['LN_STRING_SUCCEDIT'] = "Successfully edited string with id '%1'.";
+$content['LN_STRING_ADD'] = "Add new string";
+$content['LN_STRING_ERROR_ALREADYEXISTS'] = "StringID already exists.";
+$content['LN_STRING_SUCCADDED'] = "String with ID '%1' successfully added.";
+$content['LN_STRING_DELETEDSTRING'] = "The string with ID '%1' has been successfully deleted.";
+$content['LN_STRING_'] = "";
+$content['LN_STRING_'] = "";
+
+
 ?>

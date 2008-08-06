@@ -64,130 +64,80 @@ else
 // --- BEGIN Custom Code
 if ( isset($_GET['op']) )
 {
-	if ($_GET['op'] == "edit") 
+	if ($_GET['op'] == "add") 
+	{
+		// Set Mode to add
+		$content['ISEDITSTRING'] = "true";
+		$content['STRING_FORMACTION'] = "add";
+		$content['STRING_SENDBUTTON'] = $content['LN_STRING_ADD'];
+
+		//PreInit these values 
+		$content['STRINGID'] = "";
+		$content['LANG'] = "EN";
+		$content['TEXT'] = "";
+	}
+	else if ($_GET['op'] == "edit") 
 	{
 		// Set Mode to edit
-		$content['ISEDITPLAYER'] = "true";
-		$content['PLAYER_FORMACTION'] = "edit";
-		$content['PLAYER_SENDBUTTON'] = $content['LN_PLAYER_EDIT'];
+		$content['ISEDITSTRING'] = "true";
+		$content['STRING_FORMACTION'] = "edit";
+		$content['STRING_SENDBUTTON'] = $content['LN_STRING_EDIT'];
 
-		if ( isset($_GET['id']) )
+		if ( isset($_GET['id']) && isset($_GET['lang']) )
 		{
 			//PreInit these values 
-			$content['GUID'] = intval( DB_RemoveBadChars($_GET['id']) );
+			$content['STRINGID'] = DB_RemoveBadChars($_GET['id']);
+			$content['LANG'] = DB_RemoveBadChars($_GET['lang']);
 
 			$sqlquery = "SELECT " . 
-						STATS_PLAYERS_STATIC . ".GUID, " . 
-						STATS_PLAYERS_STATIC . ".PBGUID, " . 
-						STATS_PLAYERS_STATIC . ".ISCLANMEMBER, " . 
-						STATS_PLAYERS_STATIC . ".ISBANNED, " . 
-						STATS_PLAYERS_STATIC . ".BanReason, " . 
-						STATS_ALIASES . ".Alias, " . 
-						STATS_ALIASES . ".AliasAsHtml " .
-						" FROM " . STATS_PLAYERS_STATIC . 
-						" INNER JOIN (" . STATS_ALIASES . 
-						") ON (" . 
-						STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
-						" WHERE " . STATS_PLAYERS_STATIC . ".GUID = " . $content['GUID'] . 
-						" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " . 
-						" ORDER BY " . STATS_ALIASES . ".Alias " ; 
-
+						STATS_LANGUAGE_STRINGS . ".LANG, " . 
+						STATS_LANGUAGE_STRINGS . ".STRINGID, " . 
+						STATS_LANGUAGE_STRINGS . ".TEXT " . 
+						" FROM " . STATS_LANGUAGE_STRINGS . 
+						" WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID = '" . $content['STRINGID'] . "' 
+						  AND " . STATS_LANGUAGE_STRINGS . ".LANG = '" . $content['LANG'] . "'";
 			$result = DB_Query($sqlquery);
 			$myrow = DB_GetSingleRow($result, true);
-			if ( isset($myrow['GUID'] ) )
+			if ( isset($myrow['STRINGID'] ) )
 			{
-				$content['PBGUID'] = $myrow['PBGUID'];
-				$content['BanReason'] = $myrow['BanReason'];
-				$content['Alias'] = $myrow['Alias'];
-				$content['AliasAsHtml'] = $myrow['AliasAsHtml'];
-
-				if ( $myrow['ISCLANMEMBER'] == 1 ) 
-					$content['CHECKED_ISCLANMEMBED'] = "checked";
-				if ( $myrow['ISBANNED'] == 1 ) 
-					$content['CHECKED_ISBANNED'] = "checked";
+				$content['STRINGID'] = $myrow['STRINGID'];
+				$content['LANG'] = $myrow['LANG'];
+				$content['TEXT'] = $myrow['TEXT'];
 			}
 			else
 			{
 				$content['ISERROR'] = "true";
-				$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_NOTFOUND'], $content['GUID'] ); 
+				$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] ); 
 			}
 		}
 		else
 		{
 			$content['ISERROR'] = "true";
-			$content['ERROR_MSG'] = $content['LN_PLAYER_ERROR_INVID'];
+			$content['ERROR_MSG'] = $content['LN_STRING_ERROR_INVID'];
 		}
 	}
 	else if ($_GET['op'] == "delete") 
 	{
 		// Set Mode to edit
-		$content['ISDELETEPLAYER'] = "true";
+		$content['ISDELETESTRING'] = "true";
 
-		if ( isset($_GET['id']) )
+		if ( isset($_GET['id'])  && isset($_GET['lang']) )
 		{
 			//PreInit these values 
-			$content['GUID'] = intval( DB_RemoveBadChars($_GET['id']) );
-			$content['AliasName'] = GetPlayerHtmlNameFromID( $content['GUID'] );
+			$content['STRINGID'] = DB_RemoveBadChars($_GET['id']);
+			$content['LANG'] = DB_RemoveBadChars($_GET['lang']);
 
-			if ( isset($_GET['verify']) || $_GET['verify'] == "yes" )
+			if ( isset($_GET['verify']) && $_GET['verify'] == "yes" )
 			{
 				// Disable Verify few
 				$content['ISVERIFY'] = "false";
 
 				// Start Deleting the User stats!
-				$content['DeletedData'][0]['SQL_CMD'] = "DELETE FROM " . STATS_ALIASES .		" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][0]['SQL_CMD'] );
-				$content['DeletedData'][0]['NAME'] = STATS_ALIASES;
-				$content['DeletedData'][0]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][0]['cssclass'] = "line1";
+				$sqlquery = "DELETE FROM " . STATS_LANGUAGE_STRINGS .	" WHERE STRINGID = '" . $content['STRINGID'] . "' AND LANG = '" . $content['LANG'] . "'";
+				ProcessDeleteStatement( $sqlquery );
 
-				$content['DeletedData'][1]['SQL_CMD'] = "DELETE FROM " . STATS_CHAT .			" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][1]['SQL_CMD'] );
-				$content['DeletedData'][1]['NAME'] = STATS_CHAT;
-				$content['DeletedData'][1]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][1]['cssclass'] = "line2";
-
-				$content['DeletedData'][2]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS .	" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][2]['SQL_CMD'] );
-				$content['DeletedData'][2]['NAME'] = STATS_PLAYER_KILLS;
-				$content['DeletedData'][2]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][2]['cssclass'] = "line1";
-
-				$content['DeletedData'][3]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS .	" WHERE ENEMYID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][3]['SQL_CMD'] );
-				$content['DeletedData'][3]['NAME'] = STATS_PLAYER_KILLS;
-				$content['DeletedData'][3]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][3]['cssclass'] = "line2";
-
-				$content['DeletedData'][4]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS .		" WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][4]['SQL_CMD'] );
-				$content['DeletedData'][4]['NAME'] = STATS_PLAYERS;
-				$content['DeletedData'][4]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][4]['cssclass'] = "line1";
-
-				$content['DeletedData'][5]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_STATIC .	" WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][5]['SQL_CMD'] );
-				$content['DeletedData'][5]['NAME'] = STATS_PLAYERS_STATIC;
-				$content['DeletedData'][5]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][5]['cssclass'] = "line2";
-
-				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIAS . " WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][6]['SQL_CMD'] );
-				$content['DeletedData'][6]['NAME'] = STATS_PLAYERS_TOPALIAS;
-				$content['DeletedData'][6]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][6]['cssclass'] = "line1";
-
-				$content['DeletedData'][7]['SQL_CMD'] = "DELETE FROM " . STATS_ROUNDACTIONS .	" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][7]['SQL_CMD'] );
-				$content['DeletedData'][7]['NAME'] = STATS_ROUNDACTIONS;
-				$content['DeletedData'][7]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][7]['cssclass'] = "line2";
-
-				$content['DeletedData'][8]['SQL_CMD'] = "DELETE FROM " . STATS_TIME .			" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][8]['SQL_CMD'] );
-				$content['DeletedData'][8]['NAME'] = STATS_TIME;
-				$content['DeletedData'][8]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][8]['cssclass'] = "line1";
+				// For confirmation
+				RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_DELETEDSTRING'], $content['STRINGID'] ), "stringeditor.php?strfilter=" . $content['strfilter'] . "&start=" . $content['current_pagebegin'] );
 			}
 			else
 			{
@@ -195,51 +145,79 @@ if ( isset($_GET['op']) )
 				$content['ISVERIFY'] = "true";
 			}
 		}
+		else
+		{
+			$content['ISERROR'] = "true";
+			$content['ERROR_MSG'] = $content['LN_STRING_ERROR_INVID'];
+		}
 	}
 
 	if ( isset($_POST['op']) )
 	{
-		if ( isset ($_POST['id']) ) { $content['GUID'] = DB_RemoveBadChars($_POST['id']); } else {$content['GUID'] = 0; }
-
-		if ( isset ($_POST['playerpbguid']) ) { $content['PBGUID'] = DB_RemoveBadChars($_POST['playerpbguid']); } else {$content['PBGUID'] = ""; }
-		if ( isset ($_POST['banreason']) ) { $content['BanReason'] = DB_RemoveBadChars($_POST['banreason']); } else {$content['BanReason'] = ""; }
-		if ( isset ($_POST['isclanmember']) ) { $content['ISCLANMEMBER'] = true; } else {$content['ISCLANMEMBER'] = 0; }
-		if ( isset ($_POST['isbanned']) ) { $content['ISBANNED'] = true; } else {$content['ISBANNED'] = 0; }
+		if ( isset ($_POST['id']) ) { $content['STRINGID'] = DB_RemoveBadChars($_POST['id']); } else {$content['STRINGID'] = ""; }
+		if ( isset ($_POST['oldid']) ) { $content['OLDSTRINGID'] = DB_RemoveBadChars($_POST['oldid']); } else {$content['OLDSTRINGID'] = $content['STRINGID']; }
+		if ( isset ($_POST['lang']) ) { $content['LANG'] = DB_RemoveBadChars($_POST['lang']); } else {$content['LANG'] = "EN"; }
+		if ( isset ($_POST['text']) ) { $content['TEXT'] = DB_RemoveBadChars($_POST['text']); } else {$content['TEXT'] = ""; }
 
 		// Check mandotary values
-		if ( !isset($content['GUID']) || $content['GUID'] == 0 )
+		if ( !isset($content['STRINGID']) || strlen($content['STRINGID']) <= 0 )
 		{
 			$content['ISERROR'] = "true";
-			$content['ERROR_MSG'] = $content['LN_PLAYER_ERROR_PLAYERIDEMPTY'];
+			$content['ERROR_MSG'] = $content['LN_STRING_ERROR_IDEMPTY'];
 		}
 
 		if ( !isset($content['ISERROR']) ) 
 		{	
-			if ( $_POST['op'] == "edit" )
+			if ( $_POST['op'] == "add" )
 			{
-				$result = DB_Query("SELECT GUID FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = " . $content['GUID']);
-				$myrow = DB_GetSingleRow($result, true);
-				if ( !isset($myrow[GUID]) )
+				$result = DB_Query("SELECT Name FROM " . STATS_LANGUAGE_STRINGS . " WHERE 
+					STRINGID = '" . $content['STRINGID'] . "' AND
+					LANG = '" . $content['LANG'] . "'");
+				$rows = DB_GetAllRows($result, true);
+				if ( isset($rows) )
 				{
 					$content['ISERROR'] = "true";
-					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_NOTFOUND'], $content['GUID'] ); 
+					$content['ERROR_MSG'] = $content['LN_STRING_ERROR_ALREADYEXISTS'];
+				}
+				else
+				{
+					// Add new Server now!
+					$result = DB_Query("INSERT INTO " . STATS_LANGUAGE_STRINGS . " (STRINGID, LANG, TEXT) 
+					VALUES ('" . $content['STRINGID'] . "', 
+							'" . $content['LANG'] . "',
+							'" . $content['TEXT'] . "' 
+							)");
+					DB_FreeQuery($result);
+					
+					// Redirect!
+					RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCADDED'], $content['STRINGID'] ) , "stringeditor.php" );
+				}
+			}
+			else if ( $_POST['op'] == "edit" )
+			{
+				$result = DB_Query("SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = '" . $content['OLDSTRINGID'] . "'");
+				$myrow = DB_GetSingleRow($result, true);
+				if ( !isset($myrow['STRINGID']) )
+				{
+					$content['ISERROR'] = "true";
+					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] ); 
 				}
 				else
 				{
 					// Edit the Player now!
-					$result = DB_Query("UPDATE " . STATS_PLAYERS_STATIC . " SET 
-						PBGUID = '" . $content['PBGUID'] . "', 
-						ISCLANMEMBER = " . $content['ISCLANMEMBER'] . ", 
-						ISBANNED = " . $content['ISBANNED'] . ", 
-						BanReason = '" . $content['BanReason'] . "' 
-						WHERE GUID = " . $content['GUID']);
+					$sqlquery ="UPDATE " . STATS_LANGUAGE_STRINGS . " SET 
+								STRINGID = '" . $content['STRINGID'] . "', 
+								LANG = '" . $content['LANG'] . "', 
+								TEXT = '" . $content['TEXT'] . "' 
+								WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['LANG'] . "'";
+					$result = DB_Query( $sqlquery );
 					DB_FreeQuery($result);
 
 					// Redirect - may with PAGER later!
 					if ( strlen( $content['received_referer'] ) > 0 )
-						RedirectResult( GetAndReplaceLangStr( $content['LN_PLAYER_SUCCEDIT'], $content['GUID'] ) , $content['received_referer'] );
+						RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , $content['received_referer'] );
 					else
-						RedirectResult( GetAndReplaceLangStr( $content['LN_PLAYER_SUCCEDIT'], $content['GUID'] ) , "players.php" );
+						RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , "stringeditor.php" );
 				}
 			}
 		}
@@ -276,7 +254,7 @@ else
 	// --- 
 
 // --- Now the final query !
-	// Read all Players
+	// Read all Strings
 	$sqlquery = "SELECT " . 
 				STATS_LANGUAGE_STRINGS . ".LANG, " . 
 				STATS_LANGUAGE_STRINGS . ".STRINGID, " . 
