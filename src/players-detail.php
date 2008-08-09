@@ -114,7 +114,7 @@ if ( isset($_GET['id']) )
 				$content['playerenabled'] = "true";
 
 				// Set Playervars 
-				if ( isset($playervars['PBGuid']) && strlen($playervars['PBGuid']) > 0 )
+				if ( isset($playervars['PBGuid']) && strlen( trim($playervars['PBGuid']) ) > 0 )
 				{
 					// Enable Showing GUID
 					$content['EnableShowPBGuid'] = true;
