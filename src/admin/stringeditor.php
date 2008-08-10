@@ -1,36 +1,48 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2008!								*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Language String Editor
-	*																	*
-	* -> Helps to admin and manage Servers in UltraStats		*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	String Editor File													
+	*		The string editor helps you to easily add, edit and remove
+	*		strings from the languagestrings table. 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
+
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './../';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
+
+// Set PAGE to be ADMINPAGE!
+define('IS_ADMINPAGE', true);
+$content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
 CheckForUserLogin( false );
-
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 
-// --- CONTENT Vars
-$content['TITLE'] = "Ultrastats - Admin Center - Language Strings";	// Title of the Page 
-// --- 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+$content['TITLE'] .= " :: String Editor ";
+// --- END CREATE TITLE
 
+
+// --- BEGIN Custom Code
 // --- Read Vars
 if ( isset($_GET['start']) )
 	$content['current_pagebegin'] = intval(DB_RemoveBadChars($_GET['start']));

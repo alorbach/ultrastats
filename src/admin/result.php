@@ -1,18 +1,25 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006!								*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Admin main File											*
-	*																	*
-	* -> Helps the admin to manage his UltraStats		*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Result File													
+	*		Shows results 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
+
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
@@ -20,6 +27,10 @@ $gl_root_path = './../';
 include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
 include($gl_root_path . 'include/class_template.php');
+
+// Set PAGE to be ADMINPAGE!
+define('IS_ADMINPAGE', true);
+$content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
 

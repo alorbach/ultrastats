@@ -1,35 +1,45 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006!								*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Server Edit Admin File											*
-	*																	*
-	* -> Helps to admin and manage Servers in UltraStats		*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Player Admin File													
+	*		Administrates Players in UltraStats 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
+
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './../';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
+
+// Set PAGE to be ADMINPAGE!
+define('IS_ADMINPAGE', true);
+$content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
 CheckForUserLogin( false );
-
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 
-// --- CONTENT Vars
-$content['TITLE'] = "Ultrastats - Admin Center - Players";	// Title of the Page 
-// --- 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+$content['TITLE'] .= " :: Player Admin";
+// --- END CREATE TITLE
+
 
 // --- Read Vars
 if ( isset($_GET['start']) )

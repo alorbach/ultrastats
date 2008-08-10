@@ -157,6 +157,12 @@ font
 { 
 	background-color:#3D4751; 
 }
+.tableBackground
+{
+	font-size: 8pt;
+	color: #000000;
+	background-color: #1D3043;
+}
 
 .line_alt0
 {
