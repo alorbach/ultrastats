@@ -1,17 +1,24 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006-2008!							*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Common needed functions											*
-	*																	*
-	* -> 		*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Common Functions File													
+	*		This file contains the most common functions needed by 
+	*		UltraStats !
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // --- Avoid directly accessing this file! 
@@ -24,7 +31,11 @@ if ( !defined('IN_ULTRASTATS') )
 
 // --- Basic Includes
 include($gl_root_path . 'include/functions_constants.php');
+
+include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_themes.php');
+include($gl_root_path . 'include/functions_db.php');
+include($gl_root_path . 'include/functions_users.php');
 // --- 
 
 // --- Define Basic vars
@@ -32,7 +43,11 @@ $RUNMODE = RUNMODE_WEBSERVER;
 $DEBUGMODE = DEBUG_INFO;
 
 // --- Disable ARGV setting @webserver!
-ini_set( "register_argc_argv", "Off" );
+@ini_set( "register_argc_argv", "Off" );
+// --- 
+
+// Enable error tracking
+@ini_set( "track_errors", "On" );
 // --- 
 
 // Default language
@@ -41,10 +56,20 @@ $LANG = "en";		// Default language
 
 // Default Template vars
 $content['BUILDNUMBER'] = "0.3.1";
-$content['TITLE'] = "Ultrastats - Release " . $content['BUILDNUMBER'];	// Title of the Page 
+$content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
 $content['EXTRA_METATAGS'] = "";
+$content['EXTRA_JAVASCRIPT'] = "";
+$content['EXTRA_STYLESHEET'] = "";
 // --- 
+
+// --- Check PHP Version! If lower the 5, phplogcon will not work proberly!
+$myPhpVer = phpversion();
+$myPhpVerArray = explode('.', $myPhpVer);
+if ( $myPhpVerArray[0] < 4 )
+	DieWithErrorMsg( 'Error, the PHP Version on this Server does not meet the installation requirements.<br> <A HREF="http://www.php.net"><B>PHP4</B></A> or higher is needed. Current installed Version is: <B>' . $myPhpVer . '</B>');
+// ---
+
 
 function InitBasicUltraStats()
 {
@@ -64,7 +89,7 @@ function InitBasicUltraStats()
 	StartPHPSession();
 }
 
-function InitUltraStatsConfigFile()
+function InitUltraStatsConfigFile($bHandleMissing = true)
 {
 	// Needed to make global
 	global $CFG, $gl_root_path, $content;
@@ -75,50 +100,71 @@ function InitUltraStatsConfigFile()
 		include_once($gl_root_path . 'config.php');
 		
 		// Easier DB Access
-		define('STATS_ALIASES', $CFG['TBPref'] . "aliases");
-		define('STATS_CHAT', $CFG['TBPref'] . "chat");
-		define('STATS_CONFIG', $CFG['TBPref'] . "config");
-		define('STATS_CONSOLIDATED', $CFG['TBPref'] . "consolidated");
-		define('STATS_GAMEACTIONS', $CFG['TBPref'] . "gameactions");
-		define('STATS_DAMAGETYPES', $CFG['TBPref'] . "damagetypes");
-		define('STATS_GAMETYPES', $CFG['TBPref'] . "gametypes");
-		define('STATS_HITLOCATIONS', $CFG['TBPref'] . "hitlocations");
-		define('STATS_LANGUAGE_STRINGS', $CFG['TBPref'] . "language_strings");
-		define('STATS_MAPS', $CFG['TBPref'] . "maps");
-		define('STATS_PLAYER_KILLS', $CFG['TBPref'] . "player_kills");
-		define('STATS_PLAYERS', $CFG['TBPref'] . "players");
-		define('STATS_ROUNDS', $CFG['TBPref'] . "rounds");
-		define('STATS_ROUNDACTIONS', $CFG['TBPref'] . "roundactions");
-		define('STATS_SERVERS', $CFG['TBPref'] . "servers");
-		define('STATS_TIME', $CFG['TBPref'] . "time");
-		define('STATS_USERS', $CFG['TBPref'] . "users");
-		define('STATS_WEAPONS', $CFG['TBPref'] . "weapons");
-		define('STATS_PLAYERS_STATIC', $CFG['TBPref'] . "players_static");
-		define('STATS_PLAYERS_TOPALIASES', $CFG['TBPref'] . "players_topalias");
-		define('STATS_WEAPONS_PERSERVER', $CFG['TBPref'] . "weapons_perserver");
+		$myPref = GetConfigSetting("TBPref", "stats_");
+		define('STATS_ALIASES',				$myPref . "aliases");
+		define('STATS_CHAT',				$myPref . "chat");
+		define('STATS_CONFIG',				$myPref . "config");
+		define('STATS_CONSOLIDATED',		$myPref . "consolidated");
+		define('STATS_GAMEACTIONS',			$myPref . "gameactions");
+		define('STATS_DAMAGETYPES',			$myPref . "damagetypes");
+		define('STATS_GAMETYPES',			$myPref . "gametypes");
+		define('STATS_HITLOCATIONS',		$myPref . "hitlocations");
+		define('STATS_LANGUAGE_STRINGS',	$myPref . "language_strings");
+		define('STATS_MAPS',				$myPref . "maps");
+		define('STATS_PLAYER_KILLS',		$myPref . "player_kills");
+		define('STATS_PLAYERS',				$myPref . "players");
+		define('STATS_ROUNDS',				$myPref . "rounds");
+		define('STATS_ROUNDACTIONS',		$myPref . "roundactions");
+		define('STATS_SERVERS',				$myPref . "servers");
+		define('STATS_TIME',				$myPref . "time");
+		define('STATS_USERS',				$myPref . "users");
+		define('STATS_WEAPONS',				$myPref . "weapons");
+		define('STATS_PLAYERS_STATIC',		$myPref . "players_static");
+		define('STATS_PLAYERS_TOPALIASES',	$myPref . "players_topalias");
+		define('STATS_WEAPONS_PERSERVER',	$myPref . "weapons_perserver");
+
+		// --- Now Copy all entries into content variable
+		foreach ($CFG as $key => $value )
+			$content[$key] = $value;
+		// --- 
 
 		// For ShowPageRenderStats
-		if ( $CFG['ShowPageRenderStats'] == 1 )
+		if ( GetConfigSetting("ShowPageRenderStats", 1) == 1 )
 		{
 			$content['ShowPageRenderStats'] = "true";
 			InitPageRenderStats();
 		}
+
+		// return result
+		return true;
 	}
 	else
 	{
-		// Check for installscript!
-		if ( file_exists($content['BASEPATH'] . "install.php") ) 
-			$strinstallmsg = '<br><br>' 
-							. '<center><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br><br>'
-							. 'See the Installation Guides for more Details!<br>'
-							. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
-							. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
-							. 'Also take a look to the <a href="docs/readme.htm" target="_blank">Readme</a> for some basics around UltraStats!<br>'
-							. '</center>';
+		// if handled ourselfe, we die in CheckForInstallPhp.
+		if ( $bHandleMissing == true )
+		{
+			// Check for installscript!
+			CheckForInstallPhp();
+		}
 		else
-			$strinstallmsg = "";
-		DieWithErrorMsg( 'Error, main configuration file is missing!' . $strinstallmsg );
+			return false;
 	}
+}
+
+function CheckForInstallPhp()
+{
+	// Check for installscript!
+	if ( file_exists($content['BASEPATH'] . "install.php") ) 
+		$strinstallmsg = '<br><br>' 
+						. '<center><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br><br>'
+						. 'See the Installation Guides for more Details!<br>'
+						. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
+						. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
+						. 'Also take a look to the <a href="docs/readme.htm" target="_blank">Readme</a> for some basics around UltraStats!<br>'
+						. '</center>';
+	else
+		$strinstallmsg = "";
+	DieWithErrorMsg( 'Error, main configuration file is missing!' . $strinstallmsg );
 }
 
 function GetFileLength($szFileName)
@@ -224,19 +270,42 @@ function CreateParseByTypesList()
 
 function CheckAndSetRunMode()
 {
-	global $RUNMODE;
+	global $content, $RUNMODE, $MaxExecutionTime;
+
 	// Set to command line mode if argv is set! 
-//FICKU PHP!	if ( isset($_SERVER["argc"]) && $_SERVER["argc"] > 1 )
 	if ( !isset($_SERVER["GATEWAY_INTERFACE"]) )
 		$RUNMODE = RUNMODE_COMMANDLINE;
+
+	// Obtain max_execution_time
+	$MaxExecutionTime = ini_get("max_execution_time");
+	
+	// --- Check necessary PHP Extensions!
+	$loadedExtensions = get_loaded_extensions();
+
+	// Check for GD libary
+	if ( in_array("gd", $loadedExtensions) ){ $content['GD_IS_ENABLED'] = true; } else { $content['GD_IS_ENABLED'] = false; }
+	// Check MYSQL Extension
+	if ( in_array("mysql", $loadedExtensions) ) { $content['MYSQL_IS_ENABLED'] = true; } else { $content['MYSQL_IS_ENABLED'] = false; }
+
 }
 
 function InitRuntimeInformations()
 {
 	global $content;
 
+	// --- Enable GZIP Compression if available
+	if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && GetConfigSetting("MiscEnableGzipCompression", 1, CFGLEVEL_USER) == 1 ) 
+	{
+		// This starts gzip compression!
+		ob_start("ob_gzhandler");
+		$content['GzipCompressionEnmabled'] = "yes";
+	}
+	else
+		$content['GzipCompressionEnmabled'] = "no";
+	// --- 
+	
+	// --- OLD MYSQL STUFF? Do I NEED THIS ANYMORE? 
 	$content['sqltmpfile'] = $content['BASEPATH'] . "tmp.sql";
-
 	if ( strpos(PHP_OS, "WIN") !== false )
 	{
 		// Windows 
@@ -269,6 +338,7 @@ function InitRuntimeInformations()
 
 // DEBUG TEST!
 	$content['MYSQL_BULK_MODE'] = false;
+	// ---
 }
 
 function CreateDebugModes()
@@ -359,7 +429,7 @@ function GetAndReplaceLangStr( $strlang, $param1 = "", $param2 = "", $param3 = "
 
 function InitConfigurationValues()
 {
-	global $content, $LANG;
+	global $content, $gl_root_path, $LANG;
 
 	$result = DB_Query("SELECT * FROM " . STATS_CONFIG);
 	$rows = DB_GetAllRows($result, true, true);
@@ -427,9 +497,14 @@ function InitConfigurationValues()
 	else
 		$content['user_theme'] = $content['web_theme'];
 
-	//Init Theme About Info ^^
+	// --- Init Theme About Info ^^
 	InitThemeAbout($content['user_theme']);
 	// --- 
+
+	// --- Init main langauge file now!
+	IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
+	// --- 
+
 	if ( !isset($content['web_toprounds']) ) { $content['web_toprounds'] = 50; }
 	if ( !isset($content['web_topplayers']) ) { $content['web_topplayers'] = 50; }
 	if ( !isset($content['web_detaillistsplayers']) ) { $content['web_detaillistsplayers'] = 20; }
@@ -539,11 +614,13 @@ function DieWithErrorMsg( $szerrmsg )
 	}
 	else if	( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		print("<html><head><link rel=\"stylesheet\" href=\"" . $content['BASEPATH'] . "admin/css/admin.css\" type=\"text/css\"></head><body>");
+		print("<html><title>UltraStats :: Critical Error occured</title><head><link rel=\"stylesheet\" href=\"" . $gl_root_path . "admin/css/admin.css\" type=\"text/css\"></head><body>");
 		print("<table width=\"600\" align=\"center\" class=\"with_border\"><tr><td><center><H3><font color='red'>Critical Error occured</font></H3><br></center>");
-		print("<B>Errordetails:</B><BR>" .  $szerrmsg);
+		print("<B>Errordetails:</B> " .  $szerrmsg);
 		print("</td></tr></table>");
 	}
+
+	// Abort further execution
 	exit;
 }
 
@@ -989,135 +1066,6 @@ function CleanUpArray(&$myArray)
 	unset($myArray);
 }
 
-// --- BEGIN Usermanagement Function --- 
-function StartPHPSession()
-{
-	global $RUNMODE;
-	if ( $RUNMODE == RUNMODE_WEBSERVER )
-	{
-		// This will start the session
-		if (session_id() == "")
-			session_start();
-
-		if ( !isset($_SESSION['SESSION_STARTED']) )
-			$_SESSION['SESSION_STARTED'] = "true";
-	}
-}
-
-function CheckForUserLogin( $isloginpage, $isUpgradePage = false )
-{
-	global $content; 
-
-	if ( isset($_SESSION['SESSION_LOGGEDIN']) )
-	{
-		if ( !$_SESSION['SESSION_LOGGEDIN'] ) 
-			RedirectToUserLogin();
-		else
-		{
-			$content['SESSION_LOGGEDIN'] = "true";
-			$content['SESSION_USERNAME'] = $_SESSION['SESSION_USERNAME'];
-		}
-
-		// New, Check for database Version and may redirect to updatepage!
-		if (	isset($content['database_forcedatabaseupdate']) && 
-				$content['database_forcedatabaseupdate'] == "yes" && 
-				$isUpgradePage == false 
-			)
-				RedirectToDatabaseUpgrade();
-	}
-	else
-	{
-		if ( $isloginpage == false )
-			RedirectToUserLogin();
-	}
-
-}
-
-function CreateUserName( $username, $password, $access_level )
-{
-	$md5pass = md5($password);
-	$result = DB_Query("SELECT username FROM " . STATS_USERS . " WHERE username = '" . $username . "'");
-	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
-	{
-		DieWithFriendlyErrorMsg( "User $username already exists!" );
-
-		// User not created!
-		return false;
-	}
-	else
-	{
-		// Create User
-		$result = DB_Query("INSERT INTO " . STATS_USERS . " (username, password, access_level) VALUES ('$username', '$md5pass', $access_level)");
-		DB_FreeQuery($result);
-
-		// Success
-		return true;
-	}
-}
-
-function CheckUserLogin( $username, $password )
-{
-	global $content, $CFG;
-
-	// TODO: SessionTime and AccessLevel check
-
-	$md5pass = md5($password);
-	$sqlselect = "SELECT access_level FROM " . STATS_USERS . " WHERE username = '" . $username . "' and password = '" . $md5pass . "'";
-	$result = DB_Query($sqlselect);
-	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
-	{
-		$_SESSION['SESSION_LOGGEDIN'] = true;
-		$_SESSION['SESSION_USERNAME'] = $username;
-		$_SESSION['SESSION_ACCESSLEVEL'] = $rows[0]['access_level'];
-		
-		$content['SESSION_LOGGEDIN'] = "true";
-		$content['SESSION_USERNAME'] = $username;
-
-		// Success !
-		return true;
-	}
-	else
-	{
-		if ( $CFG['ShowDebugMsg'] == 1 )
-			DieWithFriendlyErrorMsg( "Debug Error: Could not login user '" . $username . "' <br><br><B>Sessionarray</B> <pre>" . var_export($_SESSION, true) . "</pre><br><B>SQL Statement</B>: " . $sqlselect );
-		
-		// Default return false
-		return false;
-	}
-}
-
-function DoLogOff()
-{
-	global $content;
-
-	unset( $_SESSION['SESSION_LOGGEDIN'] );
-	unset( $_SESSION['SESSION_USERNAME'] );
-	unset( $_SESSION['SESSION_ACCESSLEVEL'] );
-
-	// Redir to Index Page
-	RedirectPage( "index.php");
-}
-
-function RedirectToUserLogin()
-{
-	// TODO Referer
-	header("Location: login.php?referer=" . $_SERVER['PHP_SELF']);
-	exit;
-}
-
-function RedirectToDatabaseUpgrade()
-{
-	// TODO Referer
-	header("Location: upgrade.php"); // ?referer=" . $_SERVER['PHP_SELF']);
-	exit;
-}
-
-
-// --- END Usermanagement Function --- 
-
-
 // --- BEGIN Banned Player Filter --- 
 function CreateBannedPlayerFilter()
 {
@@ -1166,5 +1114,82 @@ function GetBannedPlayerWhereQuery( $customtable, $customplayerfield, $withwhere
 	// --- 
 }
 // --- 
+
+/*
+*	Helpre function to obtain the right configuration setting
+*/
+function GetConfigSetting($szSettingName, $szDefaultValue = "", $DesiredConfigLevel = CFGLEVEL_GLOBAL)
+{
+	global $content, $CFG, $USERCFG;
+
+	// Check for a user based setting!
+	if ( $DesiredConfigLevel == CFGLEVEL_USER )
+	{
+		// only use user settings if desired by the user
+		if ( isset($USERCFG['UserOverwriteOptions']) && $USERCFG['UserOverwriteOptions'] == 1 ) 
+		{
+			// return user specific setting if available
+			if ( isset($USERCFG[$szSettingName]) ) 
+				return $USERCFG[$szSettingName];
+		}
+	}
+
+	// Either UserDB disabled, or global setting wanted - easier handling
+	if ( isset($CFG[$szSettingName]) ) 
+		return $CFG[$szSettingName];
+	else
+		return $szDefaultValue;
+}
+
+/*
+*	Helper function to start PHP Sessions!
+*/
+function StartPHPSession()
+{
+	global $RUNMODE;
+	if ( $RUNMODE == RUNMODE_WEBSERVER )
+	{
+		// This will start the session
+		if (session_id() == "")
+			session_start();
+
+		if ( !isset($_SESSION['SESSION_STARTED']) )
+			$_SESSION['SESSION_STARTED'] = "true";
+		else
+		{	
+			// TODO: SHOW DEBUG ERROR!
+
+		}
+	}
+}
+
+/*
+*	Helper function to initialize the page title!
+*/
+function InitPageTitle()
+{
+	global $content, $currentSourceID;
+
+	$tmpTitle = GetConfigSetting("PrependTitle", "", CFGLEVEL_USER);
+	if ( strlen($tmpTitle) > 0 )
+		$szReturn = $tmpTitle . " :: ";
+	else
+		$szReturn = "";
+
+	if ( !defined('IS_ADMINPAGE') )
+	{
+		if ( isset($content['serverid']) && isset($content['myserver']['Name']) )
+			$szReturn .= "Server '" . $content['myserver']['Name'] . "' :: ";
+	}
+
+	// Append UltraStats
+	$szReturn .= "UltraStats";
+
+	if ( defined('IS_ADMINPAGE') )
+		$szReturn .= " :: " . $content['LN_ADMIN_CENTER'] . " :: ";
+
+	// return result
+	return $szReturn;
+}
 
 ?>

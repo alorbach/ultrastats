@@ -17,22 +17,21 @@
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
-IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
-InitFrontEndDefaults();	// Only in WebFrontEnd
+InitFrontEndDefaults();	// Only for WebFrontEnd
+//IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
 // ***					*** //
 
-// --- CONTENT Vars
-if ( isset($content['myserver']) ) 
-	$content['TITLE'] = "Ultrastats :: Home :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
-else
-	$content['TITLE'] = "Ultrastats :: Home";
-// --- 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+
+// Append custom title part!
+$content['TITLE'] .= " :: Home Overview";
+// --- END CREATE TITLE
+
 
 // --- BEGIN Custom Code
 

@@ -191,4 +191,9 @@ $content['LN_WEAPONTYPE_SPECIAL'] = "Special weapons";
 	$content['LN_DAMAGETYPE_TOPKILLEDBY'] = "Most killed by this damagetype";
 
 
+	//Install Site
+	$content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats is already configured/installed!<br><br> If you want to reinstall UltraStats, either delete the current <B>config.php</B> or replace it with an empty file.<br>Click <A HREF="index.php">here</A> to return to UltraStats start page.';
+
+
+
 ?>

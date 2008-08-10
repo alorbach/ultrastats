@@ -171,4 +171,10 @@ define('WEAPONTYPE_SHOTGUN', 9);		// Shotgun, Schrotflinten
 define('WEAPONTYPE_SPECIAL', 10);		// Special weapons like Claymore, RPG etc.
 // --- 
 
+// --- Config Level defines
+define('CFGLEVEL_GLOBAL', 0);
+define('CFGLEVEL_GROUP', 1);
+define('CFGLEVEL_USER', 2);
+// --- 
+
 ?>
