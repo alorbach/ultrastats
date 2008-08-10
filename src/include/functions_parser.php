@@ -1,18 +1,26 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006!								*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Core Parser functions												*
-	*																	*
-	* -> 		*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Core Parser File
+	*		This file contains the core parser functions to analyze and
+	*		process the gamelogfiles. This is l33t stuff!
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
+
 
 // --- Avoid directly accessing this file! 
 if ( !defined('IN_ULTRASTATS') )
