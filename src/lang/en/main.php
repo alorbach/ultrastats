@@ -212,8 +212,56 @@ $content['LN_WEAPONTYPE_SPECIAL'] = "Special weapons";
 
 
 	//Install Site
+	$content['LN_CFG_PARAMMISSING'] = "The following parameter were missing: ";
+	$content['LN_CFG_DATABASE'] = "Database Settings";
+	$content['LN_CFG_DBSERVER'] = "Database Host";
+	$content['LN_CFG_DBPORT'] = "Database Port";
+	$content['LN_CFG_DBNAME'] = "Database Name";
+	$content['LN_CFG_DBPREF'] = "Table prefix";
+	$content['LN_CFG_DBUSER'] = "Database User";
+	$content['LN_CFG_DBPASSWORD'] = "Database Password";
+	$content['LN_CFG_GAMEVER'] = "Gameversion";
+	$content['LN_INSTALL_TITLETOP'] = "Installing UltraStats Version %1 - Step %2";
+	$content['LN_INSTALL_TITLE'] = "Installer Step %1";
 	$content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats is already configured/installed!<br><br> If you want to reinstall UltraStats, either delete the current <B>config.php</B> or replace it with an empty file.<br>Click <A HREF="index.php">here</A> to return to UltraStats start page.';
-
-
+	$content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "At least one file or directory (or more) is not writeable, please check the file permissions (chmod 666)!";
+	$content['LN_INSTALL_SAMPLECONFIGMISSING'] = "The sample configuration file '%1' is missing. You may have not fully uploaded UltraStats.";
+	$content['LN_INSTALL_ERRORCONNECTFAILED'] = "Database connect to '%1' failed! Please check Servername, Port, User and Password!";
+	$content['LN_INSTALL_ERRORACCESSDENIED'] = "Cannot use the database  '%1'! If the database does not exists, create it or check user access permissions!";
+	$content['LN_INSTALL_ERRORINVALIDDBFILE'] = "Error, invalid Database definition file (to short!), the file name is '%1'! Please check if the file was correctly uploaded.";
+	$content['LN_INSTALL_ERRORINSQLCOMMANDS'] = "Error, invalid Database definition file (no sql statements found!), the file name is '%1'!<br> Please check if the file was not correctly uploaded, or contact the UltraStats forums for assistance!";
+	$content['LN_INSTALL_MISSINGUSERNAME'] = "Username needs to be specified";
+	$content['LN_INSTALL_PASSWORDNOTMATCH'] = "Either the password does not match or is to short!";
+	$content['LN_INSTALL_FAILEDCREATECFGFILE'] = "Coult not create the configuration file in '%1'! Please verify the file permissions!";
+	$content['LN_INSTALL_STEP1'] = "Step 1 - Prerequisites";
+	$content['LN_INSTALL_STEP2'] = "Step 2 - Verify File Permissions";
+	$content['LN_INSTALL_STEP3'] = "Step 3 - Database Configuration";
+	$content['LN_INSTALL_STEP4'] = "Step 4 - Create Tables";
+	$content['LN_INSTALL_STEP5'] = "Step 5 - Check SQL Results";
+	$content['LN_INSTALL_STEP6'] = "Step 6 - Creating the firts Adminuser";
+	$content['LN_INSTALL_STEP7'] = "Step 7 - Done";
+	$content['LN_INSTALL_STEP1_TEXT'] = 'Before you start installing UltraStats, the Installer setup has to check a few things first.<br>You may have to correct some file permissions. <br><br>Click on <input type="submit" value="Next"> to start the Test!';
+	$content['LN_INSTALL_STEP2_TEXT'] = "The following file permissions have been checked. Verify the results below! <br>You may use the <B>configure.sh</B> script from the <B>contrib</B> folder to set the permissions for you.";
+	$content['LN_INSTALL_STEP3_TEXT'] = "In this step, you have to configure the basic database settings for UltraStats. <br>Without this database connection, you cannot step further in the installation of UltraStats!";
+	$content['LN_INSTALL_STEP4_TEXT'] = 'If you reached this step, the database connection has been successfully verified!<br><br> The next step will create the necessary database tables used by UltraStats. This might take a while!<br> <b>WARNING</b>, if you have an existing UltraStats installation in this database with the same tableprefix, all your data will be <b>OVERWRITTEN</b>! Make sure you are using a fresh database, or you want to overwrite your old UltraStats database. <br><br><b>Click on <input type="submit" value="Next"> to start the creation of the tables</b>';
+	$content['LN_INSTALL_STEP5_TEXT'] = "All tables have been created. Check the List below for possible Error's.";
+	$content['LN_INSTALL_STEP6_TEXT'] = "You are now about to create the first UltraStats Adminuser account.<br> You will need this user in order to login and administrate your UltraStats installation in the Admin Center!";
+	$content['LN_INSTALL_STEP7_TEXT'] = 'Congratulations! You have successfully installed UltraStats :)! <br><br>Click <a href="index.php">here</a> to view your installation.';
+	$content['LN_INSTALL_WARNGAMESEL'] = "UltraStats can process Stats for ONE Game! It is __NOT__ possible to change this in a later step, so choose wisely ;)!";
+	$content['LN_INSTALL_SUCCESSSTATEMENTS'] = "Successfully executed statements:";
+	$content['LN_INSTALL_FAILEDSTATEMENTS'] = "Failed statements:";
+	$content['LN_INSTALL_STEP5_TEXT_NEXT'] = "If everything is fine, go to the next step to create the first UltraStats admin user.";
+	$content['LN_INSTALL_STEP5_TEXT_FAILED'] = "At least one statement failed,see error reasons below";
+	$content['LN_INSTALL_ERRORMSG'] = "Error Message";
+	$content['LN_INSTALL_SQLSTATEMENT'] = "SQL Statement";
+	$content['LN_INSTALL_CREATEUSER'] = "Create User Account";
+	$content['LN_INSTALL_PASSWORD'] = "Password";
+	$content['LN_INSTALL_PASSWORDREPEAT'] = "Repeat Password";
+	$content['LN_INSTALL_SUCCESSCREATED'] = "Successfully created User";
+	$content['LN_INSTALL_RECHECK'] = "ReCheck";
+	$content['LN_INSTALL_FINISH'] = "Finish!";
+	$content['LN_INSTALL_PROGRESS'] = "Install Progress: ";
+	$content['LN_INSTALL_MISSINGDBFILE'] = "The database definition file '%1' is missing.";
+	$content['LN_INSTALL_USERNAME'] = "Username";
 
 ?>
