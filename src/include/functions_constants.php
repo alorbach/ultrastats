@@ -1,17 +1,23 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006-2008!								*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Some constants													*
-	*																	*
-	* -> Stuff which has to be static and predefined					*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Constants Helper File
+	*		This file contains all needed constants for UltraStat s
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // --- Avoid directly accessing this file! 

@@ -1,56 +1,61 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Rounds Index File													*
-	*																	*
-	* -> Shows list of all played rounds								*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Rounds List File
+	*		Shows a list of played rounds 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
-IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
 InitFrontEndDefaults();	// Only in WebFrontEnd
 // ***					*** //
 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+
+// Append custom title part!
+$content['TITLE'] .= " :: Rounds ";
+// --- END CREATE TITLE
+
 // --- CONTENT Vars
 if ( isset($content['myserver']) ) 
-{
-	$content['TITLE'] = "Ultrastats :: Rounds :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
 	$content['rounddetailsspan'] = "5";
-}
 else
 {
-	$content['TITLE'] = "Ultrastats :: Rounds";
 	$content['ShowServer'] = "true";
 	$content['rounddetailsspan'] = "7";
 }
 // --- 
 
-// --- BEGIN Custom Code
 
+// --- BEGIN Custom Code
 // --- Read Vars
 if ( isset($_GET['start']) )
 	$content['current_pagebegin'] = intval(DB_RemoveBadChars($_GET['start']));
 else
 	$content['current_pagebegin'] = 0;
-
-
 // ---
+
 
 // --- Get/Set Sorting
 if ( isset($_GET['id']) && strlen($_GET['id']) > 0 )

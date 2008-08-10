@@ -1,41 +1,44 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* ServerStats - Maps File											*
-	*																	*
-	* -> The most played maps per server are displayed here				*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Server Stats File
+	*		Shows played maps of a server 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
-IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
 InitFrontEndDefaults();	// Only in WebFrontEnd
 // ***					*** //
 
-// --- CONTENT Vars
-if ( isset($content['myserver']) ) 
-	$content['TITLE'] = "Ultrastats :: ServerStats :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
-else
-	$content['TITLE'] = "Ultrastats :: ServerStats";
-// --- 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+
+// Append custom title part!
+$content['TITLE'] .= " :: Mapstats ";
+// --- END CREATE TITLE
+
 
 // --- BEGIN Custom Code
-
 // --- Read Vars
 if ( isset($_GET['start']) )
 	$content['current_pagebegin'] = intval(DB_RemoveBadChars($_GET['start']));

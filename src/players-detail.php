@@ -1,34 +1,44 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Player Details File												*
-	*																	*
-	* -> Shows Details for each player !								*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Playerdetails File
+	*		Shows details for each Player 
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
-IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
 InitFrontEndDefaults();	// Only in WebFrontEnd
 // ***					*** //
 
-// --- BEGIN Custom Code
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
 
+// Append custom title part!
+$content['TITLE'] .= " :: Playerdetails ";
+// --- END CREATE TITLE
+
+
+// --- BEGIN Custom Code
 // Set default
 $content['iserror'] = false;
 
@@ -744,14 +754,13 @@ else
 // --- CONTENT Vars
 if ( $content['iserror'] == "true" )
 {
-		$content['TITLE'] = "Ultrastats :: Player Details :: Error invalid GUID";
+	// Append to title
+	$content['TITLE'] .= "Error invalid GUID";
 }
 else
 {
-	if ( isset($content['myserver']) ) 
-		$content['TITLE'] = "Ultrastats :: Player Details for '" . $playervars['Alias'] . "' :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
-	else
-		$content['TITLE'] = "Ultrastats :: Player Details for '" . $playervars['Alias'] . "'";
+	// Append to title
+	$content['TITLE'] .= " for '" . $playervars['Alias'] . "'";
 }
 // --- 
 

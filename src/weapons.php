@@ -1,41 +1,45 @@
 <?php
 /*
-	*********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						*
-	* -> www.ultrastats.org <-											*
-	*																	*
-	* Use this script at your own risk!									*
-	* -----------------------------------------------------------------	*
-	* Weapon Detail	File												*
-	*																	*
-	* -> Display statistics per Weapon									*
-	*																	*
-	* All directives are explained within this file						*
-	*********************************************************************
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Weapon Details File
+	*		Shows Details for a weapon, or if no weapon is specified,
+	*		a list of all available weapons!
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
 */
 
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_db.php');
 include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
 include($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
-IncludeLanguageFile( $gl_root_path . '/lang/' . $LANG . '/main.php' );
 InitFrontEndDefaults();	// Only in WebFrontEnd
 // ***					*** //
 
-// --- CONTENT Vars
-if ( isset($content['myserver']) ) 
-	$content['TITLE'] = "Ultrastats :: Weapon :: Server '" . $content['myserver']['Name'] . "'";	// Title of the Page 
-else
-	$content['TITLE'] = "Ultrastats :: Weapon ";
-// --- 
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+
+// Append custom title part!
+$content['TITLE'] .= " :: Weapondetails ";
+// --- END CREATE TITLE
+
 
 // --- BEGIN Custom Code
-
 // --- Read Vars
 if ( isset($_GET['mostkills_start']) )
 	$content['current_mostkills_pagebegin'] = intval(DB_RemoveBadChars($_GET['mostkills_start']));
@@ -82,6 +86,9 @@ if ( isset($_GET['id']) )
 		else
 			$content['WeaponDisplayName'] = $weaponvars['INGAMENAME'];
 		// --- 
+
+		// Append to Title
+		$content['TITLE'] .= " for '" . $content['WeaponDisplayName'] . "'";
 
 		// --- Set ExternalInfoUrl!
 		if ( strlen($weaponvars['ExternalInfoUrl']) <= 0 )
