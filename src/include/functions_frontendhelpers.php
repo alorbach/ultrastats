@@ -22,21 +22,6 @@ if ( !defined('IN_ULTRASTATS') )
 }
 // --- 
 
-function CreateTopPlayersArray($maxnumber, $arrayname, $topname)
-{
-	global $content;
-
-	for($i = 0; $i < $maxnumber; $i++)
-	{
-		$content[$arrayname][$i]['Number'] = $i;
-
-		if ( $content[$topname] == $i )
-			$content[$arrayname][$i]['selected'] = "selected";
-		else
-			$content[$arrayname][$i]['selected'] = "";
-	}
-}
-
 function InitFrontEndDefaults()
 {
 	// Read the whole ServerList
@@ -66,6 +51,21 @@ function InitFrontEndDefaults()
 	
 	// Check if install file still exists
 //NOT NEEDED ANYMORE !	InstallFileReminder();
+}
+
+function CreateTopPlayersArray($maxnumber, $arrayname, $topname)
+{
+	global $content;
+
+	for($i = 0; $i < $maxnumber; $i++)
+	{
+		$content[$arrayname][$i]['Number'] = $i;
+
+		if ( $content[$topname] == $i )
+			$content[$arrayname][$i]['selected'] = "selected";
+		else
+			$content[$arrayname][$i]['selected'] = "";
+	}
 }
 
 function InstallFileReminder()
@@ -535,7 +535,6 @@ function GetAndSetMaxKillRation()
 	global $content;
 
 // !!!! TODO! Make a new PLAYER Table where we store a total skill value per server
-
 
 	// --- Lets get the MAX KillRatio first
 	$sqlquery = "SELECT " .

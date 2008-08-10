@@ -38,8 +38,6 @@ InitBasicUltraStats();
 if ( InitUltraStatsConfigFile(false) ) 
 	DieWithErrorMsg( $content['LN_INSTALL_ERRORINSTALLED'] );
 
-
-
 // Set some static values
 define('MAX_STEPS', 7);
 $content['web_theme'] = "default";

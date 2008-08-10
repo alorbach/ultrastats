@@ -45,6 +45,9 @@ function CreateLanguageList()
 			$content['USERLANG'][$i]['is_selected'] = "";
 		// ---
 
+		// Init Language DisplayName
+		$content['USERLANG'][$i]['DisplayName'] = GetLanguageDisplayName( $alldirectories[$i] );
+		$content['LANGUAGES'][$i]['DisplayName'] = $content['USERLANG'][$i]['DisplayName'];
 	}
 }
 
@@ -134,6 +137,29 @@ function VerifyTheme( $newtheme )
 	}
 	else
 		return false;
+}
+
+function GetLanguageDisplayName( $szLangID ) 
+{
+	global $content, $gl_root_path;
+	$szInfoFile = $gl_root_path . "lang/" . $szLangID . "/info.txt";
+	if ( is_file( $szInfoFile ) )
+	{	
+		//Read InfoFile!
+		$infofile  = fopen($szInfoFile, 'r');
+		if (!feof ($infofile)) 
+		{
+			while (!feof ($infofile))
+			{
+				// Return max 32 characters
+				$tmpline = fgets($infofile, 1024);
+				return substr( trim($tmpline), 0, 32);
+			}
+		}
+		fclose($infofile);
+	}
+	else // No Info, return ID as DisplayName
+		return $szLangID;
 }
 
 ?>
