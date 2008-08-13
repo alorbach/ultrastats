@@ -738,7 +738,7 @@ function SetMaxExecutionTime()
 	if ($RUNMODE == RUNMODE_WEBSERVER)
 	{
 		// Max Execution time
-		set_time_limit( 120 );									// Extend Execution Time
+		@set_time_limit( 120 );									// Extend Execution Time
 		$MaxExecutionTime = ini_get("max_execution_time") - 15; // Raised limit to -15 Seconds to be on the save side
 		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Gamelog", "MaxExecutionTime = $MaxExecutionTime");
 	}

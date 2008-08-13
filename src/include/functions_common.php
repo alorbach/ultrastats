@@ -219,9 +219,9 @@ function InitPhpDebugMode()
 
 	// --- Set Global DEBUG Level!
 	if ( $content['gen_phpdebug'] == "yes" )
-		ini_set( "error_reporting", E_ALL ); // ALL PHP MESSAGES!
+		@ini_set( "error_reporting", E_ALL ); // ALL PHP MESSAGES!
 	else
-		ini_set( "error_reporting", E_ERROR ); // ONLY PHP ERROR'S!
+		@ini_set( "error_reporting", E_ERROR ); // ONLY PHP ERROR'S!
 	// --- 
 }
 
