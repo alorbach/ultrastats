@@ -1,0 +1,58 @@
+/* Generic Style definitions */
+.ExpansionPlus
+{
+	background-image: url("../images/icons/navigate_plus.png");
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 20px;
+}
+
+.ExpansionMinus
+{
+	background-image: url("../images/icons/navigate_minus.png");
+	background-repeat: no-repeat;
+	background-position: left center;
+	padding-left: 20px;
+}
+
+.HiddenContent
+{
+	visibility: hidden;
+/*		position: relative; */
+	display: none;
+}
+
+.ShownContent
+{
+	visibility: visible;
+	display: inline;
+}
+
+.borderless
+{ 
+	border:0px solid;
+	background-color: transparent; 
+}
+
+.borderlessbuttons
+{ 
+	border:0px solid;
+	background-color: transparent; 
+	width:20px; 
+	padding: 0px;
+}
+
+.ErrorMsg 
+{
+	font: bold 12px Verdana, Arial, Helvetica, sans-serif; 
+	COLOR: #FF0000;
+}
+
+.PriorityEmergency
+{
+	color: #FFFFFF;
+	background-color: #ff4444;
+	border-top: black 1px solid;
+	border-bottom: black 1px solid;
+	border-right: gray 1px solid;
+}
