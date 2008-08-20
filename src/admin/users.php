@@ -113,6 +113,14 @@ if ( isset($_GET['op']) )
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_IDNOTFOUND'], $content['USERID'] ); 
 				}
 
+				// --- Ask for deletion first!
+				if ( (!isset($_GET['verify']) || $_GET['verify'] != "yes") )
+				{
+					// This will print an additional secure check which the user needs to confirm and exit the script execution.
+					PrintSecureUserCheck( GetAndReplaceLangStr( $content['LN_USER_WARNDELETEUSER'], $myrow['username'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'] );
+				}
+				// ---
+
 				if ( $_SESSION['SESSION_USERNAME'] == $myrow['username'] ) 
 				{
 					$content['ISERROR'] = "true";

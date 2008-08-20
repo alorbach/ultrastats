@@ -21,7 +21,7 @@
 */
 
 
-// --- Default includes	and procedures --- //
+// *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './../';
 include($gl_root_path . 'include/functions_common.php');
@@ -32,8 +32,8 @@ $content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
 CheckForUserLogin( true );
-// ---					--- //
-
+IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
+// ***					*** //
 
 // --- BEGIN CREATE TITLE
 $content['TITLE'] = InitPageTitle();
@@ -96,16 +96,13 @@ if ( isset($_GET['op']) && $_GET['op'] == "logoff" )
 	// logoff in this case
 	DoLogOff();
 }
+
+// --- Set redir var
+$content['REDIR_LOGIN'] = $szRedir;
+
 // --- END Custom Code
 
-// --- CONTENT Vars
-$content['REDIR_LOGIN'] = $szRedir;
-$content['TITLE'] = "Ultrastats - Admin Login";	// Title of the Page 
-// --- 
-
 // --- Parsen and Output
-IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
-
 InitTemplateParser();
 $page -> parser($content, "admin/login.html");
 $page -> output(); 

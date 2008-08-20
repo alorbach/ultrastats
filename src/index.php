@@ -23,8 +23,8 @@
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './';
-include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/functions_frontendhelpers.php');
+require_once($gl_root_path . 'include/functions_common.php');
+require_once($gl_root_path . 'include/functions_frontendhelpers.php');
 
 InitUltraStats();
 InitFrontEndDefaults();	// Only for WebFrontEnd

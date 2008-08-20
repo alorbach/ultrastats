@@ -24,9 +24,7 @@
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './../';
-include($gl_root_path . 'include/functions_db.php');
-include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/class_template.php');
+require_once($gl_root_path . 'include/functions_common.php');
 
 // Set PAGE to be ADMINPAGE!
 define('IS_ADMINPAGE', true);

@@ -139,7 +139,7 @@ $content['LN_ADMINCENTER_PARSER'] = "Server Parsing";
 $content['NO_INFRAME_POSSIBLE'] = "Unfortunately, your browser doesn't support Inframes and the Parser can not run!";
 $content['LN_EMBEDDED_PARSER'] = "Running embedded parser";
 $content['LN_WARNINGDELETE'] = "Warning! If you delete the Server, all it's stats will be deleted as well!";
-$content['LN_DELETEYES'] = "Click here to continue deleting the Server";
+$content['LN_DELETEYES'] = "Click here to continue deleting";
 $content['LN_DELETENO'] = "Click here to return to the previous page";
 $content['LN_FTPLOGINFAILED'] = "FTP Login failed, or no password given.";
 $content['LN_FTPPASSWORD'] = "FTP Password";
@@ -162,6 +162,8 @@ $content['LN_USER_ERROR_USERNAMETAKEN'] = "Error, this Username is already taken
 $content['LN_USER_ERROR_PASSSHORT'] = "Error, Password was to short, or did not match";
 $content['LN_USER_ERROR_HASBEENADDED'] = "User '%1' has been successfully added";
 $content['LN_USER_ERROR_HASBEENEDIT'] = "User '%1' has been successfully edited";
+$content['LN_USER_WARNDELETEUSER'] = "Are you sure to delete the User '%1'?";
+
 
 // General Options
 $content['LN_GEN_LANGUAGE'] = "Select default language";

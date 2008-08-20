@@ -24,8 +24,9 @@
 // *** Default includes	and procedures *** //
 define('IN_ULTRASTATS', true);
 $gl_root_path = './../';
-include($gl_root_path . 'include/functions_common.php');
-include($gl_root_path . 'include/functions_parser-medals.php');
+require_once($gl_root_path . 'include/functions_common.php');
+require_once($gl_root_path . 'include/functions_frontendhelpers.php');
+require_once($gl_root_path . 'include/functions_parser-medals.php');
 
 // Set PAGE to be ADMINPAGE!
 define('IS_ADMINPAGE', true);
@@ -43,9 +44,6 @@ $content['TITLE'] .= " :: General Options";
 
 
 // --- BEGIN Custom Code
-// Some more includes needed
-include($gl_root_path . 'include/functions_frontendhelpers.php');
-
 // Create TopPlayers Array
 CreateTopPlayersArray( 200, "TOPROUNDS", "web_toprounds" );
 CreateTopPlayersArray( 200, "TOPPLAYERS", "web_topplayers" );

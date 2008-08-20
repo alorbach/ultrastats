@@ -30,12 +30,11 @@ if ( !defined('IN_ULTRASTATS') )
 // --- 
 
 // --- Basic Includes
-include($gl_root_path . 'include/functions_constants.php');
-
-include($gl_root_path . 'include/class_template.php');
-include($gl_root_path . 'include/functions_themes.php');
-include($gl_root_path . 'include/functions_db.php');
-include($gl_root_path . 'include/functions_users.php');
+require_once($gl_root_path . 'include/functions_constants.php');
+require_once($gl_root_path . 'include/functions_themes.php');
+require_once($gl_root_path . 'include/functions_users.php');
+require_once($gl_root_path . 'include/functions_db.php');
+require_once($gl_root_path . 'include/class_template.php');
 // --- 
 
 // --- Define Basic vars
@@ -659,11 +658,11 @@ function IncludeLanguageFile( $langfile )
 	global $LANG, $LANG_EN; 
 
 	if ( file_exists( $langfile ) )
-		include( $langfile );
+		include_once( $langfile );
 	else
 	{
 		$langfile = str_replace( $LANG, $LANG_EN, $langfile );
-		include( $langfile );
+		include_once( $langfile );
 	}
 }
 

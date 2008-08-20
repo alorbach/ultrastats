@@ -335,5 +335,4 @@ InitTemplateParser();
 $page -> parser($content, "admin/servers.html");
 $page -> output(); 
 // --- 
-
 ?>
