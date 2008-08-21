@@ -35,14 +35,12 @@ CheckForUserLogin( true );
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 
-
 // --- BEGIN Custom Code
 // Additional Includes
-include($gl_root_path . 'include/functions_parser.php');
-include($gl_root_path . 'include/functions_parser-helpers.php');
-include($gl_root_path . 'include/functions_parser-medals.php');
-include($gl_root_path . 'include/functions_parser-consolidation.php');
-
+require_once($gl_root_path . 'include/functions_parser.php');
+require_once($gl_root_path . 'include/functions_parser-helpers.php');
+require_once($gl_root_path . 'include/functions_parser-medals.php');
+require_once($gl_root_path . 'include/functions_parser-consolidation.php');
 
 // Now the processing Part
 if ( isset($_GET['op']) )

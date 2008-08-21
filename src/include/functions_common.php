@@ -1185,7 +1185,7 @@ function InitPageTitle()
 	$szReturn .= "UltraStats";
 
 	if ( defined('IS_ADMINPAGE') )
-		$szReturn .= " :: " . $content['LN_ADMIN_CENTER'] . " :: ";
+		$szReturn .= " :: " . $content['LN_ADMINCENTER']; // . " :: ";
 
 	// return result
 	return $szReturn;

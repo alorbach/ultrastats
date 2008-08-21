@@ -401,7 +401,7 @@ function DeleteServer()
 	if ( !isset($_GET['verify']) || $_GET['verify'] != "yes" )
 	{
 		// Print form and return from function
-		PrintSecureUserCheck( $content['LN_WARNINGDELETE'], $content['LN_DELETEYES'], $content['LN_DELETENO'], "delete" );
+		PrintSecureUserCheckLegacy( $content['LN_WARNINGDELETE'], $content['LN_DELETEYES'], $content['LN_DELETENO'], "delete" );
 		return;
 	}
 	// ---

@@ -31,7 +31,8 @@ define('IS_ADMINPAGE', true);
 $content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
-CheckForUserLogin( false );
+CheckForUserLogin( true );
+IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 
 
@@ -100,8 +101,6 @@ if ( isset($_GET['op']) )
 // --- 
 
 // --- Parsen and Output
-IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
-
 InitTemplateParser();
 $page -> parser($content, "admin/parser.html");
 $page -> output(); 

@@ -31,7 +31,7 @@ if ( !defined('IN_ULTRASTATS') )
 
 function CreateHTMLHeader()
 {
-	global $RUNMODE;
+	global $RUNMODE, $gl_root_path;
 
 	// not needed in console mode
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
@@ -44,7 +44,7 @@ function CreateHTMLHeader()
 	print ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 			<head>
-			<link rel="stylesheet" href="css/admin.css" type="text/css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'css/admin.css" type="text/css">
 			</head>
 			<SCRIPT language="JavaScript">
 				var g_intervalID;
@@ -82,7 +82,7 @@ function PrintDebugInfoHeader()
 	}
 }
 
-function PrintSecureUserCheck( $warningtext, $yesmsg, $nomsg, $operation )
+function PrintSecureUserCheckLegacy( $warningtext, $yesmsg, $nomsg, $operation )
 {
 	global $content, $myserver;
 
@@ -95,7 +95,7 @@ function PrintSecureUserCheck( $warningtext, $yesmsg, $nomsg, $operation )
 			</table>
 			<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
-				<td align="center" class="line0">
+				<td align="center" class="line1">
 					<br>
 					<A HREF="parser-core.php?op=' . $operation . '&id=' . $myserver['ID'] . '&verify=yes">
 					<img src="' . $content['BASEPATH'] . 'images/icons/check.png" width="16"><br>
