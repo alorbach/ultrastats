@@ -139,6 +139,7 @@ $content['LN_ADMINCENTER_PARSER'] = "Server Parsing";
 $content['NO_INFRAME_POSSIBLE'] = "Unfortunately, your browser doesn't support Inframes and the Parser can not run!";
 $content['LN_EMBEDDED_PARSER'] = "Running embedded parser";
 $content['LN_WARNINGDELETE'] = "Warning! If you delete the Server, all it's stats will be deleted as well!";
+$content['LN_WARNINGDELETE_STATS'] = "Warning! All Stats for the Server '%1' will be deleted. Do you want to continue?";
 $content['LN_DELETEYES'] = "Click here to continue deleting";
 $content['LN_DELETENO'] = "Click here to return to the previous page";
 $content['LN_FTPLOGINFAILED'] = "FTP Login failed, or no password given.";

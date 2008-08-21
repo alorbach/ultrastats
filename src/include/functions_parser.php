@@ -421,7 +421,7 @@ function DeleteServer()
 */
 function DeleteServerStats()
 {
-	global $ParserStart, $myserver;
+	global $content, $ParserStart, $myserver;
 	global $RUNMODE;
 
 	// Init Header
@@ -439,6 +439,16 @@ function DeleteServerStats()
 		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser", "Error, invalid Server specified!" );
 		return;
 	}
+
+	// --- Ask for deletion first!
+	if ( (!isset($_GET['verify']) || $_GET['verify'] != "yes") )
+	{
+		// Print form and return from function
+		PrintSecureUserCheckLegacy( GetAndReplaceLangStr($content['LN_WARNINGDELETE_STATS'], $myserver['Name'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'], "deletestats" );
+		return;
+	}
+	// ---
+
 
 	// StartDbg
 	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Starting Delete process for Server '" . $myserver['ID'] . "' ...");
