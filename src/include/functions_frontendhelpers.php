@@ -326,6 +326,9 @@ function GetCustomServerWhereQuery( $customtable , $withwhere = true, $alsoretur
 function GetAndSetCurrentServer()
 {
 	global $content, $serverwherequery, $serverwherequery_and;
+	
+	// Default for helper variable
+	$content['serverselected'] = false;
 
 	if ( isset($content['serverid']) )
 	{
@@ -339,6 +342,9 @@ function GetAndSetCurrentServer()
 			$serverwherequery = " WHERE SERVERID = " . $content['serverid'];
 			$serverwherequery_and = " AND SERVERID = " . $content['serverid'];
 			
+			// Helper variable for frontend
+			$content['serverselected'] = true;
+
 			// Needed for preselection
 			for($i = 0; $i < count($content['serverlist']); $i++)
 			{

@@ -264,4 +264,29 @@ $content['LN_WEAPONTYPE_SPECIAL'] = "Special weapons";
 	$content['LN_INSTALL_MISSINGDBFILE'] = "The database definition file '%1' is missing.";
 	$content['LN_INSTALL_USERNAME'] = "Username";
 
+// Main MENU
+	$content['LN_MENU_HOME'] = "Home";
+	$content['LN_MENU_ROUNDSTATS'] = "Roundstats";
+	$content['LN_MENU_ROUNDS_BYDATE'] = "Sorted by Date";
+	$content['LN_MENU_ROUNDS_BYGAMETYPE'] = "Sorted by Gametype";
+	$content['LN_MENU_ABOUT'] = "About UltraStats";
+	$content['LN_MENU_PLAYERSTATS'] = "Player Stats";
+	$content['LN_MENU_PLAYER_BYKILL'] = "Top Players by Kills";
+	$content['LN_MENU_PLAYER_BYDEATH'] = "Top Players by Deaths";
+	$content['LN_MENU_PLAYER_BYTEAMKILLS'] = "Top Players by Teamkills";
+	$content['LN_MENU_PLAYER_BYSUICIDES'] = "Top Players by Suicides";
+	$content['LN_MENU_PLAYER_RATIO'] = "Top Players by Ratio";
+	$content['LN_MENU_SEARCH'] = "Search";
+	$content['LN_MENU_WEAPONSTATS'] = "Weapon Stats";
+	$content['LN_MENU_DAMAGESTATS'] = "Damagetype Stats";
+	$content['LN_MENU_SERVERSTATS'] = "Server Stats";
+	$content['LN_MENU_ADMINCENTER'] = "Admin Center";
+	$content['LN_MENU_SERVERLIST'] = "List Servers";
+	$content['LN_MENU_SERVERPLAYEDMAPS'] = "Show Played Maps";
+	$content['LN_MENU_'] = "";
+	$content['LN_MENU_'] = "";
+	$content['LN_MENU_'] = "";
+	$content['LN_MENU_'] = "";
+
+
 ?>

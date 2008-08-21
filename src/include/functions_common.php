@@ -383,22 +383,41 @@ function InitFrontEndVariables()
 {
 	global $content;
 
-	$content['MENU_FOLDER_OPEN'] = "image=" . $content['BASEPATH'] . "images/icons/folder_closed.png";
-	$content['MENU_FOLDER_CLOSED'] = "overimage=" . $content['BASEPATH'] . "images/icons/folder.png";
-	$content['MENU_HOMEPAGE'] = "image=" . $content['BASEPATH'] . "images/icons/home.png";
-	$content['MENU_LINK'] = "image=" . $content['BASEPATH'] . "images/icons/link.png";
-	$content['MENU_PREFERENCES'] = "image=" . $content['BASEPATH'] . "images/icons/preferences.png";
-	$content['MENU_ADMINENTRY'] = "image=" . $content['BASEPATH'] . "images/icons/star_blue.png";
-	$content['MENU_ADMINLOGOFF'] = "image=" . $content['BASEPATH'] . "images/icons/exit.png";
-	$content['MENU_ADMINUSERS'] = "image=" . $content['BASEPATH'] . "images/icons/businessmen.png";
-	$content['MENU_ADMINPLAYERS'] = "image=" . $content['BASEPATH'] . "images/icons/businessman_preferences.png";
-	$content['MENU_ADMINSERVERS'] = "image=" . $content['BASEPATH'] . "images/icons/server.png";
-	$content['MENU_ADMINSTREDITOR'] = "image=" . $content['BASEPATH'] . "images/icons/preferences.png";
-	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
-	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
-	$content['MENU_SEARCH'] = "image=" . $content['BASEPATH'] . "images/icons/view.png";
-	$content['MENU_SELECTION_DISABLED'] = "image=" . $content['BASEPATH'] . "images/icons/selection.png";
-	$content['MENU_SELECTION_ENABLED'] = "image=" . $content['BASEPATH'] . "images/icons/selection_delete.png";
+	$content['MENU_FOLDER_OPEN'] = $content['BASEPATH'] . "images/icons/folder_closed.png";
+	$content['MENU_FOLDER_CLOSED'] = $content['BASEPATH'] . "images/icons/folder.png";
+	$content['MENU_HOMEPAGE'] = $content['BASEPATH'] . "images/icons/home.png";
+	$content['MENU_LINK'] = $content['BASEPATH'] . "images/icons/link.png";
+	$content['MENU_PREFERENCES'] = $content['BASEPATH'] . "images/icons/preferences.png";
+	$content['MENU_ADMINENTRY'] = $content['BASEPATH'] . "images/icons/star_blue.png";
+	$content['MENU_ADMINLOGOFF'] = $content['BASEPATH'] . "images/icons/exit.png";
+	$content['MENU_ADMINUSERS'] = $content['BASEPATH'] . "images/icons/businessmen.png";
+	$content['MENU_ADMINPLAYERS'] = $content['BASEPATH'] . "images/icons/businessman_preferences.png";
+	$content['MENU_ADMINSERVERS'] = $content['BASEPATH'] . "images/icons/server.png";
+	$content['MENU_ADMINSTREDITOR'] = $content['BASEPATH'] . "images/icons/preferences.png";
+	$content['MENU_SEARCH'] = $content['BASEPATH'] . "images/icons/view.png";
+	$content['MENU_SEARCH'] = $content['BASEPATH'] . "images/icons/view.png";
+	$content['MENU_SEARCH'] = $content['BASEPATH'] . "images/icons/view.png";
+	$content['MENU_SELECTION_DISABLED'] = $content['BASEPATH'] . "images/icons/selection.png";
+	$content['MENU_SELECTION_ENABLED'] = $content['BASEPATH'] . "images/icons/selection_delete.png";
+
+	$content['MENU_PAGER_BEGIN'] = $content['BASEPATH'] . "images/icons/media_beginning.png";
+	$content['MENU_PAGER_PREVIOUS'] = $content['BASEPATH'] . "images/icons/media_rewind.png";
+	$content['MENU_PAGER_NEXT'] = $content['BASEPATH'] . "images/icons/media_fast_forward.png";
+	$content['MENU_PAGER_END'] = $content['BASEPATH'] . "images/icons/media_end.png";
+	$content['MENU_NAV_LEFT'] = $content['BASEPATH'] . "images/icons/navigate_left.png";
+	$content['MENU_NAV_RIGHT'] = $content['BASEPATH'] . "images/icons/navigate_right.png";
+	$content['MENU_NAV_CLOSE'] = $content['BASEPATH'] . "images/icons/navigate_close.png";
+	$content['MENU_NAV_OPEN'] = $content['BASEPATH'] . "images/icons/navigate_open.png";
+	$content['MENU_PAGER_BEGIN_GREY'] = $content['BASEPATH'] . "images/icons/grey/media_beginning.png";
+	$content['MENU_PAGER_PREVIOUS_GREY'] = $content['BASEPATH'] . "images/icons/grey/media_rewind.png";
+	$content['MENU_PAGER_NEXT_GREY'] = $content['BASEPATH'] . "images/icons/grey/media_fast_forward.png";
+	$content['MENU_PAGER_END_GREY'] = $content['BASEPATH'] . "images/icons/grey/media_end.png";
+
+	$content['MENU_BULLET_BLUE'] = $content['BASEPATH'] . "images/icons/bullet_ball_glass_blue.png";
+	$content['MENU_BULLET_GREEN'] = $content['BASEPATH'] . "images/icons/bullet_ball_glass_green.png";
+	$content['MENU_BULLET_RED'] = $content['BASEPATH'] . "images/icons/bullet_ball_glass_red.png";
+	$content['MENU_BULLET_YELLOW'] = $content['BASEPATH'] . "images/icons/bullet_ball_glass_yellow.png";
+	$content['MENU_BULLET_GREY'] = $content['BASEPATH'] . "images/icons/bullet_ball_glass_grey.png";
 
 	// Get and Set ServerID Value!
 	if ( isset($_GET['serverid']) )
