@@ -1,4 +1,4 @@
-<table width="100%" border="0" cellspacing="0" cellpadding="2" class="table_with_border">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_with_border">
 <tr>
 	<td class="topmenu1begin" nowrap align="center" width="16"><img align="left" src="{MENU_BULLET_GREEN}" width="16" height="16" vspace="0"></td>
 	<td class="topmenu1" nowrap align="center" width="75"><a class="topmenu1_link" href="{BASEPATH}index.php?{additional_url}" target="_top"><img align="left" src="{MENU_HOMEPAGE}" width="16" height="16" vspace="0">{LN_MENU_HOME}</a></td>
@@ -6,7 +6,9 @@
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
+		  <a class="topmenu1_link" href="rounds.php?{additional_url}" target="_top">
 		  <img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_showrounds');">{LN_MENU_ROUNDSTATS}
+		  </a>
 			<ul class="with_border" id="menu_showrounds">
 				<li class="topmenu2">
 				<a class="topmenu2_link" href="rounds.php?{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_ROUNDS_BYDATE}</a>
@@ -30,10 +32,9 @@
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
-		  <a class="topmenu2_link" href="players.php?{additional_url}" target="_top">
+		  <a class="topmenu1_link" href="players.php?{additional_url}" target="_top">
 		  <img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_playerstats');">{LN_MENU_PLAYERSTATS}
 		  </a>
-
 			<ul class="with_border" id="menu_playerstats">
 				<li class="topmenu2"><a class="topmenu2_link" href="players.php?sorting=Kills{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_PLAYER_BYKILL}</a></li>
 				<li class="topmenu2"><a class="topmenu2_link" href="players.php?sorting=Deaths{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_PLAYER_BYDEATH}</a></li>
@@ -45,7 +46,7 @@
 		  </li>
 		</ul></div>
 	</td>
-	<td class="topmenu1" nowrap align="left" width="100">
+	<td class="topmenu1" nowrap align="left" width="110">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
 		  <a class="topmenu2_link" href=" weapons.php?{additional_url}" target="_top">
@@ -71,7 +72,7 @@
 		  </li>
 		</ul></div>
 	</td>
-	<td class="topmenu1" nowrap align="left" width="100">
+	<td class="topmenu1" nowrap align="left" width="135">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
 		  <a class="topmenu2_link" href=" damagetypes.php?{additional_url}" target="_top">
@@ -108,6 +109,6 @@
 	</td>
 
 	<td class="topmenu1" nowrap align="center" width="100"><a class="topmenu1_link" href="{BASEPATH}admin/index.php" target="_top"><img align="left" src="{MENU_PREFERENCES}" width="16" height="16" vspace="0">{LN_MENU_ADMINCENTER}</a></td>
-	<td class="topmenuend" nowrap align="right" width="max"><a class="topmenu1_link" href="{BASEPATH}about.php?{additional_url}" target="_top">{LN_MENU_ABOUT}</a></td>
+	<td class="topmenu1end" nowrap align="right" width="max"><a class="topmenu1_link" href="{BASEPATH}about.php?{additional_url}" target="_top">{LN_MENU_ABOUT}</a></td>
 </tr>
 </table>

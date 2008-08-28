@@ -256,7 +256,7 @@ function CreateCurrentUrl()
 		$counter = 0;
 		for ( $i = 0; $i < count($queries); $i++ )	// Fixed from $i = 0 to $i = 1
 		{
-			if ( strpos($queries[$i], "serverid") === false ) 
+			if ( strpos($queries[$i], "serverid") === false && strpos($queries[$i], "=") !== false ) 
 			{
 				$tmpvars = explode ("=", $queries[$i]);
 				// 4Server Selector

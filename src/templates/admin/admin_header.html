@@ -4,8 +4,10 @@
 	<title>{TITLE}</title>
 	{EXTRA_METATAGS}
 
-	<link rel="stylesheet" href="{BASEPATH}css/admin.css" type="text/css">
 	<link rel="stylesheet" href="{BASEPATH}css/defaults.css" type="text/css">
+	<link rel="stylesheet" href="{BASEPATH}css/menu.css" type="text/css">
+<!--	<link rel="stylesheet" href="{BASEPATH}css/admin.css" type="text/css"> -->
+	<link rel="stylesheet" href="{BASEPATH}themes/default/main.css" type="text/css">
 	{EXTRA_STYLESHEET}
 
 	<script type='text/javascript' src='{BASEPATH}js/common.js'></script>
@@ -13,7 +15,7 @@
 </head>
 <body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
 
-<table width="100%" border="0" cellspacing="0" cellpadding="2" class="mainheader">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainheader">
 <tr> 
 	<td rowspan="4" width="400" align="left"><a href="../index.php"><img src="{BASEPATH}images/main/Header-Logo.png" style="filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{BASEPATH}images/main/Header-Logo.png', sizingMethod='scale');" width="297" height="100" name="HeaderLogo"></a><script>CheckAlphaPNGImage('HeaderLogo', '{BASEPATH}images/main/space.gif');</script></td>
 	<td width="100%" align="center" valign="top" height="20">&nbsp;</td>
@@ -30,11 +32,7 @@
 </tr>
 </table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_with_border">
-<tr> 
-	<td><!-- INCLUDE admin/admin_menu.html --></td>
-</tr>
-</table>
+<!-- INCLUDE admin/admin_menu.html -->
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_with_border">
 <tr> 
