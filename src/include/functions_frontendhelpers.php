@@ -140,8 +140,7 @@ function CreateWeaponArray()
 
 	// Predefine WeaponTypes
 	if (	$content['gen_gameversion'] == COD || 
-			$content['gen_gameversion'] == COD2 ||
-			$content['gen_gameversion'] == COD5 )
+			$content['gen_gameversion'] == COD2 )
 	{
 		AddToWeaponArray(WEAPONTYPE_MACHINEGUN, $content['LN_WEAPONTYPE_MACHINEGUN']);
 		AddToWeaponArray(WEAPONTYPE_SNIPER, $content['LN_WEAPONTYPE_SNIPER']);
@@ -171,6 +170,18 @@ function CreateWeaponArray()
 		AddToWeaponArray(WEAPONTYPE_STANDWEAPON, $content['LN_WEAPONTYPE_STANDWEAPON']);
 		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_SPECIAL']);
 		AddToWeaponArray(WEAPONTYPE_MISC, $content['LN_WEAPONTYPE_MISC']);
+	}
+	else if ( $content['gen_gameversion'] == COD5 ) 
+	{
+		AddToWeaponArray(WEAPONTYPE_MACHINEGUN, $content['LN_WEAPONTYPE_SUBMACHINEGUN']);
+		AddToWeaponArray(WEAPONTYPE_RIFLES, $content['LN_WEAPONTYPE_RIFLES']);
+		AddToWeaponArray(WEAPONTYPE_ASSAULT, $content['LN_WEAPONTYPE_ASSAULT']);
+		AddToWeaponArray(WEAPONTYPE_HEAVYWEAPONS, $content['LN_WEAPONTYPE_HEAVYWEAPONS']);
+		AddToWeaponArray(WEAPONTYPE_SHOTGUN, $content['LN_WEAPONTYPE_SHOTGUN']);
+		AddToWeaponArray(WEAPONTYPE_GRENADE, $content['LN_WEAPONTYPE_GRENADE']);
+		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_SPECIAL']);
+		AddToWeaponArray(WEAPONTYPE_SNIPER, $content['LN_WEAPONTYPE_SNIPER']);
+		AddToWeaponArray(WEAPONTYPE_PISTOL, $content['LN_WEAPONTYPE_PISTOL']);
 	}
 
 	// Main Menu Copy!

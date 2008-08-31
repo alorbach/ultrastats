@@ -193,6 +193,8 @@ $content['LN_WEAPONTYPE_ASSAULT'] = "Assault Rifles";
 $content['LN_WEAPONTYPE_LIGHTMACHINEGUN'] = "Light Machine Guns";
 $content['LN_WEAPONTYPE_SHOTGUN'] = "Shotguns";
 $content['LN_WEAPONTYPE_SPECIAL'] = "Special weapons";
+	$content['LN_WEAPONTYPE_RIFLES'] = "Rifles";
+	$content['LN_WEAPONTYPE_HEAVYWEAPONS'] = "Heavy Weapons";
 
 	// Medals site
 	$content['LN_ERROR_INVALIDMEDAL'] = "Error, this medal does not exist.";
