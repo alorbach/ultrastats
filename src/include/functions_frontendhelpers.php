@@ -700,8 +700,10 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_ffar",	
 							"_bipod",	
 							"_telescopic",	
-							"_bigammo",		
-							"_bayonet"
+							"_bigammo",
+							"_bayonet", 
+							"_aperture", 
+							"_silenced", 
 						);
 	$arrayReplace = array ("",		"",		"",		"",			"",			"",			"",			"",			"",			"");
 	

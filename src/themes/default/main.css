@@ -324,7 +324,7 @@ select, input, textarea
 
 .topmenu2begin
 {
-	height: 20px;
+	height: 16px;
 	border: 0px;
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
@@ -333,7 +333,7 @@ select, input, textarea
 }
 .topmenu2
 {
-	height: 20px;
+	height: 16px;
 	border:1px ridge;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
 	padding: 2px 2px 0px 2px;
@@ -353,7 +353,7 @@ select, input, textarea
 }
 .topmenu2end
 {
-	height: 20px;
+	height: 16px;
 	border:1px inset;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
 	font: 10px Verdana, Arial, Helvetica, sans-serif;
@@ -363,7 +363,7 @@ select, input, textarea
 
 .topmenu3begin
 {
-	height: 20px;
+	height: 16px;
 	border:0px;
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
@@ -372,7 +372,7 @@ select, input, textarea
 }
 .topmenu3
 {
-	height: 20px;
+	height: 16px;
 	border:1px ridge;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
 	padding: 2px 2px 0px 2px;
@@ -392,7 +392,7 @@ select, input, textarea
 }
 .topmenu3end
 {
-	height: 20px;
+	height: 16px;
 	border:1px inset;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
 	font: 10px Verdana, Arial, Helvetica, sans-serif;
