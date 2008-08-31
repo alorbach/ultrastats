@@ -111,6 +111,9 @@ if ( isset($_GET['id']) )
 		$content['WeaponImage'] = $gl_root_path . "images/weapons/normal/" . $tmpWeaponimg . ".png";
 		if ( !is_file($content['WeaponImage']) )
 			$content['WeaponImage'] = $gl_root_path . "images/weapons/no-pic.png";
+		
+		// Copy text!
+		$content['WeaponImageDisplayName'] = $content['WeaponDisplayName']; 
 		// --- 
 
 		// --- Set Description!

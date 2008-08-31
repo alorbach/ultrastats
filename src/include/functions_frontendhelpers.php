@@ -180,7 +180,7 @@ function CreateWeaponArray()
 		AddToWeaponArray(WEAPONTYPE_SHOTGUN, $content['LN_WEAPONTYPE_SHOTGUN']);
 		AddToWeaponArray(WEAPONTYPE_GRENADE, $content['LN_WEAPONTYPE_GRENADE']);
 		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_SPECIAL']);
-		AddToWeaponArray(WEAPONTYPE_SNIPER, $content['LN_WEAPONTYPE_SNIPER']);
+		AddToWeaponArray(WEAPONTYPE_TANK, $content['LN_WEAPONTYPE_TANK']);
 		AddToWeaponArray(WEAPONTYPE_PISTOL, $content['LN_WEAPONTYPE_PISTOL']);
 	}
 
