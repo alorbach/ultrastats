@@ -341,6 +341,18 @@ function GetDamageTypeIDByName( $damagetype )
 function GetWeaponIDByName( $weaponname )
 {
 	global $myserver;
+	
+	// Move GL at the right position, to avoid duplicated weapon ID's!
+	$pos = strpos($weaponname, "gl_");
+	if ( $pos !== false && $pos == 0) 
+	{	
+		// Remove GL first!
+		$weaponname = str_replace("gl_", "", $weaponname);
+		echo $weaponname;
+		// Add gl_ where it belongs to!
+		$weaponname = str_replace("_mp", "_gl_mp", $weaponname);
+		echo $weaponname;
+	}
 
 	/* --- Hotfix for crap cod4 logging format .. damn dev noobs @iw ... 
 	*	Rewritting the weapon_ids of these here: 
@@ -350,10 +362,11 @@ function GetWeaponIDByName( $weaponname )
 		gl_m14_mp
 		gl_m16_mp
 		gl_m4_mp
-	--- */
+	--- 
 	$search = array( "gl_ak47_mp", "gl_g36c_mp", "gl_g3_mp", "gl_m14_mp", "gl_m16_mp", "gl_m4_mp" );
 	$replace = array( "ak47_gl_mp", "g36c_gl_mp", "g3_gl_mp", "m14_gl_mp", "m16_gl_mp", "m4_gl_mp" );
 	$weaponname = str_replace($search, $replace, $weaponname);
+	*/
 
 	// --- First get and check the weapon id ;)!
 	$result = DB_Query("SELECT ID FROM " . STATS_WEAPONS . " WHERE INGAMENAME = '$weaponname'");

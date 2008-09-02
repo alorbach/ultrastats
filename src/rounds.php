@@ -32,7 +32,6 @@ InitFrontEndDefaults();	// Only in WebFrontEnd
 
 // --- BEGIN CREATE TITLE
 $content['TITLE'] = InitPageTitle();
-
 // Append custom title part!
 $content['TITLE'] .= " :: Rounds ";
 // --- END CREATE TITLE

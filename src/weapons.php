@@ -53,7 +53,7 @@ else
 
 // --- 
 
-// --- Get/Set Playersorting
+// --- Get/Set Weaponsorting
 if ( isset($_GET['id']) )
 {
 	// get and check
@@ -116,17 +116,9 @@ if ( isset($_GET['id']) )
 		$content['WeaponImageDisplayName'] = $content['WeaponDisplayName']; 
 		// --- 
 
-		// --- Set Description!
-/* OLD CODE
-		if ( isset($weaponvars['Description']) && strlen($weaponvars['Description']) > 0 )
-			$content['Description'] = $weaponvars['Description'];
-		else
-			$content['Description'] = $content['LN_WEAPON_NODESCRIPTION'];
-		*/
 		$content['Description'] = GetTextFromDescriptionID( $weaponvars['Description_id'], $content['LN_WEAPON_NODESCRIPTION'] );
 		$content['INGAMENAME'] = $weaponvars['INGAMENAME'];
 		// --- 
-
 
 		// --- Most kills with this Weapon
 			// --- First get the Count and Set Pager Variables
@@ -242,7 +234,6 @@ if ( isset($_GET['id']) )
 		}
 		// --- 
 
-
 		// --- Most Killed by this Weapon!
 			// --- First get the Count and Set Pager Variables
 			$sqlquery = "SELECT " .
@@ -355,17 +346,134 @@ if ( isset($_GET['id']) )
 			// ---
 		}
 		// --- 
-
-
-
 	}
 	else
 		$content['iserror'] = "true";
 }
 else
 {
-	// Invalid ID!
-	$content['iserror'] = "true";
+	// No weapon ID means we list all weapons!
+	$content['weaponslist'] = "true";
+
+	// Append to Title
+	$content['TITLE'] .= " - All weapons";
+
+// Now the real Query begins
+$sqlquery = "SELECT " .
+					STATS_WEAPONS . ".ID, " .
+					STATS_WEAPONS . ".INGAMENAME, " . 
+					STATS_WEAPONS . ".WeaponType, " . 
+					STATS_WEAPONS . ".DisplayName as WeaponDisplayName, " . 
+					STATS_WEAPONS . ".ExternalInfoUrl, " .
+					"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
+					"sum(" . STATS_PLAYER_KILLS . ".Kills) as WeaponKills " . 
+					" FROM " . STATS_WEAPONS . 
+					" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
+					" ON (" . STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID " . " )" . 
+					" GROUP BY " . STATS_WEAPONS . ".ID " . 
+					" ORDER BY DisplayName DESC ";
+
+$result = DB_Query($sqlquery);
+$content['weaponsonly'] = DB_GetAllRows($result, true);
+
+//print_r ( $content['weaponsonly'] );
+//exit;
+
+if ( isset($content['weaponsonly']) )
+{
+	// Preprocess weapons first!
+	$content['BarImageKillCount'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
+	$content['BarImagePlayerCount'] = $gl_root_path . "images/bars/bar-small/blue_middle_9.png";
+	$content['AllPlayerCount'] = 0;
+
+	for($i = 0; $i < count($content['weaponsonly']); $i++)
+	{
+		// Set MaxKillCount
+		if ( !isset($content['MaxKillCount']) || $content['weaponsonly'][$i]['WeaponKills'] > $content['MaxKillCount'] )
+			$content['MaxKillCount'] = $content['weaponsonly'][$i]['WeaponKills'];
+
+		// Set MaxPlayerCount
+		if ( !isset($content['MaxPlayerCount']) || $content['weaponsonly'][$i]['PlayerCount'] > $content['MaxPlayerCount'] )
+			$content['MaxPlayerCount'] = $content['weaponsonly'][$i]['PlayerCount'];
+	}
+
+	// --- Loop through weapontypes
+	foreach ( $content['weapontypes'] as $WeaponTypeNum => $myWeaponType ) 
+	{
+		// Copy basic properties
+		$content['weaponcategories'][$WeaponTypeNum]["ID"] = $myWeaponType["ID"];
+		$content['weaponcategories'][$WeaponTypeNum]["CategoryDisplayName"] = $myWeaponType["Name"];
+
+		// --- Loop through weapons
+		foreach ( $content['weaponsonly'] as $myWeapon ) 
+		{
+			// If same weapon type, append 
+			if ( $myWeapon['WeaponType'] == $myWeaponType["ID"] ) 
+			{
+				// --- Set CSS Class
+				if ( isset($content['weaponcategories'][$WeaponTypeNum]['myweapons']) ) 
+					$iArrayIndex = count($content['weaponcategories'][$WeaponTypeNum]['myweapons']);
+				else
+					$iArrayIndex = 0;
+				if ( $iArrayIndex % 2 == 0 )
+					$myWeapon['cssclass'] = "line1";
+				else
+					$myWeapon['cssclass'] = "line2";
+				// --- 
+
+				// Init KillCount 
+				if ( !isset($myWeapon['WeaponKills']) ) 
+					$myWeapon['WeaponKills'] = 0;
+
+				// --- Set Weaponimage
+				// Do some replacements for same weapons ^^!
+				$tmpWeaponimg = ReturnWeaponBaseName($myWeapon['INGAMENAME']);
+				$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/" . $tmpWeaponimg . ".png";
+				if ( !is_file($myWeapon['WeaponImage']) )
+					$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/no-pic.png";
+				// --- 
+
+				// --- Set ExternalInfoUrl!
+				if ( strlen($myWeapon['ExternalInfoUrl']) <= 0 )
+				{
+					$myWeapon['IsExternalInfoUrl'] = "false";
+					$myWeapon['ExternalInfoUrl'] = "";
+				}
+				else
+				{
+					$myWeapon['ExternalInfoUrl'] = $myWeapon['ExternalInfoUrl'];
+					$myWeapon['IsExternalInfoUrl'] = "true";
+					$myWeapon['ExternalInfoUrlDisplay'] = strlen($myWeapon['ExternalInfoUrl']) > 20 ? substr($myWeapon['ExternalInfoUrl'], 0, 20) . "..." : $myWeapon['ExternalInfoUrl'];
+
+				}
+				// ---
+
+				// --- Generate weapon usage bars!
+
+				// Set KillRatioWidth Bars
+				if ( $myWeapon['WeaponKills'] > 0 )
+					$myWeapon['KillRatioWidth'] = intval( $myWeapon['WeaponKills'] / ($content['MaxKillCount'] / 100) );
+				else
+					$myWeapon['KillRatioWidth'] = 1;
+
+				// Set PlayerCountWidth Bars
+				if ( $myWeapon['PlayerCount'] > 0 )
+					$myWeapon['PlayerCountWidth'] = intval( $myWeapon['PlayerCount'] / ($content['MaxPlayerCount'] / 100) );
+				else
+					$myWeapon['PlayerCountWidth'] = 1;
+
+				// ---
+
+				// Finally append to array!
+				$content['weaponcategories'][$WeaponTypeNum]['myweapons'][] = $myWeapon;
+			}
+		}
+
+	}
+}
+
+	
+
 }
 // --- 
 

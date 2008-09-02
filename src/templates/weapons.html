@@ -8,6 +8,55 @@
 	</center>
 <!-- ENDIF iserror="true" -->
 
+<!-- IF weaponslist="true" -->
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<tr>
+	<td width="10" valign="top" nowrap>&nbsp;</td>
+	<td width="100%" valign="top">
+
+		<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center">
+		<tr>
+			<td class="title" nowrap>{LN_WEAPON_LIST}</td>
+		</tr>
+		</table>
+
+		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<!-- BEGIN weaponcategories -->
+		<tr>
+			<td class="titleSecond" nowrap colspan="8">{CategoryDisplayName}</td>
+		</tr>
+		<tr>
+			<td class="cellmenu1" align="center" nowrap>&nbsp;</td>
+			<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_WEAPON_NAME}</B></td>
+			<td width="175" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_WEAPON_KILLCOUNT}</B></td>
+			<td width="175" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_WEAPON_PLAYERCOUNT}</B></td>
+			<td width="125" class="cellmenu1" align="left" nowrap colspan="2"><B>{LN_WEAPON_EXTERNLINFO}</B></td>
+		</tr>
+			<!-- BEGIN myweapons -->
+			<tr>
+				<td class="{cssclass}" align="right"><img src="{WeaponImage}" height="18" align="right"></td>
+				<td class="{cssclass}" align="left"><b>{WeaponDisplayName}</b></td>
+				<td class="{cssclass}" align="right" nowrap><b>{WeaponKills}</b></td>
+				<td class="{cssclass}" align="left" width="100"><img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9" title="{BarImageKillRatioPlusText}"></td>
+				<td class="{cssclass}" align="right" nowrap><b>{PlayerCount}</b></td>
+				<td class="{cssclass}" align="left" width="100"><img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9" title="{PlayerCountWidthPlusText}"></td>
+				<td class="{cssclass}" align="center">
+				<!-- IF IsExternalInfoUrl="true" -->
+				<a href="{ExternalInfoUrl}" target="_blank">{ExternalInfoUrlDisplay}</a>
+				<!-- ENDIF IsExternalInfoUrl="true" -->
+				</td>
+			</tr>
+			<!-- END myweapons -->
+
+		<!-- END weaponcategories -->
+		</table>
+
+	</td>
+	<td width="10" valign="top" nowrap>&nbsp;</td>
+</tr>
+</table>
+<!-- ENDIF weaponslist="true" -->
+
 <!-- IF weaponsenabled="true" -->
 <table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
 <tr>

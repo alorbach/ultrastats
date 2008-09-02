@@ -46,26 +46,32 @@ img
 .title 
 {
 	FONT: bold 11px Verdana, Arial, Helvetica, sans-serif; 
-    BACKGROUND-COLOR: #D2C598;
-	COLOR: #032D5D;
-	border: 1px solid;
-	border-color: #ACBED6 #3B679B #3B679B #ACBED6;
+    BACKGROUND-COLOR: #C6B097;
+	COLOR: #1A3745;
 	height: 20px;
 	text-align:center;
 	vertical-align:middle;
 }
-A.title, A.title:active, A.title:visited 
+a.title, a.title:active, a.title:visited 
 {
-	FONT: bold 11px Verdana, Arial, Helvetica, sans-serif;
 	COLOR: #ED9D10;
 	TEXT-DECORATION: none;
 }
-A.title:hover 
+a.title:hover 
 {
-	FONT: bold 11px Verdana, Arial, Helvetica, sans-serif;
 	COLOR: #982D00; 
 	TEXT-DECORATION: none;
 }
+.titleSecond
+{
+	FONT: bold 10px Verdana, Arial, Helvetica, sans-serif; 
+    BACKGROUND-COLOR: #E3D2AE;
+	COLOR: #1A3745;
+	height: 18px;
+	text-align:center;
+	vertical-align:middle;
+}
+
 
 /* Default Font Classes */
 font
