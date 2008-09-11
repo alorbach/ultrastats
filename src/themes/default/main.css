@@ -1,7 +1,7 @@
 /* Generell Tag Classes */
 BODY
 {
-    BACKGROUND-COLOR: #f9f9f9;
+    BACKGROUND-COLOR: #DFEAEB;
     COLOR: #000000;
     FONT-FAMILY: ARIAL;
     FONT-SIZE: 8pt;
@@ -46,11 +46,14 @@ img
 .title 
 {
 	FONT: bold 11px Verdana, Arial, Helvetica, sans-serif; 
-    BACKGROUND-COLOR: #C6B097;
 	COLOR: #1A3745;
 	height: 20px;
 	text-align:center;
 	vertical-align:middle;
+
+    background-color: #C6B097;
+    background-image: url(images/bg_3.png);
+    background-repeat: repeat-x;
 }
 a.title, a.title:active, a.title:visited 
 {
@@ -65,11 +68,14 @@ a.title:hover
 .titleSecond
 {
 	FONT: bold 10px Verdana, Arial, Helvetica, sans-serif; 
-    BACKGROUND-COLOR: #E3D2AE;
 	COLOR: #1A3745;
 	height: 18px;
 	text-align:center;
 	vertical-align:middle;
+
+    background-color: #E3D2AE;
+    background-image: url(images/bg_4.png);
+    background-repeat: repeat-x;
 }
 
 
@@ -83,14 +89,14 @@ font
 /* Table / Border Classes */
 .table_with_border
 { 
-	background-color:#ECF2F8;
+	background-color:#F0EDE9;
 	border:1px solid;
 	border-color: #CCCCCC #000000 #000000 #CCCCCC; 
 }
 
 .table_with_border_second
 { 
-	background-color:#D5E0E7;
+	background-color:#E4E4E3;
 	border:1px solid;
 	border-color: #CCCCCC #000000 #000000 #CCCCCC; 
 }
@@ -112,14 +118,14 @@ font
 .mainheader
 { 
 	border:1px solid;
-	background-color:#D3D8DD;
+	background-color:#D9E2E8;
 	border-color: #44617D #203040 #203040 #44617D; 
 }
 
 .mainfooter
 { 
 	height: 20px;
-	background-color:#DDDDDD;
+	background-color:#EBEBEB;
 	border-top: #97A8B9 1px solid;
 	border-bottom: #6592BD 1px solid;
 }
@@ -170,44 +176,19 @@ font
 	background-color: #F5F5F5;
 }
 
-.line_alt0
-{
-	font-size: 8pt;
-	color: #000000;
-	background-color: #AAAAAA;
-	background-image: url("images/dither.png"); 
-}
-.line_alt0:hover 
-{ 
-	background-color:#F9F9F9; 
-	background-image: url("images/dither.png"); 
-}
-
-.line_alt1
-{
-	font-size: 8pt;
-	color: #000000;
-	background-color: #DDDDDD;	
-	background-image: url("images/dither.png"); 
-}
-.line_alt1:hover 
-{ 
-	background-color:#F9F9F9; 
-	background-image: url("images/dither.png"); 
-}
-
-
 /* Cell Columns */
 .cellmenu1
 {
 	height: 16px;
 	border:1px ridge;
 	border-color: #79AABE #09506C #09506C #79AABE;
+	background-color: #2E79A0;
+    background-image: url(images/bg_1.png);
+    background-repeat: repeat-x;
 
 	text-indent:5px;
 	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
 	color: #FFFFFF;
-	background-color: #6C8E9C;
 }
 .cellmenu1:hover 
 { 
@@ -230,11 +211,13 @@ A.cellmenu1_link:hover
 	height: 15px;
 	border:1px inset;
 	border-color: #79AABE #09506C #09506C #79AABE;
+	background-color: #9FDAF1;
+    background-image: url(images/bg_2.png);
+    background-repeat: repeat-x;
 
 	text-indent:5px;
 	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
 	color: #393327;
-	background-color: #B8D4E0;
 }
 .cellmenu2:hover 
 { 
@@ -283,8 +266,8 @@ A.cellmenu1_link:hover
 /* Form elements */
 select, input, textarea
 {
-	background-color: #E8E7E2; 
-	color:#000000; 
+	background-color: #E6EFF4; 
+	color:#000000;
 	font:bold 10px Verdana,Arial,Helvetica,sans-serif;
 	border: 1px solid;
 	border-color: #233B51 #124A7C #124A7C #233B51; 

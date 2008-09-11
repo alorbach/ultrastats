@@ -360,7 +360,7 @@ else
 
 // Now the real Query begins
 $sqlquery = "SELECT " .
-					STATS_WEAPONS . ".ID, " .
+					STATS_WEAPONS . ".ID as WEAPONID, " .
 					STATS_WEAPONS . ".INGAMENAME, " . 
 					STATS_WEAPONS . ".WeaponType, " . 
 					STATS_WEAPONS . ".DisplayName as WeaponDisplayName, " . 
@@ -370,6 +370,9 @@ $sqlquery = "SELECT " .
 					" FROM " . STATS_WEAPONS . 
 					" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
 					" ON (" . STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID " . " )" . 
+					" WHERE 1=1 " . /* dummy where appended */
+					GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
+					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
 					" GROUP BY " . STATS_WEAPONS . ".ID " . 
 					" ORDER BY DisplayName DESC ";
 
