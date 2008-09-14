@@ -394,7 +394,7 @@ else
 		// Fix for now of the list exceeds $CFG['MAX_PAGES_COUNT'] pages
 		if ($pagenumbers > $content['admin_maxpages'])
 		{
-			$content['PLAYERS_MOREPAGES'] = "*(More then " . $content['admin_maxpages'] . " pages found)";
+			$content['PLAYERS_MOREPAGES'] = GetAndReplaceLangStr( $content['LN_ADMIN_MOREPAGES'], $content['admin_maxpages'] ); 
 			$pagenumbers = $content['admin_maxpages'];
 		}
 		else

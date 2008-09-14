@@ -32,6 +32,7 @@ $content['LN_MENU_ADMINPLAYERS'] = "Player Editor";
 $content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
 $content['LN_MENU_ADMINUSERS'] = "User Admin";
 $content['LN_MENU_ADMINLOGOFF'] = "Logoff";
+$content['LN_ADMIN_MOREPAGES'] = "(More then %1 pages found)";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
@@ -171,7 +172,6 @@ $content['LN_USER_ERROR_PASSSHORT'] = "Error, Password was to short, or did not 
 $content['LN_USER_ERROR_HASBEENADDED'] = "User '%1' has been successfully added";
 $content['LN_USER_ERROR_HASBEENEDIT'] = "User '%1' has been successfully edited";
 $content['LN_USER_WARNDELETEUSER'] = "Are you sure to delete the User '%1'?";
-
 
 // General Options
 $content['LN_GEN_LANGUAGE'] = "Select default language";

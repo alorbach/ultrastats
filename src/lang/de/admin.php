@@ -32,6 +32,7 @@ $content['LN_MENU_ADMINPLAYERS'] = "Player Editor";
 $content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
 $content['LN_MENU_ADMINUSERS'] = "User Admin";
 $content['LN_MENU_ADMINLOGOFF'] = "Logoff";
+$content['LN_ADMIN_MOREPAGES'] = "(More then %1 pages found)";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
