@@ -44,14 +44,19 @@
 	border-color: #44617D #203040 #203040 #44617D;
 } 
 
-
 #menu ul ul {
 	z-index:10;
 	white-space:nowrap;
 	position: absolute;
 	top: 14px; /*14px; */
 	left: 0px; /*24px; /* to position them to the right of their containing block */
-	width: auto; 
+	width: auto;
+	min-width: 175px; /* workaround for FF */
+}
+
+#menu ul ul li {
+	width: auto;
+	min-width: 175px; /* workaround for FF */
 }
 
 #menu ul ul ul {
@@ -66,14 +71,16 @@
 	/* width: 350; width is based on the containing block */
 }
 
-div#menu ul ul,
-div#menu ul li:hover ul ul
+#menu ul ul, 
+#menu ul li:hover ul ul, 
+#menu ul ul li:hover ul ul ul
 {
 	display: none;
 }
 
-div#menu ul li:hover ul,
-div#menu ul ul li:hover ul 
+#menu ul li:hover ul,
+#menu ul ul li:hover ul, 
+#menu ul ul ul li:hover ul 
 {
 	display: block;
 }
