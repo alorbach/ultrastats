@@ -214,6 +214,10 @@ $content['LN_DAMAGETYPE_DESCRIPTION'] = "Beschreibung für den damagetype";
 $content['LN_DAMAGETYPE_INGAMENAME'] = "Ingame name";
 $content['LN_DAMAGETYPE_TOPPLAYERS'] = "Spieler mit den meisten '%1' kills";
 $content['LN_DAMAGETYPE_TOPKILLEDBY'] = "Am häufigsten getötet von diesem damagetype";
+$content['LN_DAMAGETYPE_LIST'] = "List of all damagetypes";
+$content['LN_DAMAGETYPE_NAME'] = "Damagetype name";
+$content['LN_DAMAGETYPE_KILLCOUNT'] = "Kills caused by this damagetype";
+$content['LN_DAMAGETYPE_PLAYERCOUNT'] = "Players who killed with this damagetype";
 
 //Install Site
 $content['LN_CFG_PARAMMISSING'] = "The following parameter were missing: ";

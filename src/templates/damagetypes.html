@@ -8,6 +8,58 @@
 	</center>
 <!-- ENDIF iserror="true" -->
 
+<!-- IF damagelist="true" -->
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<tr>
+	<td width="10" valign="top" nowrap>&nbsp;</td>
+	<td width="100%" valign="top">
+
+		<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate">
+		<tr>
+			<td class="title" nowrap>{LN_DAMAGETYPE_LIST}</td>
+		</tr>
+		</table>
+
+		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<tr>
+			<td class="cellmenu1" align="center" nowrap>&nbsp;</td>
+			<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_DAMAGETYPE_NAME}</B></td>
+			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_DAMAGETYPE_KILLCOUNT}</B></td>
+			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_DAMAGETYPE_PLAYERCOUNT}</B></td>
+		</tr>
+		<!-- BEGIN damagetypeslist -->
+		<tr>
+			<td class="{cssclass}" align="right"><a HREF="damagetypes.php?id={DAMAGETYPE}{additional_url}"><img src="{DamageImage}" height="18" align="right"></a></td>
+			<td class="{cssclass}" align="left"><a HREF="damagetypes.php?id={DAMAGETYPE}{additional_url}">{DamageTypeDisplayName}</a></td>
+			<td class="{cssclass}" align="right" width="50"><b>{DamageKills}</b></td>
+			<td class="{cssclass}" align="left" width="125" bgcolor="#007700">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
+			<tr>
+				<td bgcolor="#007700">
+				<img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9" title="{BarImageKillRatioPlusText}">
+				</td>
+			</tr>
+			</table>
+			</td>
+			<td class="{cssclass}" align="right" width="50"><b>{PlayerCount}</b></td>
+			<td class="{cssclass}" align="left" width="125">
+			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
+			<tr>
+				<td bgcolor="#005577">
+				<img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9" title="{PlayerCountWidthPlusText}">
+				</td>
+			</tr>
+			</table>
+		</tr>
+		<!-- END damagetypeslist -->
+		</table>
+
+	</td>
+	<td width="10" valign="top" nowrap>&nbsp;</td>
+</tr>
+</table>
+<!-- ENDIF damagelist="true" -->
+
 <!-- IF damagetypeenabled="true" -->
 <table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
 <tr>

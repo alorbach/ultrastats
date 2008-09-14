@@ -335,8 +335,99 @@ if ( isset($_GET['id']) )
 }
 else
 {
+	// No weapon ID means we list all weapons!
+	$content['damagelist'] = "true";
+
+	// Append to Title
+	$content['TITLE'] .= " - All Damagetypes";
+
+	// Now the real Query begins
+	$sqlquery = "SELECT " .
+						STATS_DAMAGETYPES . ".ID as DAMAGETYPEID, " .
+						STATS_DAMAGETYPES . ".DAMAGETYPE, " . 
+						STATS_DAMAGETYPES . ".DisplayName as DamageTypeDisplayName, " . 
+						"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
+						"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
+						" FROM " . STATS_DAMAGETYPES . 
+						" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
+						" ON (" . STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID " . " )" . 
+						" WHERE 1=1 " . /* dummy where appended */
+						GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
+						GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+						" GROUP BY " . STATS_DAMAGETYPES . ".ID " . 
+						" ORDER BY DisplayName DESC ";
+
+	$result = DB_Query($sqlquery);
+	$content['damagetypeslist'] = DB_GetAllRows($result, true);
+
+//print_r ( $content['damagesonly'] );
+//exit;
+
+	if ( isset($content['damagetypeslist']) )
+	{
+		// Preprocess weapons first!
+		$content['BarImageKillCount'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
+		$content['BarImagePlayerCount'] = $gl_root_path . "images/bars/bar-small/blue_middle_9.png";
+		$content['AllPlayerCount'] = 0;
+
+		// --- Loop through weapontypes | First time 
+		for($i = 0; $i < count($content['damagetypeslist']); $i++)
+		{
+			// Set MaxKillCount
+			if ( !isset($content['MaxKillCount']) || $content['damagetypeslist'][$i]['DamageKills'] > $content['MaxKillCount'] )
+				$content['MaxKillCount'] = $content['damagetypeslist'][$i]['DamageKills'];
+
+			// Set MaxPlayerCount
+			if ( !isset($content['MaxPlayerCount']) || $content['damagetypeslist'][$i]['PlayerCount'] > $content['MaxPlayerCount'] )
+				$content['MaxPlayerCount'] = $content['damagetypeslist'][$i]['PlayerCount'];
+
+			// Init DamageKills 
+			if ( !isset($content['damagetypeslist'][$i]['DamageKills']) ) 
+				$content['damagetypeslist'][$i]['DamageKills'] = 0;
+		}
+		// ---
+
+		// --- Loop through weapontypes | Second Time!
+		for($i = 0; $i < count($content['damagetypeslist']); $i++)
+		{
+			// --- Set Weaponimage
+			// Do some replacements for same weapons ^^!
+			$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/weapons/thumbs/" . $content['damagetypeslist'][$i]['DAMAGETYPE'] . ".png";
+			if ( !is_file($content['damagetypeslist'][$i]['DamageImage'] ) )
+				$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/damagetypes/thumbs/no-pic.png";
+			// --- 
+
+			// --- Set CSS Class
+			if ( $i % 2 == 0 )
+				$content['damagetypeslist'][$i]['cssclass'] = "line1";
+			else
+				$content['damagetypeslist'][$i]['cssclass'] = "line2";
+			// ---
+			
+			// --- Generate weapon usage bars!
+			// Set KillRatioWidth Bars
+			if ( $content['damagetypeslist'][$i]['DamageKills'] > 0 )
+				$content['damagetypeslist'][$i]['KillRatioWidth'] = intval( $content['damagetypeslist'][$i]['DamageKills'] / ($content['MaxKillCount'] / 100) );
+			else
+				$content['damagetypeslist'][$i]['KillRatioWidth'] = 1;
+
+			// Set PlayerCountWidth Bars
+			if ( $content['damagetypeslist'][$i]['PlayerCount'] > 0 )
+				$content['damagetypeslist'][$i]['PlayerCountWidth'] = intval( $content['damagetypeslist'][$i]['PlayerCount'] / ($content['MaxPlayerCount'] / 100) );
+			else
+				$content['damagetypeslist'][$i]['PlayerCountWidth'] = 1;
+
+			// ---
+
+
+		}
+		// ---
+
+	}
+
 	// Invalid ID!
-	$content['iserror'] = "true";
+//	$content['iserror'] = "true";
+	
 }
 // --- 
 
