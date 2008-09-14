@@ -412,13 +412,15 @@ select, input, textarea
 	background-color: #7395C7;
 }
 
-.topmenu1_link, A.topmenu1_link, .topmenu2_link, A.topmenu2_link, .topmenu3_link, A.topmenu3_link
+.topmenu1_link, a.topmenu1_link, a.topmenu1_link:visited, .topmenu2_link, a.topmenu2_link, a.topmenu2_link:visited, .topmenu3_link, a.topmenu3_link, a.topmenu3_link:visited 
 {
 	color: #FFDD22;
 	font-weight:bold;
+	text-decoration: none;
 }
 .topmenu1_link:hover, .topmenu2_link:hover, .topmenu3_link:hover
 {
 	color: #FFFF99;
+	font-weight:bold;
 	text-decoration: none;
 }

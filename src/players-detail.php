@@ -225,7 +225,7 @@ if ( isset($_GET['id']) )
 					// --- Set Mapimage
 					$content['PLAYER_MapImage'] = $gl_root_path . "images/maps/small/" . $content['PLAYER_MAPNAME'] . ".jpg";
 					if ( !is_file($content['PLAYER_MapImage']) )
-						$content['PLAYER_MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+						$content['PLAYER_MapImage'] = $gl_root_path . "images/maps/no-pic.png";
 					// --- 
 
 					// --- Set DisplayName
@@ -266,7 +266,7 @@ if ( isset($_GET['id']) )
 					$tmpWeaponimg = ReturnWeaponBaseName($content['PLAYER_WEAPONID']);
 					$content['PLAYER_WeaponImage'] = $gl_root_path . "images/weapons/normal/" . $tmpWeaponimg . ".png";
 					if ( !is_file($content['PLAYER_WeaponImage']) )
-						$content['PLAYER_WeaponImage'] = $gl_root_path . "images/weapons/no-pic.jpg";
+						$content['PLAYER_WeaponImage'] = $gl_root_path . "images/weapons/no-pic.png";
 					// --- 
 
 					// --- Set DisplayName
@@ -314,7 +314,7 @@ if ( isset($_GET['id']) )
 						$tmpWeaponimg = ReturnWeaponBaseName($content['weaponstats'][$i]['INGAMENAME']);
 						$content['weaponstats'][$i]['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/" . $tmpWeaponimg . ".png";
 						if ( !is_file($content['weaponstats'][$i]['WeaponImage']) )
-							$content['weaponstats'][$i]['WeaponImage'] = $gl_root_path . "images/weapons/no-pic.jpg";
+							$content['weaponstats'][$i]['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/no-pic.png";
 						// --- 
 
 						// --- Set CSS Class
@@ -367,7 +367,7 @@ if ( isset($_GET['id']) )
 							// --- Set Mapimage
 							$content['mapstats'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/" . $content['mapstats'][$i]['MAPNAME'] . ".jpg";
 							if ( !is_file($content['mapstats'][$i]['MapImage']) )
-								$content['mapstats'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+								$content['mapstats'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/no-pic.png";
 							// --- 
 
 							// --- Set DisplayName
@@ -708,7 +708,7 @@ if ( isset($_GET['id']) )
 						// --- Set Mapimage
 						$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/" . $content['lastrounds'][$i]['MAPNAME'] . ".jpg";
 						if ( !is_file($content['lastrounds'][$i]['MapImage']) )
-							$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+							$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/no-pic.png";
 						// --- 
 
 						// --- Set GametypeName 

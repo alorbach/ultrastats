@@ -77,7 +77,7 @@ if ( isset($_GET['id']) )
 		// --- Set Gametypeimage
 		$content['GametypeImage'] = $gl_root_path . "images/gametypes/normal/" . $content['gen_gameversion_picpath'] . "/" . $gametypevars['NAME'] . ".png";
 		if ( !is_file($content['GametypeImage']) )
-			$content['GametypeImage'] = $gl_root_path . "images/gametypes/no-pic.jpg";
+			$content['GametypeImage'] = $gl_root_path . "images/gametypes/no-pic.png";
 		// --- 
 
 		// --- Copy other values
@@ -129,7 +129,7 @@ if ( isset($_GET['id']) )
 				// --- Set Mapimage
 				$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/" . $content['lastrounds'][$i]['MAPNAME'] . ".jpg";
 				if ( !is_file($content['lastrounds'][$i]['MapImage']) )
-					$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+					$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/no-pic.png";
 				// --- 
 
 				// --- Set Display Time

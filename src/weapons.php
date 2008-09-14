@@ -433,7 +433,7 @@ if ( isset($content['weaponsonly']) )
 				$tmpWeaponimg = ReturnWeaponBaseName($myWeapon['INGAMENAME']);
 				$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/" . $tmpWeaponimg . ".png";
 				if ( !is_file($myWeapon['WeaponImage']) )
-					$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/no-pic.png";
+					$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/no-pic.png";
 				// --- 
 
 				// --- Set ExternalInfoUrl!

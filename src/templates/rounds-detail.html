@@ -181,7 +181,7 @@
 				<td colspan="3" class="cellmenu1" align="center" nowrap><B>{DisplayName}</B></td>
 			</tr>
 			<tr>
-				<td class="cellmenu2" width="42" align="left" nowrap><img src="{MedalImage}" width="32" height="64" alt="{PLAYER_FinalMapDisplayName}"></td>
+				<td class="cellmenu2_naked" width="42" align="left" nowrap><img src="{MedalImage}" width="32" height="64" alt="{PLAYER_FinalMapDisplayName}"></td>
 				<td class="{cssclass}" align="center" valign="top">
 					<br><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</B>
 					<br>{ValueTitel}: <B>{Value}</B>
@@ -201,9 +201,9 @@
 
 			<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
-				<td class="cellmenu2" width="75" align="center" nowrap><b>{LN_LROUNDS_MAPNAME}</b></td>
+				<td class="cellmenu2_naked" width="75" align="center" nowrap><b>{LN_LROUNDS_MAPNAME}</b></td>
 				<td class="line1" align="center" width="100%" valign="top">
-					<img src="{MapNameFile}" width="100" alt="{MapDisplayName}" class="imageborder">
+					<a href="info-maps.php?id={MapName}{additional_url}"><img src="{MapNameFile}" width="100" alt="{MapDisplayName}" class="imageborder"></a>
 				</td>
 			</tr>
 			<tr>

@@ -78,7 +78,7 @@ if ( isset($_GET['id']) )
 		// --- Set Mapimage
 		$content['MapImage'] = $gl_root_path . "images/maps/middle/" . $mapvars['MAPNAME'] . ".jpg";
 		if ( !is_file($content['MapImage']) )
-			$content['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+			$content['MapImage'] = $gl_root_path . "images/maps/no-pic.png";
 		// --- 
 
 		// --- Copy other values
@@ -127,7 +127,7 @@ if ( isset($_GET['id']) )
 				// --- Set Mapimage
 				$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/" . $content['lastrounds'][$i]['MAPNAME'] . ".jpg";
 				if ( !is_file($content['lastrounds'][$i]['MapImage']) )
-					$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+					$content['lastrounds'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/no-pic.png";
 				// --- 
 
 				// --- Set GametypeName 

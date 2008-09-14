@@ -689,8 +689,14 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 
 function ReturnWeaponBaseName($weaponnameid)
 {
-	$arraySearch = array (	"_grip",	
-							"_acog",	
+	$arraySearch = array (	"_grip",
+							"_acog",
+							"_bigammo", 
+							"_scoped", 
+							"_aperture", 
+							"_bayonet", 
+							"_bipod",	
+							"_silenced", 
 							"_gl",	
 							"_silencer",
 							"_reflex",	
@@ -698,14 +704,9 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_stand",	
 							"_20mm",	
 							"_ffar",	
-							"_bipod",	
 							"_telescopic",	
-							"_bigammo",
-							"_bayonet", 
-							"_aperture", 
-							"_silenced", 
 						);
-	$arrayReplace = array ("",		"",		"",		"",			"",			"",			"",			"",			"",			"");
+	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 	
 	// return result
 	$stReturn = str_replace($arraySearch, $arrayReplace, $weaponnameid);

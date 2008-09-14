@@ -345,7 +345,7 @@ if ( isset($_GET['id']) )
 			// --- Set Mapimage
 			$content['MapNameFile'] = $gl_root_path . "images/maps/small/" . $content['MapName'] . ".jpg";
 			if ( !is_file($content['MapNameFile']) )
-				$content['MapNameFile'] = $gl_root_path . "images/maps/no-pic.jpg";
+				$content['MapNameFile'] = $gl_root_path . "images/maps/no-pic.png";
 			// --- 
 
 			// --- Set Gametype Details
