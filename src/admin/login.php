@@ -78,7 +78,7 @@ if ( isset($_POST['op']) )
 			if ( !CheckUserLogin( $content['uname'], $content['pass']) )
 			{
 				$content['ISERROR'] = "true";
-				$content['ERROR_MSG'] = "*Wrong username or password!";
+				$content['ERROR_MSG'] = $content['LN_LOGIN_ERRORWRONGUSER'];
 			}
 			else
 				RedirectPage( $szRedir );
@@ -86,7 +86,7 @@ if ( isset($_POST['op']) )
 		else
 		{
 			$content['ISERROR'] = "true";
-			$content['ERROR_MSG'] = "*Username or password not given";
+			$content['ERROR_MSG'] = $content['LN_LOGIN_ERRORUSERPASSNOTGIVEN'];
 		}
 	}
 }

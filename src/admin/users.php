@@ -270,9 +270,9 @@ else
 	{
 		// --- Set CSS Class
 		if ( $i % 2 == 0 )
-			$content['USERS'][$i]['cssclass'] = "line0";
-		else
 			$content['USERS'][$i]['cssclass'] = "line1";
+		else
+			$content['USERS'][$i]['cssclass'] = "line2";
 		// --- 
 	}
 	// --- 

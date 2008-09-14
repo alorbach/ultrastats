@@ -244,8 +244,8 @@ else
 	$sqlquery = "SELECT " . 
 				"count(" . STATS_LANGUAGE_STRINGS . ".STRINGID) as StringCount " . 
 				" FROM " . STATS_LANGUAGE_STRINGS . 
-				" GROUP BY " . STATS_LANGUAGE_STRINGS . ".STRINGID "; 
-				$content['strsqlwhere'];
+				$content['strsqlwhere'] . 
+				" GROUP BY " . STATS_LANGUAGE_STRINGS . ".STRINGID ";
 	$content['string_count'] = DB_GetRowCount( $sqlquery );
 	if ( $content['string_count'] > $content['admin_maxplayers'] ) 
 	{

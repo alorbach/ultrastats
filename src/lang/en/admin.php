@@ -38,6 +38,8 @@ $content['LN_ADMINLOGIN'] = "Admin login";
 $content['LN_USERNAME'] = "Username";
 $content['LN_PASSWORD'] = "Password";
 $content['LN_SAVEASCOOKIE'] = "Stay Online (Save in Cookie)";
+	$content['LN_LOGIN_ERRORWRONGUSER'] = "Wrong username or password!";
+	$content['LN_LOGIN_ERRORUSERPASSNOTGIVEN'] = "Username or password not given";
 
 // Main Page
 $content['LN_ADMINCENTER'] = "Admin Center";
