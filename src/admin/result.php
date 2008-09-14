@@ -31,15 +31,15 @@ define('IS_ADMINPAGE', true);
 $content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
-
 // WTF OMFG WHY !!!!! $_SESSION is empty here :S:S:S:S! How the fuck can this be :S
-// CheckForUserLogin( false );
+CheckForUserLogin( false );
+IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 
 // Hardcoded atm
 $content['REDIRSECONDS'] = 1;
 // ***					*** //
 
-// --- CONTENT Vars
+// --- BEGIN Custom Code
 if ( isset($_GET['redir']) )
 {
 	$content['EXTRA_METATAGS'] = '<meta HTTP-EQUIV="REFRESH" CONTENT="' . $content['REDIRSECONDS'] . '; URL=' . urldecode($_GET['redir']) . '">';
@@ -55,12 +55,16 @@ if ( isset($_GET['msg']) )
 else
 	$content['SZMSG'] = "*Unknown State";
 
-$content['TITLE'] = "Ultrastats - Redirect to '" . $content['SZREDIR'] . "' in 5 seconds";	// Title of the Page 
+// Create redir txt
+$content['RESULT_REDIRTXT'] = GetAndReplaceLangStr( $content['LN_RESULT_REDIRTXT'], $content['SZREDIR'], $content['REDIRSECONDS']); 
 // --- 
 
-// --- Parsen and Output
-IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
+// --- BEGIN CREATE TITLE
+$content['TITLE'] = InitPageTitle();
+$content['TITLE'] .= " :: " . GetAndReplaceLangStr( $content['LN_RESULT_REDIRTITLE'], $content['REDIRSECONDS']);
+// --- END CREATE TITLE
 
+// --- Parsen and Output
 InitTemplateParser();
 $page -> parser($content, "admin/result.html");
 $page -> output(); 

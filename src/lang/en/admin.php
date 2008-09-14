@@ -235,7 +235,9 @@ $content['LN_STRING_ERROR_ALREADYEXISTS'] = "StringID already exists.";
 $content['LN_STRING_SUCCADDED'] = "String with ID '%1' successfully added.";
 $content['LN_STRING_DELETEDSTRING'] = "The string with ID '%1' has been successfully deleted.";
 $content['LN_STRING_'] = "";
-$content['LN_STRING_'] = "";
 
+// result helper page
+	$content['LN_RESULT_REDIRTXT'] = 'You will be redirected to the <a href="%1">this page</a> on %2 seconds.';
+	$content['LN_RESULT_REDIRTITLE'] = "Redirecting in %1 seconds.";
 
 ?>
