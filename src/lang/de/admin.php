@@ -1,4 +1,25 @@
 <?php
+/*
+	********************************************************************
+	* Copyright by Andre Lorbach | 2006, 2007, 2008						
+	* -> www.ultrastats.org <-											
+	* ------------------------------------------------------------------
+	*
+	* Use this script at your own risk!									
+	*
+	* ------------------------------------------------------------------
+	* ->	Admin language strings			in GERMAN
+	*		Only needed in the Admin Center
+	*																	
+	* This file is part of UltraStats
+	*
+	* UltraStats is free software: you can redistribute it and/or modify
+	* it under the terms of the GNU General Public License as published
+	* by the Free Software Foundation, either version 3 of the License,
+	* or (at your option) any later version.
+	********************************************************************
+*/
+
 global $content;
 
 // Global Stuff
@@ -6,12 +27,19 @@ $content['LN_ADMINADD'] = "Eintragen";
 $content['LN_ADMINEDIT'] = "Editieren";
 $content['LN_ADMINDELETE'] = "Löschen";
 $content['LN_ADMINSEND'] = "Bestätigen";
+$content['LN_MENU_ADMINSERVERS'] = "Server Admin";
+$content['LN_MENU_ADMINPLAYERS'] = "Player Editor";
+$content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
+$content['LN_MENU_ADMINUSERS'] = "User Admin";
+$content['LN_MENU_ADMINLOGOFF'] = "Logoff";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
 $content['LN_USERNAME'] = "Benutzername";
 $content['LN_PASSWORD'] = "Passwort";
 $content['LN_SAVEASCOOKIE'] = "Eingeloggt bleiben (Gespeichert in Cookie)";
+$content['LN_LOGIN_ERRORWRONGUSER'] = "Wrong username or password!";
+$content['LN_LOGIN_ERRORUSERPASSNOTGIVEN'] = "Username or password not given";
 
 // Main Page
 $content['LN_ADMINCENTER'] = "Administration";
@@ -118,6 +146,7 @@ $content['LN_ADMINCENTER_PARSER'] = "Server Parsing";
 $content['NO_INFRAME_POSSIBLE'] = "Unglücklicherweise unterstützt Ihr Browser kein Inframes und der Parser kann nicht gestartet werden!";
 $content['LN_EMBEDDED_PARSER'] = "Eingebauten Parser laufen lassen";
 $content['LN_WARNINGDELETE'] = "Warnung! Beim löschen des Servers werden auch die Statistiken gelöscht!";
+$content['LN_WARNINGDELETE_STATS'] = "Warning! All Stats for the Server '%1' will be deleted. Do you want to continue?";
 $content['LN_DELETEYES'] = "Hier klicken um das Löschen des Servers zu Bestätigen";
 $content['LN_DELETENO'] = "Hier klicken um auf die vorherige Seite zu gelangen";
 $content['LN_FTPLOGINFAILED'] = "FTP Login gescheitert, oder kein Passwort vergeben.";
@@ -141,6 +170,7 @@ $content['LN_USER_ERROR_USERNAMETAKEN'] = "Fehler, dieser Benutzername wurde sch
 $content['LN_USER_ERROR_PASSSHORT'] = "Fehler, Passwort war zu kurz, oder es gab keine Übereinstimmung";
 $content['LN_USER_ERROR_HASBEENADDED'] = "Benutzer '%1' wurde erfolgreich hinzu gefügt";
 $content['LN_USER_ERROR_HASBEENEDIT'] = "Benutzer '%1' wurde erfolgreich editiert";
+$content['LN_USER_WARNDELETEUSER'] = "Are you sure to delete the User '%1'?";
 
 // General Options
 $content['LN_GEN_LANGUAGE'] = "Sprache auswählen";
@@ -183,5 +213,30 @@ $content['LN_DBUPGRADE_FAILEDEXEC'] = "Statements fehlgeschlagen";
 $content['LN_DBUPGRADE_ONESTATEMENTFAILED'] = "mindestens ein Statement ist fehlgeschlagen, schau dir den nachstehenden Fehler an";
 $content['LN_DBUPGRADE_ERRMSG'] = "Fehlermeldung";
 $content['LN_DBUPGRADE_ULTRASTATSDBVERSION'] = "UltraStats Database Version";
+
+// String Editor
+$content['LN_ADMIN_STREDITOR'] = "String Editor";
+$content['LN_STRING_EDIT'] = "Edit String";
+$content['LN_STRING_FILTER'] = "Stringfilter";
+$content['LN_STRED_DOFILTER'] = "Do filtering";
+$content['LN_STRED_LANG'] = "Language";
+$content['LN_STRED_STRINGID'] = "StringID";
+$content['LN_STRED_TEXT'] = "Text";
+$content['LN_STRED_ACTION'] = "Available Actions";
+$content['LN_WARNING_DELETESTRING'] = "Do you really want to delete this string?";
+$content['LN_STRING_BACKSTRINGLIST'] = "Back to stringlist";
+$content['LN_STRING_ERROR_NOTFOUND'] = "No string with id '%1' found!";
+$content['LN_STRING_ERROR_INVID'] = "Invalid StringID";
+$content['LN_STRING_ERROR_IDEMPTY'] = "StringID is empty!";
+$content['LN_STRING_SUCCEDIT'] = "Successfully edited string with id '%1'.";
+$content['LN_STRING_ADD'] = "Add new string";
+$content['LN_STRING_ERROR_ALREADYEXISTS'] = "StringID already exists.";
+$content['LN_STRING_SUCCADDED'] = "String with ID '%1' successfully added.";
+$content['LN_STRING_DELETEDSTRING'] = "The string with ID '%1' has been successfully deleted.";
+$content['LN_STRING_'] = "";
+
+// result helper page
+$content['LN_RESULT_REDIRTXT'] = 'You will be redirected to the <a href="%1">this page</a> on %2 seconds.';
+$content['LN_RESULT_REDIRTITLE'] = "Redirecting in %1 seconds.";
 
 ?>

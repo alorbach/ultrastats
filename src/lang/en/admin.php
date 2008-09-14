@@ -8,7 +8,7 @@
 	* Use this script at your own risk!									
 	*
 	* ------------------------------------------------------------------
-	* ->	Admin language stringd 
+	* ->	Admin language strings			in ENGLISH
 	*		Only needed in the Admin Center
 	*																	
 	* This file is part of UltraStats
@@ -27,19 +27,19 @@ $content['LN_ADMINADD'] = "Add";
 $content['LN_ADMINEDIT'] = "Edit";
 $content['LN_ADMINDELETE'] = "Delete";
 $content['LN_ADMINSEND'] = "Send";
-	$content['LN_MENU_ADMINSERVERS'] = "Server Admin";
-	$content['LN_MENU_ADMINPLAYERS'] = "Player Editor";
-	$content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
-	$content['LN_MENU_ADMINUSERS'] = "User Admin";
-	$content['LN_MENU_ADMINLOGOFF'] = "Logoff";
+$content['LN_MENU_ADMINSERVERS'] = "Server Admin";
+$content['LN_MENU_ADMINPLAYERS'] = "Player Editor";
+$content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
+$content['LN_MENU_ADMINUSERS'] = "User Admin";
+$content['LN_MENU_ADMINLOGOFF'] = "Logoff";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
 $content['LN_USERNAME'] = "Username";
 $content['LN_PASSWORD'] = "Password";
 $content['LN_SAVEASCOOKIE'] = "Stay Online (Save in Cookie)";
-	$content['LN_LOGIN_ERRORWRONGUSER'] = "Wrong username or password!";
-	$content['LN_LOGIN_ERRORUSERPASSNOTGIVEN'] = "Username or password not given";
+$content['LN_LOGIN_ERRORWRONGUSER'] = "Wrong username or password!";
+$content['LN_LOGIN_ERRORUSERPASSNOTGIVEN'] = "Username or password not given";
 
 // Main Page
 $content['LN_ADMINCENTER'] = "Admin Center";
@@ -66,8 +66,8 @@ $content['LN_GEN_GAMEVERSION'] = "Game Version";
 $content['LN_GEN_PARSEBYTYPE'] = "Parse Players by";
 $content['LN_GEN_PHPDEBUG'] = "Enable PHP Debugging";
 $content['LN_PARSER_ENABLECHATLOGGING'] = "Enable Chat Logging";
-	$content['LN_ADMINMEDALS'] = "Medal Options";
-	$content['LN_ADMINMEDALSENABLE'] = "Enable '%1' Medal";
+$content['LN_ADMINMEDALS'] = "Medal Options";
+$content['LN_ADMINMEDALSENABLE'] = "Enable '%1' Medal";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Admin Center";
@@ -237,7 +237,7 @@ $content['LN_STRING_DELETEDSTRING'] = "The string with ID '%1' has been successf
 $content['LN_STRING_'] = "";
 
 // result helper page
-	$content['LN_RESULT_REDIRTXT'] = 'You will be redirected to the <a href="%1">this page</a> on %2 seconds.';
-	$content['LN_RESULT_REDIRTITLE'] = "Redirecting in %1 seconds.";
+$content['LN_RESULT_REDIRTXT'] = 'You will be redirected to the <a href="%1">this page</a> on %2 seconds.';
+$content['LN_RESULT_REDIRTITLE'] = "Redirecting in %1 seconds.";
 
 ?>
