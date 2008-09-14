@@ -190,17 +190,28 @@ font
 	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
 	color: #FFFFFF;
 }
-.cellmenu1:hover 
+.cellmenu1_naked
+{
+	height: 16px;
+	border:1px ridge;
+	border-color: #79AABE #09506C #09506C #79AABE;
+	background-color: #2E79A0;
+
+	text-indent:5px;
+	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+}
+.cellmenu1:hover, .cellmenu1_naked:hover
 { 
 	color: #FFFF99;
 	text-decoration: none;
 }
-A.cellmenu1_link
+a.cellmenu1_link
 {
 	color: #FFFF55;
 	text-decoration: underline;
 }
-A.cellmenu1_link:hover
+a.cellmenu1_link:hover
 {
 	color: #FFBB55;
 	text-decoration: none;
@@ -219,7 +230,19 @@ A.cellmenu1_link:hover
 	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
 	color: #393327;
 }
-.cellmenu2:hover 
+.cellmenu2_naked
+{
+	height: 15px;
+	border:1px inset;
+	border-color: #79AABE #09506C #09506C #79AABE;
+	background-color: #9FDAF1;
+
+	text-indent:5px;
+	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	color: #393327;
+}
+
+.cellmenu2:hover, .cellmenu2_naked:hover
 { 
 	color: #A31D32;
 	text-decoration: none;

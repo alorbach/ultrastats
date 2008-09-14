@@ -54,7 +54,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.1";
+$content['BUILDNUMBER'] = "0.3.2";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
 $content['EXTRA_METATAGS'] = "";

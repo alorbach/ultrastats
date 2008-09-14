@@ -14,7 +14,7 @@
 </table>
 <table cellpadding="0" cellspacing="0" border="0" width="750" align="center" class="with_border">
 <tr>
-	<td align="center">
+	<td align="center" class="tableBackground">
 
 <!-- IF LISTSTRINGS="true" -->
 
@@ -31,7 +31,6 @@
 			</form>
 		</tr>
 		</table>
-
 
 		<!-- IF string_pagerenabled="true" -->
 		<table width="100%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
@@ -64,7 +63,7 @@
 		</tr>
 		<!-- END STRINGS -->
 		<tr>
-			<td align="center" colspan="4" class="line0">
+			<td align="center" colspan="4" class="tableBackground">
 				<a href="stringeditor.php?op=add"><img src="{BASEPATH}images/icons/add.png" title="{LN_STRING_ADD}">&nbsp;{LN_STRING_ADD}</a> 
 			</td>
 		</tr>
@@ -79,17 +78,24 @@
 				<td align="right" class="line0" width="100%"><input type="textbox" size="40" name="id" value="{STRINGID}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_STRED_LANG}</b></td>
-				<td align="right" class="line1">{LANG}</td>
+				<td align="left" class="cellmenu1" nowrap><b>{LN_STRED_LANG}</b></td>
+				<td align="right" class="line1">
+				<select name="langcode" size="1" STYLE="width: 190px">
+					<!-- BEGIN FORM_LANGUAGES -->
+					<option {is_selected} value="{langcode}">{DisplayName}</option>
+					<!-- END FORM_LANGUAGES -->
+				</select>
+				</td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_STRED_TEXT}</b></td>
+				<td align="left" class="cellmenu1_naked" nowrap><b>{LN_STRED_TEXT}</b></td>
 				<td align="right" class="line1"><textarea name="text" cols="80" rows="20">{TEXT}</textarea></td>
 			</tr>
 			<tr>
 				<td align="center" colspan="2">
 					<input type="submit" value="{STRING_SENDBUTTON}">
 					<input type="hidden" name="oldid" value="{STRINGID}">
+					<input type="hidden" name="oldlang" value="{LANG}">
 					<input type="hidden" name="op" value="{STRING_FORMACTION}">
 					<input type="hidden" name="referer" value="{encoded_referer}">
 				</td>
@@ -99,8 +105,9 @@
 <!-- ENDIF ISEDITSTRING="true" -->
 
 <!-- IF ISDELETESTRING="true" -->
+	<br>
 	<!-- IF ISVERIFY="true" -->
-			<table width="600" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
+			<table width="600" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border_alternate">
 			<tr>
 				<td colspan="10" align="center" valign="top" class="title"><strong><FONT COLOR="red">{LN_WARNING_DELETESTRING}</FONT></strong></td>
 			</tr>

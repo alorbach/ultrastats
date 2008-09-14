@@ -194,7 +194,19 @@ font
     background-image: url(images/bg_1.png);
     background-repeat: repeat-x;
 }
-.cellmenu1:hover 
+.cellmenu1_naked
+{
+	height: 16px;
+	border:1px ridge;
+	border-color: #353A3F #050A0F #050A0F #353A3F; 
+
+	text-indent:5px;
+	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFCE5;
+
+	background-color: #103B65;
+}
+.cellmenu1:hover, .cellmenu1_naked:hover
 { 
 	color: #FFFF33;
 	text-decoration: none;
@@ -224,7 +236,19 @@ A.cellmenu1_link:hover
     background-image: url(images/bg_2.png);
     background-repeat: repeat-x;
 }
-.cellmenu2:hover 
+.cellmenu2_naked
+{
+	height: 16px;
+	border:1px ridge;
+	border-color: #7777AA #12161A #12161A #7777AA;
+
+	text-indent:5px;
+	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFCE5;
+
+	background-color: #053841;
+}
+.cellmenu2:hover, .cellmenu2_naked:hover
 { 
 	color: #FFFF33;
 	text-decoration: none;

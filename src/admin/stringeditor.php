@@ -85,8 +85,19 @@ if ( isset($_GET['op']) )
 
 		//PreInit these values 
 		$content['STRINGID'] = "";
-		$content['LANG'] = "EN";
 		$content['TEXT'] = "";
+
+		// Set default language ID and set the right one to selected!
+		$content['LANG'] = "EN";
+		$content['FORM_LANGUAGES'] = $content['LANGUAGES'];
+		for($i = 0; $i < count($content['FORM_LANGUAGES']); $i++)
+		{
+			if ( strtoupper($content['FORM_LANGUAGES'][$i]['langcode']) == strtoupper($content['LANG']) )
+				$content['FORM_LANGUAGES'][$i]['is_selected'] = "selected";
+			else
+				$content['FORM_LANGUAGES'][$i]['is_selected'] = "";
+		}
+
 	}
 	else if ($_GET['op'] == "edit") 
 	{
@@ -113,8 +124,18 @@ if ( isset($_GET['op']) )
 			if ( isset($myrow['STRINGID'] ) )
 			{
 				$content['STRINGID'] = $myrow['STRINGID'];
-				$content['LANG'] = $myrow['LANG'];
 				$content['TEXT'] = $myrow['TEXT'];
+				
+				// Get language ID and set the right to selected!
+				$content['LANG'] = $myrow['LANG'];
+				$content['FORM_LANGUAGES'] = $content['LANGUAGES'];
+				for($i = 0; $i < count($content['FORM_LANGUAGES']); $i++)
+				{
+					if ( strtoupper($content['FORM_LANGUAGES'][$i]['langcode']) == strtoupper($content['LANG']) )
+						$content['FORM_LANGUAGES'][$i]['is_selected'] = "selected";
+					else
+						$content['FORM_LANGUAGES'][$i]['is_selected'] = "";
+				}
 			}
 			else
 			{
@@ -167,9 +188,12 @@ if ( isset($_GET['op']) )
 	if ( isset($_POST['op']) )
 	{
 		if ( isset ($_POST['id']) ) { $content['STRINGID'] = DB_RemoveBadChars($_POST['id']); } else {$content['STRINGID'] = ""; }
-		if ( isset ($_POST['oldid']) ) { $content['OLDSTRINGID'] = DB_RemoveBadChars($_POST['oldid']); } else {$content['OLDSTRINGID'] = $content['STRINGID']; }
-		if ( isset ($_POST['lang']) ) { $content['LANG'] = DB_RemoveBadChars($_POST['lang']); } else {$content['LANG'] = "EN"; }
+		if ( isset ($_POST['langcode']) ) { $content['LANG'] = DB_RemoveBadChars($_POST['langcode']); } else {$content['LANG'] = "EN"; }
 		if ( isset ($_POST['text']) ) { $content['TEXT'] = DB_RemoveBadChars($_POST['text']); } else {$content['TEXT'] = ""; }
+		if ( isset ($_POST['oldid']) ) { $content['OLDSTRINGID'] = DB_RemoveBadChars($_POST['oldid']); } else {$content['OLDSTRINGID'] = $content['STRINGID']; }
+		if ( isset ($_POST['oldlang']) ) { $content['OLDLANG'] = DB_RemoveBadChars($_POST['oldlang']); } else {$content['OLDLANG'] = $content['LANG']; }
+		$content['LANG'] = strtoupper($content['LANG']);
+		$content['OLDLANG'] = strtoupper($content['OLDLANG']);
 
 		// Check mandotary values
 		if ( !isset($content['STRINGID']) || strlen($content['STRINGID']) <= 0 )
@@ -207,7 +231,7 @@ if ( isset($_GET['op']) )
 			}
 			else if ( $_POST['op'] == "edit" )
 			{
-				$result = DB_Query("SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = '" . $content['OLDSTRINGID'] . "'");
+				$result = DB_Query("SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['OLDLANG'] . "' ");
 				$myrow = DB_GetSingleRow($result, true);
 				if ( !isset($myrow['STRINGID']) )
 				{
@@ -216,12 +240,12 @@ if ( isset($_GET['op']) )
 				}
 				else
 				{
-					// Edit the Player now!
+					// Edit the String now!
 					$sqlquery ="UPDATE " . STATS_LANGUAGE_STRINGS . " SET 
 								STRINGID = '" . $content['STRINGID'] . "', 
 								LANG = '" . $content['LANG'] . "', 
 								TEXT = '" . $content['TEXT'] . "' 
-								WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['LANG'] . "'";
+								WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['OLDLANG'] . "'";
 					$result = DB_Query( $sqlquery );
 					DB_FreeQuery($result);
 
