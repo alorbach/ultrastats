@@ -697,6 +697,11 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_bayonet", 
 							"_bipod",	
 							"_silenced", 
+							"_sawoff",	
+							"_singleshot", 
+							"_selectfire", 
+							"_fullauto", 
+							"_flash", 
 							"_gl",	
 							"_silencer",
 							"_reflex",	
@@ -706,7 +711,7 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_ffar",	
 							"_telescopic",	
 						);
-	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
 	
 	// return result
 	$stReturn = str_replace($arraySearch, $arrayReplace, $weaponnameid);
