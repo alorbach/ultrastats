@@ -122,10 +122,15 @@ if ( isset($_GET['id']) )
 		
 		// --- Scan for attachments and set them
 		$content['AttachmentID'] = ObtainAttachmentNameFromWeapon($weaponvars['INGAMENAME']);
-		$content['AttachmentDisplayName'] = $content['AttachmentID'];
 		$content['AttachmentImage'] = $gl_root_path . "images/perks/normal/" . $content['AttachmentID'] . ".png";
 		if ( !is_file($content['AttachmentImage']) )
 			$content['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
+
+		// Obtain DisplayName
+		if ( strlen($content['attachments'][ $content['AttachmentID'] ]['DisplayName']) > 0 )
+			$content['AttachmentDisplayName'] = $content['attachments'][$content['AttachmentID']]['DisplayName'];
+		else
+			$content['AttachmentDisplayName'] = $content['AttachmentID'];
 		// --- 
 
 		// --- Most kills with this Weapon
@@ -446,10 +451,16 @@ else
 
 					// --- Scan for attachments and set them
 					$myWeapon['AttachmentID'] = ObtainAttachmentNameFromWeapon($myWeapon['INGAMENAME']);
-					$myWeapon['AttachmentDisplayName'] = $myWeapon['AttachmentID'];
+
 					$myWeapon['AttachmentImage'] = $gl_root_path . "images/perks/thumbs/" . $myWeapon['AttachmentID'] . ".png";
 					if ( !is_file($myWeapon['AttachmentImage']) )
 						$myWeapon['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
+					
+					// Obtain DisplayName
+					if ( strlen($content['attachments'][ $myWeapon['AttachmentID'] ]['DisplayName']) > 0 )
+						$myWeapon['AttachmentDisplayName'] = $content['attachments'][$myWeapon['AttachmentID']]['DisplayName'];
+					else
+						$myWeapon['AttachmentDisplayName'] = $myWeapon['AttachmentID'];
 					// --- 
 
 					// --- Set ExternalInfoUrl!

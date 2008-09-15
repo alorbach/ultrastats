@@ -39,6 +39,9 @@ function InitFrontEndDefaults()
 	// Create Damagetype Array
 	CreateDamagetypeArray();
 
+	// Create Attachments Array
+	CreateAttachmentArray();
+
 	// Create Gametypes
 	CreateGameTypeArray();
 
@@ -132,6 +135,24 @@ function CreateDamagetypeArray()
 						" ORDER BY " . STATS_DAMAGETYPES . ".DisplayName, " . STATS_DAMAGETYPES . ".DAMAGETYPE";
 	$result = DB_Query($sqlquery, true, true); // Critical!
 	$content['damagetypes_menu'] = DB_GetAllRows($result, true);
+}
+
+function CreateAttachmentArray()
+{
+	global $content;
+
+	// Get Damagetypes from DB!
+	$sqlquery = "SELECT " .
+						STATS_ATTACHMENTS . ".ID  , " . 
+						STATS_ATTACHMENTS . ".DisplayName, " . 
+						STATS_ATTACHMENTS . ".Description_id " . 
+						" FROM " . STATS_ATTACHMENTS . 
+						" ORDER BY " . STATS_ATTACHMENTS . ".DisplayName"; 
+	$result = DB_Query($sqlquery, true, true); // Critical!
+	$tmpArray = DB_GetAllRows($result, true);
+	
+	foreach ( $tmpArray as $myEntry )
+		$content['attachments'][$myEntry['ID']] = $myEntry;
 }
 
 function CreateWeaponArray()
@@ -689,6 +710,7 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 
 function ReturnWeaponBaseName($weaponnameid)
 {
+	// Currently HARDCODED!
 	$arraySearch = array (	"_grip",
 							"_acog",
 							"_bigammo", 
@@ -720,34 +742,13 @@ function ReturnWeaponBaseName($weaponnameid)
 
 function ObtainAttachmentNameFromWeapon($weaponnameid)
 {
-	$AllPerks = array (
-				"grip",
-				"acog",
-				"bigammo", 
-				"scoped", 
-				"aperture", 
-				"bayonet", 
-				"bipod",	
-				"silenced", 
-				"sawoff",	
-				"singleshot", 
-				"selectfire", 
-				"fullauto", 
-				"flash", 
-				"gl",	
-				"silencer",
-				"reflex",
-				"crouch",	
-				"stand",	
-				"20mm",	
-				"ffar",	
-				"telescopic",
-				);
-
-	foreach($AllPerks as $myPerk)
+	global $content;
+	
+	// Loop through attachments and search
+	foreach($content['attachments'] as $myAttachment)
 	{
-		if ( strpos( $weaponnameid, $myPerk ) !== false ) 
-			return $myPerk;
+		if ( strpos( $weaponnameid, $myAttachment['ID'] ) !== false ) 
+			return $myAttachment['ID'];
 	}
 	
 	// None perk then!
