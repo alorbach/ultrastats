@@ -119,6 +119,14 @@ if ( isset($_GET['id']) )
 		$content['Description'] = GetTextFromDescriptionID( $weaponvars['Description_id'], $content['LN_WEAPON_NODESCRIPTION'] );
 		$content['INGAMENAME'] = $weaponvars['INGAMENAME'];
 		// --- 
+		
+		// --- Scan for attachments and set them
+		$content['AttachmentID'] = ObtainAttachmentNameFromWeapon($weaponvars['INGAMENAME']);
+		$content['AttachmentDisplayName'] = $content['AttachmentID'];
+		$content['AttachmentImage'] = $gl_root_path . "images/perks/normal/" . $content['AttachmentID'] . ".png";
+		if ( !is_file($content['AttachmentImage']) )
+			$content['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
+		// --- 
 
 		// --- Most kills with this Weapon
 			// --- First get the Count and Set Pager Variables
@@ -434,6 +442,14 @@ else
 					$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/" . $tmpWeaponimg . ".png";
 					if ( !is_file($myWeapon['WeaponImage']) )
 						$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/no-pic.png";
+					// --- 
+
+					// --- Scan for attachments and set them
+					$myWeapon['AttachmentID'] = ObtainAttachmentNameFromWeapon($myWeapon['INGAMENAME']);
+					$myWeapon['AttachmentDisplayName'] = $myWeapon['AttachmentID'];
+					$myWeapon['AttachmentImage'] = $gl_root_path . "images/perks/thumbs/" . $myWeapon['AttachmentID'] . ".png";
+					if ( !is_file($myWeapon['AttachmentImage']) )
+						$myWeapon['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
 					// --- 
 
 					// --- Set ExternalInfoUrl!

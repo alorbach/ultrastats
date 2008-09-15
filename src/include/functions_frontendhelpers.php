@@ -704,7 +704,7 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_flash", 
 							"_gl",	
 							"_silencer",
-							"_reflex",	
+							"_reflex",
 							"_crouch",	
 							"_stand",	
 							"_20mm",	
@@ -716,6 +716,42 @@ function ReturnWeaponBaseName($weaponnameid)
 	// return result
 	$stReturn = str_replace($arraySearch, $arrayReplace, $weaponnameid);
 	return $stReturn;
+}
+
+function ObtainAttachmentNameFromWeapon($weaponnameid)
+{
+	$AllPerks = array (
+				"grip",
+				"acog",
+				"bigammo", 
+				"scoped", 
+				"aperture", 
+				"bayonet", 
+				"bipod",	
+				"silenced", 
+				"sawoff",	
+				"singleshot", 
+				"selectfire", 
+				"fullauto", 
+				"flash", 
+				"gl",	
+				"silencer",
+				"reflex",
+				"crouch",	
+				"stand",	
+				"20mm",	
+				"ffar",	
+				"telescopic",
+				);
+
+	foreach($AllPerks as $myPerk)
+	{
+		if ( strpos( $weaponnameid, $myPerk ) !== false ) 
+			return $myPerk;
+	}
+	
+	// None perk then!
+	return "none";
 }
 
 ?>

@@ -162,6 +162,7 @@ $content['LN_WEAPON_LIST'] = "List of all weapons";
 $content['LN_WEAPON_NAME'] = "Weapon name";
 $content['LN_WEAPON_KILLCOUNT'] = "Kills done with this weapon";
 $content['LN_WEAPON_PLAYERCOUNT'] = "Players who used this weapon";
+$content['LN_WEAPON_ATTACHMENT'] = "Attachment";
 
 // ServerStats Details
 $content['LN_ERROR_NOSERVERMAPS'] = "Fehler, entweder es wurde keine Server ID vergeben, oder es wurde keine Map gespielt auf diesem Server!";
