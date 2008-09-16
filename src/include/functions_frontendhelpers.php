@@ -731,6 +731,7 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_stand",	
 							"_20mm",	
 							"_ffar",	
+							"_turret",	
 							"_telescopic",	
 						);
 	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
