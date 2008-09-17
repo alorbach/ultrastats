@@ -392,7 +392,7 @@ else
 		{
 			// --- Set Weaponimage
 			// Do some replacements for same weapons ^^!
-			$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/weapons/thumbs/" . $content['damagetypeslist'][$i]['DAMAGETYPE'] . ".png";
+			$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/damagetypes/thumbs/" . $content['damagetypeslist'][$i]['DAMAGETYPE'] . ".png";
 			if ( !is_file($content['damagetypeslist'][$i]['DamageImage'] ) )
 				$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/damagetypes/thumbs/no-pic.png";
 			// --- 
