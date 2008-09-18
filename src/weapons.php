@@ -80,7 +80,7 @@ if ( isset($_GET['id']) )
 		// Enable Stats
 		$content['weaponsenabled'] = "true";
 
-		// --- Set Mapname 
+		// --- Set WeaponName 
 		if ( strlen($weaponvars['DisplayName']) > 0 )
 			$content['WeaponDisplayName'] = $weaponvars['DisplayName'];
 		else
@@ -437,6 +437,11 @@ else
 						$myWeapon['cssclass'] = "line2";
 					// --- 
 
+					// --- Set WeaponName 
+					if ( strlen($myWeapon['WeaponDisplayName']) <= 0 )
+						$myWeapon['WeaponDisplayName'] = $myWeapon['INGAMENAME'];
+					// --- 
+
 					// Init KillCount 
 					if ( !isset($myWeapon['WeaponKills']) ) 
 						$myWeapon['WeaponKills'] = 0;
@@ -456,7 +461,7 @@ else
 					if ( !is_file($myWeapon['AttachmentImage']) )
 						$myWeapon['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
 					
-					// Obtain DisplayName
+					// Obtain DisplayName for the attachment
 					if ( strlen($content['attachments'][ $myWeapon['AttachmentID'] ]['DisplayName']) > 0 )
 						$myWeapon['AttachmentDisplayName'] = $content['attachments'][$myWeapon['AttachmentID']]['DisplayName'];
 					else
