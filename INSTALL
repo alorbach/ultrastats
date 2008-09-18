@@ -4,15 +4,15 @@
  To install UltraStats, you will need:
 
  * Apache or IIS Webserver
- * PHP5 
+ * PHP5 ( PHP4 should still work )
  * MySQL Database
- * Obviously a gamelog from a Call Of Duty 1/2/4/5 gameserver. 
+ * A gamelog from a Call Of Duty 1/2/4/5 gameserver. 
 
  Preperations 
  ------------
 
  In order too use UltraStats, your gameserver will need to write a
- gamelog file, which might not be the default case. For all known
+ gamelogfile, which might not be the default case. For all known
  Call of Duty Versions, the following settings are recommended in 
  your server configuration: 
 
@@ -50,165 +50,115 @@
      installation script. Follow this link and follow the instructions 
      from the installer. 
  
-  3.1 Step 1 - Prerequisites Beginning of installation / welcome site
-	       This is the first page of the installation. It just tells
-	       you, that before installing, some file permission have to
-	       be checked. Simply click "Next" to start the process.
+  3.1 Step 1 -	Prerequisites Beginning of installation / welcome site
+		This is the first page of the installation. It just tells
+		you, that before installing, some file permission have to
+		be checked. Simply click "Next" to start the process.
 
-  3.2 Step 2 - Verify the file permissions
-	       Here you will see, if the config.php can be written or not.
-	       If it cannot be written, you have to repeat the complete
-	       Step 2.
+  3.2 Step 2 -	Verify the file permissions
+		Here you will see, if the config.php can be written or not.
+		If it cannot be written, you have to set file permissions 
+		and repeat the check of Step 2.
 
-  3.3 Step 3 - Basic Configuration
-	       You can set several basic options here. 
-
-	       - Number of syslog messages per page = 50 (default)
-	       This is the number of syslog messages displayed on each page. 
-	       You can increase the value (makes phpLogCon slower) or decrease
-	       the value (makes it faster). 
-
-	       - Message character limit for the main view = 80 (default)
-	       Set the number of characters per message which will be shown
-	       in the last column of the main view. Full messages can be
-	       reviewed by hovering the mouse over it.
-
-	       - Show message details popup (default yes) = yes (default) 
-	       Here you can set, if you want the small window with the complete 
-	       message to pop up if you are hovering over a event with the 
-	       cursor. If you choose "No", then you have to click on the
-	       message to see the details.
-
-  3.4 Step 4 - not implemented yet
-
-  3.5 Step 5 - not implemented yet
-
-  3.6 Step 6 - not implemented yet
-
-  3.7 Step 7 - Create the first source for syslog messages
-	       This is the most important step. Here, you will configure
-	       your first data source, which holds all your syslog data.
-
-	       Mainly, you have to choose a "Name of the Source" and a 
-	       "Source Type". The name will be displayed later in a drop-down
-	       menu with which you choose your active syslog source. The 
-	       "Source Type" can be a file, a MySQL database or the PHP PDO
-	       which supports different database types like mssql, PostgreSQL, 
-	       odbc, oracle or even ibm db2.
-
-
-	       If you choose the diskfile, you have to provide the following
-	       information:
-
-	       - Logline Type = Syslog / Rsyslog (default) or Adiscon WinSyslog
-	       This tells phpLogCon, how the lines look like. This is 
-	       necessary for show the log messages properly.
-
-	       - Syslog File = /var/log/syslog (default)
-	       This is the position of the logfile in your file system.
-
-
-	       If you choose MySQL native as data source, following information
-	       is needed:
-
-	       - Table Type = monitorware (default)
-	       This is the table layout. Currently, you can use "monitorware" 
-	       or "syslogng". For more details see "Note on MySQL Databases"
-	       below.
-
-	       - Database Host = localhost (default)
-	       This is the host, where the database is located. By default this
-	       is localhost. You can specify any other host if necessary.
-
-	       - Database Name = phplogcon (default)
-	       The name of the database you want to use.
-
-	       - Database Tablename = systemevents (default)
-	       This is the name of the table in which the data is stored. The 
-	       default tablename corresponds to the tables created with the 
-	       MonitorWare Line of products.
-
-	       - Database User = user (default)
-	       The username for the database.
-
-	       - Database Password = not set by default
-	       The password for the username.
-
-	       - Enable Row Counting = No (default)
-	       If configured to "Yes", the amount of rows in the table will be 
-	       counted with every query, giving you the total records for your
-	       search, though having a lot of impact on your system when using
-	       a very large database. If configured to "No", the rows will not
-	       be counted, providing you a lot more performance.	     
-
-
-	       If you choose Database (PDO), the following has to be defined:
-
-	       - Database Storage Engine = MySQL Server (default)
-	       Choose the engine of the database you are using. The databases 
-	       are available: MySQL Server, Microsoft SQL Server, ODBC 
-	       Database Connection, PostgreSQL, Oracle Call Interface, IBM
-	       DB2, Firebird/Interbase 6, IBM Informix Dynamic Server, 
-	       SQLite 2.
-
-	       - Table Type = monitorware (default)
-	       This is the table layout. Currently, you can use "monitorware" 
-	       or "syslogng". For more details see "Note on MySQL Databases"
-	       below.
-
-	       - Database Host = localhost (default)
-	       This is the host, where the database is located. By default this
-	       is localhost. You can specify any other host if necessary.
-
-	       - Database Name = phplogcon (default)
-	       The name of the database you want to use.
-
-	       - Database Tablename = systemevents (default)
-	       This is the name of the table in which the data is stored. The 
-	       default tablename corresponds to the tables created with the 
-	       MonitorWare Line of products.
-
-	       - Database User = user (default)
-	       The username for the database.
-
-	       - Database Password = not set by default
-	       The password for the username.
-
-	       - Enable Row Counting = No (default)
-	       If configured to "Yes", the amount of rows in the table will be 
-	       counted with every query, giving you the total records for your
-	       search, though having a lot of impact on your system when using
-	       a very large database. If configured to "No", the rows will not
-	       be counted, providing you a lot more performance.	      
-
-  3.8 Step 8 - Finish
+  3.3 Step 3 -	Database Configuration
+		In this step you have to configure the basic database 
+		options of UltraStats. 
+		- Database Host = The Servername or IP of your MYSQL Server
+		- Database Port = The database Port of your MYSQL Server
+		- Database Name = The database name, needs to be created first!
+				  UltraStats does not create the database itself.
+		- Table prefix	= If you plan to use more then ONE UltraStats 
+				  installation in ONE database, you can change
+				  the table prefix here. The table prefix is 
+				  prepended in each table of UltraStats. 
+		- Database User	= A MYSQL Username with sufficient rights to your
+				  database
+		- Database Password = The password for your MYSQL User account, 
+				  if needed. 
+		- Gameversion	= Select which Version of Call of Duty you are 
+				  going to use. Note that you can only log 
+				  data from ONE game version in ONE UltraStats
+				  installation. 
 
 
 
-  4. If everything went right, you should see syslog messages already 
-     in your phplogcon installation. You can now remove the install.php 
-     script now. 
+  3.4 Step 4 -	Create Tables
+		If you reach this step, this means the conenction test to your
+		MYSQL database was successfull, and can start filling the 
+		database with tables and data. 
+
+		Be careful! Any existing UltraStats installation with the SAME
+		table prefix will be OVERWRITTEN!
+
+  3.5 Step 5 -	Check SQL Results
+		This steps confirms that all database statements were successfully
+		performed. 
+
+  3.6 Step 6 -	Creating the firts Adminuser
+		To administrate UltraStats, you need at least one Adminuser. 
+		In this step you have to add the first Adminuser. 
+
+  3.8 Step 7 -	Done
+		UltraStats is now fully installed and should be accessable now. 
 
 
-Note on Accesing Files
+  4.	If everything went right, you should see a message "No Servers installed"
+	when you access the index page of your UltraStats installation.
+	Klick on the Admin Center menu entry, and login UltraStats to add your 
+	first Server. 
+  
+  5.	Now go to the Server Admin and click on "Add Server". 
+	The most important field is the "Gamelog Location" which specifies the relative
+	location of your gamelog, from where the webserver needs to be able to access
+	the gamelogfiles. 
+
+	If you unsure, to not change this default value. The default value 
+	"../gamelogs/server_1.log" will assume, that the gamelog is located in the 
+	"gamelogs" folder of your UltraStats Installation. If gameserver and webserver 
+	are the same machine, you can configure the full logical path to your gamelog
+	file here. 
+
+  6.	Now click on "Add Server" to add the server entry into the database. 
+
+  7.	If you do NOT need to download the gamelog from a remote location, you can 
+	skip this step. 
+	
+	Click on the Edit button of your server, you will see that the "Create" 
+	button for the "Remote FTP Gamelog Location" is available now. You can use
+	this button to build a valid FTP URL, here is an example of a valid one: 
+	ftp://username@127.0.0.1/.callofduty5/main/Server1_mp.log
+
+  8.	If you do NOT need to download the gamelog from a remote location, you can 
+	skip this step. 
+
+	Assuming that you have a valid FTP Location, you can click the download 
+	icon in the Server Admin Center now, to start the gamelogfile download. 
+	You will be prompted for the ftp password if needed. 
+
+	UltraStats does append downloads of existing gamelogfiles, so you do not need
+	to worry about traffic issues. 
+
+  9.	Run the gamelog parser!
+	Click on the RunParser Icon in the Server Admin Center to start the parsing 
+	process. The script is internally designed to avoid PHP Script timeouts,
+	and automatically reload itself if necessary. 
+
+	However if database grow larger, it is possible that a php script timeout still
+	happens when the parser is in the middle of a SQL statement. In this case, it 
+	would be a good Idea to switch over to parse the gamelog using the command 
+	prompt. Sample scripts can be found in the contrib folder. 
+
+  10.	Run Total/Final Calculations
+	For performance issues of the database, there are certain things which are done 
+	at each end of a complete parsing process. This includes generation if medals, 
+	top used aliases and more. 
+
+  11.	Finished
+	If everything went right, you should see stats data in your UltraStats installation
+	now ;)!
+
+Note on SUPPORT issues
 --------------------------------
-In most environments the webserver has only access to the web directory.
-If you want to read files e.g. from /var/log/ you have to grant
-the necessary permisson to your webserver.
+If you experience problems or any bugs within UltraStats, feel free to post into our Forums: 
+http://www.shooter-szene.de/PNphpBB2-index-c-25.phtml
 
-Of course, you always need to make sure that the user the web server
-runs under also has the correct file permissions. Be careful when doing
-this, you may create a security vulnerability by granting too much
-to too many users.
- 
- 
-Note on MySQL Databases
---------------------------------
- 
-phpLogCon does support using a MySQL database as syslog source. 
-PhpLogCon supports Adiscon's MonitorWare database schema. The schema
-used by php-syslog-ng is also partly supported. That schema, however, is
-somewhat inefficient in that it stores facility and severity codes as
-textual values. We do not currently convert these values back to their
-native format and consequently facility and severity can not be taken
-from a php-syslog-ng database.

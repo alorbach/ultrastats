@@ -198,12 +198,9 @@ else if ( $content['INSTALL_STEP'] == 3 )
 		$content['errormsg'] = DB_RemoveBadChars( urldecode($_GET['errormsg']) );
 	}
 
-	// Create Gameversions List
+	// Create Gameversions List and set default game version
 	$content['gen_gameversion'] = COD5;
 	CreateGameVersionsList();
-
-	// Hardcoded Default for the Game is COD4 currently ^^
-	$content['GAMEVERSIONS'][COD4]['selected'] = "selected";
 }
 else if ( $content['INSTALL_STEP'] == 4 )
 {	

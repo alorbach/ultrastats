@@ -156,11 +156,11 @@ function CheckForInstallPhp()
 	// Check for installscript!
 	if ( file_exists($content['BASEPATH'] . "install.php") ) 
 		$strinstallmsg = '<br><br>' 
-						. '<center><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br><br>'
-						. 'See the Installation Guides for more Details!<br>'
-						. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
-						. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
-						. 'Also take a look to the <a href="docs/readme.htm" target="_blank">Readme</a> for some basics around UltraStats!<br>'
+						. '<center><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br>'
+						. 'If you need help for the installation process, you should take a look into the <B>INSTALL</B> document!<br>'
+//						. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
+//						. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
+//						. 'Also take a look to the <a href="docs/readme.htm" target="_blank">Readme</a> for some basics around UltraStats!<br>'
 						. '</center>';
 	else
 		$strinstallmsg = "";

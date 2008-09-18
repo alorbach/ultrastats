@@ -44,7 +44,9 @@ function CreateHTMLHeader()
 	print ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 			<head>
-			<link rel="stylesheet" href="' . $gl_root_path . 'css/admin.css" type="text/css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'css/defaults.css" type="text/css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'css/menu.css" type="text/css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'themes/default/main.css" type="text/css">
 			</head>
 			<SCRIPT language="JavaScript">
 				var g_intervalID;
