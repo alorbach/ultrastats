@@ -860,6 +860,7 @@ function RunParserNow()
 								{
 									//Flush php output
 									flush();
+									ob_flush();
 
 									//Check for script timeout
 									if ( ( microtime_float() - $ParserStart) > $MaxExecutionTime)
@@ -1754,7 +1755,7 @@ function Parser_AddKillAndDeath( $myArray )
 				$myArray[KILL_ATTACKER_TEAM] = TEAM_ALLIES; 
 			else if ( $myArray[KILL_OPFER_TEAM] == TEAM_WTF ) // WTF default lol! God I hate the bugged logformat from IW so much ... 
 			{
-				PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Setting Teams to default, attacker may be empty!");
+				PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Setting Teams to default, attacker may be empty!");
 				$myArray[KILL_ATTACKER_TEAM] = TEAM_ALLIES; 
 				$myArray[KILL_OPFER_TEAM] = TEAM_AXIS; 
 			}
@@ -1764,7 +1765,7 @@ function Parser_AddKillAndDeath( $myArray )
 	if ( $myArray[KILL_OPFER_TEAM] == TEAM_WTF )
 	{	
 		// Set another default in this case!
-				PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Setting Teams to default, opfer may be empty!");
+				PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Setting Teams to default, opfer may be empty!");
 		$myArray[KILL_ATTACKER_TEAM] = TEAM_ALLIES; 
 		$myArray[KILL_OPFER_TEAM] = TEAM_AXIS; 
 	}

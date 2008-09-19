@@ -179,6 +179,7 @@ function PrintHTMLDebugInfo( $facility, $fromwhere, $szDbgInfo )
 
 	//Flush php output
 	flush();
+	ob_flush();
 
 	// If DEBUG_ERROR_WTF and $content['gen_phpdebug'] is set, abort!
 	if ( $content['gen_phpdebug'] == 1 && $facility == DEBUG_ERROR_WTF ) 
@@ -348,12 +349,17 @@ function GetWeaponIDByName( $weaponname )
 	$pos = strpos($weaponname, "gl_");
 	if ( $pos !== false && $pos == 0) 
 	{	
+		// store for debug
+		$oldname = $weaponname;
+
 		// Remove GL first!
 		$weaponname = str_replace("gl_", "", $weaponname);
-		echo $weaponname;
+
 		// Add gl_ where it belongs to!
 		$weaponname = str_replace("_mp", "_gl_mp", $weaponname);
-		echo $weaponname;
+
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "GetWeaponIDByName", "Renamed weapon '" . $oldname . "' into '" . $weaponname . "'!");
+
 	}
 
 	/* --- Hotfix for crap cod4 logging format .. damn dev noobs @iw ... 

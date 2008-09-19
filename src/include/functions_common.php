@@ -294,7 +294,11 @@ function InitRuntimeInformations()
 	global $content;
 
 	// --- Enable GZIP Compression if available
-	if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && GetConfigSetting("MiscEnableGzipCompression", 1, CFGLEVEL_USER) == 1 ) 
+	if (	
+			strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && 
+			GetConfigSetting("MiscEnableGzipCompression", 0, CFGLEVEL_USER) == 1 &&
+			!defined('IS_PARSERPAGE') /* Do not GZIP in this case!*/
+		) 
 	{
 		// This starts gzip compression!
 		ob_start("ob_gzhandler");
