@@ -90,12 +90,12 @@ function PrintSecureUserCheckLegacy( $warningtext, $yesmsg, $nomsg, $operation )
 
 	// Show Accept FORM!
 	print('<br><br>
-			<table width="600" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
+			<table width="700" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
 				<td colspan="10" align="center" valign="top" class="title"><strong><FONT COLOR="red">' . $warningtext . '</FONT></strong></td>
 			</tr>
 			</table>
-			<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
+			<table width="700" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
 				<td align="center" class="line1">
 					<br>
