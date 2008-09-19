@@ -759,7 +759,8 @@ function RunParserNow()
 
 					if ( $currentseconds != -1 ) // Init starts at -1
 					{
-						if ( ($findmode == 0) && (preg_match ("/InitGame:/", $gl_linebuffer)) )
+// OLD WAY						if ( ($findmode == 0) && (preg_match ("/InitGame:/", $gl_linebuffer)) )
+						if ( ($findmode == 0) && ( stripos($gl_linebuffer, "InitGame:")  !== false ) )
 						{
 							$findmode = 1;	// From here start copying the game session into the buffer
 							PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Gameround found at Line $currentline");
@@ -789,19 +790,34 @@ function RunParserNow()
 								= If the Init and ExitSeconds are the same, the "ExitLevel: executed" is missing so we also quit the round here. 
 							*	(preg_match ("/ExitLevel: executed/", $gl_linebuffer))
 								= ExitLevel is a RoundFinish in ANY case!
-							*	($currentgametype == "dm" || $currentgametype == "tdm") && (preg_match ("/ShutdownGame:/", $gl_linebuffer))
+							*	($currentgametype == "dm" || $currentgametype == "tdm" || $currentgametype == "war" || $currentgametype == "twar" || $currentgametype == "vtdm") && (preg_match ("/ShutdownGame:/", $gl_linebuffer))
 								= If we reach this, it proberly was an "Unclean mapshutdown" - anyway, the session ends here
 							*	( isset($roundfilerestart) && $roundfilerestart == true )
 								= If a server is restarted, we need to finish the session exactly HERE as well ;)!
 							*		
 							*/
 
-							if (	($lastseconds > $currentseconds) ||
+/* OLD WAY							if (	($lastseconds > $currentseconds) ||
 									(preg_match("/ShutdownGame:/", $gl_linebuffer) && $lastseconds == $currentseconds) ||
 									(preg_match ("/ExitLevel: executed/", $gl_linebuffer)) || 
 									(
 										($currentgametype == "dm" || $currentgametype == "tdm") &&
 										(preg_match ("/ShutdownGame:/", $gl_linebuffer))
+									) ||
+									( isset($logfilerestart) && $logfilerestart == true )
+								)
+*/
+							if (	( $lastseconds > $currentseconds) ||
+									( stripos($gl_linebuffer, "ShutdownGame:") !== false && $lastseconds == $currentseconds) ||
+									( stripos($gl_linebuffer, "ExitLevel: executed") !== false ) || 
+									(
+										(	$currentgametype == "dm" || 
+											$currentgametype == "tdm" || 
+											$currentgametype == "war"  || 
+											$currentgametype == "twar" || 
+											$currentgametype == "vtdm" )
+											&&
+										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
 									) ||
 									( isset($logfilerestart) && $logfilerestart == true )
 								)
@@ -923,12 +939,18 @@ function ProcessGameRound($myRoundArray, $myrealstarttime)
 	$SQL_INSERT_Count = 0;
 	$SQL_SELECT_Count = 0;
 	
-	// ReInit Values					
+	// Unset Arrays
 	unset ($myPlayers);
 	unset ($myRound[ROUND_ALLIES_GUIDS]);		// why the fuck unset it as well? 
 	unset ($myRound[ROUND_AXIS_GUIDS]);			// why the fuck unset it as well? 
 	unset ($myRound);
 	unset ($myKills);							
+
+	// INIT Arrays
+	$myPlayers = array(); 
+	$myRound = array();
+	$myKills = array();
+//print_r ( $myPlayers);
 
 	// --- Experimental, lock all needed tables: 
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "ProcessGameRound", "Locking Database Tables...");
@@ -1271,10 +1293,14 @@ function Parser_AddPlayer( $myArray )
 	PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddPlayer", "Player with ID '" . $myArray[PARSER_GUID] . "' joined ");
 
 	// --- Starting the Code
-	
+
+	// Init Player entry array
+	$myPlayers[ $myArray[PARSER_GUID] ] = array();
+
 	// Set Values we know
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_GUID] = $myArray[PARSER_GUID];
-	$myPlayers[ $myArray[PLAYER_ID] ][PLAYER_ID] = $myArray[JOIN_CLIENTID];
+	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_ID] = $myArray[JOIN_CLIENTID];
+//WTF?	$myPlayers[ $myArray[PLAYER_ID] ][PLAYER_ID] = $myArray[JOIN_CLIENTID];
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_NAME] = $myArray[JOIN_CLIENTNAME];
 
 	// Init Values!
@@ -1284,7 +1310,6 @@ function Parser_AddPlayer( $myArray )
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_TKS] = 0;
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_SUICIDES] = 0;
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_PBGUID] = $playerpbguid;
-	
 
 	// Add Alias and increment Counter
 	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
@@ -1317,6 +1342,31 @@ function Parser_AddPlayer( $myArray )
 }
 /*	----------------------------------------------------*/
 
+/*	----------------------------------------------------
+*	Helper function to manually add mysterically 
+*	occured players
+*/
+function Parser_AddPlayerManually( $szPlayerGuid, $szPlayerAlias, $nClientID )
+{
+	global $myPlayers;
+
+	// Init Player entry array
+	$myPlayers[ $szPlayerGuid ] = array();
+
+	// Set Values we know
+	$myPlayers[ $szPlayerGuid ][PLAYER_GUID] = $szPlayerGuid;
+//	$myPlayers[ $myArray[PLAYER_ID] ][PLAYER_ID] = $nClientID;
+	$myPlayers[ $szPlayerGuid ][PLAYER_ID] = $nClientID;
+	$myPlayers[ $szPlayerGuid ][PLAYER_NAME] = $szPlayerAlias;
+
+	// Init Values!
+	$myPlayers[ $szPlayerGuid ][PLAYER_TEAM] = "";
+	$myPlayers[ $szPlayerGuid ][PLAYER_KILLS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_DEATHS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_TKS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_SUICIDES] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_PBGUID] = "";
+}
 
 /*	----------------------------------------------------*/
 /*	Helper function to create thwe static record of a player
@@ -1648,12 +1698,18 @@ function Parser_AddKillAndDeath( $myArray )
 	if ( !isset($myPlayers[$myArray[KILL_OPFER_GUID]]) )
 	{
 		// Opfer not found, we don't count this!
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Error, Player Opfer '" . $myArray[KILL_OPFER_GUID] . " already left the server, possible Double GUID! Kill may not be NOT Counted!");
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Player Opfer '" . $myArray[KILL_OPFER_GUID] . " not in Players Array! Manually adding Player into round player array!");
+		
+		// Manually add the player now!
+		Parser_AddPlayerManually( $myArray[KILL_OPFER_GUID], $myArray[KILL_OPFER_NAME], $myArray[KILL_OPFER_ID] );
+
+//		print_r ( $myPlayers );
+//		exit;
 
 		// In this case, we do NOT count!
 //		return; // TODO: Was commented out, why?
 	}
-	else
+//	else
 	{
 		// Set Opfer reference!
 		$opfer = &$myPlayers[ $myArray[KILL_OPFER_GUID] ];
@@ -1661,11 +1717,14 @@ function Parser_AddKillAndDeath( $myArray )
 
 	if ( !isset($myPlayers[$myArray[KILL_ATTACKER_GUID]]) )
 	{
-		// Attacker not found, we don't count this!
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Error, Player Attacker '" . $myArray[KILL_OPFER_GUID] . " already left the server, possible Double GUID! Kill is NOT Counted!");
+		// Opfer not found, we don't count this!
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Player Attacker '" . $myArray[KILL_ATTACKER_GUID] . " is not in players Array! Manually adding Player into round player array!");
+		
+		// Manually add the player now!
+		Parser_AddPlayerManually( $myArray[KILL_ATTACKER_GUID], $myArray[KILL_ATTACKER_NAME], $myArray[KILL_ATTACKER_ID] );
 
 		// In this case, we do NOT count!
-		return; // TODO: Was commented out, why?
+//		return; // TODO: Was commented out, why?
 	}
 	// --- 
 
