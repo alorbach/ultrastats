@@ -82,7 +82,7 @@ if ( isset($content['roundsonly']) )
 		// --- Set Mapimage
 		$content['roundsonly'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/" . $content['roundsonly'][$i]['MAPNAME'] . ".jpg";
 		if ( !is_file($content['roundsonly'][$i]['MapImage']) )
-			$content['roundsonly'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+			$content['roundsonly'][$i]['MapImage'] = $gl_root_path . "images/maps/thumbs/no-pic.png";
 		// --- 
 
 		// --- Set GametypeName 
