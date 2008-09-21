@@ -597,25 +597,10 @@ function RunParserNow()
 		return;
 	}
 
-	/* moved to helpers 
-	if ($RUNMODE == RUNMODE_WEBSERVER)
-	{
-		// Max Execution time
-		set_time_limit( 120 );									// Extend Execution Time
-		$MaxExecutionTime = ini_get("max_execution_time") - 10; // -10 Seconds to be on the save side and have enough time  to finish the site!
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Gamelog", "MaxExecutionTime = $MaxExecutionTime");
-	}
-	else
-	{
-		// Unlimited
-		set_time_limit( 0 );
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Gamelog", "Console Mode, unlimited Execution TIME ");
-	}*/
-
 	// Some defaults
 	$gl_newlastline = 0;
 	$gl_linebuffer = "";
-	$currentseconds = 0;
+	$currentseconds = 0;				// helper variables storing the seconds amount from the current logline
 	$gl_totallogtimesecs = 0;			// The total time of the whole log!
 
 	// StartDbg
@@ -625,14 +610,17 @@ function RunParserNow()
 	$db_lastlogline = GetLastLogLine( $myserver['ID'] );
 	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Last parsed Line was " . $db_lastlogline);
 
-	// --- First Loop - Get linecount
+	// --- First Loop - Obtain linecount
 	$myhandle = fopen( $myserver['GameLogLocation'], "r");
 	if ($myhandle)
 	{
 		if (feof ($myhandle)) 
 			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Error, file is empty " . $myserver['GameLogLocation'] );
 
-		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Opening for counting the lines..." );
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Opening for counting the lines, this may take a while depending on the size of your logfile..." );
+		
+		//Flush output
+		FlushParserOutput();
 
 		while (!feof ($myhandle))
 		{
@@ -666,6 +654,11 @@ function RunParserNow()
 				// --- END TimeHandling
 			}
 		}
+
+		// --- FIXED TIME CALC BUG, I can't believe nobody ever found this easy bug :S
+		// Append seconds we have left!
+		$gl_totallogtimesecs += ($currentseconds - $initseconds);
+		// --- 
 
 		fclose($myhandle);
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "has $gl_newlastline lines ");
@@ -864,8 +857,7 @@ function RunParserNow()
 								if ($RUNMODE == RUNMODE_WEBSERVER)
 								{
 									//Flush php output
-									flush();
-									ob_flush();
+									FlushParserOutput();
 
 									//Check for script timeout
 									if ( ( microtime_float() - $ParserStart) > $MaxExecutionTime)
