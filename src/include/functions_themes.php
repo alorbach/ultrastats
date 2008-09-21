@@ -82,27 +82,6 @@ function CreateThemesList()
 	}
 }
 
-function list_directories($directory) 
-{
-	$result = array();
-	if (! $directoryHandler = @opendir ($directory)) 
-		DieWithFriendlyErrorMsg( "list_directories: directory \"$directory\" doesn't exist!");
-
-	while (false !== ($fileName = @readdir ($directoryHandler))) 
-	{
-		if	( is_dir( $directory . $fileName ) && ( $fileName != "." && $fileName != ".." ))
-			@array_push ($result, $fileName);
-	}
-
-	if ( @count ($result) === 0 ) 
-		DieWithFriendlyErrorMsg( "list_directories: no directories in \"$directory\" found!");
-	else 
-	{
-		sort ($result);
-		return $result;
-	}
-}
-
 function InitThemeAbout( $themename ) 
 {
 	global $content, $gl_root_path;

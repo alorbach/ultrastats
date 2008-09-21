@@ -540,7 +540,7 @@ if ( isset($_GET['id']) )
 				if ( isset($hitlocations) )
 				{
 					// Set some helpers here!
-					$content['KILLEDDETAILS'][0]['modelname'] = "russian";
+					$content['KILLEDDETAILS'][0]['modelname'] = $content['web_playermodel_killer'];
 
 					for($i = 0; $i < count($hitlocations); $i++)
 					{
@@ -624,7 +624,7 @@ if ( isset($_GET['id']) )
 				if ( isset($hitlocations) )
 				{
 					// Set some helpers here!
-					$content['KILLEDBYDETAILS'][0]['modelname'] = "german";
+					$content['KILLEDBYDETAILS'][0]['modelname'] = $content['web_playermodel_killedby'];
 
 					for($i = 0; $i < count($hitlocations); $i++)
 					{

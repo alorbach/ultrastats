@@ -51,6 +51,10 @@ CreateTopPlayersArray( 200, "TOPLISTPLAYERS", "web_detaillistsplayers" );
 CreateTopPlayersArray( 100, "WEBMAXPAGES", "web_maxpages" );
 CreateTopPlayersArray( 50, "WEBMAXMAPSPERPAGE", "web_maxmapsperpage" );
 
+// Create Helper Lists for Player Models!
+CreatePlayerModelList( "PLAYERMODELKILLER", $content['web_playermodel_killer'] );
+CreatePlayerModelList( "PLAYERMODELKILLEDBY", $content['web_playermodel_killedby'] );
+
 // Create DebugModes
 CreateDebugModes();
 
@@ -105,6 +109,9 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['web_maxmapsperpage']) && is_numeric($_POST['web_maxmapsperpage'])) { $content['web_maxmapsperpage'] = DB_RemoveBadChars($_POST['web_maxmapsperpage']); } 
 	if ( isset ($_POST['web_medals']) ) { $content['web_medals'] = "yes"; } else { $content['web_medals'] = "no"; }
 
+	if ( isset ($_POST['web_playermodel_killer']) && CheckIfPlayerModelExists($_POST['web_playermodel_killer']) ) { $content['web_playermodel_killer'] = DB_RemoveBadChars($_POST['web_playermodel_killer']); } 
+	if ( isset ($_POST['web_playermodel_killedby']) && CheckIfPlayerModelExists($_POST['web_playermodel_killedby'])) { $content['web_playermodel_killedby'] = DB_RemoveBadChars($_POST['web_playermodel_killedby']); } 
+
 	// Write Gen Config Vars
 	WriteConfigValue( "gen_lang" );
 	WriteConfigValue( "gen_gameversion" );
@@ -127,6 +134,10 @@ if ( isset($_POST['op']) )
 	WriteConfigValue( "web_maxmapsperpage" );
 	WriteConfigValue( "web_medals" );
 
+	// Write PlayerDetail Options
+	WriteConfigValue( "web_playermodel_killer" );
+	WriteConfigValue( "web_playermodel_killedby" );
+
 	// Write Medal Config Vars
 	foreach ($content['medals'] as $key => $medal)
 	{
@@ -141,8 +152,61 @@ if ( isset($_POST['op']) )
 	// Done and redirect
 	RedirectResult( "Configuration Values have been successfully saved", "index.php" );
 }
-
 // --- 
+
+// --- Helper functions
+function CreatePlayerModelList( $szArrayItemName, $szSelectedPlayerModel)
+{
+	global $gl_root_path, $content;
+
+	$alldirs = list_directories( $gl_root_path . "images/player/");
+	for($i = 0; $i < count($alldirs); $i++)
+	{
+		// --- web_theme
+		$content[$szArrayItemName][$i]['ModelName'] = $alldirs[$i];
+		$content[$szArrayItemName][$i]['ModelDisplayname'] = GetPlayerModelDisplayName( $alldirs[$i] );
+		if ( $szSelectedPlayerModel == $alldirs[$i] )
+			$content[$szArrayItemName][$i]['selected'] = "selected";
+		else
+			$content[$szArrayItemName][$i]['selected'] = "";
+		// ---
+
+	}
+}
+
+function CheckIfPlayerModelExists( $szDirName ) 
+{
+	global $content, $gl_root_path;
+	$szInfoFile = $gl_root_path . "images/player/" . $szDirName . "/info.txt";
+	if ( is_file( $szInfoFile ) )
+		return true;
+	else
+		return false;
+
+}
+function GetPlayerModelDisplayName( $szDirName ) 
+{
+	global $content, $gl_root_path;
+	$szInfoFile = $gl_root_path . "images/player/" . $szDirName . "/info.txt";
+	if ( is_file( $szInfoFile ) )
+	{	
+		//Read InfoFile!
+		$infofile  = fopen($szInfoFile, 'r');
+		if (!feof ($infofile)) 
+		{
+			while (!feof ($infofile))
+			{
+				// Return max 32 characters
+				$tmpline = fgets($infofile, 1024);
+				return substr( trim($tmpline), 0, 32);
+			}
+		}
+		fclose($infofile);
+	}
+	else // No Info, return ID as DisplayName
+		return $szDirName;
+}
+// ---
 
 // --- Parsen and Output
 InitTemplateParser();

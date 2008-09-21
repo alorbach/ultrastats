@@ -62,7 +62,7 @@ $content['LN_GEN_WEB_MINTIME'] = "Wieviel Sekunden muss ein Spieler gespielt hab
 $content['LN_GEN_WEB_SHOWMEDALS'] = "Anzeige der Medaillien auf der Hauptseite?";
 $content['LN_ADMINPARSER'] = "Parser Auswahl";
 $content['LN_PARSER_DEBUGMODE'] = "Debug Modus";
-$content['LN_PARSER_DISABLELASTLOGLINE'] = "Schreibsperre für die letzten Log Zeilen (nur für den Debug Modus)";
+$content['LN_PARSER_DISABLELASTLOGLINE'] = "Die Position der Logzeile nicht speichern (Debug Modus)";
 $content['LN_GEN_WEB_MAXMAPSPERPAGE'] = "Wieviele Maps sollen pro Seite aufgeführt werden in der Server Statistik?";
 $content['LN_GEN_GAMEVERSION'] = "Spiel Version";
 $content['LN_GEN_PARSEBYTYPE'] = "Spieler verarbeiten nach ";
@@ -70,6 +70,9 @@ $content['LN_GEN_PHPDEBUG'] = "Aktiviere PHP Debugging";
 $content['LN_PARSER_ENABLECHATLOGGING'] = "Aktiviere Chat Logging";
 $content['LN_ADMINMEDALS'] = "Medal Options";
 $content['LN_ADMINMEDALSENABLE'] = "Aktiviere '%1' Medals";
+$content['LN_ADMINPLAYERDETAILS'] = "Optionen für Playerdetail Seite";
+$content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation Model für 'Treffezonen auf deine Gegenspieler'";
+$content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation Model für 'Wo du getroffen wurdest'";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Administration";
@@ -125,14 +128,14 @@ $content['LN_ADDITIONALFUNCTIONS'] = "Zusätzliche Funktionen";
 $content['LN_CREATEALIASES'] = "Erstelle Aliases HTML Code";
 $content['LN_CALCMEDALSONLY'] = "Kalkuliere Medals";
 $content['LN_ADMINCREATEALIASES'] = "Erstelle Top Aliases";
-$content['LN_ADMINEDIT_TEXT'] = "Click on this button to edit this existing server entry.";
-$content['LN_ADMINDELETE_TEXT'] = "If you want to delete this server entry, click here.";
-$content['LN_ADMINPARSESTATS_TEXT'] = "This function starts the logfile parsing process";
-$content['LN_ADMINCREATEALIASES_TEXT'] = "Creates the top used aliases for this server entry.";
-$content['LN_ADMINDBSTATS_TEXT'] = "Shows Database Statistic properties.";
-$content['LN_ADMINRESETLASTLOGLINE_TEXT'] = "Reset the last known logfile position to 0";
-$content['LN_ADMINDELETESTATS_TEXT'] = "Delete all stats related to this server.";
-$content['LN_ADMINGETNEWLOG_TEXT'] = "Download new gamelog from your server. ";
+$content['LN_ADMINEDIT_TEXT'] = "Klicke auf diesen Button um einen exsitierenden Servereintrag zu ändern.";
+$content['LN_ADMINDELETE_TEXT'] = "Fall du diesen Servereintrag löschen willst, klick hier.";
+$content['LN_ADMINPARSESTATS_TEXT'] = "Diese Funktion startet den Logfile parsing Process";
+$content['LN_ADMINCREATEALIASES_TEXT'] = "Erstelle die meist genutzten Aliases für diesen Servereintrag.";
+$content['LN_ADMINDBSTATS_TEXT'] = "Zeige Datenbank Statistik Eigenschaften.";
+$content['LN_ADMINRESETLASTLOGLINE_TEXT'] = "Zurücksetzten der zuletzt bekannten Logfile Position auf 0";
+$content['LN_ADMINDELETESTATS_TEXT'] = "Lösche alle Statistiken für diesen Server.";
+$content['LN_ADMINGETNEWLOG_TEXT'] = "Downloade neues Gamelog von deinem Server. ";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";

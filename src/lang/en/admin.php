@@ -70,6 +70,9 @@ $content['LN_GEN_PHPDEBUG'] = "Enable PHP Debugging";
 $content['LN_PARSER_ENABLECHATLOGGING'] = "Enable Chat Logging";
 $content['LN_ADMINMEDALS'] = "Medal Options";
 $content['LN_ADMINMEDALSENABLE'] = "Enable '%1' Medal";
+$content['LN_ADMINPLAYERDETAILS'] = "Playerdetail Site Options";
+$content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation model used for 'where you hit others'";
+$content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation model used for 'where you got klled by others'";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Admin Center";

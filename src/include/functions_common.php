@@ -537,6 +537,10 @@ function InitConfigurationValues()
 	if ( !isset($content['web_maxmapsperpage']) ) { $content['web_maxmapsperpage'] = 10; }
 	if ( !isset($content['web_medals']) ) { $content['web_medals'] = "yes"; }
 
+	// Set default Player models!
+	if ( !isset($content['web_playermodel_killer']) ) { $content['web_playermodel_killer'] = "marine"; }
+	if ( !isset($content['web_playermodel_killedby']) ) { $content['web_playermodel_killedby'] = "german"; }
+
 	// Admin Interface
 	if ( !isset($content['admin_maxplayers']) ) { $content['admin_maxplayers'] = 30; }
 	if ( !isset($content['admin_maxpages']) ) { $content['admin_maxpages'] = 20; }
@@ -1213,6 +1217,30 @@ function InitPageTitle()
 
 	// return result
 	return $szReturn;
+}
+
+/*
+*	Moved Helper function here
+*/
+function list_directories($directory) 
+{
+	$result = array();
+	if (! $directoryHandler = @opendir ($directory)) 
+		DieWithFriendlyErrorMsg( "list_directories: directory \"$directory\" doesn't exist!");
+
+	while (false !== ($fileName = @readdir ($directoryHandler))) 
+	{
+		if	( is_dir( $directory . $fileName ) && ( $fileName != "." && $fileName != ".." ))
+			@array_push ($result, $fileName);
+	}
+
+	if ( @count ($result) === 0 ) 
+		DieWithFriendlyErrorMsg( "list_directories: no directories in \"$directory\" found!");
+	else 
+	{
+		sort ($result);
+		return $result;
+	}
 }
 
 ?>
