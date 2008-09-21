@@ -123,7 +123,7 @@ if ( isset($content['serverid']) )
 			// --- Set Mapimage
 			$content['playedmaps'][$i]['MapImage'] = $gl_root_path . "images/maps/middle/" . $content['playedmaps'][$i]['MAPNAME'] . ".jpg";
 			if ( !is_file($content['playedmaps'][$i]['MapImage']) )
-				$content['playedmaps'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.jpg";
+				$content['playedmaps'][$i]['MapImage'] = $gl_root_path . "images/maps/no-pic.png";
 			// --- 
 
 			// --- Set Most Played Gametype
