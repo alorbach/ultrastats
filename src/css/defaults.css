@@ -116,27 +116,41 @@
 }
 */
 
-.popupdetails:hover
-{
-	display: none;
-    position: fixed; 
-/*	font-weight:normal; */
-	z-index:5;
-}
 .popupdetails
 {
+	position: absolute;
+	visibility: hidden;
+	z-index:4
+
+/*
 	display: none;
     position: fixed;
 	overflow: visible;
 	z-index:-1;
 	visibility: hidden;
+*/
 }
+.popupdetails:hover
+{
+	position: absolute;
+	visibility: hidden;
+	z-index: 5;
+
+/*	display: none;
+    position: fixed; 
+	z-index:5; */
+}
+
 .popupdetails_popup
 { 
 /*    display: block; */
-    position: fixed;
+
+	position: absolute;
+	visibility: visible;
+	z-index: 5;
+/*
+	position: fixed;
 	overflow: auto;
 	z-index: 5;
-
-	visibility: visible;
+*/
 }

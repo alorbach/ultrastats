@@ -1,9 +1,18 @@
+/* Detect Browser Version */
+var szBrowserApp = "MOZILLA"; // Default!
+if (/MSIE (\d+\.\d+);/.test(navigator.userAgent))
+{
+	if (!/Opera[\/\s](\d+\.\d+)/.test(navigator.userAgent)) 
+	{
+		// Set browser to Internet Explorer
+		szBrowserApp = "IEXPLORER";
+	}
+}
+
 /*
-
-Helper Javascript functions
-
+*
+*	Helper Javascript functions
 */
-
 function CheckAlphaPNGImage(ImageName, ImageTrans)
 {
 	var agt=navigator.userAgent.toLowerCase();
@@ -109,21 +118,11 @@ function FinishHoveringPopup(event, parentObj)
 	myPopupHovering = false;
 }
 
-function initPopupWindow(objName) // parentObj)
+function FinishPopupWindow() // ) //, parentObj)
 {
-	var obj = document.getElementById(objName);
-
 	// Change CSS Class
-	obj.className='popupdetails_popup with_border';
-}
-
-function FinishPopupWindow(objName) //, parentObj)
-{
-	var obj = document.getElementById(objName);
+	var obj = document.getElementById('popupdetails');
 	obj.className='popupdetails with_border';
-
-	// Change CSS Class
-//	parentObj.className='popupdetails';
 }
 
 function disableEventPropagation(myEvent)
@@ -139,14 +138,21 @@ function movePopupWindow(myEvent, ObjName, parentObj)
 {
 	var obj = document.getElementById(ObjName);
 	
-	var PopupContentWidth = 0;
-	var middle = PopupContentWidth / 2;
-//	alert ( parentObj.className ) ;
+//	var PopupContentWidth = 0;
+//	var middle = PopupContentWidth / 2;
+	var middle = -10;
+
 	if (myPopupHovering == false && obj != null && parentObj != null)
 	{
-//		alert ( parentObj.style.left );
-//		alert ( obj.style.top );
-		obj.style.top = (myEvent.clientY + 10) + 'px';
+		// Different mouse position capturing in IE!
+		if (szBrowserApp == "IEXPLORER")
+		{
+			obj.style.top = (event.y+document.body.scrollTop + 10) + 'px';
+		}
+		else
+		{
+			obj.style.top = (myEvent.pageY + 20) + 'px';
+		}
 		obj.style.left = (myEvent.clientX - middle) + 'px';
 	}
 }
@@ -166,6 +172,10 @@ function GoToPopupTarget(myTarget, parentObj)
 
 function HoverPopup( myObjRef, myPopupTitle, HoverContent, OptionalImage )
 {
+	// Change CSS Class
+	var obj = document.getElementById('popupdetails');
+	obj.className='popupdetails_popup with_border';
+
 	if ( myObjRef != null)
 	{
 		myObjRef.src = OptionalImage; 

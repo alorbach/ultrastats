@@ -33,6 +33,7 @@ $content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
 $content['LN_MENU_ADMINUSERS'] = "User Admin";
 $content['LN_MENU_ADMINLOGOFF'] = "Logoff";
 $content['LN_ADMIN_MOREPAGES'] = "(More then %1 pages found)";
+	$content['LN_ADMIN_POPUPHELP'] = "What does this button do?";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
@@ -124,6 +125,14 @@ $content['LN_ADDITIONALFUNCTIONS'] = "Additional Functions";
 $content['LN_CREATEALIASES'] = "Create Aliases HTML Code";
 $content['LN_CALCMEDALSONLY'] = "Calculate Medals";
 $content['LN_ADMINCREATEALIASES'] = "Create Top Aliases";
+	$content['LN_ADMINEDIT_TEXT'] = "Click on this button to edit this existing server entry.";
+	$content['LN_ADMINDELETE_TEXT'] = "If you want to delete this server entry, click here.";
+	$content['LN_ADMINPARSESTATS_TEXT'] = "This function starts the logfile parsing process";
+	$content['LN_ADMINCREATEALIASES_TEXT'] = "Creates the top used aliases for this server entry.";
+	$content['LN_ADMINDBSTATS_TEXT'] = "Shows Database Statistic properties.";
+	$content['LN_ADMINRESETLASTLOGLINE_TEXT'] = "Reset the last known logfile position to 0";
+	$content['LN_ADMINDELETESTATS_TEXT'] = "Delete all stats related to this server.";
+	$content['LN_ADMINGETNEWLOG_TEXT'] = "Download new gamelog from your server. ";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";
