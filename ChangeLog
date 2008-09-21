@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------
+Version 0.3.3 (devel), 2008-09-21
+New features:
+- Added 4 new Player Models for Cod5, and rewrote the hitdetection 
+  model view in the player details. Details are now shown in a popup 
+  when you hover the body parts. It is also possible to configure
+  which model you want to use in the player details: 
+  marine, german, japanese and russian. 
+- Added german translation
+- Added support to enable GZIP compression. This can be used to reduce 
+  outgoing html traffic. 
+
+Changes and bugfixes:
+  logline for now!
+- Fixed few minor display and visiblity issues in the stats
+- Changed some debug levels in the parser. Default debug level is 
+  restricted to more useful output now. 
+- Fixed readability issue in dark style
+- Added menu workaround for Internet Explorer, so it works there as well. 
+- Fixed default picture in serverlist view
+- LogParser: Rewrote round begin and round end detection to 
+  work with new Cod5 Gametypes. 
+- LogParser: Added workaround to add players into a running round which 
+  didn't join before. This workaround is only applied in the KILL 
+- LogParser: Fixed a bug in the custom time start detection method 
+  using the gamestartup variable workaround. 
+- LogParser: Fixed a roundstart time calculation bug which caused 
+  played rounds to appear in the future. 
+---------------------------------------------------------------------------
 Version 0.3.2 (devel), 2008-09-18
 
 New features:
