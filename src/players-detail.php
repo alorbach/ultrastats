@@ -540,7 +540,7 @@ if ( isset($_GET['id']) )
 				if ( isset($hitlocations) )
 				{
 					// Set some helpers here!
-					$content['KILLEDDETAILS'][0]['modelname'] = "marine";
+					$content['KILLEDDETAILS'][0]['modelname'] = "russian";
 
 					for($i = 0; $i < count($hitlocations); $i++)
 					{
