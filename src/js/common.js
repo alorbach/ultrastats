@@ -39,7 +39,7 @@ function NewWindow(Location, WindowName,X_width,Y_height,Option) {
 
 // helper array to keep track of the timeouts!
 var runningTimeouts = new Array();
-var defaultMenuTimeout = 1500;
+var defaultMenuTimeout = 3000;
 /*
 * Toggle display type from NONE to BLOCK
 */ 
@@ -83,11 +83,15 @@ function ToggleDisplayClearTimeout(ObjID)
 
 function ToggleDisplayEnhanceTimeOut(ObjID)
 {
-	// First clear timeout
-	ToggleDisplayClearTimeout(ObjID);
+	// Only perform if timeout exists!
+	if (runningTimeouts[ObjID] != null)
+	{
+		// First clear timeout
+		ToggleDisplayClearTimeout(ObjID);
 
-	// Set new  timeout
-	ToggleDisplaySetTimeout(ObjID);
+		// Set new  timeout
+		ToggleDisplaySetTimeout(ObjID);
+	}
 }
 
 /*
@@ -189,4 +193,37 @@ function HoverPopup( myObjRef, myPopupTitle, HoverContent, OptionalImage )
 	// Set Content
 	var obj = document.getElementById("popupcontent");
 	obj.innerHTML = HoverContent;
+}
+
+function HoverPopupMenuHelp( myEvent, parentObj, myPopupTitle, HoverContent )
+{
+	if (szBrowserApp !== "IEXPLORER")
+	{
+		// Don't need helper here!
+		return; 
+	}
+
+	// Change CSS Class
+	var objPopup = document.getElementById('popupdetails');
+	objPopup.className='popupdetails_popup with_border';
+
+	// Set title
+	var obj = document.getElementById("popuptitle");
+	obj.innerHTML = myPopupTitle;
+
+	// Set Content
+	obj = document.getElementById("popupcontent");
+	obj.innerHTML = HoverContent;
+
+//	var PopupContentWidth = 0;
+//	var middle = PopupContentWidth / 2;
+	var middle = -5;
+
+	if (myPopupHovering == false && parentObj != null)
+	{
+		// Different mouse position capturing in IE!
+		objPopup.style.top = (event.y+document.body.scrollTop + 50) + 'px';
+		objPopup.style.left = (myEvent.clientX - middle) + 'px';
+	}
+
 }

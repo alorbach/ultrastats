@@ -293,6 +293,6 @@ $content['LN_MENU_SERVERSTATS'] = "Server Statistik";
 $content['LN_MENU_ADMINCENTER'] = "Admin Center";
 $content['LN_MENU_SERVERLIST'] = "Server Liste";
 $content['LN_MENU_SERVERPLAYEDMAPS'] = "Zeige gespielte Maps";
-$content['LN_MENU_'] = "";
+$content['LN_MENU_CLICKTOEXPANDMENU'] = "Klicke auf das Icon, um das Menu zu öffnen.";
 
 ?>

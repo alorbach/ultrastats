@@ -6,21 +6,25 @@
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu">
 		<ul>
-		  <li class="topmenu1_link">
-		  <a class="topmenu1_link" href="rounds.php?{additional_url}" target="_top">
-		  <img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_showrounds');">{LN_MENU_ROUNDSTATS}
-		  </a>
+			<li class="topmenu1_link">
 
-			<ul class="with_border" id="menu_showrounds">
-				<li class="topmenu2">
-				<a class="topmenu2_link" href="rounds.php?{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_ROUNDS_BYDATE}</a>
+			<img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" OnClick="ToggleDisplayTypeById('menu_showrounds');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_ROUNDSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu1_link" href="rounds.php?{additional_url}" target="_top"> 
+			{LN_MENU_ROUNDSTATS}
+			</a>
+
+			<ul id="menu_showrounds" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_showrounds');">
+				<li class="topmenu2" >
+					<img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">
+					<a class="topmenu2_link" href="rounds.php?{additional_url}" target="_top">
+					{LN_MENU_ROUNDS_BYDATE}</a>
 				</li>
 
 				<li class="topmenu2">
-				<h2><img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" vspace="0">{LN_MENU_ROUNDS_BYGAMETYPE}</h2>
-					<ul class="with_border">
+				<h2><img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" vspace="0" OnClick="ToggleDisplayTypeById('menu_showrounds_submenu1');">{LN_MENU_ROUNDS_BYGAMETYPE}</h2>
+					<ul id="menu_showrounds_submenu1">
 					<!-- BEGIN gametypes -->
-					<li class="topmenu3">
+					<li class="topmenu3" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_showrounds_submenu1'); ToggleDisplayEnhanceTimeOut('menu_showrounds');">
 					<a class="topmenu3_link" href="rounds.php?id={NAME}{additional_url}" target="_top">{GameTypeDisplayName}</a>
 					</li>
 					<!-- END gametypes -->
@@ -28,17 +32,20 @@
 				</li>
 			</ul>
 
-		  </li>
+			</li>
 		</ul>
 		</div>
 	</td>
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
-		  <a class="topmenu1_link" href="players.php?{additional_url}" target="_top">
-		  <img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_playerstats');">{LN_MENU_PLAYERSTATS}
-		  </a>
-			<ul class="with_border" id="menu_playerstats">
+
+			<img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_playerstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_PLAYERSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu1_link" href="players.php?{additional_url}" target="_top">
+			{LN_MENU_PLAYERSTATS}
+			</a>
+
+			<ul id="menu_playerstats" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_playerstats');">
 				<li class="topmenu2"><a class="topmenu2_link" href="players.php?sorting=Kills{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_PLAYER_BYKILL}</a></li>
 				<li class="topmenu2"><a class="topmenu2_link" href="players.php?sorting=Deaths{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_PLAYER_BYDEATH}</a></li>
 				<li class="topmenu2"><a class="topmenu2_link" href="players.php?sorting=Teamkills{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_PLAYER_BYTEAMKILLS}</a></li>
@@ -52,18 +59,20 @@
 	<td class="topmenu1" nowrap align="left" width="110">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
-		  <a class="topmenu2_link" href=" weapons.php?{additional_url}" target="_top">
-		  <img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_weaponstats');">{LN_MENU_WEAPONSTATS}
-		  </a>
-			<ul class="with_border" id="menu_weaponstats">
 
+			<img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_weaponstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_WEAPONSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu2_link" href=" weapons.php?{additional_url}" target="_top">
+			{LN_MENU_WEAPONSTATS}
+			</a>
+
+			<ul id="menu_weaponstats" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_weaponstats');">
 				<!-- BEGIN weapontypes -->
 				<li class="topmenu2">
-				<h2><img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" vspace="0">{Name}</h2>
+				<h2><img align="left" src="{MENU_NAV_CLOSE}" width="16" height="16" vspace="0" OnClick="ToggleDisplayTypeById('menu_weaponstats_{ID}');">{Name}</h2>
 					
-					<ul class="with_border">
+					<ul id="menu_weaponstats_{ID}">
 					<!-- BEGIN myweapons -->
-					<li class="topmenu3">
+					<li class="topmenu3" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_weaponstats_{ID}'); ToggleDisplayEnhanceTimeOut('menu_weaponstats');">
 					<a class="topmenu3_link" href="weapons.php?id={INGAMENAME}{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{WeaponDisplayName}</a>
 					</li>
 					<!-- END myweapons -->
@@ -78,11 +87,13 @@
 	<td class="topmenu1" nowrap align="left" width="135">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
-		  <a class="topmenu2_link" href=" damagetypes.php?{additional_url}" target="_top">
-		  <img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_damagestats');">{LN_MENU_DAMAGESTATS}
-		  </a>
-			<ul class="with_border" id="menu_damagestats">
 
+			<img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_damagestats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_DAMAGESTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu2_link" href=" damagetypes.php?{additional_url}" target="_top">
+			{LN_MENU_DAMAGESTATS}
+			</a>
+
+			<ul id="menu_damagestats" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_damagestats');">
 				<!-- BEGIN damagetypes_menu -->
 				<li class="topmenu2">
 				<a class="topmenu2_link" href="damagetypes.php?id={DAMAGETYPE}{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{DisplayName}</a>
@@ -96,11 +107,13 @@
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu"><ul>
 		  <li class="topmenu1_link">
-		  <a class="topmenu2_link" href="serverstats.php?{additional_url}" target="_top">
-		  <img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_serverstats');">{LN_MENU_SERVERSTATS}
-		  </a>
 
-			<ul class="with_border" id="menu_serverstats">
+			<img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_GEN_PREDEFINEDSEARCHES}" OnClick="ToggleDisplayTypeById('menu_serverstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_SERVERSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu2_link" href="serverstats.php?{additional_url}" target="_top">
+			{LN_MENU_SERVERSTATS}
+			</a>
+
+			<ul id="menu_serverstats" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_serverstats');">
 				<li class="topmenu2"><a class="topmenu2_link" href="serverstats.php" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_SERVERLIST}</a></li>
 	<!-- IF serverselected="true" -->
 				<li class="topmenu2"><a class="topmenu2_link" href="serverstats.php?{additional_url}" target="_top"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0">{LN_MENU_SERVERPLAYEDMAPS}</a></li>

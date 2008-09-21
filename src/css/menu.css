@@ -4,6 +4,7 @@
 } 
 
 #menu ul { /* remove bullets and list indents */
+	z-index: 1;
 	position: relative;
 	list-style: none;
 	white-space:nowrap;
@@ -45,31 +46,36 @@
 } 
 
 #menu ul ul {
-	z-index:10;
-	white-space:nowrap;
+	z-index: 2;
+	white-space: nowrap;
 	position: absolute;
 	top: 14px; /*14px; */
 	left: 0px; /*24px; /* to position them to the right of their containing block */
+
 	width: auto;
 	min-width: 175px; /* workaround for FF */
 }
 
 #menu ul ul li {
+	z-index: 3;
 	width: auto;
 	min-width: 175px; /* workaround for FF */
 }
 
 #menu ul ul ul {
-	z-index:10;
-	white-space:nowrap;
-
-/*	border-color: #44617D #203040 #203040 #44617D; */
+	z-index: 3;
+	white-space: nowrap;
 
 	position: absolute;
 	top: -2px; /*14px; */
 	left: 99%; /*24px; /* to position them to the right of their containing block */
 	/* width: 350; width is based on the containing block */
 }
+
+#menu ul img {
+	cursor: hand;
+}
+
 
 #menu ul ul, 
 #menu ul li:hover ul ul, 

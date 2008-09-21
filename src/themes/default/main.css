@@ -425,12 +425,17 @@ select, input, textarea
 
 .topmenu1_link, a.topmenu1_link, a.topmenu1_link:visited, .topmenu2_link, a.topmenu2_link, a.topmenu2_link:visited, .topmenu3_link, a.topmenu3_link, a.topmenu3_link:visited 
 {
+	vertical-align: middle;
+	height: 16px;
+
 	color: #FFDD22;
 	font-weight:bold;
 	text-decoration: none;
 }
 .topmenu1_link:hover, .topmenu2_link:hover, .topmenu3_link:hover
 {
+	vertical-align: middle;
+
 	color: #FFFF99;
 	font-weight:bold;
 	text-decoration: none;
