@@ -73,6 +73,7 @@ $content['LN_ADMINMEDALSENABLE'] = "Aktiviere '%1' Medals";
 $content['LN_ADMINPLAYERDETAILS'] = "Optionen für Playerdetail Seite";
 $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation Model für 'Treffezonen auf deine Gegenspieler'";
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation Model für 'Wo du getroffen wurdest'";
+$content['LN_GEN_WEB_GZIP'] = "Aktiviere GZIP Kompression";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Administration";

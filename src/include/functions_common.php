@@ -185,12 +185,15 @@ function InitUltraStats()
 	
 	// Will init the config file!
 	InitUltraStatsConfigFile();
-
+	
 	// Establish DB Connection
 	DB_Connect();
 
 	// Now load the Page configuration values
 	InitConfigurationValues();
+
+	// Check if GZIP is enabled!
+	InitGzipCompression();
 
 	// Now Create Themes List because we haven't the config before!
 	CreateThemesList();
@@ -289,25 +292,29 @@ function CheckAndSetRunMode()
 
 }
 
-function InitRuntimeInformations()
+function InitGzipCompression()
 {
 	global $content;
 
 	// --- Enable GZIP Compression if available
 	if (	
 			strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && 
-			GetConfigSetting("MiscEnableGzipCompression", 0, CFGLEVEL_USER) == 1 &&
+			GetConfigSetting("gen_gzipcompression", 0, CFGLEVEL_USER) == "yes" &&
 			!defined('IS_PARSERPAGE') /* Do not GZIP in this case!*/
 		) 
 	{
 		// This starts gzip compression!
 		ob_start("ob_gzhandler");
-		$content['GzipCompressionEnmabled'] = "yes";
+		$content['GzipCompressionEnabled'] = "yes";
 	}
 	else
-		$content['GzipCompressionEnmabled'] = "no";
+		$content['GzipCompressionEnabled'] = "no";
 	// --- 
-	
+}
+function InitRuntimeInformations()
+{
+	global $content;
+
 	// --- OLD MYSQL STUFF? Do I NEED THIS ANYMORE? 
 	$content['sqltmpfile'] = $content['BASEPATH'] . "tmp.sql";
 	if ( strpos(PHP_OS, "WIN") !== false )
@@ -511,6 +518,11 @@ function InitConfigurationValues()
 	// --- PHP Debug Mode
 	if ( !isset($content['gen_phpdebug']) ) { $content['gen_phpdebug'] = "no"; }
 	// --- 
+
+	// --- GZIP Output!
+	if ( !isset($content['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "no"; }
+	// --- 
+	
 
 	// Web defaults 
 	// --- Theme Handling
@@ -1162,8 +1174,10 @@ function GetConfigSetting($szSettingName, $szDefaultValue = "", $DesiredConfigLe
 	}
 
 	// Either UserDB disabled, or global setting wanted - easier handling
-	if ( isset($CFG[$szSettingName]) ) 
+	if		( isset($CFG[$szSettingName]) ) 
 		return $CFG[$szSettingName];
+	else if ( isset($content[$szSettingName]) ) 
+		return $content[$szSettingName];
 	else
 		return $szDefaultValue;
 }

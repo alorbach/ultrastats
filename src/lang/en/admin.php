@@ -73,6 +73,7 @@ $content['LN_ADMINMEDALSENABLE'] = "Enable '%1' Medal";
 $content['LN_ADMINPLAYERDETAILS'] = "Playerdetail Site Options";
 $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation model used for 'where you hit others'";
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation model used for 'where you got klled by others'";
+$content['LN_GEN_WEB_GZIP'] = "Enable GZIP Compression";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Admin Center";
