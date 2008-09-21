@@ -556,6 +556,7 @@ function OptimizeAllTables()
 		"`" . STATS_WEAPONS . "`, " . 
 		"`" . STATS_PLAYERS_STATIC . "`, " . 
 		"`" . STATS_PLAYERS_TOPALIASES . "`, " . 
+		"`" . STATS_ATTACHMENTS . "`, " . 
 		"`" . STATS_WEAPONS_PERSERVER . "` "; 
 
 	$result = DB_Query($sqlquery);
@@ -826,8 +827,12 @@ function RunParserNow()
 								$gl_newlastline = $currentline;				// Ser lastline counter only if a complete game was found!
 								
 								// BEGIN TimeMod, thx to Ramirez!
-								if ( strlen($custserverstarttime) > 0 ) 
-									$realstarttime = strtotime($custserverstarttime) + GetSecondsFromLogLine( $gl_linebuffer );
+								if ( isset($custserverstarttime) && strlen($custserverstarttime) > 0 ) 
+								{
+									// Set realstart time by using the server start time
+									$realstarttime = strtotime($custserverstarttime) + $initgameseconds;
+									PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Roundstart time detected through CVAR: " . date('d-m-Y h:i:s', $realstarttime));
+								}
 								else
 								{
 									// Needed to find the time when the round started

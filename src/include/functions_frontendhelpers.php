@@ -140,19 +140,23 @@ function CreateDamagetypeArray()
 function CreateAttachmentArray()
 {
 	global $content;
-
-	// Get Damagetypes from DB!
-	$sqlquery = "SELECT " .
-						STATS_ATTACHMENTS . ".ID  , " . 
-						STATS_ATTACHMENTS . ".DisplayName, " . 
-						STATS_ATTACHMENTS . ".Description_id " . 
-						" FROM " . STATS_ATTACHMENTS . 
-						" ORDER BY " . STATS_ATTACHMENTS . ".DisplayName"; 
-	$result = DB_Query($sqlquery, true, true); // Critical!
-	$tmpArray = DB_GetAllRows($result, true);
 	
-	foreach ( $tmpArray as $myEntry )
-		$content['attachments'][$myEntry['ID']] = $myEntry;
+	// Only create attachment list if we have at least Version 6 installed
+	if ( $content['database_installedversion'] >= 6 ) 
+	{
+		// Get Damagetypes from DB!
+		$sqlquery = "SELECT " .
+							STATS_ATTACHMENTS . ".ID  , " . 
+							STATS_ATTACHMENTS . ".DisplayName, " . 
+							STATS_ATTACHMENTS . ".Description_id " . 
+							" FROM " . STATS_ATTACHMENTS . 
+							" ORDER BY " . STATS_ATTACHMENTS . ".DisplayName"; 
+		$result = DB_Query($sqlquery, true, true); // Critical!
+		$tmpArray = DB_GetAllRows($result, true);
+		
+		foreach ( $tmpArray as $myEntry )
+			$content['attachments'][$myEntry['ID']] = $myEntry;
+	}
 }
 
 function CreateWeaponArray()
