@@ -533,16 +533,22 @@ if ( isset($_GET['id']) )
 				$sqlquery = "SELECT " . STATS_HITLOCATIONS . ".ID, " . 
 							STATS_HITLOCATIONS . ".BODYPART, " . 
 							STATS_HITLOCATIONS . ".DisplayName " . 
-							" FROM " . STATS_HITLOCATIONS;
+							" FROM " . STATS_HITLOCATIONS . 
+							" WHERE " . STATS_HITLOCATIONS . ".BODYPART != 'none'";
 				$result = DB_Query( $sqlquery );
 				$hitlocations = DB_GetAllRows($result, true);
 				if ( isset($hitlocations) )
 				{
+					// Set some helpers here!
+					$content['KILLEDDETAILS'][0]['modelname'] = "marine";
+
 					for($i = 0; $i < count($hitlocations); $i++)
 					{
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] ] = $hitlocations[$i]['BODYPART'];
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_display" ] = $hitlocations[$i]['DisplayName'];
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_level" ] = 0;
+						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><B>" . $hitlocations[$i]['DisplayName'] . "</B><br><br>Damage<br><font color=#FFFF55><B>0%</B></font>";
+						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_image" ] = $content['BASEPATH'] . "images/player/" . $content['KILLEDDETAILS'][0]['modelname'] . "/hover/" . $hitlocations[$i]['BODYPART'] . ".png";
 					}
 				}
 
@@ -555,35 +561,39 @@ if ( isset($_GET['id']) )
 							" INNER JOIN (" . STATS_HITLOCATIONS . 
 							") ON (" . 
 							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID) " . 
-							" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+							" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . 
+							" AND " . STATS_HITLOCATIONS . ".BODYPART != 'none'" . 
+							GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
 							" GROUP BY " . STATS_HITLOCATIONS . ".ID" . 
 							" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
 				$content['KILLEDDETAILS'][0]['hitlocations'] = DB_GetAllRows($result, true);
 				if ( isset($content['KILLEDDETAILS'][0]['hitlocations']) )
 				{
-					for($i = 0; $i < count($content['KILLEDDETAILS'][0]['hitlocations']); $i++)
+					$i = 0;
+					foreach ( $content['KILLEDDETAILS'][0]['hitlocations'] as $myKey => $myHitLocation)
 					{
 						// Set default props
-						$content['KILLEDDETAILS'][0][ $content['KILLEDDETAILS'][0]['hitlocations'][$i]['BODYPART'] ] = $content['KILLEDDETAILS'][0]['hitlocations'][$i]['BODYPART'];
-						$content['KILLEDDETAILS'][0][ $content['KILLEDDETAILS'][0]['hitlocations'][$i]['BODYPART'] . "_display" ] = $content['KILLEDDETAILS'][0]['hitlocations'][$i]['DisplayName'];
+						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] ] = $myHitLocation['BODYPART'];
+						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_display" ] = $myHitLocation['DisplayName'];
 
-						if ( !isset($content['KILLEDDETAILS'][0]['hitlocations'][$i]['TotalKills']) )
-							$content['KILLEDDETAILS'][0]['hitlocations'][$i]['TotalKills'] = 0;
+						if ( !isset($myHitLocation['TotalKills']) )
+							$myHitLocation['TotalKills'] = 0;
 
-						$content['KILLEDDETAILS'][0]['hitlocations'][$i]['Number'] = $i+1;
+						$content['KILLEDDETAILS'][0]['hitlocations'][ $myKey ]['Number'] = $i+1;
 						// --- 
 
 						// --- Set CSS Class
 						if ( $i % 2 == 0 )
-							$content['KILLEDDETAILS'][0]['hitlocations'][$i]['cssclass'] = "line1";
+							$content['KILLEDDETAILS'][0]['hitlocations'][ $myKey ]['cssclass'] = "line1";
 						else
-							$content['KILLEDDETAILS'][0]['hitlocations'][$i]['cssclass'] = "line2";
+							$content['KILLEDDETAILS'][0]['hitlocations'][ $myKey ]['cssclass'] = "line2";
+						$i++;
 						// --- 
 						
 						// --- Calc Hitlocations and Round up by 10
 						if ( $content['Kills'] > 0 )
-							$tmpval = intval( $content['KILLEDDETAILS'][0]['hitlocations'][$i]['TotalKills'] / ($content['Kills'] / 100));
+							$tmpval = intval( $myHitLocation['TotalKills'] / ($content['Kills'] / 100));
 						else 
 							$tmpval = 0;
 						if ( $tmpval > 0 )
@@ -591,27 +601,38 @@ if ( isset($_GET['id']) )
 							$tmpval += 10;
 							$tmpval = intval($tmpval/10) * 10;
 						}
-						$content['KILLEDDETAILS'][0][ $content['KILLEDDETAILS'][0]['hitlocations'][$i]['BODYPART'] . "_level" ] = $tmpval;
+						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_level" ] = $tmpval;
+						// ---
+
+						// --- Set Popup Content
+						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
+//						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
+						// ---
 					}
 				}
 				// --- 
-
 
 				// --- Top HitLocations Killed BY Others
 				// PreInit All HitLocations
 				$sqlquery = "SELECT " . STATS_HITLOCATIONS . ".ID, " . 
 							STATS_HITLOCATIONS . ".BODYPART, " . 
 							STATS_HITLOCATIONS . ".DisplayName " . 
-							" FROM " . STATS_HITLOCATIONS;
+							" FROM " . STATS_HITLOCATIONS .
+							" WHERE " . STATS_HITLOCATIONS . ".BODYPART != 'none'";
 				$result = DB_Query( $sqlquery );
 				$hitlocations = DB_GetAllRows($result, true);
 				if ( isset($hitlocations) )
 				{
+					// Set some helpers here!
+					$content['KILLEDBYDETAILS'][0]['modelname'] = "german";
+
 					for($i = 0; $i < count($hitlocations); $i++)
 					{
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] ] = $hitlocations[$i]['BODYPART'];
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_display" ] = $hitlocations[$i]['DisplayName'];
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_level" ] = 0;
+						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><B>" . $hitlocations[$i]['DisplayName'] . "</B><br><br>Damage<br><font color=#FFFF55><B>0%</B></font>";
+						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_image" ] = $content['BASEPATH'] . "images/player/" . $content['KILLEDBYDETAILS'][0]['modelname'] . "/hover/" . $hitlocations[$i]['BODYPART'] . ".png";
 					}
 				}
 
@@ -624,45 +645,52 @@ if ( isset($_GET['id']) )
 							" INNER JOIN (" . STATS_HITLOCATIONS . 
 							") ON (" . 
 							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID) " . 
-							" WHERE " . STATS_PLAYER_KILLS . ".ENEMYID=" . $content['playerguid'] . GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+							" WHERE " . STATS_PLAYER_KILLS . ".ENEMYID=" . $content['playerguid'] . 
+							" AND " . STATS_HITLOCATIONS . ".BODYPART != 'none'" . 
+							GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
 							" GROUP BY " . STATS_HITLOCATIONS . ".ID" . 
 							" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
 				$content['KILLEDBYDETAILS'][0]['hitlocations'] = DB_GetAllRows($result, true);
 				if ( isset($content['KILLEDBYDETAILS'][0]['hitlocations']) )
 				{
-					for($i = 0; $i < count($content['KILLEDBYDETAILS'][0]['hitlocations']); $i++)
+					$i = 0;
+					foreach ( $content['KILLEDBYDETAILS'][0]['hitlocations'] as $myKey => $myHitLocation)
 					{
 						// Set default props
-						$content['KILLEDBYDETAILS'][0][ $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['BODYPART'] ] = $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['BODYPART'];
-						$content['KILLEDBYDETAILS'][0][ $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['BODYPART'] . "_display" ] = $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['DisplayName'];
+						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] ] = $myHitLocation['BODYPART'];
+						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_display" ] = $myHitLocation['DisplayName'];
 
-						if ( !isset($content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['TotalKills']) )
-							$content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['TotalKills'] = 0;
+						if ( !isset($myHitLocation['TotalKills']) )
+							$myHitLocation['TotalKills'] = 0;
 
-						$content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['Number'] = $i+1;
+						$content['KILLEDBYDETAILS'][0]['hitlocations'][ $myKey ]['Number'] = $i+1;
 						// --- 
 
 						// --- Set CSS Class
 						if ( $i % 2 == 0 )
-							$content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['cssclass'] = "line1";
+							$content['KILLEDBYDETAILS'][0]['hitlocations'][ $myKey ]['cssclass'] = "line1";
 						else
-							$content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['cssclass'] = "line2";
+							$content['KILLEDBYDETAILS'][0]['hitlocations'][ $myKey ]['cssclass'] = "line2";
+						$i++;
 						// --- 
 						
 						// --- Calc Hitlocations and Round up by 10
-
 						if ( $content['Kills'] > 0 )
-							$tmpval = intval( $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['TotalKills'] / ($content['Kills'] / 100));
+							$tmpval = intval( $myHitLocation['TotalKills'] / ($content['Kills'] / 100));
 						else 
 							$tmpval = 0;
-
 						if ( $tmpval > 0 )
 						{
 							$tmpval += 10;
 							$tmpval = intval($tmpval/10) * 10;
 						}
-						$content['KILLEDBYDETAILS'][0][ $content['KILLEDBYDETAILS'][0]['hitlocations'][$i]['BODYPART'] . "_level" ] = $tmpval;
+						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_level" ] = $tmpval;
+						// ---
+
+						// --- Set Popup Content
+						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
+						// ---
 					}
 				}
 				// --- 
@@ -761,6 +789,32 @@ else
 {
 	// Append to title
 	$content['TITLE'] .= " for '" . $playervars['Alias'] . "'";
+}
+// --- 
+
+// --- Helper functions
+function GetPopupContentColor( $nValue ) 
+{
+	if		( $nValue < 10 )
+		return "#FFFF00";
+	else if ( $nValue < 20 )
+		return "#FFDD00";
+	else if ( $nValue < 30 )
+		return "#FFBB00";
+	else if ( $nValue < 40 )
+		return "#FF9900";
+	else if ( $nValue < 50 )
+		return "#FF7700";
+	else if ( $nValue < 60 )
+		return "#FF5500";
+	else if ( $nValue < 70 )
+		return "#FF3300";
+	else if ( $nValue < 80 )
+		return "#FF1100";
+	else if ( $nValue < 90 )
+		return "#EE0000";
+	else 
+		return "#CC0000";
 }
 // --- 
 

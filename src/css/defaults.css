@@ -93,3 +93,50 @@
 	color: #FFFFFF;
 	background-color: #127C2A;
 }
+
+/*
+* POPUP Helper Styles
+*/
+
+/*
+.popupdetails, a.popupdetails, a.popupdetails:link, a.popupdetails:active, a.popupdetails:visited
+{
+	font-weight:normal;
+    text-decoration:none;
+    position:absolute;
+	overflow:visible;
+}
+.popupdetails
+{
+    position:absolute;
+	overflow:visible;
+	z-index:4;
+
+	visibility: hidden;
+}
+*/
+
+.popupdetails:hover
+{
+	display: none;
+    position: fixed; 
+/*	font-weight:normal; */
+	z-index:5;
+}
+.popupdetails
+{
+	display: none;
+    position: fixed;
+	overflow: visible;
+	z-index:-1;
+	visibility: hidden;
+}
+.popupdetails_popup
+{ 
+/*    display: block; */
+    position: fixed;
+	overflow: auto;
+	z-index: 5;
+
+	visibility: visible;
+}

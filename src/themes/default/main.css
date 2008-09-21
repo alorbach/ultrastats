@@ -2,9 +2,9 @@
 BODY
 {
     BACKGROUND-COLOR: #DFEAEB;
-    COLOR: #000000;
-    FONT-FAMILY: ARIAL;
-    FONT-SIZE: 8pt;
+    color: #000000;
+	font-family: Arial, Verdana, Helvetica, sans-serif; 
+    font-size: 8pt;
 
 	scrollbar-face-color: #DEE3E7;
 	scrollbar-highlight-color: #FFFFFF;
@@ -15,7 +15,12 @@ BODY
 	scrollbar-darkshadow-color: #98AAB1
 }
 
-TD { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; color: #000000 }
+TD 
+{ 
+	font-family: Arial, Verdana, Helvetica, sans-serif; 
+	font-size: 8pt; 
+	color: #000000 
+}
 
 /* Link Classes */
 .playerlink { color:#000000;  cursor:hand; }
@@ -24,7 +29,7 @@ TD { font-family: Arial, Helvetica, sans-serif; font-size: 8pt; color: #000000 }
 /* Default Link Classes */
 a:link,a:active,a:visited,a.postlink
 {
-	FONT: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-weight:bold;
 	background-color: transparent;
 	color:#38140E;
@@ -32,7 +37,7 @@ a:link,a:active,a:visited,a.postlink
 }
 a:hover
 {
-	FONT: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-weight:bold;
 	color:#FF0000;
 }
@@ -45,8 +50,8 @@ img
 /* Title Classes */
 .title 
 {
-	FONT: bold 11px Verdana, Arial, Helvetica, sans-serif; 
-	COLOR: #1A3745;
+	font: bold 11px Arial, Verdana, Helvetica, sans-serif; 
+	color: #1A3745;
 	height: 20px;
 	text-align:center;
 	vertical-align:middle;
@@ -67,8 +72,8 @@ a.title:hover
 }
 .titleSecond
 {
-	FONT: bold 10px Verdana, Arial, Helvetica, sans-serif; 
-	COLOR: #1A3745;
+	font: bold 10px Arial, Verdana, Helvetica, sans-serif; 
+	color: #1A3745;
 	height: 18px;
 	text-align:center;
 	vertical-align:middle;
@@ -82,7 +87,7 @@ a.title:hover
 /* Default Font Classes */
 font
 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
 	font-size: 8pt;
 }
 
@@ -187,7 +192,7 @@ font
     background-repeat: repeat-x;
 
 	text-indent:5px;
-	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 8pt Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 }
 .cellmenu1_naked
@@ -198,7 +203,7 @@ font
 	background-color: #2E79A0;
 
 	text-indent:5px;
-	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 8pt Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 }
 .cellmenu1:hover, .cellmenu1_naked:hover
@@ -227,7 +232,7 @@ a.cellmenu1_link:hover
     background-repeat: repeat-x;
 
 	text-indent:5px;
-	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 8pt Arial, Verdana, Helvetica, sans-serif;
 	color: #393327;
 }
 .cellmenu2_naked
@@ -238,7 +243,7 @@ a.cellmenu1_link:hover
 	background-color: #9FDAF1;
 
 	text-indent:5px;
-	font-family: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 8pt Arial, Verdana, Helvetica, sans-serif;
 	color: #393327;
 }
 
@@ -266,24 +271,30 @@ a.cellmenu1_link:hover
 }
 .ErrorMsg 
 {
-	FONT: bold 12px Verdana, Arial, Helvetica, sans-serif; 
-	COLOR: #FF0000;
+	font: bold 12px Arial, Verdana, Helvetica, sans-serif; 
+	color: #FF0000;
 	border-top: 1px solid;
 	border-bottom: 1px solid;
 	border-color: #58363E;
 }
 
-/* Player Elements */
-.playerlegend
+/* Popup Helpers */
+.popupcontent
 {
 	padding:2px;
 	background-color: #2B78AB; 
 	color: #FFFFFF; 
+
+/*    display:block;
+    position:absolute;
+	overflow:auto;
+	z-index:5; 
+	*/
 }
 
 .playertext
 {
-	filter: glow(Color=#000000,Strength=1); 
+/*	filter: glow(Color=#000000,Strength=1); */
 }
 
 /* Form elements */
@@ -314,7 +325,7 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #4E6485;
 }
@@ -329,7 +340,7 @@ select, input, textarea
 .topmenu1end
 {
 	height: 20px;
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #4E6485;
 }
@@ -351,7 +362,7 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #637FA8;
 }
@@ -368,7 +379,7 @@ select, input, textarea
 	height: 16px;
 	border:1px inset;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #7A92A6;
 }
@@ -390,7 +401,7 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #7395C7;
 }
@@ -407,7 +418,7 @@ select, input, textarea
 	height: 16px;
 	border:1px inset;
 	border-color: #BDEEFF #79AABE #09506C #09506C;
-	font: 10px Verdana, Arial, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #7395C7;
 }
