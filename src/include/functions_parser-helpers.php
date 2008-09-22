@@ -194,8 +194,8 @@ function FlushParserOutput()
 		return;
 
 	//Flush php output
-	flush();
-	ob_flush();
+	@flush();
+	@ob_flush();
 }
 
 function GetFacilityAsString( $facility )
