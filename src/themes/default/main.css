@@ -192,7 +192,7 @@ font
     background-repeat: repeat-x;
 
 	text-indent:5px;
-	font: 8pt Arial, Verdana, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 }
 .cellmenu1_naked
@@ -203,7 +203,7 @@ font
 	background-color: #2E79A0;
 
 	text-indent:5px;
-	font: 8pt Arial, Verdana, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 }
 .cellmenu1:hover, .cellmenu1_naked:hover
@@ -232,7 +232,7 @@ a.cellmenu1_link:hover
     background-repeat: repeat-x;
 
 	text-indent:5px;
-	font: 8pt Arial, Verdana, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #393327;
 }
 .cellmenu2_naked
@@ -243,7 +243,7 @@ a.cellmenu1_link:hover
 	background-color: #9FDAF1;
 
 	text-indent:5px;
-	font: 8pt Arial, Verdana, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #393327;
 }
 

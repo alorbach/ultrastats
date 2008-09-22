@@ -2,9 +2,9 @@
 BODY
 {
     BACKGROUND-COLOR: #000000;
-    font-family: Arial;
-    font-size: 8pt;
 	color: #F3F3F1; 
+	font-family: Arial, Verdana, Helvetica, sans-serif; 
+    font-size: 8pt;
 
 	scrollbar-face-color: #475059;
 	scrollbar-highlight-color: #b8c2cc;
