@@ -54,12 +54,13 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.3";
+$content['BUILDNUMBER'] = "0.3.4";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
 $content['EXTRA_METATAGS'] = "";
 $content['EXTRA_JAVASCRIPT'] = "";
 $content['EXTRA_STYLESHEET'] = "";
+$content['additional_url'] = "";
 // --- 
 
 // --- Check PHP Version! If lower the 5, phplogcon will not work proberly!
