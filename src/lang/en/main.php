@@ -27,6 +27,9 @@ $content['LN_MAIN_SELECTSTYLE'] = "Select a Style";
 $content['LN_GEN_LANGUAGE'] = "Select Language";
 $content['LN_GEN_SKINMADEBY'] = "Skin made by";
 $content['LN_NODESCRIPTION'] = "No description available";
+$content['LN_MAIN_SELECTTIMESPAN'] = "Select Timescale";
+$content['LN_ERROR_DETAILS'] = "Error Details";
+$content['LN_ERROR_NOSTATSDATAFOUND'] = "No stats data found using these filters.";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Select Server";
@@ -105,6 +108,7 @@ $content['LN_PLAYER_LASTQUOTES'] = "Last 10 Player quotes";
 $content['LN_ROUNDS_ALLROUNDS'] = "All Rounds";
 $content['LN_ROUNDS_BYDATE'] = "Sorted by Date";
 $content['LN_ROUNDS_BYGAMETYPE'] = "Sorted by Gametype";
+$content['LN_ROUNDS_ROUNDNOTFOUND'] = "The round could not be found";
 
 // Round Details
 $content['LN_ROUNDS_DETAILS'] = "Rounddetails for Round ID ";

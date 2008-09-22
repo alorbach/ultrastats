@@ -283,6 +283,14 @@ A.cellmenu1_link:hover
 	border-bottom: 1px solid;
 	border-color: #58363E;
 }
+.PriorityError
+{
+	color: #FFFFFF;
+	background-color: #CC0000;
+	border-top: black 1px solid;
+	border-bottom: black 1px solid;
+	border-right: gray 1px solid;
+}
 
 
 /* Popup Helpers */
@@ -378,8 +386,6 @@ select, input, textarea
 .topmenu2end
 {
 	height: 16px;
-	border:1px inset;
-	border-color: #09506C #557986 #09506C #09506C;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #566984;
@@ -417,8 +423,6 @@ select, input, textarea
 .topmenu3end
 {
 	height: 16px;
-	border:1px inset;
-	border-color: #09506C #557986 #09506C #09506C;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #FFFFFF;
 	background-color: #5D77A1;

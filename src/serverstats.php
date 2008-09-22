@@ -55,8 +55,10 @@ if ( isset($content['serverid']) )
 						" FROM " . STATS_MAPS . 
 						" INNER JOIN (" . STATS_ROUNDS . 
 						") ON (" . 
-						STATS_ROUNDS . ".MAPID =" . STATS_MAPS . ".ID ) " .
+						STATS_ROUNDS . ".MAPID =" . STATS_MAPS . ".ID " . 
+						") " .
 						GetCustomServerWhereQuery(STATS_ROUNDS, true) . 
+						GetTimeWhereQueryStringForRoundTable() . 
 						" GROUP BY " . STATS_MAPS . ".MAPNAME ";
 
 	$content['maps_count'] = DB_GetRowCount( $sqlquery );
@@ -85,10 +87,12 @@ if ( isset($content['serverid']) )
 						STATS_MAPS . ".DisplayName, " . 
 						"count(" . STATS_ROUNDS . ".MAPID) as MapCount" .
 						" FROM " . STATS_MAPS . 
-						" INNER JOIN (" . STATS_ROUNDS . 
+						" INNER JOIN (" . STATS_ROUNDS .
 						") ON (" . 
-						STATS_ROUNDS . ".MAPID =" . STATS_MAPS . ".ID ) " .
+						STATS_ROUNDS . ".MAPID =" . STATS_MAPS . ".ID " . 
+						") " .
 						GetCustomServerWhereQuery(STATS_ROUNDS, true) . 
+						GetTimeWhereQueryStringForRoundTable() . 
 						" GROUP BY " . STATS_MAPS . ".MAPNAME " .
 						" ORDER BY MapCount DESC" .
 						" LIMIT " . $content['current_pagebegin'] . " , " . $content['web_maxmapsperpage'];
@@ -133,9 +137,11 @@ if ( isset($content['serverid']) )
 								" FROM " . STATS_ROUNDS . 
 								" INNER JOIN (" . STATS_GAMETYPES . 
 								") ON (" . 
-								STATS_GAMETYPES . ".ID =" . STATS_ROUNDS . ".GAMETYPE ) " .
+								STATS_GAMETYPES . ".ID =" . STATS_ROUNDS . ".GAMETYPE " . 
+								") " .
 								" WHERE " . STATS_ROUNDS . ".MAPID = " . $content['playedmaps'][$i]['ID'] . 
 								GetCustomServerWhereQuery(STATS_ROUNDS, false) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY " . STATS_ROUNDS . ".MAPID " .
 								" ORDER BY GametypeCount DESC" .
 								" LIMIT 1 ";
@@ -167,13 +173,16 @@ if ( isset($content['serverid']) )
 								STATS_MAPS . ".MAPNAME ," . 
 								STATS_MAPS . ".DisplayName as MapDisplayName" . 
 								" FROM " . STATS_ROUNDS . 
-								" INNER JOIN (" . STATS_GAMETYPES . ", " . STATS_MAPS . ", " . STATS_PLAYER_KILLS .
+								" INNER JOIN (" . STATS_GAMETYPES . ", " . STATS_MAPS . ", " . STATS_PLAYER_KILLS . /*", " . STATS_TIME . */
 								") ON (" . 
 								STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " . 
 								STATS_MAPS . ".ID=" . STATS_ROUNDS . ".MAPID AND " . 
-								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID)" . 
+								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+								/*" AND " . STATS_ROUNDS . ".ID=" . STATS_TIME . ".ROUNDID " . */
+								") " . 
 								" WHERE " . STATS_MAPS . ".MAPNAME = '" . $content['playedmaps'][$i]['MAPNAME'] . "'" . 
 								GetCustomServerWhereQuery( STATS_ROUNDS, false) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY " . STATS_ROUNDS . ".ID" . 
 								" ORDER BY TIMEADDED DESC LIMIT 10";
 			$result = DB_Query($sqlquery);

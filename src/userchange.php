@@ -40,16 +40,40 @@ else
 
 if ( isset($_GET['op']) )
 {
-	if ( $_GET['op'] == "changestyle" ) 
+	if		( $_GET['op'] == "changestyle" ) 
 	{
 		if ( VerifyTheme($_GET['stylename']) ) 
 			$_SESSION['CUSTOM_THEME'] = $_GET['stylename'];
 	}
-
-	if ( $_GET['op'] == "changelang" ) 
+	else if ( $_GET['op'] == "changelang" ) 
 	{
 		if ( VerifyLanguage($_GET['langcode']) ) 
 			$_SESSION['CUSTOM_LANG'] = $_GET['langcode'];
+	}
+	else if ( $_GET['op'] == "changeyear" ) 
+	{
+		if ( $content['ENABLETIMEFILTER'] ) 
+		{
+			if ( $_GET['newyear'] == "ALL_YEARS" ) 
+				unset( $_SESSION['TIME_SELECTEDYEAR'] );
+			else if ( isset($content['TIMEYEARS'][ $_GET['newyear'] ]) ) 
+			{
+				$_SESSION['TIME_SELECTEDYEAR'] = $_GET['newyear'];
+
+				// Unset current month selection!
+				unset( $_SESSION['TIME_SELECTEDMONTH'] );
+			}
+		}
+	}
+	else if ( $_GET['op'] == "changemonth" ) 
+	{
+		if ( $content['ENABLETIMEFILTER'] ) 
+		{
+			if ( $_GET['newmonth'] == "ALL_MONTHS" ) 
+				unset($_SESSION['TIME_SELECTEDMONTH']);
+			else if ( isset($_SESSION['TIME_SELECTEDYEAR']) && isset($content['TIMEMONTHS'][ $_GET['newmonth'] ]) ) 
+				$_SESSION['TIME_SELECTEDMONTH'] = $_GET['newmonth'];
+		}
 	}
 }
 

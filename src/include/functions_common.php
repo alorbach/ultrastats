@@ -211,6 +211,10 @@ function InitUltraStats()
 	CreateBannedPlayerFilter();
 	// --- 
 
+	// --- Created available years and month, which can be used for filtering
+	CreateAvailableYearsAndMonthFilters();
+	// --- 
+
 	// --- Enable PHP Debug Mode 
 	InitPhpDebugMode();
 	// --- 
@@ -1105,6 +1109,143 @@ function CleanUpArray(&$myArray)
 	unset($myArray);
 }
 
+// --- BEGIN Available Years and Month --- 
+function CreateAvailableYearsAndMonthFilters()
+{
+	global $content;
+	
+	// NOT SURE if this is a good idea xD
+//	$content['TIMETABLE'][ "ALL-TIME" ] = array ( "Year" => "", "Month" => "");
+	
+
+
+	// Get available month and years from DB!
+	$sqlquery = " SELECT DISTINCT " . 
+					STATS_TIME . ".Time_Year, " . 
+					STATS_TIME . ".Time_Month " . 
+				" FROM " . STATS_TIME . 
+				" ORDER BY " . STATS_TIME . ".Time_Year AND " . STATS_TIME . ".Time_Month";
+
+	$result = DB_Query($sqlquery);
+	$content['dbresults'] = DB_GetAllRows($result, true);
+	if ( isset($content['dbresults']) )
+	{
+		// This enables the time filter within the stats
+		$content['ENABLETIMEFILTER'] = true;
+		$content['ENABLETIMEFILTER_MONTH'] = false;
+
+		foreach ($content['dbresults'] as $myDate)
+		{
+			if ( !isset($content['TIMEYEARS'][ $myDate['Time_Year'] ]) ) 
+			{
+				$content['TIMEYEARS'][ $myDate['Time_Year'] ]['ID'] = $myDate['Time_Year'];
+				$content['TIMEYEARS'][ $myDate['Time_Year'] ]['DisplayName'] = $myDate['Time_Year'];
+
+				// Set selected state!
+				if ( isset($_SESSION['TIME_SELECTEDYEAR']) && $_SESSION['TIME_SELECTEDYEAR'] == $myDate['Time_Year'] )
+				{
+					$content['TIMEYEARS'][ $myDate['Time_Year'] ]['selected'] = "selected"; 
+
+					// Activate Month filter as well!
+					$content['ENABLETIMEFILTER_MONTH'] = true;
+				}
+				else
+					$content['TIMEYEARS'][ $myDate['Time_Year'] ]['selected'] = ""; 
+
+			}
+
+			// Add to MONTH array!
+			if ( $content['ENABLETIMEFILTER_MONTH'] && isset($_SESSION['TIME_SELECTEDYEAR']) && $_SESSION['TIME_SELECTEDYEAR'] == $myDate['Time_Year'] )
+			{
+				$content['TIMEMONTHS'][ $myDate['Time_Month'] ]['ID'] = $myDate['Time_Month'];
+				$content['TIMEMONTHS'][ $myDate['Time_Month'] ]['DisplayName'] = GetReadAbleMonth( $myDate['Time_Month'] );
+
+				// Set selected state!
+				if ( isset($_SESSION['TIME_SELECTEDMONTH']) && $_SESSION['TIME_SELECTEDMONTH'] == $myDate['Time_Month'] )
+					$content['TIMEMONTHS'][ $myDate['Time_Month'] ]['selected'] = "selected"; 
+				else
+					$content['TIMEMONTHS'][ $myDate['Time_Month'] ]['selected'] = ""; 
+			}
+		}
+	}
+	else
+	{
+		// This disables the time filter within the stats
+		$content['ENABLETIMEFILTER'] = false;
+		$content['ENABLETIMEFILTER_MONTH'] = false;
+	}
+
+	// Set Unix Filter Timestamps now!
+	SetUnixTimeStampFilters();
+
+//	print_r ( $content['TIMETABLE'] );
+}
+
+function SetUnixTimeStampFilters()
+{
+	global $content;
+
+	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+	{
+		if ( isset($_SESSION['TIME_SELECTEDMONTH']) ) 
+		{
+			if ( $_SESSION['TIME_SELECTEDMONTH'] == 12 ) 
+			{
+				$monthEnd = 1;
+				$yearEnd = $_SESSION['TIME_SELECTEDYEAR']+1;
+			}
+			else
+			{
+				$monthEnd = $_SESSION['TIME_SELECTEDMONTH']+1;
+				$yearEnd = $_SESSION['TIME_SELECTEDYEAR'];
+			}
+
+			// Set Start and End UNIX TImestamp!
+			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, $_SESSION['TIME_SELECTEDMONTH'], 1, $_SESSION['TIME_SELECTEDYEAR']);
+			$content['TIME_SELECTEDYEAR_UNIXEND'] = mktime(0, 0, 0, $monthEnd, 1, $yearEnd);
+		}
+		else
+		{
+			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, 1, 1, $_SESSION['TIME_SELECTEDYEAR']);
+			$content['TIME_SELECTEDYEAR_UNIXEND'] = mktime(0, 0, 0, 1, 1, $_SESSION['TIME_SELECTEDYEAR']+1);
+		}
+	}
+}
+
+function GetTimeWhereQueryStringForRoundTable( )
+{
+	global $content;
+
+	// Init return value
+	$szReturn = "";
+
+	if ( isset($content['TIME_SELECTEDYEAR_UNIXSTART']) && isset($content['TIME_SELECTEDYEAR_UNIXEND']) )
+	{
+		$szReturn .=	" AND " . STATS_ROUNDS . ".TIMEADDED >= " . $content['TIME_SELECTEDYEAR_UNIXSTART'] . 
+						" AND " . STATS_ROUNDS . ".TIMEADDED <= " . $content['TIME_SELECTEDYEAR_UNIXEND'];
+	}
+
+	// return result
+	return $szReturn;
+}
+
+function GetTimeWhereQueryString( $szTableName )
+{
+	// Init return value
+	$szReturn = "";
+
+	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+		$szReturn .= " AND " . $szTableName . ".Time_Year = " . $_SESSION['TIME_SELECTEDYEAR'] . " ";
+
+	if ( isset($_SESSION['TIME_SELECTEDMONTH']) ) 
+		$szReturn .= " AND " . $szTableName . ".Time_Month = " . $_SESSION['TIME_SELECTEDMONTH'] . " ";
+
+	// return result
+	return $szReturn;
+}
+
+// --- END Available Years and Month --- 
+
 // --- BEGIN Banned Player Filter --- 
 function CreateBannedPlayerFilter()
 {
@@ -1254,6 +1395,49 @@ function list_directories($directory)
 	{
 		sort ($result);
 		return $result;
+	}
+}
+
+function GetReadAbleMonth( $nMonthID ) 
+{
+	switch ( $nMonthID ) 
+	{
+		case 1: 
+			return "Janury";
+			break;
+		case 2: 
+			return "February";
+			break;
+		case 3: 
+			return "March";
+			break;
+		case 4: 
+			return "April";
+			break;
+		case 5: 
+			return "May";
+			break;
+		case 6: 
+			return "June";
+			break;
+		case 7: 
+			return "July";
+			break;
+		case 8: 
+			return "August";
+			break;
+		case 9: 
+			return "September";
+			break;
+		case 10: 
+			return "October";
+			break;
+		case 11: 
+			return "November";
+			break;
+		case 12: 
+			return "December";
+			break;
 	}
 }
 

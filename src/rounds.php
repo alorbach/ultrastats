@@ -57,18 +57,23 @@ else
 
 
 // --- Get/Set Sorting
+$strsortingsql = " WHERE 1 = 1 "; // Dummy query begin 
 if ( isset($_GET['id']) && strlen($_GET['id']) > 0 )
 {
 	// Set new Sorting
 	$content['sorting'] = DB_RemoveBadChars($_GET['id']);
-	$strsortingsql = " WHERE " . STATS_GAMETYPES . ".NAME = '" . $content['sorting'] . "'" . 
-					 GetCustomServerWhereQuery( STATS_ROUNDS, false);
+	$strsortingsql .= " AND " . STATS_GAMETYPES . ".NAME = '" . $content['sorting'] . "'";
 }
 else
 {
-	$strsortingsql = GetCustomServerWhereQuery( STATS_ROUNDS, true);
+	$strsortingsql .= GetCustomServerWhereQuery( STATS_ROUNDS, false);
+//	$strsortingsql = GetCustomServerWhereQuery( STATS_ROUNDS, true);
 	$content['sorting'] = ""; // Set empty, we have no sorting!
 }
+
+// Append Timefilter to query!
+$strsortingsql .= GetTimeWhereQueryString(STATS_TIME);
+//echo $strsortingsql;
 // --- 
 
 // --- BEGIN LastRounds Code for front stats
@@ -76,9 +81,11 @@ else
 	$sqlquery = "SELECT " .
 						"count(" . STATS_ROUNDS . ".ID) as AllRoundCount " . 
 						" FROM " . STATS_ROUNDS . 
-						" INNER JOIN (" . STATS_GAMETYPES .  
+						" INNER JOIN (" . STATS_GAMETYPES . ", " . STATS_TIME .  
 						") ON (" . 
-						STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE ) " . 
+						STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " .
+						STATS_ROUNDS . ".ID=" . STATS_TIME . ".ROUNDID " . 
+						") " . 
 						$strsortingsql . 
 						" GROUP BY " . STATS_ROUNDS . ".ID " . 
 						" ORDER BY TIMEADDED DESC ";

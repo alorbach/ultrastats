@@ -71,6 +71,7 @@ if ( isset($_GET['sorting']) )
 						" WHERE Kills > " . $content['web_minkills'] . " " . 
 						GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 						GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
+						GetTimeWhereQueryString(STATS_PLAYERS) . 
 						" GROUP BY GUID " . 
 						" ORDER BY " . $content['sorting'] . " DESC ";
 	$content['players_count'] = DB_GetRowCount( $sqlquery );
@@ -110,7 +111,7 @@ $sqlquery = "SELECT " .
 					" WHERE Kills > " . $content['web_minkills'] . " " . 
 					GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 					GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
-//					GetCustomServerWhereQuery( STATS_TIME, false) . 
+					GetTimeWhereQueryString(STATS_PLAYERS) . 
 					" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 					" ORDER BY " . $content['sorting'] . " DESC " . 
 					" LIMIT " . $content['current_pagebegin'] . " , " . $content['web_topplayers'];

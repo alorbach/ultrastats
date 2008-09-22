@@ -105,13 +105,18 @@ if ( isset($_GET['id']) )
 								"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as AllPlayersCount, " . 
 								"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 								" FROM " . STATS_PLAYER_KILLS . 
-								" INNER JOIN (" . STATS_DAMAGETYPES . 
+								" INNER JOIN (" . STATS_DAMAGETYPES .
+// ", " . STATS_ROUNDS . ", " . STATS_TIME . 
 								") ON (" . 
-								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID " . 
+// " AND " . STATS_ROUNDS . ".ID=" . STATS_PLAYER_KILLS . ".ROUNDID AND " . 
+// STATS_ROUNDS . ".ID=" . STATS_TIME . ".ROUNDID " . 
+								") " . 
 								" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE = '" . $content['damageid'] . "' " . 
 								GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
-								" GROUP BY PLAYERID" . 
+// GetTimeWhereQueryString(STATS_TIME) . 
+								" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID" . 
 								" ORDER BY AllKills DESC ";
 			$result = DB_Query($sqlquery);
 			$content['mostkills_count'] = DB_GetRowCountByResult( $result );

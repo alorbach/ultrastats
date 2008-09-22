@@ -213,6 +213,9 @@ function DB_StripSlahes($myString)
 
 function DB_GetRowCount($query)
 {
+	// Init num rows
+	$num_rows = -1;
+
 	if ($result = mysql_query($query)) 
 	{   
 		$num_rows = mysql_num_rows($result);

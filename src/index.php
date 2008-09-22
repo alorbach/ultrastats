@@ -62,6 +62,7 @@ $sqlquery = "SELECT " .
 					STATS_ROUNDS . ".MAPID=" . STATS_MAPS . ".ID AND " . 
 					STATS_ROUNDS . ".ID=" . STATS_TIME . ".ROUNDID )" . 
 					GetCustomServerWhereQuery( STATS_ROUNDS, true) . 
+					GetTimeWhereQueryStringForRoundTable() . 
 					" GROUP BY " . STATS_ROUNDS . ".ID " . 
 					" ORDER BY TIMEADDED DESC LIMIT 10";
 $result = DB_Query($sqlquery);
@@ -203,6 +204,7 @@ $sqlquery =		"SELECT " .
 				" WHERE Kills > " . $content['web_minkills'] .
 				GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
+				GetTimeWhereQueryString(STATS_PLAYERS) . 
 				" GROUP BY " . STATS_PLAYERS . ".GUID " .
 				" ORDER BY Kills DESC LIMIT 20";
 //echo $sqlquery;

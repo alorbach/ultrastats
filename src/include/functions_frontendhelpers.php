@@ -514,7 +514,8 @@ function FillPlayerWithTime(&$myplayer, $idfield)
 						"sum(" . STATS_TIME . ".TIMEPLAYED) as TotalSeconds " . 
 						" FROM " . STATS_TIME . 
 						" WHERE " . STATS_TIME . ".PLAYERID=" . $myplayer[$idfield] .
-						GetCustomServerWhereQuery( STATS_TIME, false) . 
+						GetTimeWhereQueryString(STATS_TIME) . 
+//						GetCustomServerWhereQuery( STATS_TIME, false) . 
 						" GROUP BY " . STATS_TIME . ".PLAYERID ";
 	$result = DB_Query($sqlquery);
 	$timevars = DB_GetSingleRow($result, true);
@@ -548,7 +549,9 @@ function FindAndFillWithTime(&$myplayers, $idfield, $TimeSecondsField, $TimeStri
 						"sum(" . STATS_TIME . ".TIMEPLAYED) as TotalSeconds " . 
 						" FROM " . STATS_TIME . 
 						" WHERE " . STATS_TIME . ".PLAYERID IN (" . $playerguids . ")" . 
-						GetCustomServerWhereQuery( STATS_TIME, false) . 
+						GetTimeWhereQueryString(STATS_TIME) . 
+//						GetCustomServerWhereQuery( STATS_TIME, false) . 
+
 						" GROUP BY " . STATS_TIME . ".PLAYERID ";
 //						" ORDER BY Count DESC";
 	$result = DB_Query($sqlquery);

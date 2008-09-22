@@ -27,6 +27,9 @@ $content['LN_MAIN_SELECTSTYLE'] = "Style auswählen";
 $content['LN_GEN_LANGUAGE'] = "Sprache auswählen";
 $content['LN_GEN_SKINMADEBY'] = "Skin made by";
 $content['LN_NODESCRIPTION'] = "Keine Beschreibung verfügbar";
+$content['LN_MAIN_SELECTTIMESPAN'] = "Zeitbereich wählen";
+$content['LN_ERROR_DETAILS'] = "Error Details";
+$content['LN_ERROR_NOSTATSDATAFOUND'] = "Keine Statistikdaten mit diesen Filtereinstellungen gefunden.";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Server wählen";
@@ -105,6 +108,7 @@ $content['LN_PLAYER_LASTQUOTES'] = "Letzten 10 Spieler Zitate";
 $content['LN_ROUNDS_ALLROUNDS'] = "Alle Runden";
 $content['LN_ROUNDS_BYDATE'] = "Sortiert bei Datum";
 $content['LN_ROUNDS_BYGAMETYPE'] = "Sortiert bei Gametype";
+$content['LN_ROUNDS_ROUNDNOTFOUND'] = "Es konnten keine Daten zu dieser Runde gefunden werden";
 
 // Round Details
 $content['LN_ROUNDS_DETAILS'] = "Rundendetails für Runden ID ";
