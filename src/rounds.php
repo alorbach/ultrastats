@@ -76,6 +76,48 @@ $strsortingsql .= GetTimeWhereQueryString(STATS_TIME);
 //echo $strsortingsql;
 // --- 
 
+// --- BEGIN Get Available Gametypes!
+$sqlquery = "SELECT DISTINCT " .
+					STATS_GAMETYPES . ".NAME as GameTypeName, " .
+					STATS_GAMETYPES . ".DisplayName as GameTypeDisplayName " . 
+					" FROM " . STATS_GAMETYPES . 
+					" INNER JOIN (" . STATS_ROUNDS . ", " . STATS_SERVERS . 
+					") ON (" . 
+					STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " . 
+					STATS_ROUNDS . ".SERVERID=" . STATS_SERVERS . ".ID )" . 
+					" WHERE 1 = 1 " . /* Dummy where */
+					GetCustomServerWhereQuery( STATS_ROUNDS, false) . 
+					GetTimeWhereQueryString(STATS_TIME) . 
+					" ORDER BY GameTypeName "; 
+
+$result = DB_Query($sqlquery);
+$content['roundgametypes'] = DB_GetAllRows($result, true);
+if ( isset($content['roundgametypes']) )
+{
+	// Set pagermenuenabled true
+	$content['pagermenuenabled'] = "true";
+	$content['PAGERMENUTITLE'] = $content['LN_ROUNDS_AVAILABLEGAMETYPES'];
+	
+
+	foreach( $content['roundgametypes'] as $myGameType )
+	{
+		$content['PAGERMENU'][] = array(
+									"PMENU_URL" => "?id=" . $myGameType['GameTypeName'] . $content['additional_url'] , 
+									"PMENU_DisplayName" =>	$myGameType['GameTypeDisplayName'], 
+									"PMENU_IMG_ENABLED" => false, 
+									"PMENU_IMG" => "", 
+									);
+	}
+
+
+//print_r( $content['roundgametypes'] );
+
+}
+	
+
+
+// --- END
+
 // --- BEGIN LastRounds Code for front stats
 	// --- First get the Count and Set Pager Variables
 	$sqlquery = "SELECT " .

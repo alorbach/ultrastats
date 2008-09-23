@@ -114,6 +114,7 @@ $content['LN_ROUNDS_ALLROUNDS'] = "Alle Runden";
 $content['LN_ROUNDS_BYDATE'] = "Sortiert bei Datum";
 $content['LN_ROUNDS_BYGAMETYPE'] = "Sortiert bei Gametype";
 $content['LN_ROUNDS_ROUNDNOTFOUND'] = "Es konnten keine Daten zu dieser Runde gefunden werden";
+	$content['LN_ROUNDS_AVAILABLEGAMETYPES'] = "Available Gametypes";
 
 // Round Details
 $content['LN_ROUNDS_DETAILS'] = "Rundendetails für Runden ID ";
