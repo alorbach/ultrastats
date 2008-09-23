@@ -27,7 +27,7 @@ $content['LN_MAIN_SELECTSTYLE'] = "Select a Style";
 $content['LN_GEN_LANGUAGE'] = "Select Language";
 $content['LN_GEN_SKINMADEBY'] = "Skin made by";
 $content['LN_NODESCRIPTION'] = "No description available";
-$content['LN_MAIN_SELECTTIMESPAN'] = "Select Timescale";
+$content['LN_MAIN_SELECTTIMESPAN'] = "Select time span";
 $content['LN_ERROR_DETAILS'] = "Error Details";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "No stats data found using these filters.";
 
@@ -103,6 +103,10 @@ $content['LN_PLAYER_HITLMOUSEHELP'] = "To see details, scroll over the <b>Player
 $content['LN_PLAYER_LASTROUNDS'] = "Last played rounds";
 $content['LN_PLAYER_DETAILS'] = "Details";
 $content['LN_PLAYER_LASTQUOTES'] = "Last 10 Player quotes";
+$content['LN_PLAYER_ERROR'] = "Error obtaining player data";
+$content['LN_PLAYER_ERROR_NOPLAYERDATA'] = "Could not find data for this player";
+$content['LN_PLAYER_ERROR_TIMEFILTER'] = "The player may did not play in this time span"; 
+$content['LN_PLAYER_ERROR_DIDNOTPLAY'] = "The player '%1' did not play in this time span"; 
 
 // Rounds Stats
 $content['LN_ROUNDS_ALLROUNDS'] = "All Rounds";

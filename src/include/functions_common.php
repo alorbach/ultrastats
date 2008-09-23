@@ -1245,6 +1245,14 @@ function GetTimeWhereQueryString( $szTableName )
 	return $szReturn;
 }
 
+function TimeFilterUsed()
+{
+	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+		return true;
+	else
+		return false;
+}
+
 // --- END Available Years and Month --- 
 
 // --- BEGIN Banned Player Filter --- 

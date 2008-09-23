@@ -103,6 +103,10 @@ $content['LN_PLAYER_HITLMOUSEHELP'] = "Um Details zu sehen bewege dich über die 
 $content['LN_PLAYER_LASTROUNDS'] = "Letzte gespielte Runden";
 $content['LN_PLAYER_DETAILS'] = "Details";
 $content['LN_PLAYER_LASTQUOTES'] = "Letzten 10 Spieler Zitate";
+	$content['LN_PLAYER_ERROR'] = "Error obtaining player data";
+	$content['LN_PLAYER_ERROR_NOPLAYERDATA'] = "Could not find data for this player";
+	$content['LN_PLAYER_ERROR_TIMEFILTER'] = "The player may did not play in this time span"; 
+	$content['LN_PLAYER_ERROR_DIDNOTPLAY'] = "The player '%1' did not play in this time span"; 
 
 // Rounds Stats
 $content['LN_ROUNDS_ALLROUNDS'] = "Alle Runden";

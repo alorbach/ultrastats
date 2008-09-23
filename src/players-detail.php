@@ -55,6 +55,7 @@ if ( isset($_GET['id']) )
 	{
 		// Invalid Guid!
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDPLAYER'];
 	}
 	else
 	{	
@@ -97,19 +98,15 @@ if ( isset($_GET['id']) )
 								"sum( " . STATS_PLAYERS . ".Suicides) as Suicides, " . 
 //								"round(AVG( " . STATS_PLAYERS . ".KillRatio),2) as KillRatio " .
 								"sum(" . STATS_PLAYERS . ".Kills) / sum(" . STATS_PLAYERS . ".Deaths) as KillRatio " .	// TRUE l33tAGE!
-//								STATS_ALIASES . ".Alias, " .
-//								STATS_ALIASES . ".AliasAsHtml " .
 								" FROM " . STATS_PLAYERS . 
 								" LEFT OUTER JOIN (" . STATS_PLAYERS_STATIC . 
 								") ON (" . 
 								STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS . ".GUID) " . 
 								" WHERE " . STATS_PLAYERS . ".GUID = " . $content['playerguid'] . " " . 
-//								" AND " . STATS_ALIASES . ".Count = " . $content['aliases'][0]['Count'] .
-								GetCustomServerWhereQuery(STATS_PLAYERS, false) . // GetCustomServerWhereQuery(STATS_ALIASES, false) . 
+								GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 								GetTimeWhereQueryString(STATS_PLAYERS) . 
-								" GROUP BY " . STATS_PLAYERS . ".GUID "; // . 
-//								" ORDER BY AliasCount DESC";
+								" GROUP BY " . STATS_PLAYERS . ".GUID ";
 			$result = DB_Query($sqlquery);
 			$playervars = DB_GetSingleRow($result, true);
 
@@ -248,16 +245,18 @@ if ( isset($_GET['id']) )
 				// --- 
 
 				// --- Get Favourite Weapon
-//TODO TIMEFILTER!
 				$sqlquery = "SELECT " . STATS_PLAYER_KILLS . ".WEAPONID, " . 
 										"Sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills, " . 
 										STATS_WEAPONS . ".INGAMENAME, " . 
 										STATS_WEAPONS . ".DisplayName " . 
 										" FROM " . STATS_PLAYER_KILLS . 
-										" INNER JOIN (" . STATS_WEAPONS . ") ON (" . 
-										STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+										" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . ") ON (" . 
+										STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+										STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+										") " . 
 										" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . 
 										GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+										GetTimeWhereQueryStringForRoundTable() . 
 										" GROUP BY " . STATS_WEAPONS . ".INGAMENAME" . 
 										" ORDER BY TotalKills DESC";
 
@@ -290,16 +289,18 @@ if ( isset($_GET['id']) )
 				// --- 
 
 				// --- Top Used Weapons
-//TODO TIMEFILTER!
 				$sqlquery = "SELECT " . STATS_PLAYER_KILLS . ".WEAPONID, " . 
 										"Sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills, " . 
 										STATS_WEAPONS . ".INGAMENAME, " . 
 										STATS_WEAPONS . ".DisplayName " . 
 										" FROM " . STATS_PLAYER_KILLS . 
-										" INNER JOIN (" . STATS_WEAPONS . ") ON (" . 
-										STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+										" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . ") ON (" . 
+										STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+										STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+										") " . 
 										" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . 
 										GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+										GetTimeWhereQueryStringForRoundTable() . 
 										" GROUP BY " . STATS_WEAPONS . ".INGAMENAME" . 
 										" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
@@ -413,14 +414,14 @@ if ( isset($_GET['id']) )
 
 
 				// --- Top Victims
-//TODO TIMEFILTER!
 				$sqlquery = "SELECT " . STATS_PLAYER_KILLS . ".ENEMYID, " . 
 										"Sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills " . 
 										" FROM " . STATS_PLAYER_KILLS . 
-//										" INNER JOIN (" . STATS_ALIASES . ") ON (" . 
-//										STATS_PLAYER_KILLS . ".ENEMYID=" . STATS_ALIASES . ".PLAYERID) " . 
+										" INNER JOIN (" . STATS_ROUNDS . ") ON (" . 
+										STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID ) " . 
 										" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . 
 										GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+										GetTimeWhereQueryStringForRoundTable() . 
 										" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID" . 
 										" ORDER BY TotalKills DESC LIMIT 15";
 				$result = DB_Query( $sqlquery );
@@ -458,13 +459,14 @@ if ( isset($_GET['id']) )
 				// --- 
 
 				// --- Top Killers
-//TODO TIMEFILTER
 				$sqlquery = "SELECT " . STATS_PLAYER_KILLS . ".PLAYERID, " . 
 										"Sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills " . 
 										" FROM " . STATS_PLAYER_KILLS . 
-//										" INNER JOIN (" . STATS_ALIASES . ") ON (" . 
-//										STATS_PLAYER_KILLS . ".PLAYERID=" . STATS_ALIASES . ".PLAYERID) " . 
-										" WHERE " . STATS_PLAYER_KILLS . ".ENEMYID=" .  $content['playerguid'] . GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+										" INNER JOIN (" . STATS_ROUNDS . ") ON (" . 
+										STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID ) " . 
+										" WHERE " . STATS_PLAYER_KILLS . ".ENEMYID=" .  $content['playerguid'] . 
+										GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+										GetTimeWhereQueryStringForRoundTable() . 
 										" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID" . 
 										" ORDER BY TotalKills DESC LIMIT 15";
 				$result = DB_Query( $sqlquery );
@@ -564,18 +566,20 @@ if ( isset($_GET['id']) )
 				}
 
 				// Get Detailed info for each bodypart
-// TODO TIMEFILTER!
 				$sqlquery = "SELECT sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills, " . 
 							STATS_HITLOCATIONS . ".ID, " . 
 							STATS_HITLOCATIONS . ".BODYPART, " . 
 							STATS_HITLOCATIONS . ".DisplayName " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_HITLOCATIONS . 
+							" INNER JOIN (" . STATS_HITLOCATIONS . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID) " . 
+							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID AND " .
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " . 
 							" WHERE " . STATS_PLAYER_KILLS . ".PLAYERID=" .  $content['playerguid'] . 
 							" AND " . STATS_HITLOCATIONS . ".BODYPART != 'none'" . 
 							GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY " . STATS_HITLOCATIONS . ".ID" . 
 							" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
@@ -612,6 +616,10 @@ if ( isset($_GET['id']) )
 						{
 							$tmpval += 10;
 							$tmpval = intval($tmpval/10) * 10;
+
+							// Secure Check, if for some reason the level is higher then 100%, we set it down to 100%!
+							if ( $tmpval > 100) 
+								$tmpval = 100;
 						}
 						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_level" ] = $tmpval;
 						// ---
@@ -649,18 +657,20 @@ if ( isset($_GET['id']) )
 				}
 
 				// Get Detailed info for each bodypart
-// TODO TIMEFILTER!
 				$sqlquery = "SELECT sum(" . STATS_PLAYER_KILLS . ".Kills) as TotalKills, " . 
 							STATS_HITLOCATIONS . ".ID, " . 
 							STATS_HITLOCATIONS . ".BODYPART, " . 
 							STATS_HITLOCATIONS . ".DisplayName " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_HITLOCATIONS . 
+							" INNER JOIN (" . STATS_HITLOCATIONS . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID) " . 
+							STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID AND " . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " . 
 							" WHERE " . STATS_PLAYER_KILLS . ".ENEMYID=" . $content['playerguid'] . 
 							" AND " . STATS_HITLOCATIONS . ".BODYPART != 'none'" . 
 							GetCustomServerWhereQuery( STATS_PLAYER_KILLS, false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY " . STATS_HITLOCATIONS . ".ID" . 
 							" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
@@ -697,6 +707,10 @@ if ( isset($_GET['id']) )
 						{
 							$tmpval += 10;
 							$tmpval = intval($tmpval/10) * 10;
+
+							// Secure Check, if for some reason the level is higher then 100%, we set it down to 100%!
+							if ( $tmpval > 100) 
+								$tmpval = 100;
 						}
 						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_level" ] = $tmpval;
 						// ---
@@ -780,10 +794,20 @@ if ( isset($_GET['id']) )
 				// --- 
 			}
 			else
+			{
 				$content['iserror'] = "true";
+				$content['ERROR_DETAILS'] = $content['LN_PLAYER_ERROR_NOPLAYERDATA'];
+				if ( TimeFilterUsed() ) 
+					$content['ERROR_DETAILS'] .= "<br>" . GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_DIDNOTPLAY'], $content['aliases'][0]['Aliases_AliasAsHtml']) ;
+			}
 		}
 		else
+		{
 			$content['iserror'] = "true";
+			$content['ERROR_DETAILS'] = $content['LN_PLAYER_ERROR_NOPLAYERDATA'];
+			if ( TimeFilterUsed() ) 
+				$content['ERROR_DETAILS'] .= "<br>" . $content['LN_PLAYER_ERROR_TIMEFILTER'];
+		}
 		// --- END LastRounds Code for front stats
 	}
 }
@@ -791,6 +815,7 @@ else
 {
 	// Invalid Guid!
 	$content['iserror'] = "true";
+	$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDPLAYER'];
 }
 // --- 
 
@@ -798,7 +823,7 @@ else
 if ( $content['iserror'] == "true" )
 {
 	// Append to title
-	$content['TITLE'] .= "Error invalid GUID";
+	$content['TITLE'] .= $content['LN_PLAYER_ERROR'];
 }
 else
 {
