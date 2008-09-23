@@ -30,6 +30,7 @@ $content['LN_NODESCRIPTION'] = "Keine Beschreibung verfügbar";
 $content['LN_MAIN_SELECTTIMESPAN'] = "Zeitbereich wählen";
 $content['LN_ERROR_DETAILS'] = "Error Details";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "Keine Statistikdaten mit diesen Filtereinstellungen gefunden.";
+$content['LN_DETAIL_INFO'] = "Detail Informationen";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Server wählen";

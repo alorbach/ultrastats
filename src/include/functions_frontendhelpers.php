@@ -597,6 +597,7 @@ function GetAndSetMaxKillRation()
 						" WHERE Kills > " . $content['web_minkills'] .
 						GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 						GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
+						GetTimeWhereQueryString(STATS_PLAYERS) . 
 						" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 						" ORDER BY MaxKillRatio DESC LIMIT 1";
 	$result = DB_Query($sqlquery);

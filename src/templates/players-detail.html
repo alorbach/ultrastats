@@ -64,14 +64,14 @@
 			</tr>
 			<tr>
 				<td width="150" class="cellmenu1_naked" align="center" nowrap><B>{LN_TOPPLAY_KillRatio}</B></td>
-				<td colspan="2" class="line0" align="center" nowrap>
+				<td colspan="2" class="line0" align="center" nowrap OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{KillRatioWidthPlusText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
 					<b>{KillRatio}</b>
 					<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 					<tr>
-						<td bgcolor="#770000"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+						<td bgcolor="#770000"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9"></td>
 						<td bgcolor="#007700">
 						<!-- IF KillRatioWidthPlusText!="" -->
-						<img align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+						<img align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9">
 						<!-- ENDIF KillRatioWidthPlusText!="" -->
 						</td>
 					</tr>
