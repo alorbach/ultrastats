@@ -105,17 +105,18 @@ if ( isset($_GET['id']) )
 								"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as AllPlayersCount, " . 
 								"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 								" FROM " . STATS_PLAYER_KILLS . 
-								" INNER JOIN (" . STATS_DAMAGETYPES .
+								" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 // ", " . STATS_ROUNDS . ", " . STATS_TIME . 
 								") ON (" . 
-								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID " . 
+								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
 // " AND " . STATS_ROUNDS . ".ID=" . STATS_PLAYER_KILLS . ".ROUNDID AND " . 
 // STATS_ROUNDS . ".ID=" . STATS_TIME . ".ROUNDID " . 
 								") " . 
 								" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE = '" . $content['damageid'] . "' " . 
 								GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
-// GetTimeWhereQueryString(STATS_TIME) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID" . 
 								" ORDER BY AllKills DESC ";
 			$result = DB_Query($sqlquery);
@@ -144,12 +145,15 @@ if ( isset($_GET['id']) )
 							STATS_PLAYER_KILLS . ".PLAYERID, " . 
 							"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_DAMAGETYPES . 
+							" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+							STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " . 
 							" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE = '" . $content['damageid'] . "' " . 
 							GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 							GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY PLAYERID" . 
 							" ORDER BY AllKills DESC " . 
 							" LIMIT " . $content['current_mostkills_pagebegin'] . " , " . $content['web_detaillistsplayers'];
@@ -225,12 +229,15 @@ if ( isset($_GET['id']) )
 								"count(" . STATS_PLAYER_KILLS . ".ENEMYID) as AllPlayersCount, " . 
 								"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 								" FROM " . STATS_PLAYER_KILLS . 
-								" INNER JOIN (" . STATS_DAMAGETYPES . 
+								" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 								") ON (" . 
-								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+								STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+								") " . 
 								" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE = '" . $content['damageid'] . "' " . 
 								GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY ENEMYID" . 
 								" ORDER BY AllKills DESC ";
 			$result = DB_Query($sqlquery);
@@ -258,12 +265,15 @@ if ( isset($_GET['id']) )
 							STATS_PLAYER_KILLS . ".ENEMYID, " . 
 							"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_DAMAGETYPES . 
+							" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+							STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " . 
 							" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE = '" . $content['damageid'] . "' " . 
 							GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 							GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY ENEMYID" . 
 							" ORDER BY AllKills DESC " . 
 							" LIMIT " . $content['current_killedby_pagebegin'] . " , " . $content['web_detaillistsplayers'];
@@ -351,14 +361,18 @@ else
 						STATS_DAMAGETYPES . ".ID as DAMAGETYPEID, " .
 						STATS_DAMAGETYPES . ".DAMAGETYPE, " . 
 						STATS_DAMAGETYPES . ".DisplayName as DamageTypeDisplayName, " . 
-						"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
-						"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
+						STATS_DAMAGETYPES_KILLS . ".Kills as PlayersCount, " . 
+						STATS_DAMAGETYPES_KILLS . ".Kills as DamageKills " . 
+
+//						"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
+//						"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
 						" FROM " . STATS_DAMAGETYPES . 
-						" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
-						" ON (" . STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID " . " )" . 
+						" LEFT OUTER JOIN (" . STATS_DAMAGETYPES_KILLS . ") " . 
+						" ON (" . STATS_DAMAGETYPES . ".ID=" . STATS_DAMAGETYPES_KILLS . ".DAMAGETYPEID " . " )" . 
 						" WHERE 1=1 " . /* dummy where appended */
-						GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
-						GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+						GetCustomServerWhereQuery(STATS_DAMAGETYPES_KILLS, false) . 
+//						GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+						GetTimeWhereQueryString(STATS_DAMAGETYPES_KILLS) . 
 						" GROUP BY " . STATS_DAMAGETYPES . ".ID " . 
 						" ORDER BY DisplayName DESC ";
 

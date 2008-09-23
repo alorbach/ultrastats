@@ -107,6 +107,7 @@ function InitUltraStatsConfigFile($bHandleMissing = true)
 		define('STATS_CONSOLIDATED',		$myPref . "consolidated");
 		define('STATS_GAMEACTIONS',			$myPref . "gameactions");
 		define('STATS_DAMAGETYPES',			$myPref . "damagetypes");
+		define('STATS_DAMAGETYPES_KILLS',	$myPref . "damagetypes_kills");
 		define('STATS_ATTACHMENTS',			$myPref . "attachments");
 		define('STATS_GAMETYPES',			$myPref . "gametypes");
 		define('STATS_HITLOCATIONS',		$myPref . "hitlocations");

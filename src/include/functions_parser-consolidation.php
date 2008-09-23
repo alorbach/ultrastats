@@ -282,4 +282,46 @@ function RunServerConsolidation( $serverid )
 	PrintHTMLDebugInfo( DEBUG_INFO, "Consolidation", "Finished Consolidation Calculation...");
 }
 
+function RunDamagetypeConsolidation( $serverid ) 
+{
+	global $myserver, $content;
+
+	// Now we create overall Medals!
+	if ( $serverid != -1 ) 
+		PrintHTMLDebugInfo( DEBUG_ERROR, "RunDamagetypeConsolidation", "Error, invalid ServerID supplied ...");
+	else
+	{
+		PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeConsolidation", "Starting Damagetype Consolidation Calculation, this may take a while ...");
+
+
+/*
+		// Now the real Query begins
+		$sqlquery = "SELECT " .
+							STATS_DAMAGETYPES . ".ID as DAMAGETYPEID, " .
+							STATS_DAMAGETYPES . ".DAMAGETYPE, " . 
+							STATS_DAMAGETYPES . ".DisplayName as DamageTypeDisplayName, " . 
+							"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
+							"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
+							" FROM " . STATS_DAMAGETYPES . 
+							" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
+							" ON (" . STATS_DAMAGETYPES . ".ID=" . STATS_DAMAGETYPES_KILLS . ".DAMAGETYPEID " . " )" . 
+							" INNERJOIN (" . STATS_ROUNDS . ") " .
+							" ON (" . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID ) " . 
+							" WHERE SERVERID = " . $serverid . 
+							GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+//							GetTimeWhereQueryString(STATS_ROUNDS) . 
+							" GROUP BY " . STATS_DAMAGETYPES . ".ID " . 
+							" ORDER BY DisplayName DESC ";
+		
+
+
+		$result = DB_Query($sqlquery);
+		$content['damagetypeslist'] = DB_GetAllRows($result, true);
+*/
+
+	}
+
+}
+
 ?>
