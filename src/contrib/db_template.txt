@@ -380,14 +380,13 @@ CREATE TABLE `stats_weapons` (
 -- 
 
 DROP TABLE IF EXISTS `stats_damagetypes_kills`;
-CREATE TABLE IF NOT EXISTS `stats_damagetypes_kills` (
+CREATE TABLE `stats_damagetypes_kills` (
   `damagetypeid` tinyint(4) NOT NULL,
   `SERVERID` tinyint(4) NOT NULL,
   `Time_Year` mediumint(9) NOT NULL,
   `Time_Month` tinyint(4) NOT NULL,
   `Kills` int(11) NOT NULL,
   `PlayersCount` int(11) NOT NULL,
-  `Deaths` int(11) NOT NULL,
   PRIMARY KEY  (`damagetypeid`,`SERVERID`,`Time_Year`,`Time_Month`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Helper table to store and combine damagetype kills and deaths';
 
