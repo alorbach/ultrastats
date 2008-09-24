@@ -230,6 +230,8 @@ $content['LN_DAMAGETYPE_LIST'] = "Liste von allen Schadenstypen";
 $content['LN_DAMAGETYPE_NAME'] = "Schadenstype Name";
 $content['LN_DAMAGETYPE_KILLCOUNT'] = "Kills verursacht von diesem Schadenstype";
 $content['LN_DAMAGETYPE_PLAYERCOUNT'] = "Spieler welche mit diesem Schadenstype getötet haben";
+	$content['LN_DAMAGETYPE_KILLCOUNT_TEXT'] = "%1 total kills were caused by this damagetype.";
+	$content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'] = "%1 players killed with this damagetype";
 
 //Install Site
 $content['LN_CFG_PARAMMISSING'] = "Die folgenden Parameter fehlen: ";

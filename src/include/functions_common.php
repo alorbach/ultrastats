@@ -1118,8 +1118,6 @@ function CreateAvailableYearsAndMonthFilters()
 	
 	// NOT SURE if this is a good idea xD
 //	$content['TIMETABLE'][ "ALL-TIME" ] = array ( "Year" => "", "Month" => "");
-	
-
 
 	// Get available month and years from DB!
 	$sqlquery = " SELECT DISTINCT " . 
@@ -1183,33 +1181,42 @@ function CreateAvailableYearsAndMonthFilters()
 //	print_r ( $content['TIMETABLE'] );
 }
 
-function SetUnixTimeStampFilters()
+function SetUnixTimeStampFilters($selectedYear = null, $selectedMonth = null)
 {
 	global $content;
+	
+	// Set the year we want to filter for!
+	if ( $selectedYear == null && isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+		$selectedYear = $_SESSION['TIME_SELECTEDYEAR'];
 
-	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+	// Set the month we want to filter for!
+	if ( $selectedMonth == null && isset($_SESSION['TIME_SELECTEDMONTH']) ) 
+		$selectedMonth = $_SESSION['TIME_SELECTEDMONTH'];
+	
+	// 
+	if ( $selectedYear != null ) 
 	{
-		if ( isset($_SESSION['TIME_SELECTEDMONTH']) ) 
+		if ( $selectedMonth != null ) 
 		{
-			if ( $_SESSION['TIME_SELECTEDMONTH'] == 12 ) 
+			if ( $selectedMonth == 12 ) 
 			{
 				$monthEnd = 1;
-				$yearEnd = $_SESSION['TIME_SELECTEDYEAR']+1;
+				$yearEnd = $selectedYear+1;
 			}
 			else
 			{
-				$monthEnd = $_SESSION['TIME_SELECTEDMONTH']+1;
-				$yearEnd = $_SESSION['TIME_SELECTEDYEAR'];
+				$monthEnd = $selectedMonth+1;
+				$yearEnd = $selectedYear;
 			}
 
 			// Set Start and End UNIX TImestamp!
-			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, $_SESSION['TIME_SELECTEDMONTH'], 1, $_SESSION['TIME_SELECTEDYEAR']);
+			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, $selectedMonth, 1, $selectedYear);
 			$content['TIME_SELECTEDYEAR_UNIXEND'] = mktime(0, 0, 0, $monthEnd, 1, $yearEnd);
 		}
 		else
 		{
-			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, 1, 1, $_SESSION['TIME_SELECTEDYEAR']);
-			$content['TIME_SELECTEDYEAR_UNIXEND'] = mktime(0, 0, 0, 1, 1, $_SESSION['TIME_SELECTEDYEAR']+1);
+			$content['TIME_SELECTEDYEAR_UNIXSTART'] = mktime(0, 0, 0, 1, 1, $selectedYear);
+			$content['TIME_SELECTEDYEAR_UNIXEND'] = mktime(0, 0, 0, 1, 1, $selectedYear+1);
 		}
 	}
 }

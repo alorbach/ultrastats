@@ -346,12 +346,14 @@ if ( isset($_GET['id']) )
 
 	}
 	else
+	{
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDDAMAGETYPE'];
+	}
 }
 else
 {
 	// No weapon ID means we list all weapons!
-	$content['damagelist'] = "true";
 
 	// Append to Title
 	$content['TITLE'] .= " - All Damagetypes";
@@ -361,8 +363,8 @@ else
 						STATS_DAMAGETYPES . ".ID as DAMAGETYPEID, " .
 						STATS_DAMAGETYPES . ".DAMAGETYPE, " . 
 						STATS_DAMAGETYPES . ".DisplayName as DamageTypeDisplayName, " . 
-						STATS_DAMAGETYPES_KILLS . ".Kills as PlayersCount, " . 
-						STATS_DAMAGETYPES_KILLS . ".Kills as DamageKills " . 
+						" sum(" . STATS_DAMAGETYPES_KILLS . ".PlayersCount) as PlayersCount, " . 
+						" sum(" . STATS_DAMAGETYPES_KILLS . ".Kills) as DamageKills " . 
 
 //						"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
 //						"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
@@ -378,18 +380,17 @@ else
 
 	$result = DB_Query($sqlquery);
 	$content['damagetypeslist'] = DB_GetAllRows($result, true);
-
-//print_r ( $content['damagesonly'] );
-//exit;
-
 	if ( isset($content['damagetypeslist']) )
 	{
+		// enable damagelist
+		$content['damagelist'] = "true";
+
 		// Preprocess weapons first!
 		$content['BarImageKillCount'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
 		$content['BarImagePlayerCount'] = $gl_root_path . "images/bars/bar-small/blue_middle_9.png";
 		$content['AllPlayerCount'] = 0;
 
-		// --- Loop through weapontypes | First time 
+		// --- Loop through damagetypes | First time 
 		for($i = 0; $i < count($content['damagetypeslist']); $i++)
 		{
 			// Set MaxKillCount
@@ -397,8 +398,8 @@ else
 				$content['MaxKillCount'] = $content['damagetypeslist'][$i]['DamageKills'];
 
 			// Set MaxPlayerCount
-			if ( !isset($content['MaxPlayerCount']) || $content['damagetypeslist'][$i]['PlayerCount'] > $content['MaxPlayerCount'] )
-				$content['MaxPlayerCount'] = $content['damagetypeslist'][$i]['PlayerCount'];
+			if ( !isset($content['MaxPlayerCount']) || $content['damagetypeslist'][$i]['PlayersCount'] > $content['MaxPlayerCount'] )
+				$content['MaxPlayerCount'] = $content['damagetypeslist'][$i]['PlayersCount'];
 
 			// Init DamageKills 
 			if ( !isset($content['damagetypeslist'][$i]['DamageKills']) ) 
@@ -416,6 +417,11 @@ else
 				$content['damagetypeslist'][$i]['DamageImage'] = $gl_root_path . "images/damagetypes/thumbs/no-pic.png";
 			// --- 
 
+			// --- Set Popupdetails Text
+			$content['damagetypeslist'][$i]['KillCountText'] = GetAndReplaceLangStr( $content['LN_DAMAGETYPE_KILLCOUNT_TEXT'], $content['damagetypeslist'][$i]['DamageKills'] );
+			$content['damagetypeslist'][$i]['PlayerCountText'] = GetAndReplaceLangStr( $content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'], $content['damagetypeslist'][$i]['PlayersCount'] );
+			// ---
+
 			// --- Set CSS Class
 			if ( $i % 2 == 0 )
 				$content['damagetypeslist'][$i]['cssclass'] = "line1";
@@ -431,22 +437,19 @@ else
 				$content['damagetypeslist'][$i]['KillRatioWidth'] = 1;
 
 			// Set PlayerCountWidth Bars
-			if ( $content['damagetypeslist'][$i]['PlayerCount'] > 0 )
-				$content['damagetypeslist'][$i]['PlayerCountWidth'] = intval( $content['damagetypeslist'][$i]['PlayerCount'] / ($content['MaxPlayerCount'] / 100) );
+			if ( $content['damagetypeslist'][$i]['PlayersCount'] > 0 )
+				$content['damagetypeslist'][$i]['PlayerCountWidth'] = intval( $content['damagetypeslist'][$i]['PlayersCount'] / ($content['MaxPlayerCount'] / 100) );
 			else
 				$content['damagetypeslist'][$i]['PlayerCountWidth'] = 1;
-
 			// ---
-
-
 		}
 		// ---
-
 	}
-
-	// Invalid ID!
-//	$content['iserror'] = "true";
-	
+	else
+	{
+		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_NOSTATSDATAFOUND'];
+	}
 }
 // --- 
 

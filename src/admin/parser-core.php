@@ -126,6 +126,7 @@ if ( isset($_GET['op']) )
 				$parseroperation == 'runtotals' ||
 				$parseroperation == 'createaliases' ||
 				$parseroperation == 'calcmedalsonly' ||
+				$parseroperation == 'calcdamagetypekills' ||
 				$parseroperation == 'databaseopt'
 			)
 	{
@@ -155,6 +156,11 @@ if ( isset($_GET['op']) )
 
 			//Run the Medals Generation now!
 			CreateAllMedals( -1 );
+		}
+		else if ( $parseroperation == 'calcdamagetypekills' )
+		{
+			// Create Damagetype Stats
+			RunDamagetypeConsolidation( -1 );
 		}
 		else if ( $parseroperation == 'databaseopt' )
 		{

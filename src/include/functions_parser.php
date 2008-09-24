@@ -508,8 +508,13 @@ function RunTotalStats()
 	// Set StartTime
 	$ParserStart = microtime_float();
 
-	//Run the Medals Generation now!
+	// Create Damagetype Stats
+	RunDamagetypeConsolidation( -1 );
+
+	// Create Medals 
 	CreateAllMedals( -1 );
+
+	// Consolidate Global stuff
 	RunServerConsolidation( -1 );
 
 	//Run Calc for TOPAliases

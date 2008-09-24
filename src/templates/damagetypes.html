@@ -5,7 +5,7 @@
 <center>
 	<div class="table_with_border_second ErrorMsg" style="width:600px">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-		<p>{LN_ERROR_INVALIDDAMAGETYPE}</p>
+		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
 </center>
@@ -39,17 +39,17 @@
 			<td class="{cssclass}" align="left" width="125" bgcolor="#007700">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td bgcolor="#007700">
+				<td bgcolor="#007700" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{KillCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
 				<img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9">
 				</td>
 			</tr>
 			</table>
 			</td>
-			<td class="{cssclass}" align="right" width="50"><b>{PlayerCount}</b></td>
+			<td class="{cssclass}" align="right" width="50"><b>{PlayersCount}</b></td>
 			<td class="{cssclass}" align="left" width="125">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td bgcolor="#005577">
+				<td bgcolor="#005577" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{PlayerCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
 				<img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9">
 				</td>
 			</tr>
