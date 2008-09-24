@@ -139,6 +139,8 @@ $content['LN_ADMINDELETESTATS_TEXT'] = "Delete all stats related to this server.
 $content['LN_ADMINGETNEWLOG_TEXT'] = "Download new gamelog from your server.";
 
 $content['LN_RUNDAMAGETYPEKILLS'] = "Calculates total kills and usages by damagetype.";
+$content['LN_RUNWEAPONKILLS'] = "Calculates total kills and usages by weapon.";
+
 $content['LN_RUNTOTALUPDATE_MORE'] = "This includes consolidating server stats, damagetype kills, weapon kills and top used aliases.<br>Depending on the size of your database, this may take a while.<br><br>If the script times out during this operation, I recommend to perform these steps manually.";
 
 

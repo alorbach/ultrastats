@@ -174,6 +174,8 @@ $content['LN_WEAPON_KILLCOUNT'] = "Erzielte Kills mit dieser Waffe";
 $content['LN_WEAPON_PLAYERCOUNT'] = "Spieler die diese Waffe nutzten";
 $content['LN_WEAPON_ATTACHMENT'] = "Zusatzteil";
 $content['LN_WEAPON_READMORE'] = "Folge dem Link um mehr Informationen zu erhalten:";
+	$content['LN_WEAPON_KILLCOUNT_TEXT'] = "%1 total kills were caused by this weapon.";
+	$content['LN_WEAPON_PLAYERCOUNT_TEXT'] = "%1 players killed with this weapon";
 
 // ServerStats Details
 $content['LN_ERROR_NOSERVERMAPS'] = "Fehler, entweder es wurde keine Server ID vergeben, oder es wurde keine Map gespielt auf diesem Server!";

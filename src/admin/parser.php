@@ -91,6 +91,7 @@ if ( isset($_GET['op']) )
 				$content['parseroperation'] == 'createaliases' ||
 				$content['parseroperation'] == 'calcmedalsonly' ||
 				$content['parseroperation'] == 'calcdamagetypekills' ||
+				$content['parseroperation'] == 'calcweaponkills' ||
 				$content['parseroperation'] == 'databaseopt'
 			) 
 	{

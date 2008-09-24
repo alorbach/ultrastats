@@ -127,6 +127,7 @@ if ( isset($_GET['op']) )
 				$parseroperation == 'createaliases' ||
 				$parseroperation == 'calcmedalsonly' ||
 				$parseroperation == 'calcdamagetypekills' ||
+				$parseroperation == 'calcweaponkills' ||
 				$parseroperation == 'databaseopt'
 			)
 	{
@@ -160,8 +161,14 @@ if ( isset($_GET['op']) )
 		else if ( $parseroperation == 'calcdamagetypekills' )
 		{
 			// Create Damagetype Stats
-			RunDamagetypeConsolidation( -1 );
+			RunDamagetypeKillsConsolidation( -1 );
 		}
+		else if ( $parseroperation == 'calcweaponkills' )
+		{
+			// Create Damagetype Stats
+			RunWeaponKillsConsolidation( -1 );
+		}
+		
 		else if ( $parseroperation == 'databaseopt' )
 		{
 			// Optimize SQL Tables

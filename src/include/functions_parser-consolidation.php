@@ -282,7 +282,7 @@ function RunServerConsolidation( $serverid )
 	PrintHTMLDebugInfo( DEBUG_INFO, "Consolidation", "Finished Consolidation Calculation...");
 }
 
-function RunDamagetypeConsolidation( $serverid ) 
+function RunDamagetypeKillsConsolidation( $serverid ) 
 {
 	global $myserver, $content;
 
@@ -297,20 +297,20 @@ function RunDamagetypeConsolidation( $serverid )
 		$content['serverlist'] = DB_GetAllRows($result, true);
 		if ( isset($content['serverlist']) )
 		{
-			PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeConsolidation", "Start consolidating damagetype data...");
+			PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeKillsConsolidation", "Start consolidating damagetype data...");
 			foreach ( $content['serverlist'] as $myServerRecord)
 			{
 				// Call function with valid ServerID now
-				RunDamagetypeConsolidation( $myServerRecord['ID'] );
+				RunDamagetypeKillsConsolidation( $myServerRecord['ID'] );
 			}
-			PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeConsolidation", "Finished consolidating damagetype data ...");
+			PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeKillsConsolidation", "Finished consolidating damagetype data ...");
 		}
 		else
-			PrintHTMLDebugInfo( DEBUG_ERROR, "RunDamagetypeConsolidation", "Error no server records found!");
+			PrintHTMLDebugInfo( DEBUG_ERROR, "RunDamagetypeKillsConsolidation", "Error no server records found!");
 	}
 	else
 	{
-		PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeConsolidation", "Consolidation Damagetype data for ServerID '" . $serverid . "', this may take a while ...");
+		PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeKillsConsolidation", "Consolidation Damagetype data for ServerID '" . $serverid . "', this may take a while ...");
 
 		// Get available month and years for this Server!
 		$sqlquery = " SELECT DISTINCT " . 
@@ -334,12 +334,9 @@ function RunDamagetypeConsolidation( $serverid )
 				$sqlquery = "SELECT " .
 									STATS_DAMAGETYPES . ".ID as DAMAGETYPEID, " .
 									STATS_DAMAGETYPES . ".DAMAGETYPE, " . 
-									STATS_DAMAGETYPES . ".DisplayName as DamageTypeDisplayName, " . 
 									"count(DISTINCT " . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
 									"sum(" . STATS_PLAYER_KILLS . ".Kills) as DamageKills " . 
 									" FROM " . STATS_DAMAGETYPES . 
-//									" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
-//									" ON (" . STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID " . " )" . 
 									" INNER JOIN (" . STATS_PLAYER_KILLS . ", " . STATS_ROUNDS . ") " .
 									" ON (" . 
 									STATS_PLAYER_KILLS . ".DAMAGETYPEID =" . STATS_DAMAGETYPES . ".ID AND " . 
@@ -348,10 +345,7 @@ function RunDamagetypeConsolidation( $serverid )
 									" WHERE " . STATS_PLAYER_KILLS . ".SERVERID = " . $serverid .
 									GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
 									GetTimeWhereQueryStringForRoundTable() . 
-//									GetTimeWhereQueryString(STATS_ROUNDS) . 
 									" GROUP BY " . STATS_DAMAGETYPES . ".ID ";
-//									" ORDER BY DisplayName DESC ";
-				
 				$result = DB_Query($sqlquery);
 				$content['damagetypeslist'] = DB_GetAllRows($result, true);
 				if ( isset($content['damagetypeslist']) )
@@ -360,7 +354,7 @@ function RunDamagetypeConsolidation( $serverid )
 					foreach( $content['damagetypeslist'] as $myDamageType)
 					{
 						// Insert or Update damagetype record
-						InsertOrUpdateDamagetype( $serverid, $myTimeRecord['Time_Year'], $myTimeRecord['Time_Month'], $myDamageType );
+						InsertOrUpdateDamagetypekills( $serverid, $myTimeRecord['Time_Year'], $myTimeRecord['Time_Month'], $myDamageType );
 					}
 				}
 			}
@@ -368,9 +362,121 @@ function RunDamagetypeConsolidation( $serverid )
 	}
 }
 
-function InsertOrUpdateDamagetype( $myServerID, $timeyear, $timemonth, $myDamageTypeRecord )
+function RunWeaponKillsConsolidation( $serverid ) 
 {
-	PrintHTMLDebugInfo( DEBUG_DEBUG, "InsertOrUpdateDamagetype", "Adding/Updating Damagetype Record for Medal '" . $myDamageTypeRecord['DAMAGETYPEID'] . "', Server '" . $myServerID . "'");
+	global $myserver, $content;
+
+	// Now we create overall Medals!
+	if ( $serverid == -1 )
+	{
+		// Get ServerDetails
+		$sqlquery = "SELECT ID, Name " . 
+					"FROM " . STATS_SERVERS . " " . 
+					"ORDER BY ID";
+		$result = DB_Query($sqlquery, true); 
+		$content['serverlist'] = DB_GetAllRows($result, true);
+		if ( isset($content['serverlist']) )
+		{
+			PrintHTMLDebugInfo( DEBUG_INFO, "RunWeaponKillsConsolidation", "Start consolidating weapons data...");
+			foreach ( $content['serverlist'] as $myServerRecord)
+			{
+				// Call function with valid ServerID now
+				RunWeaponKillsConsolidation( $myServerRecord['ID'] );
+			}
+			PrintHTMLDebugInfo( DEBUG_INFO, "RunWeaponKillsConsolidation", "Finished consolidating weapons data ...");
+		}
+		else
+			PrintHTMLDebugInfo( DEBUG_ERROR, "RunWeaponKillsConsolidation", "Error no server records found!");
+	}
+	else
+	{
+		PrintHTMLDebugInfo( DEBUG_INFO, "RunWeaponKillsConsolidation", "Consolidation weapons data for ServerID '" . $serverid . "', this may take a while ...");
+
+		// Get available month and years for this Server!
+		$sqlquery = " SELECT DISTINCT " . 
+						STATS_TIME . ".Time_Year, " . 
+						STATS_TIME . ".Time_Month " . 
+					" FROM " . STATS_TIME . 
+					" WHERE " . STATS_TIME . ".SERVERID = " . $serverid . 
+					" ORDER BY " . STATS_TIME . ".Time_Year AND " . STATS_TIME . ".Time_Month";
+		
+		$result = DB_Query($sqlquery);
+		$content['timeresults'] = DB_GetAllRows($result, true);
+		if ( isset($content['timeresults']) )
+		{
+			// Process each month!
+			foreach( $content['timeresults'] as $myTimeRecord)
+			{
+				// Set variables for timefilter
+				SetUnixTimeStampFilters($myTimeRecord['Time_Year'], $myTimeRecord['Time_Month']);
+
+				// Now the real Query stuff starts ;)!
+				$sqlquery = "SELECT " .
+									STATS_WEAPONS . ".ID as WEAPONID, " .
+									"count(DISTINCT " . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
+									"sum(" . STATS_PLAYER_KILLS . ".Kills) as WeaponKills " . 
+									" FROM " . STATS_WEAPONS . 
+									" INNER JOIN (" . STATS_PLAYER_KILLS . ", " . STATS_ROUNDS . ") " .
+									" ON (" . 
+									STATS_PLAYER_KILLS . ".WEAPONID =" . STATS_WEAPONS . ".ID AND " . 
+									STATS_PLAYER_KILLS . ".ROUNDID =" . STATS_ROUNDS . ".ID " . 
+									") " . 
+									" WHERE " . STATS_PLAYER_KILLS . ".SERVERID = " . $serverid .
+									GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+									GetTimeWhereQueryStringForRoundTable() . 
+									" GROUP BY " . STATS_WEAPONS . ".ID ";
+				$result = DB_Query($sqlquery);
+				$content['weaponslist'] = DB_GetAllRows($result, true);
+				if ( isset($content['weaponslist']) )
+				{
+					// Process each damagetype and insert data!
+					foreach( $content['weaponslist'] as $myWeaponType)
+					{
+						// Insert or Update damagetype record
+						InsertOrUpdateWeaponkills( $serverid, $myTimeRecord['Time_Year'], $myTimeRecord['Time_Month'], $myWeaponType );
+					}
+				}
+			}
+		}
+	}
+
+}
+
+function InsertOrUpdateWeaponkills( $myServerID, $timeyear, $timemonth, $myWeaponTypeRecord )
+{
+	PrintHTMLDebugInfo( DEBUG_DEBUG, "InsertOrUpdateWeaponkills", "Adding/Updating Record for Weapon '" . $myWeaponTypeRecord['WEAPONID'] . "', Server '" . $myServerID . "'");
+	$wherequery =	" WHERE WEAPONID = " . $myWeaponTypeRecord['WEAPONID'] . " AND " . 
+					" SERVERID = " . $myServerID . " AND " . 
+					" Time_Year = " . $timeyear . " AND " . 
+					" Time_Month = " . $timemonth . ""; 
+
+	$result = DB_Query("SELECT WEAPONID FROM " . STATS_WEAPONS_KILLS . " " . $wherequery );
+	$rows = DB_GetAllRows($result, true);
+	if ( isset($rows) )
+	{
+		// Update Calc
+		ProcessUpdateStatement(	" UPDATE " . STATS_WEAPONS_KILLS . " SET " . 
+								" Kills = " . $myWeaponTypeRecord['WeaponKills'] . ", " . 
+								" PlayersCount = " . $myWeaponTypeRecord['PlayerCount'] . 
+								$wherequery, true );
+	}
+	else
+	{
+		// Insert New
+		ProcessInsertStatement("INSERT INTO " . STATS_WEAPONS_KILLS . " (WEAPONID, SERVERID, Time_Year, Time_Month, Kills, PlayersCount) 
+		VALUES (
+			 " . $myWeaponTypeRecord['WEAPONID'] . ", 
+			 " . $myServerID . ", 
+			 " . $timeyear . ", 
+			 " . $timemonth . ", 
+			 " . $myWeaponTypeRecord['WeaponKills'] . ", 
+			 " . $myWeaponTypeRecord['PlayerCount'] . ")");
+	}
+}
+
+function InsertOrUpdateDamagetypekills( $myServerID, $timeyear, $timemonth, $myDamageTypeRecord )
+{
+	PrintHTMLDebugInfo( DEBUG_DEBUG, "InsertOrUpdateDamagetypekills", "Adding/Updating Record for Damagetype '" . $myDamageTypeRecord['DAMAGETYPEID'] . "', Server '" . $myServerID . "'");
 	$wherequery =	" WHERE damagetypeid = " . $myDamageTypeRecord['DAMAGETYPEID'] . " AND " . 
 					" SERVERID = " . $myServerID . " AND " . 
 					" Time_Year = " . $timeyear . " AND " . 

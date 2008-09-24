@@ -509,7 +509,10 @@ function RunTotalStats()
 	$ParserStart = microtime_float();
 
 	// Create Damagetype Stats
-	RunDamagetypeConsolidation( -1 );
+	RunWeaponKillsConsolidation( -1 );
+
+	// Create Damagetype Stats
+	RunDamagetypeKillsConsolidation( -1 );
 
 	// Create Medals 
 	CreateAllMedals( -1 );

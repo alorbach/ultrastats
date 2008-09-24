@@ -388,7 +388,24 @@ CREATE TABLE `stats_damagetypes_kills` (
   `Kills` int(11) NOT NULL,
   `PlayersCount` int(11) NOT NULL,
   PRIMARY KEY  (`damagetypeid`,`SERVERID`,`Time_Year`,`Time_Month`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Helper table to store and combine damagetype kills and deaths';
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Helper table to store and combine damagetype kills';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stats_weapons_kills`
+--
+
+DROP TABLE IF EXISTS `stats_weapons_kills`;
+CREATE TABLE `stats_weapons_kills` (
+  `WEAPONID` smallint(6) NOT NULL,
+  `SERVERID` tinyint(4) NOT NULL,
+  `Time_Year` mediumint(9) NOT NULL,
+  `Time_Month` tinyint(4) NOT NULL,
+  `Kills` int(11) NOT NULL,
+  `PlayersCount` int(11) NOT NULL,
+  PRIMARY KEY  (`WEAPONID`,`SERVERID`,`Time_Year`,`Time_Month`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Helper table to store and combine weapon kills';
 
 -- --------------------------------------------------------
 

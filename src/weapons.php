@@ -139,12 +139,15 @@ if ( isset($_GET['id']) )
 								"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as AllPlayersCount, " . 
 								"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 								" FROM " . STATS_PLAYER_KILLS . 
-								" INNER JOIN (" . STATS_WEAPONS . 
+								" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS .
 								") ON (" . 
-								STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+								STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+								") " . 
 								" WHERE " . STATS_WEAPONS . ".INGAMENAME = '" . $content['weaponid'] . "' " . 
 								GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY PLAYERID" . 
 								" ORDER BY AllKills DESC ";
 			$result = DB_Query($sqlquery);
@@ -173,12 +176,15 @@ if ( isset($_GET['id']) )
 							STATS_PLAYER_KILLS . ".PLAYERID, " . 
 							"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_WEAPONS . 
+							" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+							STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " .  
 							" WHERE " . STATS_WEAPONS . ".INGAMENAME = '" . $content['weaponid'] . "' " . 
 							GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 							GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY PLAYERID" . 
 							" ORDER BY AllKills DESC " . 
 							" LIMIT " . $content['current_mostkills_pagebegin'] . " , " . $content['web_detaillistsplayers'];
@@ -253,12 +259,15 @@ if ( isset($_GET['id']) )
 								"count(" . STATS_PLAYER_KILLS . ".ENEMYID) as AllPlayersCount, " . 
 								"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 								" FROM " . STATS_PLAYER_KILLS . 
-								" INNER JOIN (" . STATS_WEAPONS . 
+								" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 								") ON (" . 
-								STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+								STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+								STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+								") " . 
 								" WHERE " . STATS_WEAPONS . ".INGAMENAME = '" . $content['weaponid'] . "' " . 
 								GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 								GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+								GetTimeWhereQueryStringForRoundTable() . 
 								" GROUP BY ENEMYID" . 
 								" ORDER BY AllKills DESC ";
 			$result = DB_Query($sqlquery);
@@ -286,12 +295,15 @@ if ( isset($_GET['id']) )
 							STATS_PLAYER_KILLS . ".ENEMYID, " . 
 							"sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills " . 
 							" FROM " . STATS_PLAYER_KILLS . 
-							" INNER JOIN (" . STATS_WEAPONS . 
+							" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 							") ON (" . 
-							STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+							STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+							") " . 
 							" WHERE " . STATS_WEAPONS . ".INGAMENAME = '" . $content['weaponid'] . "' " . 
 							GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
 							GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+							GetTimeWhereQueryStringForRoundTable() . 
 							" GROUP BY ENEMYID" . 
 							" ORDER BY AllKills DESC " . 
 							" LIMIT " . $content['current_killedby_pagebegin'] . " , " . $content['web_detaillistsplayers'];
@@ -361,12 +373,14 @@ if ( isset($_GET['id']) )
 		// --- 
 	}
 	else
+	{
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDWEAPON'];
+	}
 }
 else
 {
 	// No weapon ID means we list all weapons!
-	$content['weaponslist'] = "true";
 
 	// Append to Title
 	$content['TITLE'] .= " - All weapons";
@@ -378,14 +392,15 @@ else
 						STATS_WEAPONS . ".WeaponType, " . 
 						STATS_WEAPONS . ".DisplayName as WeaponDisplayName, " . 
 						STATS_WEAPONS . ".ExternalInfoUrl, " .
-						"count(" . STATS_PLAYER_KILLS . ".PLAYERID) as PlayerCount, " . 
-						"sum(" . STATS_PLAYER_KILLS . ".Kills) as WeaponKills " . 
+						" sum(" . STATS_WEAPONS_KILLS . ".PlayersCount) as PlayersCount, " . 
+						" sum(" . STATS_WEAPONS_KILLS . ".Kills) as WeaponKills " . 
+
 						" FROM " . STATS_WEAPONS . 
-						" LEFT OUTER JOIN (" . STATS_PLAYER_KILLS . ") " . 
-						" ON (" . STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID " . " )" . 
+						" LEFT OUTER JOIN (" . STATS_WEAPONS_KILLS . ") " . 
+						" ON (" . STATS_WEAPONS . ".ID=" . STATS_WEAPONS_KILLS . ".WEAPONID " . " )" . 
 						" WHERE 1=1 " . /* dummy where appended */
-						GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false) . 
-						GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+						GetCustomServerWhereQuery(STATS_WEAPONS_KILLS, false) . 
+						GetTimeWhereQueryString(STATS_WEAPONS_KILLS) . 
 						" GROUP BY " . STATS_WEAPONS . ".ID " . 
 						" ORDER BY DisplayName DESC ";
 
@@ -397,6 +412,9 @@ else
 
 	if ( isset($content['weaponsonly']) )
 	{
+		// Enable weapon list
+		$content['weaponslist'] = "true";
+
 		// Preprocess weapons first!
 		$content['BarImageKillCount'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
 		$content['BarImagePlayerCount'] = $gl_root_path . "images/bars/bar-small/blue_middle_9.png";
@@ -409,8 +427,8 @@ else
 				$content['MaxKillCount'] = $content['weaponsonly'][$i]['WeaponKills'];
 
 			// Set MaxPlayerCount
-			if ( !isset($content['MaxPlayerCount']) || $content['weaponsonly'][$i]['PlayerCount'] > $content['MaxPlayerCount'] )
-				$content['MaxPlayerCount'] = $content['weaponsonly'][$i]['PlayerCount'];
+			if ( !isset($content['MaxPlayerCount']) || $content['weaponsonly'][$i]['PlayersCount'] > $content['MaxPlayerCount'] )
+				$content['MaxPlayerCount'] = $content['weaponsonly'][$i]['PlayersCount'];
 		}
 
 		// --- Loop through weapontypes
@@ -454,6 +472,11 @@ else
 						$myWeapon['WeaponImage'] = $gl_root_path . "images/weapons/thumbs/no-pic.png";
 					// --- 
 
+					// --- Set Popupdetails Text
+					$myWeapon['KillCountText'] = GetAndReplaceLangStr( $content['LN_WEAPON_KILLCOUNT_TEXT'], $myWeapon['WeaponKills'] );
+					$myWeapon['PlayerCountText'] = GetAndReplaceLangStr( $content['LN_WEAPON_PLAYERCOUNT_TEXT'], $myWeapon['PlayersCount'] );
+					// ---
+
 					// --- Scan for attachments and set them
 					$myWeapon['AttachmentID'] = ObtainAttachmentNameFromWeapon($myWeapon['INGAMENAME']);
 
@@ -492,8 +515,8 @@ else
 						$myWeapon['KillRatioWidth'] = 1;
 
 					// Set PlayerCountWidth Bars
-					if ( $myWeapon['PlayerCount'] > 0 )
-						$myWeapon['PlayerCountWidth'] = intval( $myWeapon['PlayerCount'] / ($content['MaxPlayerCount'] / 100) );
+					if ( $myWeapon['PlayersCount'] > 0 )
+						$myWeapon['PlayerCountWidth'] = intval( $myWeapon['PlayersCount'] / ($content['MaxPlayerCount'] / 100) );
 					else
 						$myWeapon['PlayerCountWidth'] = 1;
 
@@ -506,9 +529,11 @@ else
 
 		}
 	}
-
-	
-
+	else
+	{
+		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_NOSTATSDATAFOUND'];
+	}
 }
 // --- 
 

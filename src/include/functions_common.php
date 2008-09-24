@@ -121,9 +121,10 @@ function InitUltraStatsConfigFile($bHandleMissing = true)
 		define('STATS_TIME',				$myPref . "time");
 		define('STATS_USERS',				$myPref . "users");
 		define('STATS_WEAPONS',				$myPref . "weapons");
+		define('STATS_WEAPONS_KILLS',		$myPref . "weapons_kills");
+		define('STATS_WEAPONS_PERSERVER',	$myPref . "weapons_perserver");
 		define('STATS_PLAYERS_STATIC',		$myPref . "players_static");
 		define('STATS_PLAYERS_TOPALIASES',	$myPref . "players_topalias");
-		define('STATS_WEAPONS_PERSERVER',	$myPref . "weapons_perserver");
 
 		// --- Now Copy all entries into content variable
 		foreach ($CFG as $key => $value )
