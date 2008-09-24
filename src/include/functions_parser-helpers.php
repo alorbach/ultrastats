@@ -251,8 +251,11 @@ function CreateHTMLFooter()
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
 		return;
 
-	print ('<br><center><h3>Finished</h3><br>Total running time was ' . $RenderTime . ' seconds<br><br>
-			<br></center>
+	print ('<br><center><h3>Finished</h3>
+			Total running time was ' . $RenderTime . ' seconds
+			<br><br>
+			<br>
+			</center>
 			</body> 
 			</html>');
 }

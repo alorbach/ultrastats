@@ -550,6 +550,7 @@ function OptimizeAllTables()
 		"`" . STATS_CONSOLIDATED . "`, " . 
 		"`" . STATS_GAMEACTIONS . "`, " . 
 		"`" . STATS_DAMAGETYPES . "`, " . 
+		"`" . STATS_DAMAGETYPES_KILLS . "`, " . 
 		"`" . STATS_GAMETYPES . "`, " . 
 		"`" . STATS_HITLOCATIONS . "`, " . 
 		"`" . STATS_LANGUAGE_STRINGS . "`, " . 
@@ -562,10 +563,11 @@ function OptimizeAllTables()
 		"`" . STATS_TIME . "`, " . 
 		"`" . STATS_USERS . "`, " . 
 		"`" . STATS_WEAPONS . "`, " . 
+		"`" . STATS_WEAPONS_KILLS . "`, " . 
+		"`" . STATS_WEAPONS_PERSERVER . "`, " . 
 		"`" . STATS_PLAYERS_STATIC . "`, " . 
 		"`" . STATS_PLAYERS_TOPALIASES . "`, " . 
-		"`" . STATS_ATTACHMENTS . "`, " . 
-		"`" . STATS_WEAPONS_PERSERVER . "` "; 
+		"`" . STATS_ATTACHMENTS . "` ";
 
 	$result = DB_Query($sqlquery);
 	$sqllines = DB_GetAllRows($result, true);

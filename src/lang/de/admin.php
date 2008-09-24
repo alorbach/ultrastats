@@ -137,6 +137,14 @@ $content['LN_ADMINDBSTATS_TEXT'] = "Zeige Datenbank Statistik Eigenschaften.";
 $content['LN_ADMINRESETLASTLOGLINE_TEXT'] = "Zurücksetzten der zuletzt bekannten Logfile Position auf 0";
 $content['LN_ADMINDELETESTATS_TEXT'] = "Lösche alle Statistiken für diesen Server.";
 $content['LN_ADMINGETNEWLOG_TEXT'] = "Downloade neues Gamelog von deinem Server. ";
+	$content['LN_RUNDAMAGETYPEKILLS'] = "Calculates total kills and usages by damagetype.";
+	$content['LN_RUNWEAPONKILLS'] = "Calculates total kills and usages by weapon.";
+	$content['LN_DATABASEOPT_MORE'] = "Uses inbuild mysql functions to optimize the database tables.<br>This also may remove unused data.";
+	$content['LN_RUNTOTALUPDATE_MORE'] = "This includes consolidating server stats, damagetype kills, weapon kills and top used aliases.<br>Depending on the size of your database, this may take a while.<br><br>If the script times out during this operation, I recommend to perform these steps manually.";
+	$content['LN_RUNDAMAGETYPEKILLS_MORE'] = "Consolidates all kills made grouped by damagetypes.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
+	$content['LN_RUNWEAPONKILLS_MORE'] = "Consolidates all kills made grouped by weapons.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
+	$content['LN_CREATEALIASES_MORE'] = "Generates top used aliases for each player in a helper table.<br>This is also used for peformance reasons.";
+	$content['LN_CALCMEDALSONLY_MORE'] = "Calculates all enabled medals only, for all Servers. ";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";

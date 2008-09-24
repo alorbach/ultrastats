@@ -79,11 +79,11 @@ if ( isset($_GET['op']) )
 				RunParserNow();
 				
 				// Print finished
-				print ('<br><center><a href="parser.php?op=runtotals" target="_top"><img src="' . $content["BASEPATH"] . 'images/icons/gears_run.png">&nbsp; ' . $content["LN_RUNTOTALUPDATE"] . '</a></center>');
+				print ('<br><center><a href="parser-core.php?op=runtotals"><img src="' . $content["BASEPATH"] . 'images/icons/gears_run.png">&nbsp; ' . $content["LN_RUNTOTALUPDATE"] . '</a></center>');
 				
 				// Print reload statement
 				print ('<center><B>Automatically running ' . $content["LN_RUNTOTALUPDATE"] . ' in 10 seconds.</B><br>
-						<script language="Javascript">function reload() { location = "parser.php?op=runtotals"; } setTimeout("reload()", 10000);</script>');
+						<script language="Javascript">function reload() { location = "parser-core.php?op=runtotals"; } setTimeout("reload()", 10000);</script>');
 
 			}
 			else if ( $parseroperation == 'delete' )
