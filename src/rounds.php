@@ -87,7 +87,7 @@ $sqlquery = "SELECT DISTINCT " .
 					STATS_ROUNDS . ".SERVERID=" . STATS_SERVERS . ".ID )" . 
 					" WHERE 1 = 1 " . /* Dummy where */
 					GetCustomServerWhereQuery( STATS_ROUNDS, false) . 
-					GetTimeWhereQueryString(STATS_TIME) . 
+					GetTimeWhereQueryStringForRoundTable() . 
 					" ORDER BY GameTypeName "; 
 
 $result = DB_Query($sqlquery);

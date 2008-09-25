@@ -55,7 +55,10 @@ if ( isset($_GET['op']) )
 		if ( $content['ENABLETIMEFILTER'] ) 
 		{
 			if ( $_GET['newyear'] == "ALL_YEARS" ) 
+			{
 				unset( $_SESSION['TIME_SELECTEDYEAR'] );
+				unset( $_SESSION['TIME_SELECTEDMONTH'] );
+			}
 			else if ( isset($content['TIMEYEARS'][ $_GET['newyear'] ]) ) 
 			{
 				$_SESSION['TIME_SELECTEDYEAR'] = $_GET['newyear'];
