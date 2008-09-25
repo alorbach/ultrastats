@@ -240,7 +240,7 @@ a.cellmenu1_link:hover, a.cellmenu2_link:hover
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #F3ECD2;
 
-	background-color: #053841;
+	background-color: #88966C;
     background-image: url(images/bg_2.png);
     background-repeat: repeat-x;
 }
@@ -254,7 +254,7 @@ a.cellmenu1_link:hover, a.cellmenu2_link:hover
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #F3ECD2;
 
-	background-color: #053841;
+	background-color: #88966C;
 }
 .cellmenu2:hover, .cellmenu2_naked:hover, a.cellmenu1_link:hover
 { 
@@ -327,6 +327,8 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	background-color: #171A12;
 }
 .topmenu1
@@ -337,15 +339,15 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #171A12;
 }
 .topmenu1end
 {
 	height: 20px;
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #171A12;
 }
 .topmenu1:hover 
@@ -364,6 +366,8 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	background-color: #3B412F;
 }
 .topmenu2
@@ -374,15 +378,15 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #3B412F;
 }
 .topmenu2end
 {
 	height: 16px;
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #3B412F;
 }
 .topmenu2:hover 
@@ -400,6 +404,8 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	background-color: #525845;
 }
 .topmenu3
@@ -410,15 +416,15 @@ select, input, textarea
 	padding: 2px 2px 0px 2px;
 	vertical-align: middle;
 
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #525845;
 }
 .topmenu3end
 {
 	height: 16px;
+	color: #FFDD22;
 	font: 10px Arial, Verdana, Helvetica, sans-serif;
-	color: #FFFFFF;
 	background-color: #525845;
 }
 .topmenu3:hover 
