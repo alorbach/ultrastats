@@ -309,4 +309,9 @@ $content['LN_MENU_SERVERLIST'] = "List Servers";
 $content['LN_MENU_SERVERPLAYEDMAPS'] = "Show Played Maps";
 $content['LN_MENU_CLICKTOEXPANDMENU'] = "Click on the Icon to expand the menu";
 
+// Update notification
+$content['LN_UPDATE_AVAILABLE'] = "UltraStats Update available";
+$content['LN_UPDATE_AVAILABLETEXT'] = "An update for UltraStats is available. Your current installed Version is '%1'.<br>Version '%2' is available for update.";
+$content['LN_UPDATE_LINK'] = "Click here to get the UltraStats Update";
+
 ?>

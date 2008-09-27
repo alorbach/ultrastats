@@ -260,5 +260,4 @@ $content['LN_STRING_'] = "";
 // result helper page
 $content['LN_RESULT_REDIRTXT'] = 'You will be redirected to the <a href="%1">this page</a> on %2 seconds.';
 $content['LN_RESULT_REDIRTITLE'] = "Redirecting in %1 seconds.";
-
 ?>
