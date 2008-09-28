@@ -94,6 +94,7 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['gen_parseby']) ) { $content['gen_parseby'] = Intval(DB_RemoveBadChars($_POST['gen_parseby'])); }
 	if ( isset ($_POST['gen_phpdebug']) ) { $content['gen_phpdebug'] = "yes"; } else { $content['gen_phpdebug'] = "no"; } 
 	if ( isset ($_POST['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "yes"; } else { $content['gen_gzipcompression'] = "no"; } 
+	if ( isset ($_POST['gen_maxexecutiontime']) && is_numeric($_POST['gen_maxexecutiontime']) ) { $content['gen_maxexecutiontime'] = $_POST['gen_maxexecutiontime']; }
 
 	// Read Parser Config Vars
 	if ( isset ($_POST['parser_debugmode']) ) { $content['parser_debugmode'] = DB_RemoveBadChars($_POST['parser_debugmode']); }
@@ -120,6 +121,7 @@ if ( isset($_POST['op']) )
 	WriteConfigValue( "gen_parseby" );
 	WriteConfigValue( "gen_phpdebug" );
 	WriteConfigValue( "gen_gzipcompression" );
+	WriteConfigValue( "gen_maxexecutiontime" );
 
 	// Read Parser Config Vars
 	WriteConfigValue( "parser_debugmode" );

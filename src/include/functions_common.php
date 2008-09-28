@@ -197,7 +197,7 @@ function InitUltraStats()
 	InitConfigurationValues();
 
 	// Check if GZIP is enabled!
-	InitGzipCompression();
+	InitPostDbConfigRuntime();
 
 	// Now Create Themes List because we haven't the config before!
 	CreateThemesList();
@@ -293,14 +293,15 @@ function CheckAndSetRunMode()
 	// --- Check necessary PHP Extensions!
 	$loadedExtensions = get_loaded_extensions();
 
+	// Check for FTP Extensions
+	if ( in_array("ftp", $loadedExtensions) ){ $content['FTP_IS_ENABLED'] = true; } else { $content['FTP_IS_ENABLED'] = false; }
 	// Check for GD libary
 	if ( in_array("gd", $loadedExtensions) ){ $content['GD_IS_ENABLED'] = true; } else { $content['GD_IS_ENABLED'] = false; }
 	// Check MYSQL Extension
 	if ( in_array("mysql", $loadedExtensions) ) { $content['MYSQL_IS_ENABLED'] = true; } else { $content['MYSQL_IS_ENABLED'] = false; }
-
 }
 
-function InitGzipCompression()
+function InitPostDbConfigRuntime()
 {
 	global $content;
 
@@ -318,7 +319,17 @@ function InitGzipCompression()
 	else
 		$content['GzipCompressionEnabled'] = "no";
 	// --- 
+
+	// --- Try to extend the script timeout if possible!
+	$iTmp = GetConfigSetting("gen_maxexecutiontime", 30, CFGLEVEL_GLOBAL);
+	if ( $iTmp != $content['MaxExecutionTime'] && $iTmp > 10 )
+	{	//Try to extend the runtime in this case!
+		@ini_set("max_execution_time", $iTmp);
+		$content['MaxExecutionTime'] = ini_get("max_execution_time");
+	}
+	// ---
 }
+
 function InitRuntimeInformations()
 {
 	global $content;
@@ -531,6 +542,9 @@ function InitConfigurationValues()
 	if ( !isset($content['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "no"; }
 	// --- 
 	
+	// --- Default Script Timeout!
+	if ( !isset($content['gen_maxexecutiontime']) ) { $content['gen_maxexecutiontime'] = 30; }
+	// --- 
 
 	// Web defaults 
 	// --- Theme Handling

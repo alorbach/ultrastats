@@ -31,6 +31,11 @@ $content['LN_MAIN_SELECTTIMESPAN'] = "Select time span";
 $content['LN_ERROR_DETAILS'] = "Error Details";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "No stats data found using these filters.";
 $content['LN_DETAIL_INFO'] = "Detail Information";
+$content['LN_FOOTER_PAGERENDERED'] = "Page rendered in";
+$content['LN_FOOTER_DBQUERIES'] = "DB queries";
+$content['LN_FOOTER_GZIPENABLED'] = "GZIP enabled";
+$content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
+$content['LN_FOOTER_SECONDS'] = "seconds";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Select Server";
