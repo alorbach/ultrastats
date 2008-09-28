@@ -60,7 +60,7 @@ else
 // --- 
 
 // --- Init MedalSQLCode!
-CreateMedalsSQLCode($serverid);
+CreateMedalsSQLCode($serverid, true);
 // --- 
 
 // --- Get/Set Playersorting

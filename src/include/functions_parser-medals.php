@@ -30,42 +30,56 @@ if ( !defined('IN_ULTRASTATS') )
 // --- 
 
 // --- We use an medal array to save the SQL Codes, so we can use them on another page at a later step. 
-function CreateMedalsSQLCode( $serverid )
+function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 {
 	global $myserver, $content;
 
 	// Now we create overall Medals!
 	if ( $serverid != -1 )
 	{
-		$wheresinglesql = " WHERE SERVERID = " . $serverid;
-		$whereaddsql = " AND SERVERID = " . $serverid;
+		$wheresinglesql = " WHERE " . STATS_PLAYER_KILLS . ".SERVERID = " . $serverid;
+		$whereaddsql = " AND " . STATS_PLAYER_KILLS . ".SERVERID = " . $serverid;
 	}
 	else
 	{
 		$wheresinglesql = " WHERE 1 = 1 ";	// needed as we scan for banned players also | Dummy 1=1 for AND queries
 		$whereaddsql = "";
 	}
+	
+	// Set timefilter now!
+	if ( $includeTimeFilter ) 
+		$szTimeFilter = GetTimeWhereQueryStringForRoundTable();
+	else
+		$szTimeFilter = "";
 
 	// --- PRO MEDALS
 	$content['medals']['medal_pro_killer']['sql'] = "SELECT " .
-					STATS_PLAYER_KILLS . ".PLAYERID, " .
-					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
-					" FROM " . STATS_PLAYER_KILLS . 
-					$wheresinglesql .
-					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
-					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
-					" ORDER BY AllKills";
+				STATS_PLAYER_KILLS . ".PLAYERID, " .
+				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
+				" FROM " . STATS_PLAYER_KILLS . 
+				" INNER JOIN (" . STATS_ROUNDS . 
+				") ON (" . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				")" . 
+				$wheresinglesql .
+				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+				$szTimeFilter . 
+				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
+				" ORDER BY AllKills";
 
 	$content['medals']['medal_pro_headshot']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".PLAYERID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 				" FROM " . STATS_PLAYER_KILLS . 
-				" INNER JOIN (" . STATS_HITLOCATIONS . 
+				" INNER JOIN (" . STATS_HITLOCATIONS . ", " . STATS_ROUNDS . 
 				") ON (" . 
-				STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID) " . 
+				STATS_HITLOCATIONS . ".ID=" . STATS_PLAYER_KILLS . ".HITLOCATIONID AND " . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				" WHERE " . STATS_HITLOCATIONS . ".BODYPART = '" . "head" . "'" . 
 				$whereaddsql . 
 				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
@@ -73,12 +87,15 @@ function CreateMedalsSQLCode( $serverid )
 				STATS_PLAYER_KILLS . ".PLAYERID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 				" FROM " . STATS_PLAYER_KILLS . 
-				" INNER JOIN (" . STATS_DAMAGETYPES . 
+				" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 				") ON (" . 
-				STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+				STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_GRENADE_SPLASH' )" . 
 				$whereaddsql . 
 				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
@@ -86,12 +103,15 @@ function CreateMedalsSQLCode( $serverid )
 				STATS_PLAYER_KILLS . ".PLAYERID, " . 
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 				" FROM " . STATS_PLAYER_KILLS . 
-				" INNER JOIN (" . STATS_WEAPONS . 
+				" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 				") ON (" . 
-				STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
+				STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				" WHERE " . STATS_WEAPONS . ".WeaponType IN ('" . WEAPONTYPE_PISTOL . "')" . 
 				$whereaddsql . 
 				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
@@ -104,12 +124,15 @@ function CreateMedalsSQLCode( $serverid )
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 					" FROM " . STATS_PLAYER_KILLS . 
-					" INNER JOIN (" . STATS_DAMAGETYPES . 
+					" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 					") ON (" . 
-					STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
-					" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_MELEE')" . 
+					STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_MELEE') " . 
 					$whereaddsql . 
 					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 
@@ -117,12 +140,15 @@ function CreateMedalsSQLCode( $serverid )
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 					" FROM " . STATS_PLAYER_KILLS . 
-					" INNER JOIN (" . STATS_WEAPONS . 
+					" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 					") ON (" . 
-					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
-					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('springfield_mp', 'enfield_scope_mp', 'kar98k_sniper_mp', 'mosin_nagant_sniper_mp')" . 
+					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('springfield_mp', 'enfield_scope_mp', 'kar98k_sniper_mp', 'mosin_nagant_sniper_mp') " . 
 					$whereaddsql . 
 					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 	}
@@ -132,38 +158,47 @@ function CreateMedalsSQLCode( $serverid )
 					STATS_PLAYER_KILLS . ".PLAYERID, " . 
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 					" FROM " . STATS_PLAYER_KILLS . 
-					" INNER JOIN (" . STATS_DAMAGETYPES . 
+					" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 					") ON (" . 
-					STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
-					" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_MELEE')" . 
+					STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_MELEE') " . 
 					$whereaddsql . 
 					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 
 		$content['medals']['medal_pro_sniper']['sql'] = "SELECT " . 
-			STATS_PLAYER_KILLS . ".PLAYERID, " . 
-			" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
-			" FROM " . STATS_PLAYER_KILLS . 
-			" INNER JOIN (" . STATS_WEAPONS . 
-			") ON (" . 
-			STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
-			" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('barrett_mp', 'barrett_acog_mp', 'dragunov_mp', 'dragunov_acog_mp', 'm21_mp', 'm21_acog_mp', 'm40a3_mp', 'm40a3_acog_mp', 'remington700_mp', 'remington700_acog_mp')" . 
-			$whereaddsql . 
-			GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
-			" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
-			" ORDER BY AllKills";
+					STATS_PLAYER_KILLS . ".PLAYERID, " .
+					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
+					" FROM " . STATS_PLAYER_KILLS . 
+					" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
+					") ON (" . 
+					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('barrett_mp', 'barrett_acog_mp', 'dragunov_mp', 'dragunov_acog_mp', 'm21_mp', 'm21_acog_mp', 'm40a3_mp', 'm40a3_acog_mp', 'remington700_mp', 'remington700_acog_mp') " . 
+					$whereaddsql . 
+					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
+					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
+					" ORDER BY AllKills";
 
 		$content['medals']['medal_pro_claymorec4']['sql'] = "SELECT " .
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 					" FROM " . STATS_PLAYER_KILLS . 
-					" INNER JOIN (" . STATS_WEAPONS . 
+					" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
 					") ON (" . 
-					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID) " . 
-					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('c4_mp', 'claymore_mp')" . 
+					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('c4_mp', 'claymore_mp') " . 
 					$whereaddsql . 
 					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 	}
@@ -174,8 +209,13 @@ function CreateMedalsSQLCode( $serverid )
 				STATS_PLAYER_KILLS . ".ENEMYID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 				" FROM " . STATS_PLAYER_KILLS . 
+				" INNER JOIN (" . STATS_ROUNDS . 
+				") ON (" . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				$wheresinglesql .
 				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID " . 
 				" ORDER BY AllKills";
 
@@ -185,6 +225,7 @@ function CreateMedalsSQLCode( $serverid )
 				" FROM " . STATS_PLAYERS . 
 				$wheresinglesql .
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
+				GetTimeWhereQueryString(STATS_PLAYERS, $includeTimeFilter) . 
 				" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 				" ORDER BY AllKills";
 
@@ -194,6 +235,7 @@ function CreateMedalsSQLCode( $serverid )
 				" FROM " . STATS_PLAYERS . 
 				$wheresinglesql .
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
+				GetTimeWhereQueryString(STATS_PLAYERS, $includeTimeFilter) . 
 				" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 				" ORDER BY AllKills";
 
@@ -201,12 +243,15 @@ function CreateMedalsSQLCode( $serverid )
 				STATS_PLAYER_KILLS . ".ENEMYID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
 				" FROM " . STATS_PLAYER_KILLS . 
-				" INNER JOIN (" . STATS_DAMAGETYPES . 
+				" INNER JOIN (" . STATS_DAMAGETYPES . ", " . STATS_ROUNDS . 
 				") ON (" . 
-				STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID) " . 
+				STATS_DAMAGETYPES . ".ID=" . STATS_PLAYER_KILLS . ".DAMAGETYPEID AND " . 
+				STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				" WHERE " . STATS_DAMAGETYPES . ".DAMAGETYPE IN ('MOD_GRENADE_SPLASH' )" . 
 				$whereaddsql . 
 				GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "ENEMYID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID " . 
 				" ORDER BY AllKills";
 
@@ -214,9 +259,14 @@ function CreateMedalsSQLCode( $serverid )
 				STATS_CHAT . ".PLAYERID, " .
 				" count(" . STATS_CHAT . ".ID) as AllKills" . 
 				" FROM " . STATS_CHAT . 
+				" INNER JOIN (" . STATS_ROUNDS . 
+				") ON (" . 
+				STATS_CHAT . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+				") " . 
 				" WHERE (" . ReturnWhinerQuery() . ") " . 
 				$whereaddsql . 
 				GetBannedPlayerWhereQuery(STATS_CHAT, "PLAYERID", false) . 
+				$szTimeFilter . 
 				" GROUP BY " . STATS_CHAT . ".PLAYERID " . 
 				" ORDER BY AllKills";
 	// ---
