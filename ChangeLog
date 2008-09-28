@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------
+Version 0.3.5 (devel), 2008-09-28
+New features:
+- Added new default theme called "codww" which is like the current 
+  www.callofduty.com style. 
+- Implemented Update Check feature which is performed when the user logs 
+  into the admin center. If an update is available, the user will be 
+  reminded on each admin page. 
+- Added option to set php script execution timeout, if possible. 
+  This will help people who have to parse the logfile 
+  using the webserver. 
+- Links within text description are parsed and modified, so that always
+  open in a new window. 
+- Implemented time filter into medal code. All sql statements had 
+  to be modified for this to work.
+Changes and bugfixes:
+- Fixed some sql statement issues
+- Added additional pager template, forgot to add in last version
+- Fixed typo of table name when deleting a player in admin/players.php
+
+---------------------------------------------------------------------------
 Version 0.3.4 (devel), 2008-09-24
 New features:
 - Implemented Time Filtering which can be selected now on the left 
