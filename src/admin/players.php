@@ -216,9 +216,9 @@ if ( isset($_GET['op']) )
 				$content['DeletedData'][5]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][5]['cssclass'] = "line2";
 
-				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIAS . " WHERE GUID = " . $content['GUID'];
+				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = " . $content['GUID'];
 				ProcessDeleteStatement( $content['DeletedData'][6]['SQL_CMD'] );
-				$content['DeletedData'][6]['NAME'] = STATS_PLAYERS_TOPALIAS;
+				$content['DeletedData'][6]['NAME'] = STATS_PLAYERS_TOPALIASES;
 				$content['DeletedData'][6]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][6]['cssclass'] = "line1";
 
