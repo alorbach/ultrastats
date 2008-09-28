@@ -204,7 +204,7 @@ if ( isset($content['serverid']) )
 					// --- 
 
 					// --- Set Display Time
-					$content['playedmaps'][$i]['lastrounds'][$n]['Number'] = $n+1;
+					$content['playedmaps'][$i]['lastrounds'][$n]['LRNumber'] = $n+1;
 					// --- 
 
 					// --- Set CSS Class

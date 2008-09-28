@@ -684,6 +684,8 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 {
 	global $content, $LANG, $LANG_EN;
 
+	$szReturn = "";
+
 	// --- Try to get the text in custom language! 
 	$sqlquery = "SELECT " .
 						STATS_LANGUAGE_STRINGS . ".STRINGID, " .
@@ -694,7 +696,7 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 	$result = DB_Query($sqlquery);
 	$textvars = DB_GetSingleRow($result, true);
 	if ( isset($textvars['STRINGID']) )
-		return $textvars['Description'];
+		$szTxtReturn = $textvars['Description'];
 	else
 	{
 		// FallBack, try to optain ENGLISH String!
@@ -707,10 +709,16 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 		$result = DB_Query($sqlquery);
 		$textvars = DB_GetSingleRow($result, true);
 		if ( isset($textvars['STRINGID']) )
-			return $textvars['Description'];
+			$szTxtReturn = $textvars['Description'];
 		else
 			return $szDefault;
 	}
+	
+	// Search and replace links, so a new window opens if clicked!
+	$szTxtReturn = preg_replace("/<a.+?href=\"([^\"]*?)\"[^>]*?>([^<]*?)<[^>]*?>/i", '<a href="\\1" target="_blank">\\2</a>', $szTxtReturn);
+		
+	// Now return results
+	return $szTxtReturn;
 }
 
 function ReturnWeaponBaseName($weaponnameid)
