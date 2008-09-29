@@ -1440,7 +1440,7 @@ function GetReadAbleMonth( $nMonthID )
 	switch ( $nMonthID ) 
 	{
 		case 1: 
-			return "Janury";
+			return "January";
 			break;
 		case 2: 
 			return "February";
@@ -1477,5 +1477,44 @@ function GetReadAbleMonth( $nMonthID )
 			break;
 	}
 }
+
+function GetCustomServerWhereQuery( $customtable, $withwhere = true, $alsoreturnifempty = false, $customserverid = 0 )
+{
+	global $serverwherequery, $content;
+	
+	// Set ServerID which is going to be used
+	if ( $customserverid == 0) 
+	{
+		if ( isset($content['serverid']) ) 
+			$myServerID = $content['serverid'];
+		else
+			$myServerID = -1;
+	}
+	else
+		$myServerID = $customserverid;
+	
+	// --- Special Check for special cases
+	if ( $alsoreturnifempty && $myServerID == -1 ) 
+	{
+		if ( $withwhere )
+			return " WHERE ". $customtable. ".SERVERID = " . $myServerID;
+		else
+			return " AND ". $customtable. ".SERVERID = " . $myServerID;
+	}
+	// --- 
+
+	// --- Normal return 
+	if ( $myServerID != -1 ) /*&& isset($serverwherequery) )*/
+	{
+		if ( $withwhere )
+			return " WHERE ". $customtable. ".SERVERID = " . $myServerID;
+		else
+			return " AND ". $customtable. ".SERVERID = " . $myServerID;
+	}
+	else
+		return "";
+	// --- 
+}
+
 
 ?>

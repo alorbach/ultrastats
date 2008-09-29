@@ -96,7 +96,7 @@ if ( isset($content['roundsonly']) )
 		// --- Set Gametypeimage
 		$content['roundsonly'][$i]['GametypeImage'] = $gl_root_path . "images/gametypes/thumbs/" . $content['roundsonly'][$i]['GameTypeName'] . ".png";
 		if ( !is_file($content['roundsonly'][$i]['GametypeImage']) )
-			$content['roundsonly'][$i]['GametypeImage'] = $gl_root_path . "images/gametypes/no-pic.jpg";
+			$content['roundsonly'][$i]['GametypeImage'] = $gl_root_path . "images/gametypes/no-pic.png";
 		// --- 
 
 		// --- Set CSS Classes for Teams
@@ -384,7 +384,7 @@ if ( isset($content['myserver']) )
 				// --- Set Mapimage
 				$content['server_top_map_picture'] = $gl_root_path . "images/maps/small/" . $content['server_top'][$i]['VALUE_TXT'] . ".jpg";
 				if ( !is_file($content['server_top_map_picture']) )
-					$content['server_top_map_picture'] = $gl_root_path . "images/maps/no-pic.jpg";
+					$content['server_top_map_picture'] = $gl_root_path . "images/maps/no-pic.png";
 				// --- 
 			}
 			else if ( $content['server_top'][$i]['NAME'] == "server_top_gametype" ) 
@@ -395,7 +395,7 @@ if ( isset($content['myserver']) )
 				// --- Set Mapimage
 				$content['server_top_gametype_picture'] = $gl_root_path . "images/gametypes/small/" . $content['server_top'][$i]['VALUE_TXT'] . ".png";
 				if ( !is_file($content['server_top_gametype_picture']) )
-					$content['server_top_gametype_picture'] = $gl_root_path . "images/gametypes/no-pic.jpg";
+					$content['server_top_gametype_picture'] = $gl_root_path . "images/gametypes/no-pic.png";
 				// --- 
 			}
 

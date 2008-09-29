@@ -334,31 +334,6 @@ function CreateServerListArray()
 	}
 }
 
-function GetCustomServerWhereQuery( $customtable , $withwhere = true, $alsoreturnifempty = false )
-{
-	global $serverwherequery, $content;
-	
-	// --- Special Check for special cases
-	if ( $alsoreturnifempty && !(isset($content['serverid'])) ) 
-	{
-		if ( $withwhere )
-			return " WHERE ". $customtable. ".SERVERID = -1 ";
-		else
-			return " AND ". $customtable. ".SERVERID = -1 ";
-	}
-	// --- 
-
-	if ( isset($content['serverid']) && isset($serverwherequery) )
-	{
-		if ( $withwhere )
-			return " WHERE ". $customtable. ".SERVERID = " . $content['serverid'];
-		else
-			return " AND ". $customtable. ".SERVERID = " . $content['serverid'];
-	}
-	else
-		return "";
-}
-
 function GetAndSetCurrentServer()
 {
 	global $content, $serverwherequery, $serverwherequery_and;

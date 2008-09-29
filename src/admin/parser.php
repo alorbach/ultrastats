@@ -30,10 +30,6 @@ include($gl_root_path . 'include/functions_common.php');
 define('IS_ADMINPAGE', true);
 $content['IS_ADMINPAGE'] = true;
 
-// Set PAGE to be ADMINPAGE!
-define('IS_PARSERPAGE', true);
-$content['IS_PARSERPAGE'] = true;
-
 InitUltraStats();
 CheckForUserLogin( true );
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
