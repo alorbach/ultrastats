@@ -1140,7 +1140,7 @@ function CreateAvailableYearsAndMonthFilters()
 					STATS_TIME . ".Time_Year, " . 
 					STATS_TIME . ".Time_Month " . 
 				" FROM " . STATS_TIME . 
-				" ORDER BY " . STATS_TIME . ".Time_Year AND " . STATS_TIME . ".Time_Month";
+				" ORDER BY " . STATS_TIME . ".Time_Year DESC, " . STATS_TIME . ".Time_Month DESC";
 
 	$result = DB_Query($sqlquery);
 	$content['dbresults'] = DB_GetAllRows($result, true);
