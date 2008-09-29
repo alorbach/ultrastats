@@ -415,6 +415,11 @@ function FindAndFillTopAliases(&$myplayers, $idfield, $AliasField, $AliasHtmlFie
 		else
 			$playerguids = "";	// INIT!
 		$playerguids .= $myplayers[$i][$idfield];
+		
+		// PreINIT fields!
+		$myplayers[$i][$AliasField] = "-Topalias unknown-"; 
+		$myplayers[$i][$AliasHtmlField] = "<i>-Topalias unknown-</i>";
+
 	}
 
 	// No GUIDS, then we do not need to run thissql query!
@@ -432,7 +437,7 @@ function FindAndFillTopAliases(&$myplayers, $idfield, $AliasField, $AliasHtmlFie
 				STATS_ALIASES . ".Alias, " . 
 				STATS_ALIASES . ".AliasAsHtml " .
 				" FROM " . STATS_ALIASES . 
-				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . 
+				" LEFT OUTER JOIN (" . STATS_PLAYERS_TOPALIASES . 
 				") ON (" . 
 //				STATS_ALIASES . ".PLAYERID=" . STATS_PLAYERS_TOPALIASES . ".GUID) " . 
 				STATS_ALIASES . ".ID=" . STATS_PLAYERS_TOPALIASES . ".ALIASID) " . 

@@ -523,8 +523,10 @@ function RunTotalStats()
 	//Run Calc for TOPAliases
 	GenerateStrippedCodeAliases();
 
+
 	//Run Calc for TOPAliases
 	CreateTopAliases( -1 );
+
 }
 
 /*
