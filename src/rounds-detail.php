@@ -192,7 +192,10 @@ if ( isset($_GET['id']) )
 					$content['rounds_unfinished_enabled'] = "true";
 
 					// --- Combine All Players for analysis
+//		print_r( $content['unfinishedplayers'] );
 					ExtendPlayerData( $content['unfinishedplayers'] );
+//		print_r( $content['unfinishedplayers'] );
+
 					if ( isset($AllPlayers) )
 						$AllPlayers = array_merge( $AllPlayers, $content['unfinishedplayers'] );
 					else
@@ -631,8 +634,19 @@ function ExtendPlayerData ( &$myplayers )
 	{
 		if ( isset($playerguids) ) { $playerguids .= ", "; } else { $playerguids = ""; }
 		$playerguids .= $myplayers[$i]['PLAYERID'];
-	}
 
+		// --- Set Default picture url for KillRation Values and Bars
+		$myplayers[$i]['BarImageKillRatioMinus'] = $gl_root_path . "images/bars/bar-small/red_middle_9.png";
+		$myplayers[$i]['BarImageKillRatioPlus'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
+		// ---
+
+		// --- Set other variable defaults
+		$myplayers[$i]['KillRatioWidthMinus'] = 0;
+		$myplayers[$i]['KillRatioWidthPlus'] = "0";
+		$myplayers[$i]['KillRatioWidthMinusText'] = "";
+		$myplayers[$i]['KillRatioWidthPlusText'] = "";
+		// ---
+	}
 
 	// Get Player Stats from DB
 	$sqlquery = "SELECT " .
@@ -645,6 +659,7 @@ function ExtendPlayerData ( &$myplayers )
 						" AND " . STATS_PLAYER_KILLS . ".ROUNDID=" . $content['roundid'] . 
 						GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
 						" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID";
+
 	$result = DB_Query($sqlquery);
 	$tmpvars = DB_GetAllRows($result, true);
 
@@ -682,10 +697,6 @@ function ExtendPlayerData ( &$myplayers )
 
 		for($n = 0; $n < count($myplayers); $n++)
 		{
-			// --- Set KillRation Values and Bars
-			$myplayers[$n]['BarImageKillRatioMinus'] = $gl_root_path . "images/bars/bar-small/red_middle_9.png";
-			$myplayers[$n]['BarImageKillRatioPlus'] = $gl_root_path . "images/bars/bar-small/green_middle_9.png";
-
 			if ( isset($content['MyMaxKillRatio']) )
 			{
 				// Now we set the Width of the images
