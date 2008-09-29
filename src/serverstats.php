@@ -133,6 +133,7 @@ if ( isset($content['serverid']) )
 			// --- Set Most Played Gametype
 			$sqlquery = "SELECT " .
 								STATS_GAMETYPES . ".NAME, " . 
+								STATS_GAMETYPES . ".DisplayName, " . 
 								"count(" . STATS_ROUNDS . ".GAMETYPE) as GametypeCount" .
 								" FROM " . STATS_ROUNDS . 
 								" INNER JOIN (" . STATS_GAMETYPES . 
@@ -150,12 +151,15 @@ if ( isset($content['serverid']) )
 			if ( isset($gametypevars['GametypeCount']) )
 			{
 				$content['GameTypeCount'] = $gametypevars['GametypeCount'];
-				$content['GameTypeName'] = $gametypevars['NAME'];
+				if ( strlen($gametypevars['DisplayName']) > 0 )
+					$content['playedmaps'][$i]['GameTypeName'] = $gametypevars['DisplayName'];
+				else
+					$content['playedmaps'][$i]['GameTypeName'] = $gametypevars['NAME'];
 			}
 			else
 			{
-				$content['GameTypeCount'] = "";
-				$content['GameTypeName'] = "";
+				$content['playedmaps'][$i]['GameTypeCount'] = "0";
+				$content['playedmaps'][$i]['GameTypeName'] = "Unknown";
 			}
 			// --- 
 
