@@ -1160,7 +1160,11 @@ function Parser_FinalizeRound( $roundlastedtime )
 				$alliexguids = GetGuidsFromPlayerArray("allies");
 
 			// --- IW messed up again and just removed round finish loglines, so we Count at least TDM (WAR) ourself!
-			if ( $content['gen_gameversion'] == COD4 && $myRound[ROUND_GAMETYPE] == "war" ) 
+			if ( 
+					$content['gen_gameversion'] == COD4 && $myRound[ROUND_GAMETYPE] == "war" 
+					||
+					$content['gen_gameversion'] == COD5 && $myRound[ROUND_GAMETYPE] == "tdm" 
+				) 
 			{	
 				$KillsAllies = 0;
 				$KillsAxis = 0;
