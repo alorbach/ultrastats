@@ -1,15 +1,13 @@
 -- Insert gametypes for Cod5
 
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(12, 'ffa', 'Deathmatch', 'gametype_dm');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(13, 'tdm', 'Team Deathmatch', 'gametype_tdm');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(14, 'snd', 'Search and Destroy', 'gametype_sd');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(15, 'hq', 'Headquarters', 'gametype_hq');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(16, 'ctf', 'Capture the Flag', 'gametype_ctf');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(23, 'vtdm', 'Vehicle Team Deathmatch', 'gametype_vtdm');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(19, 'war', 'War', 'gametype_war_cod5');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(20, 'sabo', 'Sabotage', 'gametype_sab');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(21, 'dom', 'Domination', 'gametype_dom');
-INSERT INTO `stats_gametypes` (`ID`, `NAME`, `DisplayName`, `Description_id`) VALUES(22, 'twar', 'Vehicle War', 'gametype_twar');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('dm', 'Deathmatch', 'gametype_dm');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('tdm', 'Team Deathmatch', 'gametype_tdm');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('snd', 'Search and Destroy', 'gametype_sd');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('koth', 'Headquarters', 'gametype_hq');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('ctf', 'Capture the Flag', 'gametype_ctf');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('sab', 'Sabotage', 'gametype_sab');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('dom', 'Domination', 'gametype_dom');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('twar', 'War', 'gametype_war_cod5');
 
 -- Insert maps for Cod5
 
