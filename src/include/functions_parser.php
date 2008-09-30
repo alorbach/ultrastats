@@ -1339,13 +1339,19 @@ function Parser_AddPlayer( $myArray )
 	}
 	else
 	{
+		// Set variables first!
+		$plainalias = GetPlayerNameAsWithHTMLCodes( DB_RemoveBadChars($myArray[JOIN_CLIENTNAME]) );
+		$aliaschecksum = sprintf( "%u", crc32 ( $plainalias )); 
+		$aliasashtmlcode = GetPlayerNameAsHTML(DB_RemoveBadChars($myArray[JOIN_CLIENTNAME]));
+
 		// Insert New
-		ProcessInsertStatement("INSERT INTO " . STATS_ALIASES . " (SERVERID, PLAYERID, Alias, AliasAsHtml, Count) 
+		ProcessInsertStatement("INSERT INTO " . STATS_ALIASES . " (SERVERID, PLAYERID, Alias, AliasChecksum, AliasAsHtml, Count) 
 		VALUES (
 			 " . $myserver['ID'] . ", 
 			 " . $myArray[PARSER_GUID] . ", 
-			 '" . GetPlayerNameAsWithHTMLCodes(DB_RemoveBadChars($myArray[JOIN_CLIENTNAME])) . "', 
-			 '" . GetPlayerNameAsHTML(DB_RemoveBadChars($myArray[JOIN_CLIENTNAME])) . "', 
+			 '" . $plainalias . "', 
+			 " . $aliaschecksum . ", 
+			 '" . $aliasashtmlcode . "', 
 			 " . "1" . "
 				)");
 	}

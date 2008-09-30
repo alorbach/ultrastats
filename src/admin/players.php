@@ -116,10 +116,10 @@ if ( isset($_GET['op']) )
 		$content['PLAYER_FORMACTION'] = "edit";
 		$content['PLAYER_SENDBUTTON'] = $content['LN_PLAYER_EDIT'];
 
-		if ( isset($_GET['id']) )
+		if ( isset($_GET['id']) && is_numeric($_GET['id']) )
 		{
 			//PreInit these values 
-			$content['GUID'] = intval( DB_RemoveBadChars($_GET['id']) );
+			$content['GUID'] = DB_RemoveBadChars($_GET['id']);
 
 			$sqlquery = "SELECT " . 
 						STATS_PLAYERS_STATIC . ".GUID, " . 
@@ -168,10 +168,10 @@ if ( isset($_GET['op']) )
 		// Set Mode to edit
 		$content['ISDELETEPLAYER'] = "true";
 
-		if ( isset($_GET['id']) )
+		if ( isset($_GET['id']) && is_numeric($_GET['id']) )
 		{
 			//PreInit these values 
-			$content['GUID'] = intval( DB_RemoveBadChars($_GET['id']) );
+			$content['GUID'] = DB_RemoveBadChars($_GET['id']);
 			$content['AliasName'] = GetPlayerHtmlNameFromID( $content['GUID'] );
 
 			if ( isset($_GET['verify']) || $_GET['verify'] == "yes" )
@@ -343,9 +343,10 @@ else
 				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " . 
 				" ORDER BY " . STATS_ALIASES . ".Alias " .  
 				" LIMIT " . $content['current_pagebegin'] . " , " . $content['admin_maxplayers'];
-
 	$result = DB_Query($sqlquery);
 	$content['PLAYERS'] = DB_GetAllRows($result, true);
+//echo $sqlquery;
+//exit;
 
 	// For the eye
 	$css_class = "line0";

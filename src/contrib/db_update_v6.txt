@@ -37,6 +37,11 @@ CREATE TABLE `stats_weapons_kills` (
   PRIMARY KEY  (`WEAPONID`,`SERVERID`,`Time_Year`,`Time_Month`)
 ) ENGINE=MyISAM COMMENT='Helper table to store and combine weapon kills';
 
+--
+-- Added new field for optimazing database performance!
+--
+ALTER TABLE `stats_aliases` ADD `AliasChecksum` INT NOT NULL AFTER `PLAYERID` ;
+
 -- --------------------------------------------------------
 -- New Insert stuff
 -- ID's are auto generated

@@ -672,13 +672,14 @@ function ReCreateAliases()
 			
 			// Now create plain alias code!
 			$plainalias = GetPlayerNameAsWithHTMLCodes( DB_RemoveBadChars($allplayers[$i]['Alias']) );
+			$aliaschecksum = sprintf( "%u", crc32 ( $plainalias )); 
 			$aliasashtml = GetPlayerNameAsHTML( DB_RemoveBadChars($allplayers[$i]['Alias']) );
 			$strippedalias = StripColorCodesFromString( DB_RemoveBadChars($allplayers[$i]['Alias']) );
 			if ( strlen($strippedalias) <= 0 )	// matches for peoples using colorcodes only, bastards :D
 				$strippedalias = "ColorCodePlayer";
 
 			// Update Calc
-			ProcessUpdateStatement("UPDATE " . STATS_ALIASES . " SET Alias = '" . $plainalias .  "', AliasAsHtml = '" . $aliasashtml . "', AliasStrippedCodes = '" . $strippedalias . "' " . $wherequery );
+			ProcessUpdateStatement("UPDATE " . STATS_ALIASES . " SET Alias = '" . $plainalias .  "', AliasChecksum = " . $aliaschecksum . ", AliasAsHtml = '" . $aliasashtml . "', AliasStrippedCodes = '" . $strippedalias . "' " . $wherequery );
 		}
 	}
 }
