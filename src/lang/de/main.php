@@ -157,24 +157,24 @@ $content['LN_MAP_LASTROUNDS'] = "letzten gespielten Runden auf";
 $content['LN_MAP_INGAMENAME'] = "Im Spiel Mapname";
 
 // Gametype Details
-$content['LN_GAMETYPE_DETAILS'] = "Gametype Details für";
-$content['LN_GAMETYPE_NODESCRIPTION'] = "keine Gametype Beschreibung gefunden";
-$content['LN_GAMETYPE_DESCRIPTION'] = "Gametype Beschreibung";
-$content['LN_GAMETYPE_INGAMENAME'] = "Im Spiel Gametype Name";
+$content['LN_GAMETYPE_DETAILS'] = "Gametypedetails für";
+$content['LN_GAMETYPE_NODESCRIPTION'] = "keine Gametypebeschreibung gefunden";
+$content['LN_GAMETYPE_DESCRIPTION'] = "Gametypebeschreibung";
+$content['LN_GAMETYPE_INGAMENAME'] = "Im Spiel Gametypenme";
 $content['LN_GAMETYPE_LASTROUNDS'] = "letzten 20 gespielten Runden in diesem Gametype";
-$content['LN_ERROR_UNKNOWNGAMETYPE'] = "nicht bekannter Gametype Name";
+$content['LN_ERROR_UNKNOWNGAMETYPE'] = "nicht bekannter Gametypename";
 
 // Weapon Details
-$content['LN_WEAPON_NODESCRIPTION'] = "keine Waffen Beschreibung gefunden";
-$content['LN_ERROR_INVALIDWEAPON'] = "ungültiger Waffen Name";
-$content['LN_WEAPON_DETAILS'] = "Waffen Details für";
-$content['LN_WEAPON_DESCRIPTION'] = "Waffen Beschreibung";
+$content['LN_WEAPON_NODESCRIPTION'] = "keine Waffenbeschreibung gefunden";
+$content['LN_ERROR_INVALIDWEAPON'] = "ungültiger Waffenname";
+$content['LN_WEAPON_DETAILS'] = "Waffendetails für";
+$content['LN_WEAPON_DESCRIPTION'] = "Waffenbeschreibung";
 $content['LN_WEAPON_INGAMENAME'] = "Im Spiel Waffenname";
 $content['LN_WEAPON_TOPPLAYERS'] = "Spieler mit den meisten Kills";
 $content['LN_WEAPON_TOPKILLEDBY'] = "am häufigsten getötet mit dieser Waffe";
 $content['LN_WEAPON_EXTERNLINFO'] = "Externe Informationen";
 $content['LN_WEAPON_LIST'] = "Liste aller Waffen";
-$content['LN_WEAPON_NAME'] = "Waffen Name";
+$content['LN_WEAPON_NAME'] = "Waffenname";
 $content['LN_WEAPON_KILLCOUNT'] = "Erzielte Kills mit dieser Waffe";
 $content['LN_WEAPON_PLAYERCOUNT'] = "Spieler die diese Waffe nutzten";
 $content['LN_WEAPON_ATTACHMENT'] = "Zusatzteil";
@@ -185,7 +185,7 @@ $content['LN_WEAPON_PLAYERCOUNT_TEXT'] = "%1 Spieler töteten mit dieser Waffe";
 // ServerStats Details
 $content['LN_ERROR_NOSERVERMAPS'] = "Fehler, entweder es wurde keine Server ID vergeben, oder es wurde keine Map gespielt auf diesem Server!";
 $content['LN_SERVER_DETAILS'] = "Details für diesen Server";
-$content['LN_SERVER_MAPDETAILS'] = "Map Details für";
+$content['LN_SERVER_MAPDETAILS'] = "Mapdetails für";
 $content['LN_SERVER_LASTROUNDS'] = "letzte gespielten Runde in diesem Gametype";
 $content['LN_SERVER_MAPSTATS'] = "Map Statistiken für diesen Server";
 $content['LN_SERVER_PLAYEDCOUNT'] = "Speilzeit";
@@ -230,15 +230,15 @@ $content['LN_DAMAGETYPE_NODESCRIPTION'] = "Keine Schadenstype Beschreibung vorha
 $content['LN_ERROR_INVALIDDAMAGETYPE'] = "Fehler, diesen Schadenstype gibt es nicht.";
 $content['LN_DAMAGETYPE_DETAILS'] = "Details für den '%1' Schadenstype";
 $content['LN_DAMAGETYPE_DESCRIPTION'] = "Beschreibung für den Schadenstype";
-$content['LN_DAMAGETYPE_INGAMENAME'] = "Ingame Name";
+$content['LN_DAMAGETYPE_INGAMENAME'] = "Ingamename";
 $content['LN_DAMAGETYPE_TOPPLAYERS'] = "Spieler mit den meisten '%1' kills";
 $content['LN_DAMAGETYPE_TOPKILLEDBY'] = "Am häufigsten getötet von diesem Schadenstype";
 $content['LN_DAMAGETYPE_LIST'] = "Liste von allen Schadenstypen";
-$content['LN_DAMAGETYPE_NAME'] = "Schadenstype Name";
+$content['LN_DAMAGETYPE_NAME'] = "Schadenstypename";
 $content['LN_DAMAGETYPE_KILLCOUNT'] = "Kills verursacht von diesem Schadenstype";
 $content['LN_DAMAGETYPE_PLAYERCOUNT'] = "Spieler welche mit diesem Schadenstype getötet haben";
-$content['LN_DAMAGETYPE_KILLCOUNT_TEXT'] = "%1 total kills were caused by this damagetype.";
-$content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'] = "%1 players killed with this damagetype";
+$content['LN_DAMAGETYPE_KILLCOUNT_TEXT'] = "%1 Tode wurde durch diesen Schadenstype verursacht.";
+$content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'] = "%1 Spieler haben durch diesen Schadenstype getötet";
 
 //Install Site
 $content['LN_CFG_PARAMMISSING'] = "Die folgenden Parameter fehlen: ";
@@ -269,8 +269,8 @@ $content['LN_INSTALL_STEP4'] = "Schritt 4 - Tabellen erstellen";
 $content['LN_INSTALL_STEP5'] = "Schritt 5 - Überprüfung der SQL Ergebnisse";
 $content['LN_INSTALL_STEP6'] = "Schritt 6 - Erstellen des ersten Adminbenutzer";
 $content['LN_INSTALL_STEP7'] = "Schritt 7 - Fertig";
-$content['LN_INSTALL_STEP1_TEXT'] = 'Bevor du beginnst mit der Installation von UltraStats, überprüft zuerst das Installer Setup einige Dinge.<br>Vielleicht musst du einige Rechte anpassen. <br><br>Klick auf <input type="submit" value="Next"> um den Test zu starten!';
-$content['LN_INSTALL_STEP2_TEXT'] = "Die folgenden Dateirechte wurden überprüft. Überprüfe das Ergebnis nachstehend! <br>Du kannst auch das <B>configure.sh</B> Script aus dem <B>contrib</B> Ordner nutzen um die Rechte zu setzen.";
+$content['LN_INSTALL_STEP1_TEXT'] = 'Bevor du mit der Installation von UltraStats beginnst, überprüfe zuerst folgende Dinge.<br>Vielleicht müssen noch Rechte angepasst werden. <br><br>Klick auf <input type="submit" value="Next"> um den Test zu starten!';
+$content['LN_INSTALL_STEP2_TEXT'] = "Die folgenden Dateirechte wurden überprüft. Überprüfe das Ergebnis! <br>Du kannst auch das <B>configure.sh</B> Script aus dem <B>contrib</B> Ordner nutzen um die Rechte zu setzen.";
 $content['LN_INSTALL_STEP3_TEXT'] = "In diesem Schritt musst du die Grundkonfiguration für die UltraStats Datenbank vornehmen. <br>Ohne eine Datenbank Verbindung kannst du die UltraStats Installation nicht weiterführen!";
 $content['LN_INSTALL_STEP4_TEXT'] = 'Wenn du diesen Schritt erreicht hast, wurde die Datenbank Verbindung erfolgreich ausgeführt!<br><br> Der nächste Schritt erstellt die erforderlichen Datenbank Tabellen für UltraStats. Das könnte einen Augenblick in Anspruch nehmen!<br> <b>WARNUNG</b>, falls du bereits schon eine bestehende UltraStats Installation mit dem gleichen Tabellenprefix installiert hast, werden alle Daten <b>ÜBERSCHRIEBEN</b>! Versichere dich das du eine neue Datenbank nutzt, oder du willst das deine alte UltraStats Datenbank überschrieben wird. <br><br><b>Klick auf <input type="submit" value="Next"> um das Erstellen der Tabellen zu starten</b>';
 $content['LN_INSTALL_STEP5_TEXT'] = "Alle Tabellen wurden erstellt. Überprüfe die nachstehende Liste für mögliche Fehler.";
@@ -295,8 +295,8 @@ $content['LN_INSTALL_USERNAME'] = "Benutzername";
 
 // Main MENU
 $content['LN_MENU_HOME'] = "Home";
-$content['LN_MENU_ROUNDSTATS'] = "Runden Statistik";
-$content['LN_MENU_ROUNDS_BYDATE'] = "Sortiert nach datum";
+$content['LN_MENU_ROUNDSTATS'] = "Rundenstatistik";
+$content['LN_MENU_ROUNDS_BYDATE'] = "Sortiert nach Datum";
 $content['LN_MENU_ROUNDS_BYGAMETYPE'] = "Sortiert nach Spieltype";
 $content['LN_MENU_ABOUT'] = "Über UltraStats";
 $content['LN_MENU_PLAYERSTATS'] = "Spieler Statistik";
@@ -315,7 +315,7 @@ $content['LN_MENU_SERVERPLAYEDMAPS'] = "Zeige gespielte Maps";
 $content['LN_MENU_CLICKTOEXPANDMENU'] = "Klicke auf das Icon, um das Menu zu öffnen.";
 
 // Update notification
-$content['LN_UPDATE_AVAILABLE'] = "UltraStats Update available";
+$content['LN_UPDATE_AVAILABLE'] = "UltraStats Update ist verfügbar";
 $content['LN_UPDATE_AVAILABLETEXT'] = "Ein Update für UltraStats ist verfügbar, die aktuell installierte Version ist '%1', die neue Version ist '%2'";
 $content['LN_UPDATE_LINK'] = "Klick hier, um die neue UltraStats Version zu erhalten";
 
