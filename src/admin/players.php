@@ -299,9 +299,9 @@ else
 	$sqlquery = "SELECT " . 
 				"count(" . STATS_PLAYERS_STATIC . ".GUID) as PlayersCount " . 
 				" FROM " . STATS_PLAYERS_STATIC . 
-				" INNER JOIN (" . STATS_ALIASES . 
+				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . 
 				") ON (" . 
-				STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
+				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID) " . 
 				$content['playersqlwhere'] . 
 				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID "; 
 //	$result = DB_Query($sqlquery);
@@ -336,20 +336,20 @@ else
 				STATS_ALIASES . ".Alias, " . 
 				STATS_ALIASES . ".AliasAsHtml " .
 				" FROM " . STATS_PLAYERS_STATIC . 
-				" INNER JOIN (" . STATS_ALIASES . 
+				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . ", " . STATS_ALIASES .
 				") ON (" . 
-				STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
+				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID AND " . 
+				STATS_PLAYERS_TOPALIASES . ".ALIASID=" . STATS_ALIASES . ".ID " . 
+				") " . 
 				$content['playersqlwhere'] . 
 				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " . 
 				" ORDER BY " . STATS_ALIASES . ".Alias " .  
 				" LIMIT " . $content['current_pagebegin'] . " , " . $content['admin_maxplayers'];
 	$result = DB_Query($sqlquery);
 	$content['PLAYERS'] = DB_GetAllRows($result, true);
-//echo $sqlquery;
-//exit;
 
 	// For the eye
-	$css_class = "line0";
+	$css_class = "line";
 	for($i = 0; $i < count($content['PLAYERS']); $i++)
 	{
 		// --- Set Number
