@@ -1,7 +1,17 @@
 ---------------------------------------------------------------------------
 Version 0.3.7 (devel), 2008-09-30
 New features:
+- Added some german translation
+- Added warning if FTP Extensions are disabled!
+- Enhanced database query performance in player admin
+- Show found player number in player admin
+- Prepared time filter for consolidation table
 Changes and bugfixes:
+- Fixed GUID issues bug in player admin causing failed edits of some players
+- Fixed minor issues if new gametypes were added, no displayname was used
+- Fixed lots of minor display issues and minor template issues
+- Cleaned up gametypes in default database template
+- Removed useless default charset from tabel defs
 ---------------------------------------------------------------------------
 Version 0.3.6 (devel), 2008-09-29
 New features:
