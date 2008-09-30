@@ -31,11 +31,11 @@ $content['LN_MAIN_SELECTTIMESPAN'] = "Zeitbereich wählen";
 $content['LN_ERROR_DETAILS'] = "Error Details";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "Keine Statistikdaten mit diesen Filtereinstellungen gefunden.";
 $content['LN_DETAIL_INFO'] = "Detail Informationen";
-	$content['LN_FOOTER_PAGERENDERED'] = "Page rendered in";
-	$content['LN_FOOTER_DBQUERIES'] = "DB queries";
-	$content['LN_FOOTER_GZIPENABLED'] = "GZIP enabled";
-	$content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
-	$content['LN_FOOTER_SECONDS'] = "seconds";
+$content['LN_FOOTER_PAGERENDERED'] = "Page rendered in";
+$content['LN_FOOTER_DBQUERIES'] = "DB queries";
+$content['LN_FOOTER_GZIPENABLED'] = "GZIP enabled";
+$content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
+$content['LN_FOOTER_SECONDS'] = "seconds";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Server wählen";
@@ -44,7 +44,7 @@ $content['LN_LROUNDS_TIME'] = "gespielt am";
 $content['LN_LROUNDS_GAMETYPE'] = "Gametype";
 $content['LN_LROUNDS_MAPNAME'] = "gespielte Map";
 $content['LN_LROUNDS_RESULTS'] = "Ergebnisse";
-$content['LN_LROUNDS_DURATION'] = "gespielt";
+$content['LN_LROUNDS_DURATION'] = "Rundenzeit";
 $content['LN_LROUNDS_DETAILS'] = "Runden Details";
 $content['LN_LROUNDS_WINNER'] = "Gewinner";
 $content['LN_LROUNDS_DETAILSONLY'] = "Details";
@@ -109,17 +109,17 @@ $content['LN_PLAYER_HITLMOUSEHELP'] = "Um Details zu sehen bewege dich über die 
 $content['LN_PLAYER_LASTROUNDS'] = "Letzte gespielte Runden";
 $content['LN_PLAYER_DETAILS'] = "Details";
 $content['LN_PLAYER_LASTQUOTES'] = "Letzten 10 Spieler Zitate";
-	$content['LN_PLAYER_ERROR'] = "Error obtaining player data";
-	$content['LN_PLAYER_ERROR_NOPLAYERDATA'] = "Could not find data for this player";
-	$content['LN_PLAYER_ERROR_TIMEFILTER'] = "The player may did not play in this time span"; 
-	$content['LN_PLAYER_ERROR_DIDNOTPLAY'] = "The player '%1' did not play in this time span"; 
+$content['LN_PLAYER_ERROR'] = "Error obtaining player data";
+$content['LN_PLAYER_ERROR_NOPLAYERDATA'] = "Es wurden keine Daten zu diesem Spieler gefunden";
+$content['LN_PLAYER_ERROR_TIMEFILTER'] = "Der Spieler hat vielleicht nicht in diesem Zeitabschnitt gespielt"; 
+$content['LN_PLAYER_ERROR_DIDNOTPLAY'] = "Der Spieler '%1' hat in diesem Zeitabschnitt nicht gespielt"; 
 
 // Rounds Stats
 $content['LN_ROUNDS_ALLROUNDS'] = "Alle Runden";
 $content['LN_ROUNDS_BYDATE'] = "Sortiert bei Datum";
 $content['LN_ROUNDS_BYGAMETYPE'] = "Sortiert bei Gametype";
 $content['LN_ROUNDS_ROUNDNOTFOUND'] = "Es konnten keine Daten zu dieser Runde gefunden werden";
-	$content['LN_ROUNDS_AVAILABLEGAMETYPES'] = "Available Gametypes";
+	$content['LN_ROUNDS_AVAILABLEGAMETYPES'] = "Verfügbare Spieltypen";
 
 // Round Details
 $content['LN_ROUNDS_DETAILS'] = "Rundendetails für Runden ID ";
@@ -179,8 +179,8 @@ $content['LN_WEAPON_KILLCOUNT'] = "Erzielte Kills mit dieser Waffe";
 $content['LN_WEAPON_PLAYERCOUNT'] = "Spieler die diese Waffe nutzten";
 $content['LN_WEAPON_ATTACHMENT'] = "Zusatzteil";
 $content['LN_WEAPON_READMORE'] = "Folge dem Link um mehr Informationen zu erhalten:";
-	$content['LN_WEAPON_KILLCOUNT_TEXT'] = "%1 total kills were caused by this weapon.";
-	$content['LN_WEAPON_PLAYERCOUNT_TEXT'] = "%1 players killed with this weapon";
+$content['LN_WEAPON_KILLCOUNT_TEXT'] = "%1 Gesamt Kills welche mit dieser Waffe erzielt wurden.";
+$content['LN_WEAPON_PLAYERCOUNT_TEXT'] = "%1 Spieler töteten mit dieser Waffe";
 
 // ServerStats Details
 $content['LN_ERROR_NOSERVERMAPS'] = "Fehler, entweder es wurde keine Server ID vergeben, oder es wurde keine Map gespielt auf diesem Server!";
@@ -237,8 +237,8 @@ $content['LN_DAMAGETYPE_LIST'] = "Liste von allen Schadenstypen";
 $content['LN_DAMAGETYPE_NAME'] = "Schadenstype Name";
 $content['LN_DAMAGETYPE_KILLCOUNT'] = "Kills verursacht von diesem Schadenstype";
 $content['LN_DAMAGETYPE_PLAYERCOUNT'] = "Spieler welche mit diesem Schadenstype getötet haben";
-	$content['LN_DAMAGETYPE_KILLCOUNT_TEXT'] = "%1 total kills were caused by this damagetype.";
-	$content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'] = "%1 players killed with this damagetype";
+$content['LN_DAMAGETYPE_KILLCOUNT_TEXT'] = "%1 total kills were caused by this damagetype.";
+$content['LN_DAMAGETYPE_PLAYERCOUNT_TEXT'] = "%1 players killed with this damagetype";
 
 //Install Site
 $content['LN_CFG_PARAMMISSING'] = "Die folgenden Parameter fehlen: ";
@@ -314,9 +314,9 @@ $content['LN_MENU_SERVERLIST'] = "Server Liste";
 $content['LN_MENU_SERVERPLAYEDMAPS'] = "Zeige gespielte Maps";
 $content['LN_MENU_CLICKTOEXPANDMENU'] = "Klicke auf das Icon, um das Menu zu öffnen.";
 
-	// Update notification
-	$content['LN_UPDATE_AVAILABLE'] = "UltraStats Update available";
-	$content['LN_UPDATE_AVAILABLETEXT'] = "An update for UltraStats is available, your current installed Version is '%1', the update version is '%2'";
-	$content['LN_UPDATE_LINK'] = "Click here to get the UltraStats Update";
+// Update notification
+$content['LN_UPDATE_AVAILABLE'] = "UltraStats Update available";
+$content['LN_UPDATE_AVAILABLETEXT'] = "Ein Update für UltraStats ist verfügbar, die aktuell installierte Version ist '%1', die neue Version ist '%2'";
+$content['LN_UPDATE_LINK'] = "Klick hier, um die neue UltraStats Version zu erhalten";
 
 ?>

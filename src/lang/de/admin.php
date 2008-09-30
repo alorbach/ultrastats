@@ -33,7 +33,7 @@ $content['LN_MENU_ADMINSTREDITOR'] = "String Editor";
 $content['LN_MENU_ADMINUSERS'] = "User Admin";
 $content['LN_MENU_ADMINLOGOFF'] = "Ausloggen";
 $content['LN_ADMIN_MOREPAGES'] = "(Mehr als %1 Seiten gefunden)";
-$content['LN_ADMIN_POPUPHELP'] = "What does this button do?";
+$content['LN_ADMIN_POPUPHELP'] = "Wozu ist dieser Button?";
 
 // LoginPage
 $content['LN_ADMINLOGIN'] = "Admin login";
@@ -69,12 +69,12 @@ $content['LN_GEN_PARSEBYTYPE'] = "Spieler verarbeiten nach ";
 $content['LN_GEN_PHPDEBUG'] = "Aktiviere PHP Debugging";
 $content['LN_PARSER_ENABLECHATLOGGING'] = "Aktiviere Chat Logging";
 $content['LN_ADMINMEDALS'] = "Medal Options";
-$content['LN_ADMINMEDALSENABLE'] = "Aktiviere '%1' Medals";
-$content['LN_ADMINPLAYERDETAILS'] = "Optionen für Playerdetail Seite";
+$content['LN_ADMINMEDALSENABLE'] = "Aktiviere '%1' Medaillen";
+$content['LN_ADMINPLAYERDETAILS'] = "Optionen für Spielerdetails Seite";
 $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation Model für 'Treffezonen auf deine Gegenspieler'";
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation Model für 'Wo du getroffen wurdest'";
 $content['LN_GEN_WEB_GZIP'] = "Aktiviere GZIP Kompression";
-	$content['LN_GEN_WEB_MAXTIMEOUT'] = "Try to overwrite script execution timeout (in seconds)";
+$content['LN_GEN_WEB_MAXTIMEOUT'] = "Versuche die Script Ausführungs Zeit zu überschreiben (in Sekunden)";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Administration";
@@ -138,14 +138,14 @@ $content['LN_ADMINDBSTATS_TEXT'] = "Zeige Datenbank Statistik Eigenschaften.";
 $content['LN_ADMINRESETLASTLOGLINE_TEXT'] = "Zurücksetzten der zuletzt bekannten Logfile Position auf 0";
 $content['LN_ADMINDELETESTATS_TEXT'] = "Lösche alle Statistiken für diesen Server.";
 $content['LN_ADMINGETNEWLOG_TEXT'] = "Downloade neues Gamelog von deinem Server. ";
-	$content['LN_RUNDAMAGETYPEKILLS'] = "Calculates total kills and usages by damagetype.";
-	$content['LN_RUNWEAPONKILLS'] = "Calculates total kills and usages by weapon.";
-	$content['LN_DATABASEOPT_MORE'] = "Uses inbuild mysql functions to optimize the database tables.<br>This also may remove unused data.";
-	$content['LN_RUNTOTALUPDATE_MORE'] = "This includes consolidating server stats, damagetype kills, weapon kills and top used aliases.<br>Depending on the size of your database, this may take a while.<br><br>If the script times out during this operation, I recommend to perform these steps manually.";
-	$content['LN_RUNDAMAGETYPEKILLS_MORE'] = "Consolidates all kills made grouped by damagetypes.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
-	$content['LN_RUNWEAPONKILLS_MORE'] = "Consolidates all kills made grouped by weapons.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
-	$content['LN_CREATEALIASES_MORE'] = "Generates top used aliases for each player in a helper table.<br>This is also used for peformance reasons.";
-	$content['LN_CALCMEDALSONLY_MORE'] = "Calculates all enabled medals only, for all Servers. ";
+$content['LN_RUNDAMAGETYPEKILLS'] = "Berechne gesamt Kills nach benutzten Schadenstypen.";
+$content['LN_RUNWEAPONKILLS'] = "Berechne gesamt Kills nach benutzten Waffen.";
+$content['LN_DATABASEOPT_MORE'] = "Benutze die eingebaute MYSQL Funktion um die Datenbank Tabellen zu optimieren.<br>Dies löscht vermutlich auch unbenutzte Tabellen.";
+$content['LN_RUNTOTALUPDATE_MORE'] = "Dies beinhaltet zusammenführende Server Statistiken, Schadenstype Kills, Waffen Kills und meist genutzte Aliases.<br>Je nach größe deiner Datenbank, dies könnte eine Weile dauern.<br><br>Sollte die Script Zeit während diesem Arbeitsvorgang überschritten werden, dann wird emphohlen diesen Schritt manuell vorzunehmen.";
+$content['LN_RUNDAMAGETYPEKILLS_MORE'] = "Zusammenführung aller Kills gruppiert nach Schadenstypen.<br>Das Ergebnis wird in einer Hilfstabelle gespeichert und<br>für jeden Server berechnet, Jahr und Monat.";
+$content['LN_RUNWEAPONKILLS_MORE'] = "Zusammenführung aller Kills gruppiert nach Waffen.<br>Das Ergebnis wird in einer Hilfstabelle gespeichert und<br>für jeden Server berechnet, Jahr und Monat.";
+$content['LN_CREATEALIASES_MORE'] = "Berechne meist genutzte Aliases für jeden Spieler in einer Hilfstabelle.<br>Dies wird auch für eine Leistungssteigerung genutzt.";
+$content['LN_CALCMEDALSONLY_MORE'] = "Berechne alle aktivierten Medaillen für alle Server. ";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";
