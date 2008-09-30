@@ -221,6 +221,7 @@ $content['LN_PLAYER_SQLTABLE'] = "SQL Tabelle";
 $content['LN_PLAYER_AFFECTEDRECORD'] = "Bettroffende Einträge";
 $content['LN_PLAYER_DELETED'] = "gelöscht";
 $content['LN_PLAYER_BACKPLAYERLIST'] = "Zurück zur Playerliste";
+$content['LN_PLAYER_PLAYERCOUNT'] = "'%1' Spieler gefunden.";
 
 // Upgrade Page
 $content['LN_DBUPGRADE_TITLE'] = "UltraStats Datenbank update";

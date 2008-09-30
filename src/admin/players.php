@@ -299,9 +299,11 @@ else
 	$sqlquery = "SELECT " . 
 				"count(" . STATS_PLAYERS_STATIC . ".GUID) as PlayersCount " . 
 				" FROM " . STATS_PLAYERS_STATIC . 
-				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . 
+				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . ", " . STATS_ALIASES .
 				") ON (" . 
-				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID) " . 
+				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID AND " . 
+				STATS_PLAYERS_TOPALIASES . ".ALIASID=" . STATS_ALIASES . ".ID " . 
+				") " . 
 				$content['playersqlwhere'] . 
 				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID "; 
 //	$result = DB_Query($sqlquery);
@@ -324,6 +326,11 @@ else
 		$content['current_pagebegin'] = 0;
 		$pagenumbers = 0;
 	}
+	
+	// Set text
+	$content['players_count_text'] = GetAndReplaceLangStr( $content['LN_PLAYER_PLAYERCOUNT'], $content['players_count']);
+
+
 	// --- 
 
 // --- Now the final query !

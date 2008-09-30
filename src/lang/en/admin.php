@@ -222,6 +222,8 @@ $content['LN_PLAYER_SQLTABLE'] = "SQL Table";
 $content['LN_PLAYER_AFFECTEDRECORD'] = "Affected records";
 $content['LN_PLAYER_DELETED'] = "deleted";
 $content['LN_PLAYER_BACKPLAYERLIST'] = "Back to Playerlist";
+$content['LN_PLAYER_PLAYERCOUNT'] = "Found '%1' players found.";
+
 
 // Upgrade Page
 $content['LN_DBUPGRADE_TITLE'] = "Upgrading UltraStats Database";
