@@ -22,30 +22,30 @@
 global $content;
 
 // Global Stuff
-$content['LN_MAINTITLE'] = "Main UltraStats";
+$content['LN_MAINTITLE'] = "UltraStats";
 $content['LN_MAIN_SELECTSTYLE'] = "Style auswählen";
 $content['LN_GEN_LANGUAGE'] = "Sprache auswählen";
-$content['LN_GEN_SKINMADEBY'] = "Skin made by";
+$content['LN_GEN_SKINMADEBY'] = "Skin erstellt von";
 $content['LN_NODESCRIPTION'] = "Keine Beschreibung verfügbar";
 $content['LN_MAIN_SELECTTIMESPAN'] = "Zeitbereich wählen";
-$content['LN_ERROR_DETAILS'] = "Error Details";
+$content['LN_ERROR_DETAILS'] = "Errordetails";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "Keine Statistikdaten mit diesen Filtereinstellungen gefunden.";
-$content['LN_DETAIL_INFO'] = "Detail Informationen";
-$content['LN_FOOTER_PAGERENDERED'] = "Page rendered in";
-$content['LN_FOOTER_DBQUERIES'] = "DB queries";
-$content['LN_FOOTER_GZIPENABLED'] = "GZIP enabled";
+$content['LN_DETAIL_INFO'] = "Detailinformationen";
+$content['LN_FOOTER_PAGERENDERED'] = "Seite erstellt in";
+$content['LN_FOOTER_DBQUERIES'] = "DB Abfragen";
+$content['LN_FOOTER_GZIPENABLED'] = "GZIP aktiviert";
 $content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
-$content['LN_FOOTER_SECONDS'] = "seconds";
+$content['LN_FOOTER_SECONDS'] = "Sekunden";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Server wählen";
-$content['LN_MAINLASTROUNDS'] = "Letzte gespielte Runden";
+$content['LN_MAINLASTROUNDS'] = "Die %1 letzten gespielte Runden";
 $content['LN_LROUNDS_TIME'] = "gespielt am";
 $content['LN_LROUNDS_GAMETYPE'] = "Gametype";
 $content['LN_LROUNDS_MAPNAME'] = "gespielte Map";
 $content['LN_LROUNDS_RESULTS'] = "Ergebnisse";
 $content['LN_LROUNDS_DURATION'] = "Rundenzeit";
-$content['LN_LROUNDS_DETAILS'] = "Runden Details";
+$content['LN_LROUNDS_DETAILS'] = "Rundendetails";
 $content['LN_LROUNDS_WINNER'] = "Gewinner";
 $content['LN_LROUNDS_DETAILSONLY'] = "Details";
 $content['LN_MAINTOPPLAYERS'] = "Beste Spieler";
@@ -76,13 +76,13 @@ $content['LN_LROUNDS_SERVER'] = "Server";
 // Players
 $content['LN_PLAYERS_MAINLASTROUNDS'] = "Beste Spieler sortiert nach";
 $content['LN_PLAYERS_ONLYLISTED'] = "nur Spieler aufgelistet";
-$content['LN_PLAYERS_WITHMINPLAY'] = "mit minimum Zeit";
-$content['LN_PLAYERS_SECANDMINKILLS'] = "sekunden und minimum kills";
+$content['LN_PLAYERS_WITHMINPLAY'] = "mit Mindestspielzeit";
+$content['LN_PLAYERS_SECANDMINKILLS'] = "Sekunden und Mindestkillanzahl";
 
 // Player Details
 $content['LN_ERROR_INVALIDPLAYER'] = "Fehler, die Spieler ID ist leer oder nicht gültig.";
 $content['LN_PLAYER_DETAILS'] = "Spieler Details";
-$content['LN_PLAYER_TOPALIASES'] = "Meist genutzte Aliases";
+$content['LN_PLAYER_TOPALIASES'] = "Meist verwendete Aliases";
 $content['LN_PLAYER_ALIASCOUNT'] = "Zähler";
 $content['LN_PLAYER_ALIAS'] = "Alias";
 $content['LN_PLAYER_FAVMAP'] = "Beliebteste Map";

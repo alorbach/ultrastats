@@ -39,7 +39,7 @@ $content['LN_FOOTER_SECONDS'] = "seconds";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Select Server";
-$content['LN_MAINLASTROUNDS'] = "Last Played Rounds";
+$content['LN_MAINLASTROUNDS'] = "%1 last played rounds";
 $content['LN_LROUNDS_TIME'] = "Date/Time played at";
 $content['LN_LROUNDS_GAMETYPE'] = "Gametype";
 $content['LN_LROUNDS_MAPNAME'] = "Played Map";

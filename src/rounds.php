@@ -101,6 +101,10 @@ if ( isset($content['roundgametypes']) )
 
 	foreach( $content['roundgametypes'] as $myGameType )
 	{
+		// Set DisplayName for Gametype if necessary
+		if ( strlen($myGameType['GameTypeDisplayName']) <= 0 ) 
+			$myGameType['GameTypeDisplayName'] = $myGameType['GameTypeName'];
+
 		$content['PAGERMENU'][] = array(
 									"PMENU_URL" => "?id=" . $myGameType['GameTypeName'] . $content['additional_url'] , 
 									"PMENU_DisplayName" =>	$myGameType['GameTypeDisplayName'], 
@@ -219,7 +223,7 @@ if ( isset($content['roundsonly']) )
 		// --- 
 
 		// --- Set GametypeName 
-		if ( isset($content['roundsonly'][$i]['GameTypeDisplayName']) )
+		if ( isset($content['roundsonly'][$i]['GameTypeDisplayName']) && strlen($content['roundsonly'][$i]['GameTypeDisplayName']) > 0 )
 			$content['roundsonly'][$i]['FinalGameTypeDisplayName'] = $content['roundsonly'][$i]['GameTypeDisplayName'];
 		else
 			$content['roundsonly'][$i]['FinalGameTypeDisplayName'] = $content['roundsonly'][$i]['GameTypeName'];

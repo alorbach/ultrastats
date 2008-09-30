@@ -70,7 +70,13 @@ $result = DB_Query($sqlquery);
 $content['roundsonly'] = DB_GetAllRows($result, true);
 if ( isset($content['roundsonly']) )
 {
+	// Enabled last round display
 	$content['lastroundsenable'] = "true";
+
+	// Set LastRounds title
+	$content['MAINLASTROUNDS'] = GetAndReplaceLangStr( $content['LN_MAINLASTROUNDS'], 10);
+
+	// Process all rounds
 	for($i = 0; $i < count($content['roundsonly']); $i++)
 	{
 		// --- Set Mapname 

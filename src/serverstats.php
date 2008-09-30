@@ -151,10 +151,11 @@ if ( isset($content['serverid']) )
 			if ( isset($gametypevars['GametypeCount']) )
 			{
 				$content['GameTypeCount'] = $gametypevars['GametypeCount'];
+				$content['playedmaps'][$i]['GameTypeName'] = $gametypevars['NAME'];
 				if ( strlen($gametypevars['DisplayName']) > 0 )
-					$content['playedmaps'][$i]['GameTypeName'] = $gametypevars['DisplayName'];
+					$content['playedmaps'][$i]['GameTypeDisplayName'] = $gametypevars['DisplayName'];
 				else
-					$content['playedmaps'][$i]['GameTypeName'] = $gametypevars['NAME'];
+					$content['playedmaps'][$i]['GameTypeDisplayName'] = $gametypevars['NAME'];
 			}
 			else
 			{
@@ -197,7 +198,7 @@ if ( isset($content['serverid']) )
 				for($n = 0; $n < count($content['playedmaps'][$i]['lastrounds']); $n++)
 				{
 					// --- Set GametypeName 
-					if ( isset($content['playedmaps'][$i]['lastrounds'][$n]['GameTypeDisplayName']) )
+					if ( isset($content['playedmaps'][$i]['lastrounds'][$n]['GameTypeDisplayName']) && strlen($content['playedmaps'][$i]['lastrounds'][$n]['GameTypeDisplayName']) > 0 )
 						$content['playedmaps'][$i]['lastrounds'][$n]['FinalGameTypeDisplayName'] = $content['playedmaps'][$i]['lastrounds'][$n]['GameTypeDisplayName'];
 					else
 						$content['playedmaps'][$i]['lastrounds'][$n]['FinalGameTypeDisplayName'] = $content['playedmaps'][$i]['lastrounds'][$n]['GameTypeName'];
