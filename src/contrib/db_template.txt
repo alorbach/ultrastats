@@ -14,6 +14,7 @@ CREATE TABLE `stats_aliases` (
   `ID` int(11) NOT NULL auto_increment,
   `SERVERID` tinyint(4) NOT NULL default '0',
   `PLAYERID` int(11) unsigned NOT NULL default '0',
+  `AliasChecksum` int(11) NOT NULL,
   `Alias` varchar(128) NOT NULL default '',
   `AliasAsHtml` text NOT NULL,
   `AliasStrippedCodes` varchar(128) NOT NULL default '',
