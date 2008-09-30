@@ -1273,6 +1273,27 @@ function GetTimeWhereQueryString( $szTableName, $includeTimeFilter = true )
 	return $szReturn;
 }
 
+function GetTimeWhereConsolidatedQueryString( $szTableName )
+{
+	$szReturn = "";
+/*	TODO IMPLEMENT ADDING THIS DATA!
+
+	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
+	{
+		$szReturn .= " AND " . $szTableName . ".Time_Year = " . $_SESSION['TIME_SELECTEDYEAR'] . " ";
+		if ( isset($_SESSION['TIME_SELECTEDMONTH']) ) 
+			$szReturn .= " AND " . $szTableName . ".Time_Month = " . $_SESSION['TIME_SELECTEDMONTH'] . " ";
+		else
+			$szReturn .= " AND " . $szTableName . ".Time_Month = 0 "; 
+	}
+	else*/
+		$szReturn = " AND " . $szTableName . ".Time_Year = 0 AND " . $szTableName . ".Time_Month = 0 ";
+
+	// return result
+	return $szReturn;
+}
+
+
 function TimeFilterUsed()
 {
 	if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 

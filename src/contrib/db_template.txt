@@ -70,13 +70,15 @@ CREATE TABLE `stats_consolidated` (
   `ID` int(11) NOT NULL auto_increment,
   `NAME` varchar(63) NOT NULL default '',
   `SERVERID` tinyint(4) NOT NULL default '0',
+  `Time_Year` mediumint(9) NOT NULL default '0',
+  `Time_Month` tinyint(4) NOT NULL default '0',
   `SortID` int(11) NOT NULL default '0',
   `DisplayName` varchar(255) NOT NULL default '',
   `DescriptionID` varchar(255) NOT NULL default '0',
   `VALUE_INT` int(11) NOT NULL default '0',
   `VALUE_TXT` varchar(255) NOT NULL default '',
   `PLAYER_ID` int(11) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`ID`,`NAME`,`SERVERID`)
+  PRIMARY KEY  (`ID`,`NAME`,`SERVERID`,`Time_Year`,`Time_Month`)
 ) TYPE=MyISAM COMMENT='Table to hold total values and medals' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

@@ -592,6 +592,13 @@ function GetAndSetGlobalInfo()
 {
 	global $content;
 
+	// Set default for global_lastupdate_TimeFormat
+	$content['global_lastupdate_TimeFormat'] = "Never";
+
+	// --- Create TIME Where query!
+	$szTimeWhere = GetTimeWhereConsolidatedQueryString( STATS_CONSOLIDATED );
+	// ---
+
 	// --- Get Total Values
 	$sqlquery = "SELECT " .
 						STATS_CONSOLIDATED . ".NAME, " . 
@@ -605,6 +612,7 @@ function GetAndSetGlobalInfo()
 						") ON (" . 
 						STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 						" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'global_%' " .
+						$szTimeWhere . 
 						" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 	$result = DB_Query($sqlquery);
 
@@ -620,7 +628,6 @@ function GetAndSetGlobalInfo()
 	// --- 
 
 	// --- Get Total Server Values
-
 	$serverwheresql = GetCustomServerWhereQuery( STATS_CONSOLIDATED, false);
 	if ( strlen($serverwheresql) <= 0 ) 
 		$serverwheresql = " AND " . STATS_CONSOLIDATED . ".SERVERID = -1 ";
@@ -633,6 +640,7 @@ function GetAndSetGlobalInfo()
 						" FROM " . STATS_CONSOLIDATED .
 						" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'server_total%' " .
 						$serverwheresql . 
+						$szTimeWhere . 
 						" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 	$result = DB_Query($sqlquery);
 

@@ -296,6 +296,10 @@ else
 	$content['topplayersenable'] = "false";
 // --- END TopPlayers Code for front stats
 
+// --- Create TIME Where query for Consolidated queries
+$szTimeWhere = GetTimeWhereConsolidatedQueryString( STATS_CONSOLIDATED );
+// ---
+
 // --- BEGIN Server Details Code 
 if ( isset($content['myserver']) )
 {
@@ -330,6 +334,7 @@ if ( isset($content['myserver']) )
 						STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 						" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'server_total%' " .
 						GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
+						$szTimeWhere . 
 						" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 	$result = DB_Query($sqlquery);
 
@@ -372,6 +377,7 @@ if ( isset($content['myserver']) )
 						STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 						" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'server_top%' " .
 						GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
+						$szTimeWhere . 
 						" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 	$result = DB_Query($sqlquery);
 	$content['server_top'] = DB_GetAllRows($result, true);
@@ -468,6 +474,7 @@ $sqlquery = "SELECT " .
 //					STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 					" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'medal_pro%' " .
 					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
+					$szTimeWhere . 
 					" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 $result = DB_Query($sqlquery);
 
