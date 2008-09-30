@@ -1,10 +1,28 @@
 <!-- INCLUDE admin/admin_header.html --> 
 
 <!-- IF ISERROR="true" -->
+<br><br>
 <center>
-<h3><font color="red">{ERROR_MSG}</font></h3>
+	<div class="table_with_border_second ErrorMsg" style="width:600px">
+		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
+		<p>{ERROR_MSG}</p>
+		</div>
+	<br><br>
 </center>
+<br><br>
 <!-- ENDIF ISERROR="true" -->
+
+<!-- IF FTP_IS_ENABLED!="true" -->
+<br><br>
+<center>
+	<div class="table_with_border_second ErrorMsg" style="width:600px">
+		<div class="PriorityWarning">{LN_WARN_DETAILS}</div>
+		<p>{LN_WARN_NOFTPEXTENSIONS}</p>
+		</div>
+	<br><br>
+</center>
+<br><br>
+<!-- ENDIF FTP_IS_ENABLED!="true" -->
 
 <table cellpadding="0" cellspacing="0" border="0" width="600" align="center" class="with_border_alternate">
 <tr>
@@ -60,7 +78,7 @@
 			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="100%">
 			<tr>
 				<td align="left" class="cellmenu1" width="150" nowrap><b>{LN_SERVERNAME}</b></td>
-				<td align="left" class="line0" width="100%"><input type="text" name="servername" size="50" maxlength="255" value="{SERVERNAME}"></td>
+				<td align="left" class="line2" width="100%"><input type="text" name="servername" size="50" maxlength="255" value="{SERVERNAME}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu2" nowrap><b>{LN_SERVERIP}</b></td>
@@ -68,7 +86,7 @@
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_PORT}</b></td>
-				<td align="left" class="line0"><input type="text" name="port" size="50" maxlength="7" value="{PORT}"></td>
+				<td align="left" class="line2"><input type="text" name="port" size="50" maxlength="7" value="{PORT}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu2_naked" nowrap><b>{LN_DESCRIPTION}</b></td>
@@ -76,7 +94,7 @@
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_MODNAME}</b></td>
-				<td align="left" class="line0"><input type="text" name="modname" size="50" maxlength="32" value="{MODNAME}"></td>
+				<td align="left" class="line2"><input type="text" name="modname" size="50" maxlength="32" value="{MODNAME}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu2" nowrap><b>{LN_ADMINNAME}</b></td>
@@ -84,7 +102,7 @@
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_CLANNAME}</b></td>
-				<td align="left" class="line0"><input type="text" name="clanname" size="50" maxlength="255" value="{CLANNAME}"></td>
+				<td align="left" class="line2"><input type="text" name="clanname" size="50" maxlength="255" value="{CLANNAME}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu2" nowrap><b>{LN_ADMINEMAIL}</b></td>
@@ -92,33 +110,33 @@
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_GAMELOGLOCATION}</b></td>
-				<td align="left" class="line0"><input type="text" name="gameloglocation" size="50" maxlength="255" value="{GAMELOGLOCATION}"></td>
+				<td align="left" class="line2"><input type="text" name="gameloglocation" size="50" maxlength="255" value="{GAMELOGLOCATION}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_REMOTEGAMELOGLOCATION}</b></td>
-				<td align="left" class="line0">
+				<td align="left" class="line1">
 				<input type="text" name="remotegameloglocation" size="35" maxlength="255" value="{REMOTEGAMELOGLOCATION}">
 				<input type="button" value="{LN_BUILDFTPSTRING}" {BUILDFTP_DISABLED} OnClick="NewWindow('servers-ftpbuilder.php?id={SERVERID}', 'BuildFTP', 500, 500, '');">
 				</td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_FTPPASSIVEENABLED}</b></td>
-				<td align="left" class="line0"><input type="checkbox" name="ftppassiveenabled" value="yes" {FTPPASSIVEENABLED_CHECKED}></td>
+				<td align="left" class="line2"><input type="checkbox" name="ftppassiveenabled" value="yes" {FTPPASSIVEENABLED_CHECKED}></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_SERVERLOGO}</b></td>
-				<td align="left" class="line0"><input type="text" name="serverlogo" size="50" maxlength="255" value="{SERVERLOGO}"></td>
+				<td align="left" class="line1"><input type="text" name="serverlogo" size="50" maxlength="255" value="{SERVERLOGO}"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu2" nowrap><b>{LN_SERVERENABLED}</b></td>
-				<td align="left" class="line1"><input type="checkbox" name="serverenabled" value="yes" {SERVERENABLED_CHECKED}></td>
+				<td align="left" class="line2"><input type="checkbox" name="serverenabled" value="yes" {SERVERENABLED_CHECKED}></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><b>{LN_PARSINGENABLED}</b></td>
-				<td align="left" class="line0"><input type="checkbox" name="parsingenabled" value="yes" {PARSINGENABLED_CHECKED}></td>
+				<td align="left" class="line1"><input type="checkbox" name="parsingenabled" value="yes" {PARSINGENABLED_CHECKED}></td>
 			</tr>
 			<tr>
-				<td align="center" colspan="2">
+				<td align="center" colspan="2" class="tableBackground">
 					<input type="submit" value="{SERVER_SENDBUTTON}">
 					<input type="hidden" name="op" value="{SERVER_FORMACTION}">
 					<input type="hidden" name="id" value="{SERVERID}">
@@ -132,7 +150,7 @@
 	<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="100%">
 	<tr>
 		<td align="left" class="cellmenu1" width="150"  nowrap><b>{LN_STATSALIASES}</b></td>
-		<td align="right" class="line0" width="100%">{STATSALIASES}</td>
+		<td align="right" class="line2" width="100%">{STATSALIASES}</td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_STATSCHATLINES}</b></td>
@@ -140,7 +158,7 @@
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu1" nowrap><b>{LN_STATSPLAYERS}</b></td>
-		<td align="right" class="line0">{STATSPLAYERS}</td>
+		<td align="right" class="line2">{STATSPLAYERS}</td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_STATSKILLS}</b></td>
@@ -148,7 +166,7 @@
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu1" nowrap><b>{LN_STATSROUNDS}</b></td>
-		<td align="right" class="line0">{STATSROUNDS}</td>
+		<td align="right" class="line2">{STATSROUNDS}</td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_STATSTIME}</b></td>

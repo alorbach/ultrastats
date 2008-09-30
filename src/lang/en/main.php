@@ -29,6 +29,7 @@ $content['LN_GEN_SKINMADEBY'] = "Skin made by";
 $content['LN_NODESCRIPTION'] = "No description available";
 $content['LN_MAIN_SELECTTIMESPAN'] = "Select time span";
 $content['LN_ERROR_DETAILS'] = "Error Details";
+$content['LN_WARN_DETAILS'] = "Warning Details";
 $content['LN_ERROR_NOSTATSDATAFOUND'] = "No stats data found using these filters.";
 $content['LN_DETAIL_INFO'] = "Detail Information";
 $content['LN_FOOTER_PAGERENDERED'] = "Page rendered in";
@@ -36,6 +37,7 @@ $content['LN_FOOTER_DBQUERIES'] = "DB queries";
 $content['LN_FOOTER_GZIPENABLED'] = "GZIP enabled";
 $content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
 $content['LN_FOOTER_SECONDS'] = "seconds";
+$content['LN_WARN_NOFTPEXTENSIONS'] = "Warning! The FTP Extension have been disabled on your Webserver. UltraStats will not be able to download the gamelog over FTP.";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Select Server";
