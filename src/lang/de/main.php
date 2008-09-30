@@ -109,7 +109,7 @@ $content['LN_PLAYER_HITLMOUSEHELP'] = "Um Details zu sehen bewege dich über die 
 $content['LN_PLAYER_LASTROUNDS'] = "Letzte gespielte Runden";
 $content['LN_PLAYER_DETAILS'] = "Details";
 $content['LN_PLAYER_LASTQUOTES'] = "Letzten 10 Spieler Zitate";
-$content['LN_PLAYER_ERROR'] = "Error obtaining player data";
+$content['LN_PLAYER_ERROR'] = "Fehler beim Auslesen der Spielerdaten";
 $content['LN_PLAYER_ERROR_NOPLAYERDATA'] = "Es wurden keine Daten zu diesem Spieler gefunden";
 $content['LN_PLAYER_ERROR_TIMEFILTER'] = "Der Spieler hat vielleicht nicht in diesem Zeitabschnitt gespielt"; 
 $content['LN_PLAYER_ERROR_DIDNOTPLAY'] = "Der Spieler '%1' hat in diesem Zeitabschnitt nicht gespielt"; 
@@ -148,11 +148,11 @@ $content['LN_SERVER_Top_Map'] = "Meist gespielte Map";
 $content['LN_SERVER_Top_Gametype'] = "Meist gespielter Gametype";
 
 // Map Details
-$content['LN_ERROR_INVALIDMAP'] = "nicht gültiger Map Name";
-$content['LN_MAP_DETAILS'] = "Map Details für ";
-$content['LN_MAP_INFO'] = "Map Information";
-$content['LN_MAP_DESCRIPTION'] = "Map Beschreibung";
-$content['LN_MAP_NODESCRIPTION'] = "keine Map Beschreibung gefunden";
+$content['LN_ERROR_INVALIDMAP'] = "nicht gültiger Mapname";
+$content['LN_MAP_DETAILS'] = "Mapdetails für ";
+$content['LN_MAP_INFO'] = "Mapinformation";
+$content['LN_MAP_DESCRIPTION'] = "Mapbeschreibung";
+$content['LN_MAP_NODESCRIPTION'] = "keine Mapbeschreibung gefunden";
 $content['LN_MAP_LASTROUNDS'] = "letzten gespielten Runden auf";
 $content['LN_MAP_INGAMENAME'] = "Im Spiel Mapname";
 
