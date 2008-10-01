@@ -316,7 +316,7 @@ $content['LN_MENU_SERVERSTATS'] = "Server Statistik";
 $content['LN_MENU_ADMINCENTER'] = "Admin Center";
 $content['LN_MENU_SERVERLIST'] = "Server Liste";
 $content['LN_MENU_SERVERPLAYEDMAPS'] = "Zeige gespielte Maps";
-$content['LN_MENU_CLICKTOEXPANDMENU'] = "Klicke auf das Icon, um das Menu zu öffnen.";
+$content['LN_MENU_CLICKTOEXPANDMENU'] = "Klicke auf das Icon, um das Menü zu öffnen.";
 
 // Update notification
 $content['LN_UPDATE_AVAILABLE'] = "UltraStats Update ist verfügbar";
