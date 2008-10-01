@@ -40,15 +40,14 @@ if ( InitUltraStatsConfigFile(false) )
 
 // Set some static values
 define('MAX_STEPS', 7);
-$content['web_theme'] = "default";
-$content['user_theme'] = "default";
+$content['web_theme'] = "codww";
+$content['user_theme'] = "codww";
 $configsamplefile = $content['BASEPATH'] . "contrib/config.sample.php"; 
 //ini_set('error_reporting', E_ERROR); // NO PHP ERROR'S!
 // ***					*** //
 
 // --- CONTENT Vars
 $content['TITLE'] = "Ultrastats :: " . $content['LN_INSTALL_TITLE'];
-//$content['TITLE'] = "Ultrastats :: Installer Step %1";
 // --- 
 
 // --- Read Vars
@@ -136,7 +135,7 @@ if ( $content['INSTALL_STEP'] == 2 )
 				$content['fileperm'][$i]['BGCOLOR'] = "#770000";
 				$content['fileperm'][$i]['ISSUCCESS'] = "NOT Writeable"; 
 				$bSuccess = false;
-				echo  "mowl1";
+//				echo  "mowl1";
 			}
 		}
 		else
@@ -144,8 +143,9 @@ if ( $content['INSTALL_STEP'] == 2 )
 			if ( !is_writable($content['fileperm'][$i]['FILE_NAME']) ) 
 			{
 				// Try to create an empty file
-				$handle = fopen( $content['fileperm'][$i]['FILE_NAME'] , "x");
-				fclose($handle);
+				$handle = @fopen( $content['fileperm'][$i]['FILE_NAME'] , "x");
+				if ( $handle ) 
+					fclose($handle);
 			}
 
 			if ( is_writable($content['fileperm'][$i]['FILE_NAME']) ) 
@@ -168,7 +168,7 @@ if ( $content['INSTALL_STEP'] == 2 )
 		$content['NEXT_ENABLED'] = "false";
 		$content['RECHECK_ENABLED'] = "true";
 		$content['iserror'] = "true";
-		$content['errormsg'] = $content['LN_INSTALL_FILEORDIRNOTWRITEABLE'];
+		$content['errormsg'] = GetAndReplaceLangStr( $content['LN_INSTALL_FILEORDIRNOTWRITEABLE'], "chmod 666 ./config.php", "chmod 777 ./gamelogs/ ./images/maps/ ./images/serverlogos/ ./images/weapons/");
 	}
 
 	// Check if sample config file is available
@@ -429,7 +429,7 @@ else if ( $content['INSTALL_STEP'] == 7 )
 	$filebuffer = preg_replace( $patterns, $replacements, $filebuffer );
 
 	// --- Create file and write config into it!
-	$handle = fopen( $content['BASEPATH'] . "config.php" , "w");
+	$handle = @fopen( $content['BASEPATH'] . "config.php" , "w");
 	if ( $handle === false ) 
 		RevertOneStep( $content['INSTALL_STEP']-1, GetAndReplaceLangStr($content['LN_INSTALL_FAILEDCREATECFGFILE'], $content['BASEPATH'] . "config.php") );
 	

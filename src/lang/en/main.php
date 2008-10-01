@@ -257,7 +257,7 @@ $content['LN_CFG_GAMEVER'] = "Gameversion";
 $content['LN_INSTALL_TITLETOP'] = "Installing UltraStats Version %1 - Step %2";
 $content['LN_INSTALL_TITLE'] = "Installer Step %1";
 $content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats is already configured/installed!<br><br> If you want to reinstall UltraStats, either delete the current <B>config.php</B> or replace it with an empty file.<br>Click <A HREF="index.php">here</A> to return to UltraStats start page.';
-$content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "At least one file or directory (or more) is not writeable, please check the file permissions (chmod 666)!";
+$content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "At least one file or directory (or more) is not writeable, please check the file permissions.<br>On Linux you can use this commands: '%1' and '%2'.";
 $content['LN_INSTALL_SAMPLECONFIGMISSING'] = "The sample configuration file '%1' is missing. You may have not fully uploaded UltraStats.";
 $content['LN_INSTALL_ERRORCONNECTFAILED'] = "Database connect to '%1' failed! Please check Servername, Port, User and Password!";
 $content['LN_INSTALL_ERRORACCESSDENIED'] = "Cannot use the database  '%1'! If the database does not exists, create it or check user access permissions!";

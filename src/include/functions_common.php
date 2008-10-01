@@ -54,7 +54,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.7";
+$content['BUILDNUMBER'] = "0.3.8";
 $content['UPDATEURL'] = "http://www.ultrastats.org/cod5/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
@@ -308,12 +308,12 @@ function InitPostDbConfigRuntime()
 	// --- Enable GZIP Compression if available
 	if (	
 			strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && 
-			GetConfigSetting("gen_gzipcompression", 0, CFGLEVEL_USER) == "yes" &&
+			GetConfigSetting("gen_gzipcompression", "yes", CFGLEVEL_USER) == "yes" &&
 			!defined('IS_PARSERPAGE') /* Do not GZIP in this case!*/
 		) 
 	{
 		// This starts gzip compression!
-		ob_start("ob_gzhandler");
+		@ob_start("ob_gzhandler");
 		$content['GzipCompressionEnabled'] = "yes";
 	}
 	else
@@ -538,8 +538,8 @@ function InitConfigurationValues()
 	if ( !isset($content['gen_phpdebug']) ) { $content['gen_phpdebug'] = "no"; }
 	// --- 
 
-	// --- GZIP Output!
-	if ( !isset($content['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "no"; }
+	// --- Set DEFAULT GZIP Output!
+	if ( !isset($content['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "yes"; }
 	// --- 
 	
 	// --- Default Script Timeout!
@@ -675,10 +675,19 @@ function DieWithErrorMsg( $szerrmsg )
 	}
 	else if	( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		print("<html><title>UltraStats :: Critical Error occured</title><head><link rel=\"stylesheet\" href=\"" . $gl_root_path . "admin/css/admin.css\" type=\"text/css\"></head><body>");
-		print("<table width=\"600\" align=\"center\" class=\"with_border\"><tr><td><center><H3><font color='red'>Critical Error occured</font></H3><br></center>");
-		print("<B>Errordetails:</B> " .  $szerrmsg);
-		print("</td></tr></table>");
+		echo 
+			"<html><title>UltraStats :: Critical Error occured</title><head>" . 
+			"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/codww/main.css\" type=\"text/css\"></head><body><br><br>" .
+			"<table width=\"600\" align=\"center\" class=\"with_border_alternate ErrorMsg\"><tr>". 
+			"<td class=\"PriorityError\" align=\"center\" colspan=\"2\">" . 
+			"<H3>Critical Error occured</H3>" . 
+			"</td></tr>" . 
+			"<tr><td class=\"cellmenu1\" align=\"left\">Errordetails:</td>" . 
+			"<td class=\"tableBackground\" align=\"left\">" . 
+			$szerrmsg . 
+			"</td></tr></table>" . 
+			"</body></html>";
+		exit;
 	}
 
 	// Abort further execution
@@ -687,13 +696,20 @@ function DieWithErrorMsg( $szerrmsg )
 
 function DieWithFriendlyErrorMsg( $szerrmsg )
 {
-	//TODO: Make with template
-	print("<html><body>");
-	print("<center><H3><font color='red'>Error occured</font></H3><br></center>");
-	print("<B>Errordetails:</B><BR>" .  $szerrmsg);
+	echo 
+		"<html><title>UltraStats :: Error occured</title><head>" . 
+		"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/default/main.css\" type=\"text/css\"></head><body><br><br>" .
+		"<table width=\"600\" align=\"center\" class=\"with_border_alternate ErrorMsg\"><tr>". 
+		"<td class=\"PriorityWarning\" align=\"center\" colspan=\"2\">" . 
+		"<H3>Error occured</H3>" . 
+		"</td></tr>" . 
+		"<tr><td class=\"cellmenu1\" align=\"left\">Errordetails:</td>" . 
+		"<td class=\"tableBackground\" align=\"left\">" . 
+		$szerrmsg . 
+		"</td></tr></table>" . 
+		"</body></html>";
 	exit;
 }
-
 
 function InitTemplateParser()
 {
