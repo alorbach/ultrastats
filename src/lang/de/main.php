@@ -208,9 +208,10 @@ $content['LN_SEARCH_PLAYERPBGUID'] = "Suche nach Punkbuster GUID";
 $content['LN_WEAPONTYPE_MACHINEGUN'] = "Maschinengewehr";
 $content['LN_WEAPONTYPE_SNIPER'] = "Sniper";
 $content['LN_WEAPONTYPE_PISTOL'] = "Pistole";
-$content['LN_WEAPONTYPE_GRENADE'] = "Granaten";
+$content['LN_WEAPONTYPE_GRENADE'] = "Prim‰re Granaten";
+$content['LN_WEAPONTYPE_SECONDARYGRENADE'] = "Sekund‰re Granaten";
 $content['LN_WEAPONTYPE_STANDWEAPON'] = "Standmaschinengewehr";
-$content['LN_WEAPONTYPE_TANK'] = "Panzer";
+$content['LN_WEAPONTYPE_TANK'] = "Panzer und Fahrzeuge";
 $content['LN_WEAPONTYPE_MISC'] = "Andere Waffen";
 $content['LN_WEAPONTYPE_SUBMACHINEGUN'] = "Maschinenpistole";
 $content['LN_WEAPONTYPE_ASSAULT'] = "Sturmfeuergewehr";
@@ -218,7 +219,8 @@ $content['LN_WEAPONTYPE_LIGHTMACHINEGUN'] = "Groﬂes Sturmgewehr";
 $content['LN_WEAPONTYPE_SHOTGUN'] = "Schrotflinte";
 $content['LN_WEAPONTYPE_SPECIAL'] = "Spezial-Waffen";
 $content['LN_WEAPONTYPE_RIFLES'] = "Rifles";
-$content['LN_WEAPONTYPE_HEAVYWEAPONS'] = "Heavy Weapons";
+$content['LN_WEAPONTYPE_HEAVYWEAPONS'] = "Rocket Launchers";
+$content['LN_WEAPONTYPE_CATEGORY'] = "Waffen Kategorie";
 
 // Medals site
 $content['LN_ERROR_INVALIDMEDAL'] = "Fehler, diese Medaillie gibt es nicht.";

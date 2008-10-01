@@ -26,6 +26,7 @@
 
 		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
 		<!-- BEGIN weaponcategories -->
+		<!-- IF weaponcategoriesenabled="true" -->
 		<tr>
 			<td class="titleSecond" nowrap colspan="9">{CategoryDisplayName}</td>
 		</tr>
@@ -69,7 +70,7 @@
 				</td>
 			</tr>
 			<!-- END myweapons -->
-
+		<!-- ENDIF weaponcategoriesenabled="true" -->
 		<!-- END weaponcategories -->
 		</table>
 
@@ -95,23 +96,33 @@
 				</table>
 				<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
 				<tr>
-					<td colspan="3" width="266" nowrap valign="top" align="center" class="line1">
+					<td colspan="3" width="266" nowrap valign="top" align="center" class="tablebackground">
 					<img src="{WeaponImage}" alt="{WeaponImageDisplayName}">
+					
+					<!-- IF AttachmentEnabled="true" -->
+					<table width="128" cellpadding="1" cellspacing="1" border="0" align="center" class="with_border_alternate">
+					<tr><td nowrap align="center" class="cellmenu2_naked"><B>{LN_WEAPON_ATTACHMENT}:</B></td></tr>
+					<tr><td nowrap valign="top" align="center" class="line2">{AttachmentDisplayName}</td></tr>
+					<tr><td nowrap valign="top" align="center" class="line1"><img src="{AttachmentImage}" height="128" align="left"></td></tr>
+					</table>
+					<br>
+					<!-- ENDIF AttachmentEnabled="true" -->
+
 					</td>
-					<td width="100%" nowrap valign="top" class="line1">
+					<td width="100%" nowrap valign="top" class="tablebackground">
 						<table width="100%" cellpadding="2" cellspacing="0" border="0" align="center">
 						<tr><td width="100%" class="cellmenu1" align="center"><B>{LN_WEAPON_DESCRIPTION}</B></td></tr>
 						</table>
 						<table width="100%" cellpadding="5" cellspacing="1" border="0" align="center">
 						<tr>
-							<td width="100%" class="tablebackground">{Description}</td>
+							<td width="100%" class="tablebackground"  height="100%">{Description}</td>
 						</tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" nowrap align="center" class="cellmenu2"><B>{LN_WEAPON_INGAMENAME}:</B></td>
-					<td nowrap valign="top" align="left" class="line1">{INGAMENAME}</td>
+					<td colspan="2" nowrap align="center" class="cellmenu2"><B>{LN_WEAPONTYPE_CATEGORY}:</B></td>
+					<td nowrap valign="top" align="left" class="line1">{WeaponTypeDisplayName}</td>
 					<td class="tablebackground" align="center">
 					<!-- IF IsExternalInfoUrl="true" -->
 						<b>{LN_WEAPON_READMORE}</b>
@@ -120,9 +131,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td nowrap align="center" class="cellmenu2"><B>{LN_WEAPON_ATTACHMENT}:</B></td>
-					<td nowrap valign="top" align="left" class="line1"><img src="{AttachmentImage}" height="18" align="left"></td>
-					<td nowrap valign="top" align="left" class="line1">{AttachmentDisplayName}</td>
+					<td colspan="2" nowrap align="center" class="cellmenu2"><B>{LN_WEAPON_INGAMENAME}:</B></td>
+					<td nowrap valign="top" align="left" class="line1">{INGAMENAME}</td>
 					<td class="tablebackground" align="center">
 					<!-- IF IsExternalInfoUrl="true" -->
 						<a href="{ExternalInfoUrl}" target="_blank">{ExternalInfoUrlDisplay}</a>

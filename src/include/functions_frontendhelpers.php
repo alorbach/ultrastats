@@ -111,6 +111,21 @@ function CreateGameTypeArray()
 	//--- Set Displayname
 }
 
+// Helper to obtain the weapontype display name
+function GetWeapontypeDisplayName($weapontypeid)
+{
+	global $content;
+
+	foreach( $content['weapontypes'] as $myWeaponType)
+	{
+		if ( $myWeaponType['ID'] == $weapontypeid )
+			return $myWeaponType['Name'];
+	}
+	
+	// default return
+	return $content['LN_WEAPONTYPE_MISC'];
+}
+
 function AddToWeaponArray($weapontypeid, $weapontypename)
 {
 	global $content;
@@ -203,10 +218,11 @@ function CreateWeaponArray()
 		AddToWeaponArray(WEAPONTYPE_ASSAULT, $content['LN_WEAPONTYPE_ASSAULT']);
 		AddToWeaponArray(WEAPONTYPE_HEAVYWEAPONS, $content['LN_WEAPONTYPE_HEAVYWEAPONS']);
 		AddToWeaponArray(WEAPONTYPE_SHOTGUN, $content['LN_WEAPONTYPE_SHOTGUN']);
-		AddToWeaponArray(WEAPONTYPE_GRENADE, $content['LN_WEAPONTYPE_GRENADE']);
-		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_SPECIAL']);
-		AddToWeaponArray(WEAPONTYPE_TANK, $content['LN_WEAPONTYPE_TANK']);
 		AddToWeaponArray(WEAPONTYPE_PISTOL, $content['LN_WEAPONTYPE_PISTOL']);
+		AddToWeaponArray(WEAPONTYPE_GRENADE, $content['LN_WEAPONTYPE_GRENADE']);
+		AddToWeaponArray(WEAPONTYPE_SECONDARYGRENADE, $content['LN_WEAPONTYPE_SECONDARYGRENADE']);
+		AddToWeaponArray(WEAPONTYPE_TANK, $content['LN_WEAPONTYPE_TANK']);
+		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_MISC']);
 	}
 
 	// Main Menu Copy!
@@ -733,6 +749,8 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_20mm",	
 							"_ffar",	
 							"_turret",	
+							"_gunner",	
+							"_defuse", 
 							"_telescopic",	
 						);
 	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");

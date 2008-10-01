@@ -208,9 +208,10 @@ $content['LN_SEARCH_PLAYERPBGUID'] = "Search by Punkbuster GUID";
 $content['LN_WEAPONTYPE_MACHINEGUN'] = "Machine Gun";
 $content['LN_WEAPONTYPE_SNIPER'] = "Sniper Rifles";
 $content['LN_WEAPONTYPE_PISTOL'] = "Pistols";
-$content['LN_WEAPONTYPE_GRENADE'] = "Grenades";
+$content['LN_WEAPONTYPE_GRENADE'] = "Primary Grenades";
+$content['LN_WEAPONTYPE_SECONDARYGRENADE'] = "Secondary Grenades";
 $content['LN_WEAPONTYPE_STANDWEAPON'] = "Stand Weapon";
-$content['LN_WEAPONTYPE_TANK'] = "Tanks";
+$content['LN_WEAPONTYPE_TANK'] = "Tanks & Vehicles";
 $content['LN_WEAPONTYPE_MISC'] = "Misc weapons";
 $content['LN_WEAPONTYPE_SUBMACHINEGUN'] = "Sub Machine Guns";
 $content['LN_WEAPONTYPE_ASSAULT'] = "Assault Rifles";
@@ -218,7 +219,8 @@ $content['LN_WEAPONTYPE_LIGHTMACHINEGUN'] = "Light Machine Guns";
 $content['LN_WEAPONTYPE_SHOTGUN'] = "Shotguns";
 $content['LN_WEAPONTYPE_SPECIAL'] = "Special weapons";
 $content['LN_WEAPONTYPE_RIFLES'] = "Rifles";
-$content['LN_WEAPONTYPE_HEAVYWEAPONS'] = "Heavy Weapons";
+$content['LN_WEAPONTYPE_HEAVYWEAPONS'] = "Rocket Launchers";
+$content['LN_WEAPONTYPE_CATEGORY'] = "Weapon Category";
 
 // Medals site
 $content['LN_ERROR_INVALIDMEDAL'] = "Error, this medal does not exist.";

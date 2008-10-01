@@ -87,6 +87,10 @@ if ( isset($_GET['id']) )
 			$content['WeaponDisplayName'] = $weaponvars['INGAMENAME'];
 		// --- 
 
+		// --- Set WeaponTypeDisplayName 
+		$content['WeaponTypeDisplayName'] = GetWeapontypeDisplayName( $weaponvars['WeaponType'] );
+		// --- 
+
 		// Append to Title
 		$content['TITLE'] .= " for '" . $content['WeaponDisplayName'] . "'";
 
@@ -122,15 +126,21 @@ if ( isset($_GET['id']) )
 		
 		// --- Scan for attachments and set them
 		$content['AttachmentID'] = ObtainAttachmentNameFromWeapon($weaponvars['INGAMENAME']);
-		$content['AttachmentImage'] = $gl_root_path . "images/perks/normal/" . $content['AttachmentID'] . ".png";
-		if ( !is_file($content['AttachmentImage']) )
-			$content['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
+		if ( $content['AttachmentID'] != "none" ) 
+		{
+			// Enable Attachment
+			$content['AttachmentEnabled'] = true;
 
-		// Obtain DisplayName
-		if ( strlen($content['attachments'][ $content['AttachmentID'] ]['DisplayName']) > 0 )
-			$content['AttachmentDisplayName'] = $content['attachments'][$content['AttachmentID']]['DisplayName'];
-		else
-			$content['AttachmentDisplayName'] = $content['AttachmentID'];
+			$content['AttachmentImage'] = $gl_root_path . "images/perks/normal/" . $content['AttachmentID'] . ".png";
+			if ( !is_file($content['AttachmentImage']) )
+				$content['AttachmentImage'] = $gl_root_path . "images/perks/no-pic.png";
+
+			// Obtain DisplayName
+			if ( strlen($content['attachments'][ $content['AttachmentID'] ]['DisplayName']) > 0 )
+				$content['AttachmentDisplayName'] = $content['attachments'][$content['AttachmentID']]['DisplayName'];
+			else
+				$content['AttachmentDisplayName'] = $content['AttachmentID'];
+		}
 		// --- 
 
 		// --- Most kills with this Weapon
@@ -526,7 +536,10 @@ else
 					$content['weaponcategories'][$WeaponTypeNum]['myweapons'][] = $myWeapon;
 				}
 			}
-
+			
+			// Enable List if weapons were found
+			if ( isset($content['weaponcategories'][$WeaponTypeNum]['myweapons']) && count($content['weaponcategories'][$WeaponTypeNum]['myweapons']) > 0 )
+				$content['weaponcategories'][$WeaponTypeNum]['weaponcategoriesenabled'] = "true";
 		}
 	}
 	else

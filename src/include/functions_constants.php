@@ -164,19 +164,20 @@ define('TRANSFERTYPE_SCP', 1);
 // --- 
 
 // --- WeaponTypes
-define('WEAPONTYPE_MACHINEGUN', 0);		// MachineGun, Maschinenpistolen
-define('WEAPONTYPE_SNIPER', 1);			// Sniper, Scharfschützengewehre
-define('WEAPONTYPE_PISTOL', 2);			// Pistol, Pistole
-define('WEAPONTYPE_GRENADE', 3);		// Grenade, Granaten
-define('WEAPONTYPE_STANDWEAPON', 4);	// Stand-MG, Stand-MG's
-define('WEAPONTYPE_TANK', 5);			// Tanks, Panzer
-define('WEAPONTYPE_MISC', 6);			// Misc, Sonstiges
-define('WEAPONTYPE_ASSAULT', 7);		// Assault Rifles, Sturmgewehre
-define('WEAPONTYPE_LIGHTMACHINEGUN', 8);// Light MachineGun, Leichte Maschinengewehre
-define('WEAPONTYPE_SHOTGUN', 9);		// Shotgun, Schrotflinten
-define('WEAPONTYPE_SPECIAL', 10);		// Special weapons like Claymore, RPG etc.
-define('WEAPONTYPE_RIFLES', 11);		// Rifles Weapons like M1 Garand or K98
-define('WEAPONTYPE_HEAVYWEAPONS', 12);	// Heavy Weapons like portable machine gun or rocket launchers.
+define('WEAPONTYPE_MACHINEGUN', 0);			// MachineGun, Maschinenpistolen
+define('WEAPONTYPE_SNIPER', 1);				// Sniper, Scharfschützengewehre
+define('WEAPONTYPE_PISTOL', 2);				// Pistol, Pistole
+define('WEAPONTYPE_GRENADE', 3);			// Grenade, Granaten
+define('WEAPONTYPE_STANDWEAPON', 4);		// Stand-MG, Stand-MG's
+define('WEAPONTYPE_TANK', 5);				// Tanks, Panzer
+define('WEAPONTYPE_MISC', 6);				// Misc, Sonstiges
+define('WEAPONTYPE_ASSAULT', 7);			// Assault Rifles, Sturmgewehre
+define('WEAPONTYPE_LIGHTMACHINEGUN', 8);	// Light MachineGun, Leichte Maschinengewehre
+define('WEAPONTYPE_SHOTGUN', 9);			// Shotgun, Schrotflinten
+define('WEAPONTYPE_SPECIAL', 10);			// Special weapons like Claymore, RPG etc.
+define('WEAPONTYPE_RIFLES', 11);			// Rifles Weapons like M1 Garand or K98
+define('WEAPONTYPE_HEAVYWEAPONS', 12);		// Heavy Weapons like rocket launchers.
+define('WEAPONTYPE_SECONDARYGRENADE', 13);	// Secondary Grenade
 // --- 
 
 // --- Config Level defines
