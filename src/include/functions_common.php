@@ -548,7 +548,7 @@ function InitConfigurationValues()
 
 	// Web defaults 
 	// --- Theme Handling
-	if ( !isset($content['web_theme']) ) { $content['web_theme'] = "default"; }
+	if ( !isset($content['web_theme']) ) { $content['web_theme'] = "codww"; }
 	if ( isset($_SESSION['CUSTOM_THEME']) && VerifyTheme($_SESSION['CUSTOM_THEME']) )
 		$content['user_theme'] = $_SESSION['CUSTOM_THEME'];
 	else
@@ -682,7 +682,7 @@ function DieWithErrorMsg( $szerrmsg )
 			"<td class=\"PriorityError\" align=\"center\" colspan=\"2\">" . 
 			"<H3>Critical Error occured</H3>" . 
 			"</td></tr>" . 
-			"<tr><td class=\"cellmenu1\" align=\"left\">Errordetails:</td>" . 
+			"<tr><td class=\"cellmenu1_naked\" align=\"left\">Errordetails:</td>" . 
 			"<td class=\"tableBackground\" align=\"left\">" . 
 			$szerrmsg . 
 			"</td></tr></table>" . 
@@ -703,7 +703,7 @@ function DieWithFriendlyErrorMsg( $szerrmsg )
 		"<td class=\"PriorityWarning\" align=\"center\" colspan=\"2\">" . 
 		"<H3>Error occured</H3>" . 
 		"</td></tr>" . 
-		"<tr><td class=\"cellmenu1\" align=\"left\">Errordetails:</td>" . 
+		"<tr><td class=\"cellmenu1_naked\" align=\"left\">Errordetails:</td>" . 
 		"<td class=\"tableBackground\" align=\"left\">" . 
 		$szerrmsg . 
 		"</td></tr></table>" . 

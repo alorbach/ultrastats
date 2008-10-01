@@ -257,7 +257,7 @@ $content['LN_CFG_GAMEVER'] = "Spielversion";
 $content['LN_INSTALL_TITLETOP'] = "Installiere UltraStats Version %1 - Schritt %2";
 $content['LN_INSTALL_TITLE'] = "Installer Schritt %1";
 $content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats ist bereits konfiguriert/installiert!<br><br> Falls du UltraStats reinstallieren willst, lösche die aktuelle <B>config.php</B> oder ersetzte diese mit einer leeren Datei.<br>Klick <A HREF="index.php">hier</A> um zur UltraStats Hauptseite zurück zukehren.';
-$content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "Mindestens eine Datei oder Ordner (oder mehrere) ist nicht beschreibbar, bitte überprüfe die Rechte. <br>Unter Linux kannst du diesen Befehle verwenden: '%1' and '%2'.";
+$content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "Mindestens eine Datei oder Ordner (oder mehrere) ist nicht beschreibbar, bitte überprüfe die Rechte. <br>Unter Linux kannst du diesen Befehle verwenden:<br>Erstelle eine leere config.php: '%1'<br>Setzet Schreibrechte auf config.php: '%2'<br>Setzte Schreibrechte auf Verzeichnisse: '%3'";
 $content['LN_INSTALL_SAMPLECONFIGMISSING'] = "Die ausgewählte Konfiguration Datei '%1' ist nicht vorhanden. Vielleicht hast du nicht alle UltraStats Datein hochgeladen.";
 $content['LN_INSTALL_ERRORCONNECTFAILED'] = "Datenbank Verbindung zu '%1' gescheitert! Bitte überprüfe Servername, Port, Benutzer und Passwort!";
 $content['LN_INSTALL_ERRORACCESSDENIED'] = "Datenbank '%1' kann nicht verwendet werden! Falls die Datenbank nicht vorhanden ist, erstelle diese oder überprüfe die Benutzer Zugriffs Berechtigung!";

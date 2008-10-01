@@ -135,7 +135,6 @@ if ( $content['INSTALL_STEP'] == 2 )
 				$content['fileperm'][$i]['BGCOLOR'] = "#770000";
 				$content['fileperm'][$i]['ISSUCCESS'] = "NOT Writeable"; 
 				$bSuccess = false;
-//				echo  "mowl1";
 			}
 		}
 		else
@@ -158,7 +157,6 @@ if ( $content['INSTALL_STEP'] == 2 )
 				$content['fileperm'][$i]['BGCOLOR'] = "#770000";
 				$content['fileperm'][$i]['ISSUCCESS'] = "NOT Writeable"; 
 				$bSuccess = false;
-				echo  "mowl2";
 			}
 		}
 	}
@@ -168,7 +166,7 @@ if ( $content['INSTALL_STEP'] == 2 )
 		$content['NEXT_ENABLED'] = "false";
 		$content['RECHECK_ENABLED'] = "true";
 		$content['iserror'] = "true";
-		$content['errormsg'] = GetAndReplaceLangStr( $content['LN_INSTALL_FILEORDIRNOTWRITEABLE'], "chmod 666 ./config.php", "chmod 777 ./gamelogs/ ./images/maps/ ./images/serverlogos/ ./images/weapons/");
+		$content['errormsg'] = GetAndReplaceLangStr( $content['LN_INSTALL_FILEORDIRNOTWRITEABLE'], "touch config.php", "chmod 666 ./config.php", "chmod 777 ./gamelogs/ ./images/maps/ ./images/serverlogos/ ./images/weapons/");
 	}
 
 	// Check if sample config file is available
