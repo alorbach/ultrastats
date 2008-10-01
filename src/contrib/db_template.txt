@@ -579,8 +579,7 @@ INSERT INTO `stats_language_strings` (`LANG`, `STRINGID`, `TEXT`) VALUES('EN', '
 -- 
 -- data for table `stats_weapons` , all other data will be added based on the game
 -- 
-
-INSERT INTO `stats_weapons` (`ID`, `INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES (32, 'none', '', 0, 'No Weapon at all', 'weapon_none', '', 0, 0, '');
+INSERT INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('none', '', 10, 'No Weapon at all', 'weapon_none', '', 0, 0, '');
 
 -- --------------------------------------------------------
 

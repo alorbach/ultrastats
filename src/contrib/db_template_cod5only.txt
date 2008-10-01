@@ -81,7 +81,6 @@ INSERT INTO `stats_language_strings` (`LANG`, `STRINGID`, `TEXT`) VALUES('EN', '
 
 -- Insert weapons for Cod5
 
-INSERT INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('none', '', 10, 'No Weapon at all', 'weapon_none', '', 0, 0, '');
 INSERT INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('m1carbine_gl_mp', '', 11, 'M1 Carbine + Grenade Launcher', 'weapon_m1carbine_mp', 'http://en.wikipedia.org/wiki/M1_carbine', 0, 0, '');
 INSERT INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('frag_grenade_mp', '', 3, 'Frag Grenade', 'weapon_frag_grenade_mp', 'http://en.wikipedia.org/wiki/Fragmentation_grenade', 0, 0, '');
 INSERT INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('briefcase_bomb_mp', '', 10, 'Bomb Explosion', 'weapon_briefcase_bomb_mp', '', 0, 0, '');
