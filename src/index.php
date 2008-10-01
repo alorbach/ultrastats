@@ -466,12 +466,8 @@ $sqlquery = "SELECT " .
 					STATS_CONSOLIDATED . ".VALUE_INT, " . 
 					STATS_CONSOLIDATED . ".VALUE_TXT, " . 
 					STATS_CONSOLIDATED . ".DescriptionID, " . 
-//					STATS_LANGUAGE_STRINGS . ".TEXT as Description, " .
 					STATS_CONSOLIDATED . ".PLAYER_ID " . 
 					" FROM " . STATS_CONSOLIDATED . 
-//					" LEFT JOIN (" . STATS_LANGUAGE_STRINGS . 
-//					") ON (" . 
-//					STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 					" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'medal_pro%' " .
 					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
 					$szTimeWhere . 
@@ -509,6 +505,8 @@ else
 	$content['medalsproenable'] = "false";
 // --- END PRO Medals Code
 
+
+/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
 // --- BEGIN ANTI Medals Code
 $sqlquery = "SELECT " .
 					STATS_CONSOLIDATED . ".NAME, " . 
@@ -516,12 +514,8 @@ $sqlquery = "SELECT " .
 					STATS_CONSOLIDATED . ".VALUE_INT, " . 
 					STATS_CONSOLIDATED . ".VALUE_TXT, " . 
 					STATS_CONSOLIDATED . ".DescriptionID, " . 
-//					STATS_LANGUAGE_STRINGS . ".TEXT as Description, " .
 					STATS_CONSOLIDATED . ".PLAYER_ID " . 
 					" FROM " . STATS_CONSOLIDATED . 
-//					" LEFT JOIN (" . STATS_LANGUAGE_STRINGS . 
-//					") ON (" . 
-//					STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_CONSOLIDATED . ".DescriptionID) " . 
 					" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'medal_anti%' " .
 					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
 					" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
@@ -555,6 +549,7 @@ if ( isset($content['medals_anti']) )
 	}
 }
 else
+*/
 	$content['medalsantienable'] = "false";
 // --- END ANTI Medals Code
 

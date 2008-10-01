@@ -55,6 +55,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 		$szTimeFilter = "";
 
 	// --- PRO MEDALS
+	$content['medals']['medal_pro_killer']['DisplayName'] = "Killer";
+	$content['medals']['medal_pro_killer']['GroupedPlayerID'] = "PLAYERID";
 	$content['medals']['medal_pro_killer']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".PLAYERID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -70,6 +72,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_pro_headshot']['DisplayName'] = "Headshot";
+	$content['medals']['medal_pro_headshot']['GroupedPlayerID'] = "PLAYERID";
 	$content['medals']['medal_pro_headshot']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".PLAYERID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -86,6 +90,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_pro_explosivekiller']['DisplayName'] = "Explosive Killer";
+	$content['medals']['medal_pro_explosivekiller']['GroupedPlayerID'] = "PLAYERID";
 	$content['medals']['medal_pro_explosivekiller']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".PLAYERID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -102,6 +108,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_pro_pistol']['DisplayName'] = "Pistol";
+	$content['medals']['medal_pro_pistol']['GroupedPlayerID'] = "PLAYERID";
 	$content['medals']['medal_pro_pistol']['sql'] = "SELECT " . 
 				STATS_PLAYER_KILLS . ".PLAYERID, " . 
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -123,6 +131,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 			$content['gen_gameversion'] == COD2 || 
 			$content['gen_gameversion'] == COD5 )
 	{
+		$content['medals']['medal_pro_slappyhappy']['DisplayName'] = "Slappy Happy";
+		$content['medals']['medal_pro_slappyhappy']['GroupedPlayerID'] = "PLAYERID";
 		$content['medals']['medal_pro_slappyhappy']['sql'] = "SELECT " .
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -139,6 +149,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 
+		$content['medals']['medal_pro_sniper']['DisplayName'] = "Sniper";
+		$content['medals']['medal_pro_sniper']['GroupedPlayerID'] = "PLAYERID";
 		$content['medals']['medal_pro_sniper']['sql'] = "SELECT " .
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -157,6 +169,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 	}
 	else if($content['gen_gameversion'] == COD4)
 	{
+		$content['medals']['medal_pro_knifekills']['DisplayName'] = "Knife Kills";
+		$content['medals']['medal_pro_knifekills']['GroupedPlayerID'] = "PLAYERID";
 		$content['medals']['medal_pro_knifekills']['sql'] = "SELECT " . 
 					STATS_PLAYER_KILLS . ".PLAYERID, " . 
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -173,6 +187,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 
+		$content['medals']['medal_pro_sniper']['DisplayName'] = "Sniper";
+		$content['medals']['medal_pro_sniper']['GroupedPlayerID'] = "PLAYERID";
 		$content['medals']['medal_pro_sniper']['sql'] = "SELECT " . 
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -189,6 +205,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
 					" ORDER BY AllKills";
 
+		$content['medals']['medal_pro_claymorec4']['DisplayName'] = "Claymore/C4";
+		$content['medals']['medal_pro_claymorec4']['GroupedPlayerID'] = "PLAYERID";
 		$content['medals']['medal_pro_claymorec4']['sql'] = "SELECT " .
 					STATS_PLAYER_KILLS . ".PLAYERID, " .
 					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -207,7 +225,10 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 	}
 	// --- 
 
+/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
 	// --- ANTI Medals
+	$content['medals']['medal_anti_no1target']['DisplayName'] = "No 1 Target";
+	$content['medals']['medal_anti_no1target']['GroupedPlayerID'] = "ENEMYID";
 	$content['medals']['medal_anti_no1target']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".ENEMYID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -223,6 +244,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_anti_teamkiller']['DisplayName'] = "Teamkiller";
+	$content['medals']['medal_anti_teamkiller']['GroupedPlayerID'] = "GUID";
 	$content['medals']['medal_anti_teamkiller']['sql'] = "SELECT " .
 				STATS_PLAYERS . ".GUID, " .
 				" sum(" . STATS_PLAYERS . ".Teamkills) as AllKills" . 
@@ -234,6 +257,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_anti_suicide']['DisplayName'] = "Suicide";
+	$content['medals']['medal_anti_suicide']['GroupedPlayerID'] = "GUID";
 	$content['medals']['medal_anti_suicide']['sql'] = "SELECT " .
 				STATS_PLAYERS . ".GUID, " .
 				" sum(" . STATS_PLAYERS . ".Suicides) as AllKills" . 
@@ -245,6 +270,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYERS . ".GUID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_anti_nademagnet']['DisplayName'] = "Nade Magnet";
+	$content['medals']['medal_anti_nademagnet']['GroupedPlayerID'] = "ENEMYID";
 	$content['medals']['medal_anti_nademagnet']['sql'] = "SELECT " .
 				STATS_PLAYER_KILLS . ".ENEMYID, " .
 				" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
@@ -261,6 +288,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_PLAYER_KILLS . ".ENEMYID " . 
 				" ORDER BY AllKills";
 
+	$content['medals']['medal_anti_whiner']['DisplayName'] = "Whiner";
+	$content['medals']['medal_anti_whiner']['GroupedPlayerID'] = "PLAYERID";
 	$content['medals']['medal_anti_whiner']['sql'] = "SELECT " .
 				STATS_CHAT . ".PLAYERID, " .
 				" count(" . STATS_CHAT . ".ID) as AllKills" . 
@@ -276,34 +305,7 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_CHAT . ".PLAYERID " . 
 				" ORDER BY AllKills";
 	// ---
-
-	// --- Set Display Names!
-	$content['medals']['medal_pro_killer']['DisplayName'] = "Killer";
-	$content['medals']['medal_pro_killer']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_headshot']['DisplayName'] = "Headshot";
-	$content['medals']['medal_pro_headshot']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_explosivekiller']['DisplayName'] = "Explosive Killer";
-	$content['medals']['medal_pro_explosivekiller']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_slappyhappy']['DisplayName'] = "Slappy Happy";
-	$content['medals']['medal_pro_slappyhappy']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_sniper']['DisplayName'] = "Sniper";
-	$content['medals']['medal_pro_sniper']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_knifekills']['DisplayName'] = "Knife Kills";
-	$content['medals']['medal_pro_knifekills']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_pistol']['DisplayName'] = "Pistol";
-	$content['medals']['medal_pro_pistol']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_pro_claymorec4']['DisplayName'] = "Claymore/C4";
-	$content['medals']['medal_pro_claymorec4']['GroupedPlayerID'] = "PLAYERID";
-	$content['medals']['medal_anti_no1target']['DisplayName'] = "No 1 Target";
-	$content['medals']['medal_anti_no1target']['GroupedPlayerID'] = "ENEMYID";
-	$content['medals']['medal_anti_teamkiller']['DisplayName'] = "Teamkiller";
-	$content['medals']['medal_anti_teamkiller']['GroupedPlayerID'] = "GUID";
-	$content['medals']['medal_anti_suicide']['DisplayName'] = "Suicide";
-	$content['medals']['medal_anti_suicide']['GroupedPlayerID'] = "GUID";
-	$content['medals']['medal_anti_nademagnet']['DisplayName'] = "Nade Magnet";
-	$content['medals']['medal_anti_nademagnet']['GroupedPlayerID'] = "ENEMYID";
-	$content['medals']['medal_anti_whiner']['DisplayName'] = "Whiner";
-	$content['medals']['medal_anti_whiner']['GroupedPlayerID'] = "PLAYERID";
+*/
 
 	// Can't use this core yet, it only works on PHP5: foreach ($content['medals'] as $key => &$medal)
 	foreach ($content['medals'] as $key => $medal)
@@ -545,7 +547,7 @@ function CreateAllMedals( $serverid )
 	}
 	// ==========================            =================================
 
-
+/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
 	// ========================== ANTI MEDALS =================================
 	// --- Calc: medal_anti_no1target
 	if ( $content["medal_anti_no1target"] == "yes" ) 
@@ -651,8 +653,8 @@ function CreateAllMedals( $serverid )
 			PrintHTMLDebugInfo( DEBUG_INFO, "Medal", "medal_anti_whiner is empty!" );
 	}
 	// --- 
-
 	// ==========================            =================================
+*/
 
 	// Finished
 	PrintHTMLDebugInfo( DEBUG_INFO, "Medal", "Finished Medal Calculation...");
