@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------
+Version 0.3.8 (beta), 2008-10-01
+New features:
+- Added few missing language strings for certain existing and new weapons. 
+- Added README document
+- Added images for certain existing and new weapons
+Changes and bugfixes:
+- Lots of fixes in the weapon table, replaced some of the existing 
+  weapon images with better ones. 
+- Added new attachment images
+- Removed ANTI Medals from code for now. 
+- Fixed minor installer issues and enhanced critical error messages. 
+- Changed few minor things in the docs and about page
+--------------------------------------------------------------------------
 Version 0.3.7 (devel), 2008-09-30
 New features:
 - Added some german translation

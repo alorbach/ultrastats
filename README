@@ -1,10 +1,15 @@
- UltraStats Readme
+ README
  ----------------------------------
 
- Welcome to UltraStats, a powerfull parser gamelogs created 
- by for Call of Duty gameservers.
+ Welcome to UltraStats, a powerfull logparser for gamelogs 
+ created by for Call of Duty gameservers. 
 
+ 
+ AUTHORS
+ ----------------------------------
+ Andre Lorbach (alias deltaray)
 
+ 
  Support Games
  ----------------------------------
  - Call of Duty
@@ -13,15 +18,23 @@
  - Call of Duty 4: Modern Warfare
  - Call of Duty 5: World at War
 
-
- Other documents
+ 
+ ChangeLog
  ----------------------------------
- - For Installation help, please read the INSTALL document. 
- - The UltraStats license can be found in the COPYING document. 
- - The Version History can be found in the ChangeLog document. 
+ The Version History can be found in the ChangeLog document. 
+
+ 
+ INSTALL
+ ----------------------------------
+ For Installation help, please read the INSTALL document. 
 
 
- UltraStats Support 
+ COPYING
+ --------------------------------
+ The UltraStats license can be found in the COPYING document. 
+
+ 
+ BUGS
  --------------------------------
  If you experience problems or any bugs within UltraStats, 
  feel free to post into our Forums at http://www.ultrastats.org
