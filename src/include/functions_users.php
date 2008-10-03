@@ -99,6 +99,10 @@ function CompareVersionNumbers( $oldVer, $newVer )
 	$currentVersion = explode(".", $oldVer);
 	$newVersion = explode(".", $newVer);
 
+	// Check if the format is correct!
+	if ( count($newVersion) != 3 )
+		return false;
+
 	// check for update
 	if		( isset($newVersion[0]) && $newVersion[0] > $currentVersion[0] )
 		return true;
