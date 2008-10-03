@@ -169,11 +169,24 @@ function PrintHTMLDebugInfo( $facility, $fromwhere, $szDbgInfo )
 	}
 
 	//Flush php output
-	flush();
+	FlushParserOutput();
 
 	// If DEBUG_ERROR_WTF and $content['gen_phpdebug'] is set, abort!
 	if ( $content['gen_phpdebug'] == 1 && $facility == DEBUG_ERROR_WTF ) 
 		die ( $szDbgInfo );
+}
+
+function FlushParserOutput()
+{
+	global $RUNMODE;
+	
+	// not needed in console mode
+	if ( $RUNMODE == RUNMODE_COMMANDLINE )
+		return;
+
+	//Flush php output
+	@flush();
+	@ob_flush();
 }
 
 function GetFacilityAsString( $facility )

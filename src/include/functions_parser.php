@@ -613,7 +613,10 @@ function RunParserNow()
 		if (feof ($myhandle)) 
 			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Error, file is empty " . $myserver['GameLogLocation'] );
 
-		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Opening for counting the lines..." );
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Opening for counting the lines, this may take a while depending on the size of your logfile..." );
+
+		//Flush output
+		FlushParserOutput();
 
 		while (!feof ($myhandle))
 		{
@@ -647,6 +650,11 @@ function RunParserNow()
 				// --- END TimeHandling
 			}
 		}
+
+		// --- FIXED TIME CALC BUG, I can't believe nobody ever found this easy bug :S
+		// Append seconds we have left!
+		$gl_totallogtimesecs += ($currentseconds - $initseconds);
+		// --- 
 
 		fclose($myhandle);
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "has $gl_newlastline lines ");
@@ -825,7 +833,7 @@ function RunParserNow()
 								if ($RUNMODE == RUNMODE_WEBSERVER)
 								{
 									//Flush php output
-									flush();
+									FlushParserOutput();
 
 									//Check for script timeout
 									if ( ( microtime_float() - $ParserStart) > $MaxExecutionTime)
@@ -1299,6 +1307,31 @@ function Parser_AddPlayer( $myArray )
 }
 /*	----------------------------------------------------*/
 
+/*	----------------------------------------------------
+*	Helper function to manually add mysterically 
+*	occured players
+*/
+function Parser_AddPlayerManually( $szPlayerGuid, $szPlayerAlias, $nClientID )
+{
+	global $myPlayers;
+
+	// Init Player entry array
+	$myPlayers[ $szPlayerGuid ] = array();
+
+	// Set Values we know
+	$myPlayers[ $szPlayerGuid ][PLAYER_GUID] = $szPlayerGuid;
+//	$myPlayers[ $myArray[PLAYER_ID] ][PLAYER_ID] = $nClientID;
+	$myPlayers[ $szPlayerGuid ][PLAYER_ID] = $nClientID;
+	$myPlayers[ $szPlayerGuid ][PLAYER_NAME] = $szPlayerAlias;
+
+	// Init Values!
+	$myPlayers[ $szPlayerGuid ][PLAYER_TEAM] = "";
+	$myPlayers[ $szPlayerGuid ][PLAYER_KILLS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_DEATHS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_TKS] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_SUICIDES] = 0;
+	$myPlayers[ $szPlayerGuid ][PLAYER_PBGUID] = "";
+}
 
 /*	----------------------------------------------------*/
 /*	Helper function to create thwe static record of a player
@@ -1630,12 +1663,18 @@ function Parser_AddKillAndDeath( $myArray )
 	if ( !isset($myPlayers[$myArray[KILL_OPFER_GUID]]) )
 	{
 		// Opfer not found, we don't count this!
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Error, Player Opfer '" . $myArray[KILL_OPFER_GUID] . " already left the server, possible Double GUID! Kill may not be NOT Counted!");
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Player Opfer '" . $myArray[KILL_OPFER_GUID] . " not in Players Array! Manually adding Player into round player array!");
+
+		// Manually add the player now!
+		Parser_AddPlayerManually( $myArray[KILL_OPFER_GUID], $myArray[KILL_OPFER_NAME], $myArray[KILL_OPFER_ID] );
+
+//		print_r ( $myPlayers );
+//		exit;
 
 		// In this case, we do NOT count!
 //		return; // TODO: Was commented out, why?
 	}
-	else
+//	else
 	{
 		// Set Opfer reference!
 		$opfer = &$myPlayers[ $myArray[KILL_OPFER_GUID] ];
@@ -1643,11 +1682,14 @@ function Parser_AddKillAndDeath( $myArray )
 
 	if ( !isset($myPlayers[$myArray[KILL_ATTACKER_GUID]]) )
 	{
-		// Attacker not found, we don't count this!
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Error, Player Attacker '" . $myArray[KILL_OPFER_GUID] . " already left the server, possible Double GUID! Kill is NOT Counted!");
+		// Opfer not found, we don't count this!
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Player Attacker '" . $myArray[KILL_ATTACKER_GUID] . " is not in players Array! Manually adding Player into round player array!");
+
+		// Manually add the player now!
+		Parser_AddPlayerManually( $myArray[KILL_ATTACKER_GUID], $myArray[KILL_ATTACKER_NAME], $myArray[KILL_ATTACKER_ID] );
 
 		// In this case, we do NOT count!
-		return; // TODO: Was commented out, why?
+//		return; // TODO: Was commented out, why?
 	}
 	// --- 
 
@@ -1677,7 +1719,7 @@ function Parser_AddKillAndDeath( $myArray )
 				$myArray[KILL_ATTACKER_TEAM] = TEAM_ALLIES; 
 			else if ( $myArray[KILL_OPFER_TEAM] == TEAM_WTF ) // WTF default lol! God I hate the bugged logformat from IW so much ... 
 			{
-				PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddKillAndDeath", "Setting Teams to default, attacker may be empty!");
+				PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddKillAndDeath", "Setting Teams to default, attacker may be empty!");
 				$myArray[KILL_ATTACKER_TEAM] = TEAM_ALLIES; 
 				$myArray[KILL_OPFER_TEAM] = TEAM_AXIS; 
 			}
