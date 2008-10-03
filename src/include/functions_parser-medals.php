@@ -129,7 +129,7 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 	if (	$content['gen_gameversion'] == COD || 
 			$content['gen_gameversion'] == CODUO || 
 			$content['gen_gameversion'] == COD2 || 
-			$content['gen_gameversion'] == COD5 )
+			$content['gen_gameversion'] == CODWW )
 	{
 		$content['medals']['medal_pro_slappyhappy']['DisplayName'] = "Slappy Happy";
 		$content['medals']['medal_pro_slappyhappy']['GroupedPlayerID'] = "PLAYERID";
@@ -408,7 +408,7 @@ function CreateAllMedals( $serverid )
 	if (	$content['gen_gameversion'] == COD || 
 			$content['gen_gameversion'] == CODUO || 
 			$content['gen_gameversion'] == COD2 ||
-			$content['gen_gameversion'] == COD5 )
+			$content['gen_gameversion'] == CODWW )
 	{
 		// --- Calc: medal_pro_slappyhappy
 		if ( $content["medal_pro_slappyhappy"] == "yes" ) 

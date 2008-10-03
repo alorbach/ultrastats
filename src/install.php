@@ -197,7 +197,7 @@ else if ( $content['INSTALL_STEP'] == 3 )
 	}
 
 	// Create Gameversions List and set default game version
-	$content['gen_gameversion'] = COD5;
+	$content['gen_gameversion'] = CODWW;
 	CreateGameVersionsList();
 }
 else if ( $content['INSTALL_STEP'] == 4 )
@@ -268,8 +268,8 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		ImportDataFile( $content['BASEPATH'] . "contrib/db_template_codww2only.txt" );
 	else if ( $_SESSION['GEN_GAMEVER'] == COD4 )
 		ImportDataFile( $content['BASEPATH'] . "contrib/db_template_cod4only.txt" );
-	else if ( $_SESSION['GEN_GAMEVER'] == COD5 )
-		ImportDataFile( $content['BASEPATH'] . "contrib/db_template_cod5only.txt" );
+	else if ( $_SESSION['GEN_GAMEVER'] == CODWW )
+		ImportDataFile( $content['BASEPATH'] . "contrib/db_template_codwwonly.txt" );
 
 	// Continue if no error occured while loading the db files
 	if (!isset($content['iserror']) || $content['iserror'] == "false" ) 

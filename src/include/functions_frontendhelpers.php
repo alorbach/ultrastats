@@ -211,7 +211,7 @@ function CreateWeaponArray()
 		AddToWeaponArray(WEAPONTYPE_SPECIAL, $content['LN_WEAPONTYPE_SPECIAL']);
 		AddToWeaponArray(WEAPONTYPE_MISC, $content['LN_WEAPONTYPE_MISC']);
 	}
-	else if ( $content['gen_gameversion'] == COD5 ) 
+	else if ( $content['gen_gameversion'] == CODWW ) 
 	{
 		AddToWeaponArray(WEAPONTYPE_MACHINEGUN, $content['LN_WEAPONTYPE_SUBMACHINEGUN']);
 		AddToWeaponArray(WEAPONTYPE_RIFLES, $content['LN_WEAPONTYPE_RIFLES']);

@@ -1165,7 +1165,7 @@ function Parser_FinalizeRound( $roundlastedtime )
 			if ( 
 					$content['gen_gameversion'] == COD4 && $myRound[ROUND_GAMETYPE] == "war" 
 					||
-					$content['gen_gameversion'] == COD5 && $myRound[ROUND_GAMETYPE] == "tdm" 
+					$content['gen_gameversion'] == CODWW && $myRound[ROUND_GAMETYPE] == "tdm" 
 				) 
 			{	
 				$KillsAllies = 0;

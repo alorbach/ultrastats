@@ -54,7 +54,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.8";
+$content['BUILDNUMBER'] = "0.3.9";
 $content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
@@ -258,9 +258,9 @@ function CreateGameVersionsList()
 	$content['GAMEVERSIONS'][COD4]['gamevertitle'] = LN_GEN_COD4;
 	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][COD4]['gamever'] ) { $content['GAMEVERSIONS'][COD4]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][COD4]['selected'] = ""; }
 
-	$content['GAMEVERSIONS'][COD5]['gamever'] = COD5;
-	$content['GAMEVERSIONS'][COD5]['gamevertitle'] = LN_GEN_COD5;
-	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][COD5]['gamever'] ) { $content['GAMEVERSIONS'][COD5]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][COD5]['selected'] = ""; }
+	$content['GAMEVERSIONS'][CODWW]['gamever'] = CODWW;
+	$content['GAMEVERSIONS'][CODWW]['gamevertitle'] = LN_GEN_CODWW;
+	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][CODWW]['gamever'] ) { $content['GAMEVERSIONS'][CODWW]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][CODWW]['selected'] = ""; }
 	// ---
 }
 
@@ -522,7 +522,7 @@ function InitConfigurationValues()
 		if (	$content['gen_gameversion'] == COD || 
 				$content['gen_gameversion'] == CODUO || 
 				$content['gen_gameversion'] == COD2 ||
-				$content['gen_gameversion'] == COD5 )
+				$content['gen_gameversion'] == CODWW )
 			$content['gen_gameversion_picpath'] = "cod"; 
 		else if($content['gen_gameversion'] == COD4)
 			$content['gen_gameversion_picpath'] = "cod4"; 
@@ -1405,9 +1405,9 @@ function StartPHPSession()
 	global $RUNMODE;
 	if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		// This will start the session
-		if (session_id() == "")
-			session_start();
+		// Start Session in any case!
+		session_start();
+//		if (session_id() == "")
 
 		if ( !isset($_SESSION['SESSION_STARTED']) )
 			$_SESSION['SESSION_STARTED'] = "true";
