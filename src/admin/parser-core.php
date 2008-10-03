@@ -35,7 +35,7 @@ define('IS_PARSERPAGE', true);
 $content['IS_PARSERPAGE'] = true;
 
 InitUltraStats();
-CheckForUserLogin( true );
+CheckForUserLogin( false );
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 

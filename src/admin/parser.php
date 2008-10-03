@@ -31,7 +31,7 @@ define('IS_ADMINPAGE', true);
 $content['IS_ADMINPAGE'] = true;
 
 InitUltraStats();
-CheckForUserLogin( true );
+CheckForUserLogin( false );
 IncludeLanguageFile( $gl_root_path . 'lang/' . $LANG . '/admin.php' );
 // ***					*** //
 
