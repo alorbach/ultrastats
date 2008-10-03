@@ -369,7 +369,7 @@ function ResetLastLine()
 	}
 
 	// --- Set the last FilePosition to 0 
-	$result = DB_Query("UPDATE " . STATS_SERVERS . " SET LastLogLine = '0' WHERE ID = " . $myserver['ID']);
+	$result = DB_Query("UPDATE " . STATS_SERVERS . " SET LastLogLine = 0, PlayedSeconds = 0, LastLogLineChecksum = 0 WHERE ID = " . $myserver['ID']);
 	DB_FreeQuery($result);
 
 	// Dbg
@@ -618,9 +618,18 @@ function RunParserNow()
 	// StartDbg
 	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Starting Parser...");
 	
-	// Get LastLogLine Value
+	// Get Stored LastLogline Value
 	$db_lastlogline = GetLastLogLine( $myserver['ID'] );
-	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Last parsed Line was " . $db_lastlogline);
+	// --- TIME CALC FIX!
+	$db_lastplayedseconds = GetLastPlayedSeconds( $myserver['ID'] );
+	if ( $db_lastplayedseconds > 0 ) 
+	{
+		// Append prevous played seconds to gl_totallogtimesecs!
+		$gl_totallogtimesecs += $db_lastplayedseconds;
+	}
+	// ---
+	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "The last parsed line was " . $db_lastlogline . ", playedseconds = " . $db_lastplayedseconds);
+
 
 	// --- First Loop - Obtain linecount
 	$myhandle = fopen( $myserver['GameLogLocation'], "r");
@@ -668,14 +677,16 @@ function RunParserNow()
 		}
 
 		// --- FIXED TIME CALC BUG, I can't believe nobody ever found this easy bug :S
-		// Append seconds we have left!
-		$gl_totallogtimesecs += ($currentseconds - $initseconds);
+		// Append seconds we have left + the saved seconds from the  last processed time!
+		$gl_totallogtimesecs += ( ($currentseconds) - $initseconds);
 		// --- 
 
 		fclose($myhandle);
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "has $gl_newlastline lines ");
-		PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Total Time player in the logfile is '" . $gl_totallogtimesecs . "' seconds");
-		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Closing ..." );
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Total amount of seconds played since last time: " . $gl_totallogtimesecs );
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Closing Filehandle ..." );
+
+// TODO! Compare Last LogLine with Checksum!
 
 		if ($db_lastlogline == 0)
 			PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "First time, processing whole Gamelogfile, this could take some time...");
@@ -694,12 +705,13 @@ function RunParserNow()
 	}
 	else
 	{
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Gamelog", "Could not open the game logfile ".$CFG['Gamelogfile']." - Check File name and path");
+		PrintHTMLDebugInfo( DEBUG_ERROR, "Gamelog", "Could not open the game logfile ". $myserver['GameLogLocation'] ." - Check File name and path");
 		return;
 	}
 
 	// Get the last file modification time
 	$gl_logfiletimemod = filemtime( $myserver['GameLogLocation'] );
+	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Last modification date of the gamelogfile " . $myserver['GameLogLocation'] . " was " . date ("Y-m-d H:i:s", $gl_logfiletimemod) );
 
 	// Copy Last line of the file
 	$gl_MaxLineCount = $gl_newlastline;
@@ -711,12 +723,13 @@ function RunParserNow()
 	{
 		// --- Init some vars
 		$currentgametype = "";
-		$CurrentGame[] = "";
+		$CurrentGame = array();
 		$currentline = 0;
 		$arrayline = 0;
 		$initgameseconds = 0;			// Used to compare
 		$currentseconds = -1;			// Reinit | Update! Changed to -1, because otherwise the first round could have been skipped
-		$currenttotalseconds = 0;		// Needed to determine the time the round started
+//		$currenttotalseconds = 0;		// Needed to determine the time the round started
+		$currenttotalseconds = $db_lastplayedseconds;	// Helper Needed to determine the time the round started | TIMECALC FIXED!
 
 		// 0 means search for "InitGame:"
 		// 1 means search for "ShutdownGame:" to get a whole game and then process it!
@@ -750,9 +763,31 @@ function RunParserNow()
 
 					// Add to current running total time
 					if ( $currentseconds > $lastseconds )
-						$currenttotalseconds += ($currentseconds - $lastseconds );
+					{
+						/* Very complex handling needed here!
+						*	If $currenttotalseconds is more then 0, the lastseconds are 0 or smaller and
+						*	it is NOT a ServerRESTART - then we do NOT append the seconds. 
+						*	In all other cases, the seconds are added!
+						*		- 
+						*	Seriously, this is very complex stuff! If there just was a dvar including the
+						*	Starttime of a round ... 
+						*/
+						if ( $currenttotalseconds > 0 && $lastseconds <= 0 && !isset($logfilerestart) ) 
+							$currenttotalseconds += 0; //Dummy add!
+						else
+						{
+							$currenttotalseconds += ($currentseconds - $lastseconds);
+
+							// Special, case subtract one second in this case
+							if ( $lastseconds == -1 ) 
+								$currenttotalseconds--;
+						}
+					}
 					else if ( $currentseconds < $lastseconds )
 					{
+						// Add to total seconds as well!
+						$currenttotalseconds += ($currentseconds);
+
 						//LogTime was less then befor, then the server was restarted 
 						$logfilerestart = true;
 						PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Attention, gamelogtime was restarted from " . $lastseconds . " seconds to " . $currentseconds . " seconds");
@@ -765,7 +800,6 @@ function RunParserNow()
 
 					if ( $currentseconds != -1 ) // Init starts at -1
 					{
-// OLD WAY						if ( ($findmode == 0) && (preg_match ("/InitGame:/", $gl_linebuffer)) )
 						if ( ($findmode == 0) && ( stripos($gl_linebuffer, "InitGame:")  !== false ) )
 						{
 							$findmode = 1;	// From here start copying the game session into the buffer
@@ -802,17 +836,6 @@ function RunParserNow()
 								= If a server is restarted, we need to finish the session exactly HERE as well ;)!
 							*		
 							*/
-
-/* OLD WAY							if (	($lastseconds > $currentseconds) ||
-									(preg_match("/ShutdownGame:/", $gl_linebuffer) && $lastseconds == $currentseconds) ||
-									(preg_match ("/ExitLevel: executed/", $gl_linebuffer)) || 
-									(
-										($currentgametype == "dm" || $currentgametype == "tdm") &&
-										(preg_match ("/ShutdownGame:/", $gl_linebuffer))
-									) ||
-									( isset($logfilerestart) && $logfilerestart == true )
-								)
-*/
 							if (	( $lastseconds > $currentseconds) ||
 									( stripos($gl_linebuffer, "ShutdownGame:") !== false && $lastseconds == $currentseconds) ||
 									( stripos($gl_linebuffer, "ExitLevel: executed") !== false ) || 
@@ -824,7 +847,8 @@ function RunParserNow()
 											$currentgametype == "vtdm" )
 											&&
 										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
-									) ||
+									) 
+										||
 									( isset($logfilerestart) && $logfilerestart == true )
 								)
 							{
@@ -836,14 +860,14 @@ function RunParserNow()
 								{
 									// Set realstart time by using the server start time
 									$realstarttime = strtotime($custserverstarttime) + $initgameseconds;
-									PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Roundstart time detected through CVAR: " . date('d-m-Y h:i:s', $realstarttime));
+									PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Roundstart time detected through CVAR: " . date('Y-m-d h:i:s', $realstarttime));
 								}
+								// END TimeMod
 								else
 								{
 									// Needed to find the time when the round started
 									$realstarttime = $gl_logfiletimemod	- ( $gl_totallogtimesecs - $currenttotalseconds );
 								}
-								// END TimeMod
 
 								// Now process the Round
 								$processingtime = ProcessGameRound($CurrentGame, $realstarttime);			
@@ -853,7 +877,7 @@ function RunParserNow()
 								unset($CurrentGame);						
 
 								// Write FileCounter into database
-								SetLastLogLine($myserver['ID'], $gl_newlastline);
+								SetLastLogLine($myserver['ID'], $gl_newlastline, $currenttotalseconds);
 
 								// Keep user informed where processing is
 								PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Processed in $processingtime | " . 
@@ -874,6 +898,7 @@ function RunParserNow()
 									//Check for script timeout
 									if ( ( microtime_float() - $ParserStart) > $MaxExecutionTime)
 									{
+										define('RELOADPARSER', true);
 										print ('<br><center><B>Timelimit hit (' . $MaxExecutionTime . ' seconds).</B><br>
 												Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
 												This site will automatically reload in 5 seconds.<br></center>

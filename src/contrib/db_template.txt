@@ -205,6 +205,8 @@ CREATE TABLE `stats_servers` (
   `AdminEmail` varchar(255) NOT NULL default '',
   `GameLogLocation` varchar(255) NOT NULL default '',
   `LastLogLine` int(11) NOT NULL default '0',
+  `LastLogLineChecksum` int(11) NOT NULL default '0',
+  `PlayedSeconds` int(11) NOT NULL default '0',
   `ServerEnabled` tinyint(1) NOT NULL default '0',
   `ParsingEnabled` tinyint(1) NOT NULL default '0',
   `ftppath` varchar(255) NOT NULL default '',
