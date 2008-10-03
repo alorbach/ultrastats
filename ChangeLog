@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------
+Version 0.3.9 (beta), 2008-10-03
+New features:
+Changes and bugfixes:
+- Replaced all weapon images with new rendered weapn images from the 
+  final game. 
+- Fixed all references to Call of Duty: World ar War. 
+- Fixed minor spelling issues in default database template
+- 
+---------------------------------------------------------------------------
 Version 0.3.8 (beta), 2008-10-01
 New features:
 - Added few missing language strings for certain existing and new weapons. 
@@ -34,7 +43,7 @@ Changes and bugfixes:
 - Fixed sort order of available stats years and months
 - fixed misspelled svt40 images
 - Set default bar images for players without kills
-- Added result workaround for TDM gametype in COD5
+- Added result workaround for TDM gametype in Cod:WW
 - Added missing weapons into default sql statement set
 - Changed artillery text
 - Unknown alias is now displayed with -Topalias Unknown-
@@ -77,7 +86,7 @@ New features:
 ---------------------------------------------------------------------------
 Version 0.3.3 (devel), 2008-09-21
 New features:
-- Added 4 new Player Models for Cod5, and rewrote the hitdetection 
+- Added 4 new Player Models for Cod:WW, and rewrote the hitdetection 
   model view in the player details. Details are now shown in a popup 
   when you hover the body parts. It is also possible to configure
   which model you want to use in the player details: 
@@ -95,7 +104,7 @@ Changes and bugfixes:
 - Added menu workaround for Internet Explorer, so it works there as well. 
 - Fixed default picture in serverlist view
 - LogParser: Rewrote round begin and round end detection to 
-  work with new Cod5 Gametypes. 
+  work with new Cod:WW Gametypes. 
 - LogParser: Added workaround to add players into a running round which 
   didn't join before. This workaround is only applied in the KILL 
 - LogParser: Fixed a bug in the custom time start detection method 
@@ -107,9 +116,9 @@ Version 0.3.2 (devel), 2008-09-18
 
 New features:
 - Initial Changelog entry for the third UltraStats release
-- Added support for Cod5 (Call of Duty: World at War)
-- Added map images for cod5
-- Added weapon images for cod5
+- Added support for Cod:WW (Call of Duty: World at War)
+- Added map images for Cod:WW
+- Added weapon images for Cod:WW
 - Added string editor in Admin Center
 - Implemented new css based menu into UltraStats
 - Enhanced and cleaned up the basic "default" and "dark"

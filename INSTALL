@@ -6,7 +6,7 @@
  * Apache or IIS Webserver
  * PHP5 ( PHP4 should still work )
  * MySQL Database
- * A gamelog from a Call Of Duty 1/2/4/5 gameserver. 
+ * A gamelog from a Call Of Duty 1/Uo/2/4/WaW gameserver. 
 
  Preperations 
  ------------
@@ -126,7 +126,7 @@
 	Click on the Edit button of your server, you will see that the "Create" 
 	button for the "Remote FTP Gamelog Location" is available now. You can use
 	this button to build a valid FTP URL, here is an example of a valid one: 
-	ftp://username@127.0.0.1/.callofduty5/main/Server1_mp.log
+	ftp://username@127.0.0.1/.callofdutyww/main/Server1_mp.log
 
   8.	If you do NOT need to download the gamelog from a remote location, you can 
 	skip this step. 
