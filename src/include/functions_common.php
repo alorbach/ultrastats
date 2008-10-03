@@ -40,7 +40,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.2.145";
+$content['BUILDNUMBER'] = "0.2.146";
 $content['TITLE'] = "Ultrastats - Release " . $content['BUILDNUMBER'];	// Title of the Page 
 $content['BASEPATH'] = $gl_root_path;
 $content['EXTRA_METATAGS'] = "";
@@ -990,8 +990,8 @@ function StartPHPSession()
 	if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
 		// This will start the session
-		if (session_id() == "")
-			session_start();
+		session_start();
+//		if (session_id() == "")
 
 		if ( !isset($_SESSION['SESSION_STARTED']) )
 			$_SESSION['SESSION_STARTED'] = "true";
