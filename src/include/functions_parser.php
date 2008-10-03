@@ -578,21 +578,6 @@ function RunParserNow()
 		return;
 	}
 
-	/* moved to helpers 
-	if ($RUNMODE == RUNMODE_WEBSERVER)
-	{
-		// Max Execution time
-		set_time_limit( 120 );									// Extend Execution Time
-		$MaxExecutionTime = ini_get("max_execution_time") - 10; // -10 Seconds to be on the save side and have enough time  to finish the site!
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Gamelog", "MaxExecutionTime = $MaxExecutionTime");
-	}
-	else
-	{
-		// Unlimited
-		set_time_limit( 0 );
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Gamelog", "Console Mode, unlimited Execution TIME ");
-	}*/
-
 	// Some defaults
 	$gl_newlastline = 0;
 	$gl_linebuffer = "";
