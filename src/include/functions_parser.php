@@ -683,7 +683,7 @@ function RunParserNow()
 
 		fclose($myhandle);
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "has $gl_newlastline lines ");
-		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Total amount of seconds played since last time: " . $gl_totallogtimesecs );
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Total amount of seconds played in the whole logfile: " . $gl_totallogtimesecs );
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Closing Filehandle ..." );
 
 // TODO! Compare Last LogLine with Checksum!
