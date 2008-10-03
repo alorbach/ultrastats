@@ -1,12 +1,12 @@
 ---------------------------------------------------------------------------
 Version 0.3.9 (beta), 2008-10-03
-New features:
 Changes and bugfixes:
 - Replaced all weapon images with new rendered weapn images from the 
-  final game. 
+  final game. Added lots of missing images as well. 
 - Fixed all references to Call of Duty: World ar War. 
 - Fixed minor spelling issues in default database template
 - Removed old obselete documentation. 
+- Session Startup is done in every site now!
 ---------------------------------------------------------------------------
 Version 0.3.8 (beta), 2008-10-01
 New features:
