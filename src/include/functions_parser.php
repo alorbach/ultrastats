@@ -373,7 +373,7 @@ function ResetLastLine()
 	DB_FreeQuery($result);
 
 	// Dbg
-	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Resetted LastLine value for Server '" . $myserver['ID'] . "' ...");
+	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Reseted LastLine value for Server '" . $myserver['ID'] . "' ...");
 }
 
 
@@ -676,7 +676,10 @@ function RunParserNow()
 
 		// --- FIXED TIME CALC BUG, I can't believe nobody ever found this easy bug :S
 		// Append seconds we have left + the saved seconds from the  last processed time!
-		$gl_totallogtimesecs += ( ($currentseconds) - $initseconds);
+		if ( isset($initseconds) ) 
+			$gl_totallogtimesecs += ( ($currentseconds) - $initseconds);
+		else
+			$gl_totallogtimesecs += $currentseconds;
 		// --- 
 
 		fclose($myhandle);
@@ -697,7 +700,7 @@ function RunParserNow()
 		elseif ($gl_newlastline < $db_lastlogline)
 		{	
 			// logfile is smaller then before, start from beginning
-			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Logfile is smaller then last time, new logfile assumed. UltraStats is resetting the LastLogLine...");
+			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Logfile is smaller then last time, new logfile assumed. UltraStats is reseting the LastLogLine...");
 			
 			// Not really needed lol!
 			$db_lastlogline = 0;
@@ -708,7 +711,7 @@ function RunParserNow()
 			
 			// Draw Javascript reload!
 			define('RELOADPARSER', true);
-			print ('<br><center><B>The LastLogline was resettet, the Parser need to be reloaded to restart parsing!</B><br>
+			print ('<br><center><B>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</B><br>
 					Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
 					This site will automatically reload in 5 seconds.<br></center>
 					<script language="Javascript">function reload() { location = "' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"; } setTimeout("reload()", 5000);</script>');
