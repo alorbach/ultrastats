@@ -7,6 +7,7 @@ Changes and bugfixes:
   large logfiles which contain server restarts. Added two new fields 
   into Server Table needed for this and future enhancments. 
 - Removed some obselete weapons from template database
+- All fopen calls changed to use @fopen, this avoids php warnings
 ---------------------------------------------------------------------------
 Version 0.3.9 (beta), 2008-10-03
 Changes and bugfixes:
