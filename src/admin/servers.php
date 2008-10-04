@@ -206,7 +206,7 @@ if ( isset($_GET['op']) )
 		else if ( file_exists($content['GAMELOGLOCATION']) == false )
 		{
 			// Try to create an empty file
-			$handle = fopen( $content['GAMELOGLOCATION'] , "x");
+			$handle = @fopen( $content['GAMELOGLOCATION'] , "x");
 			fclose($handle);
 
 			// Try again

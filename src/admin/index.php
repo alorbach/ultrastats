@@ -196,7 +196,7 @@ function GetPlayerModelDisplayName( $szDirName )
 	if ( is_file( $szInfoFile ) )
 	{	
 		//Read InfoFile!
-		$infofile  = fopen($szInfoFile, 'r');
+		$infofile  = @fopen($szInfoFile, 'r');
 		if (!feof ($infofile)) 
 		{
 			while (!feof ($infofile))

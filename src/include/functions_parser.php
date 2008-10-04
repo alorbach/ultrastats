@@ -221,10 +221,10 @@ function GetLastLogFile( $overwritepasswd = "" )
 						PrintHTMLDebugInfo( DEBUG_INFO, "SCP", "Download of " . $ftppath . $ftpfilename . " - resuming from filepos " . $locallogfilesize);
 
 						// Create stream handle to the file for reading!
-						$streamIn = fopen($szFileStr, 'r');
+						$streamIn = @fopen($szFileStr, 'r');
 
 						// Create local stream handle to the file for writing!
-						$streamOut = fopen($myserver['GameLogLocation'], 'a+'); //w
+						$streamOut = @fopen($myserver['GameLogLocation'], 'a+'); //w
 
 						// Move Pointer to last known position ^^
 						fseek($streamIn, $locallogfilesize);
@@ -632,7 +632,7 @@ function RunParserNow()
 
 
 	// --- First Loop - Obtain linecount
-	$myhandle = fopen( $myserver['GameLogLocation'], "r");
+	$myhandle = @fopen( $myserver['GameLogLocation'], "r");
 	if ($myhandle)
 	{
 		if (feof ($myhandle)) 
@@ -718,7 +718,7 @@ function RunParserNow()
 	// ---
 
 	// --- Second Loop, processing Round by round now!
-	$myhandle = fopen( $myserver['GameLogLocation'], "r");
+	$myhandle = @fopen( $myserver['GameLogLocation'], "r");
 	if ($myhandle)
 	{
 		// --- Init some vars

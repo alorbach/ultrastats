@@ -580,7 +580,7 @@ function ProcessQueuedUpdateStatement()
 		return; 
 	
 	// Dump into file now
-	$myhandle = fopen( $content['sqltmpfile'], "w" );
+	$myhandle = @fopen( $content['sqltmpfile'], "w" );
 	if ($myhandle)
 		fwrite($myhandle, $sqlupdatestatements . "\r\n");
 	

@@ -88,7 +88,7 @@ function InitThemeAbout( $themename )
 	$szAboutFile = $gl_root_path . "themes/" . $themename . "/about.txt";
 	if ( is_file( $szAboutFile ) )
 	{	//Read About Info!
-		$aboutfile  = fopen($szAboutFile, 'r');
+		$aboutfile  = @fopen($szAboutFile, 'r');
 		if (!feof ($aboutfile)) 
 		{
 			while (!feof ($aboutfile))
@@ -131,7 +131,7 @@ function GetLanguageDisplayName( $szLangID )
 	if ( is_file( $szInfoFile ) )
 	{	
 		//Read InfoFile!
-		$infofile  = fopen($szInfoFile, 'r');
+		$infofile  = @fopen($szInfoFile, 'r');
 		if (!feof ($infofile)) 
 		{
 			while (!feof ($infofile))

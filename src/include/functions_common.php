@@ -353,7 +353,7 @@ function InitRuntimeInformations()
 		// Try to create file if not there
 		if ( !is_file($content['sqltmpfile']) ) 
 		{
-			$handle = fopen( $content['sqltmpfile'] , "x");
+			$handle = @fopen( $content['sqltmpfile'] , "x");
 			fclose($handle);
 		}
 
