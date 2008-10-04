@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------
+Version 0.3.10 (beta), 2008-10-04
+New features:
+- Added missing .357 Magnum Pistol including images and description. 
+Changes and bugfixes:
+- Calculation of time (roundbegin) has been hardened and corrected against 
+  large logfiles which contain server restarts. Added two new fields 
+  into Server Table needed for this and future enhancments. 
+- Removed some obselete weapons from template database
+---------------------------------------------------------------------------
 Version 0.3.9 (beta), 2008-10-03
 Changes and bugfixes:
 - Replaced all weapon images with new rendered weapn images from the 
