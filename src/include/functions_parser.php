@@ -523,10 +523,8 @@ function RunTotalStats()
 	//Run Calc for TOPAliases
 	GenerateStrippedCodeAliases();
 
-
 	//Run Calc for TOPAliases
 	CreateTopAliases( -1 );
-
 }
 
 /*
@@ -699,8 +697,24 @@ function RunParserNow()
 		elseif ($gl_newlastline < $db_lastlogline)
 		{	
 			// logfile is smaller then before, start from beginning
-			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Logfile is smaller then last time, start processing from beginning...");
+			PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Logfile is smaller then last time, new logfile assumed. UltraStats is resetting the LastLogLine...");
+			
+			// Not really needed lol!
 			$db_lastlogline = 0;
+			$db_lastplayedseconds = 0;
+
+			// Reset LastLogline now!
+			ResetLastLine();
+			
+			// Draw Javascript reload!
+			define('RELOADPARSER', true);
+			print ('<br><center><B>The LastLogline was resettet, the Parser need to be reloaded to restart parsing!</B><br>
+					Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
+					This site will automatically reload in 5 seconds.<br></center>
+					<script language="Javascript">function reload() { location = "' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"; } setTimeout("reload()", 5000);</script>');
+
+			// Return from the function
+			return;
 		}
 	}
 	else

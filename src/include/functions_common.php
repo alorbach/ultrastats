@@ -64,7 +64,7 @@ $content['EXTRA_STYLESHEET'] = "";
 $content['additional_url'] = "";
 // --- 
 
-// --- Check PHP Version! If lower the 5, phplogcon will not work proberly!
+// --- Check PHP Version! If lower the 4, UltraStats will not work proberly!
 $myPhpVer = phpversion();
 $myPhpVerArray = explode('.', $myPhpVer);
 if ( $myPhpVerArray[0] < 4 )
