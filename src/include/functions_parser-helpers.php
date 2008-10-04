@@ -248,6 +248,17 @@ function CreateHTMLFooter()
 			</html>');
 }
 
+function GetLastPlayedSeconds( $serverid )
+{
+	// --- Get last FilePosition
+	$result = DB_Query("SELECT PlayedSeconds FROM " . STATS_SERVERS . " WHERE id = $serverid");
+	$rows = DB_GetAllRows($result, true);
+	if ( isset($rows) )
+		return $rows[0]['PlayedSeconds'];
+	else
+		return 0;
+}
+
 function GetLastLogLine( $serverid )
 {
 	// --- Get last FilePosition
@@ -259,7 +270,7 @@ function GetLastLogLine( $serverid )
 		return 0;
 }
 
-function SetLastLogLine( $serverid, $newlastline )
+function SetLastLogLine( $serverid, $newlastline, $nTotalPlayedSeconds )
 {
 	global $content;
 
@@ -268,7 +279,7 @@ function SetLastLogLine( $serverid, $newlastline )
 		return;
 
 	// --- Set the last FilePosition
-	$result = DB_Query("UPDATE " . STATS_SERVERS . " SET LastLogLine = '" . $newlastline . "' WHERE ID = $serverid");
+	$result = DB_Query("UPDATE " . STATS_SERVERS . " SET LastLogLine = " . $newlastline . ", PlayedSeconds = " . $nTotalPlayedSeconds . " WHERE ID = $serverid");
 	DB_FreeQuery($result);
 }
 

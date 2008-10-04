@@ -213,10 +213,10 @@ function GetLastLogFile( $overwritepasswd = "" )
 						PrintHTMLDebugInfo( DEBUG_INFO, "SCP", "Download of " . $ftppath . $ftpfilename . " - resuming from filepos " . $locallogfilesize);
 
 						// Create stream handle to the file for reading!
-						$streamIn = fopen($szFileStr, 'r');
+						$streamIn = @fopen($szFileStr, 'r');
 
 						// Create local stream handle to the file for writing!
-						$streamOut = fopen($myserver['GameLogLocation'], 'a+'); //w
+						$streamOut = @fopen($myserver['GameLogLocation'], 'a+'); //w
 
 						// Move Pointer to last known position ^^
 						fseek($streamIn, $locallogfilesize);
@@ -589,10 +589,19 @@ function RunParserNow()
 	
 	// Get LastLogLine Value
 	$db_lastlogline = GetLastLogLine( $myserver['ID'] );
+	// --- TIME CALC FIX!
+	$db_lastplayedseconds = GetLastPlayedSeconds( $myserver['ID'] );
+	if ( $db_lastplayedseconds > 0 ) 
+	{
+		// Append prevous played seconds to gl_totallogtimesecs!
+		$gl_totallogtimesecs += $db_lastplayedseconds;
+	}
+	// ---
 	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Last parsed Line was " . $db_lastlogline);
 
+
 	// --- First Loop - Get linecount
-	$myhandle = fopen( $myserver['GameLogLocation'], "r");
+	$myhandle = @fopen( $myserver['GameLogLocation'], "r");
 	if ($myhandle)
 	{
 		if (feof ($myhandle)) 
@@ -637,13 +646,13 @@ function RunParserNow()
 		}
 
 		// --- FIXED TIME CALC BUG, I can't believe nobody ever found this easy bug :S
-		// Append seconds we have left!
-		$gl_totallogtimesecs += ($currentseconds - $initseconds);
+		// Append seconds we have left + the saved seconds from the  last processed time!
+		$gl_totallogtimesecs += ( ($currentseconds) - $initseconds);
 		// --- 
 
 		fclose($myhandle);
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "has $gl_newlastline lines ");
-		PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Total Time player in the logfile is '" . $gl_totallogtimesecs . "' seconds");
+		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Total amount of seconds played in the whole logfile: " . $gl_totallogtimesecs );
 		PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Closing ..." );
 
 		if ($db_lastlogline == 0)
@@ -663,29 +672,31 @@ function RunParserNow()
 	}
 	else
 	{
-		PrintHTMLDebugInfo( DEBUG_ERROR, "Gamelog", "Could not open the game logfile ".$CFG['Gamelogfile']." - Check File name and path");
+		PrintHTMLDebugInfo( DEBUG_ERROR, "Gamelog", "Could not open the game logfile ". $myserver['GameLogLocation'] ." - Check File name and path");
 		return;
 	}
 
 	// Get the last file modification time
 	$gl_logfiletimemod = filemtime( $myserver['GameLogLocation'] );
+	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Last modification date of the gamelogfile " . $myserver['GameLogLocation'] . " was " . date ("Y-m-d H:i:s", $gl_logfiletimemod) );
 
 	// Copy Last line of the file
 	$gl_MaxLineCount = $gl_newlastline;
 	// ---
 
 	// --- Second Loop, processing Round by round now!
-	$myhandle = fopen( $myserver['GameLogLocation'], "r");
+	$myhandle = @fopen( $myserver['GameLogLocation'], "r");
 	if ($myhandle)
 	{
 		// --- Init some vars
 		$currentgametype = "";
-		$CurrentGame[] = "";
+		$CurrentGame = array();
 		$currentline = 0;
 		$arrayline = 0;
 		$initgameseconds = 0;			// Used to compare
 		$currentseconds = -1;			// Reinit | Update! Changed to -1, because otherwise the first round could have been skipped
-		$currenttotalseconds = 0;		// Needed to determine the time the round started
+//		$currenttotalseconds = 0;		// Needed to determine the time the round started
+		$currenttotalseconds = $db_lastplayedseconds;	// Helper Needed to determine the time the round started | TIMECALC FIXED!
 
 		// 0 means search for "InitGame:"
 		// 1 means search for "ShutdownGame:" to get a whole game and then process it!
@@ -719,9 +730,31 @@ function RunParserNow()
 
 					// Add to current running total time
 					if ( $currentseconds > $lastseconds )
-						$currenttotalseconds += ($currentseconds - $lastseconds );
+					{
+						/* Very complex handling needed here!
+						*	If $currenttotalseconds is more then 0, the lastseconds are 0 or smaller and
+						*	it is NOT a ServerRESTART - then we do NOT append the seconds. 
+						*	In all other cases, the seconds are added!
+						*		- 
+						*	Seriously, this is very complex stuff! If there just was a dvar including the
+						*	Starttime of a round ... 
+						*/
+						if ( $currenttotalseconds > 0 && $lastseconds <= 0 && !isset($logfilerestart) ) 
+							$currenttotalseconds += 0; //Dummy add!
+						else
+						{
+							$currenttotalseconds += ($currentseconds - $lastseconds);
+
+							// Special, case subtract one second in this case
+							if ( $lastseconds == -1 ) 
+								$currenttotalseconds--;
+						}
+					}
 					else if ( $currentseconds < $lastseconds )
 					{
+						// Add to total seconds as well!
+						$currenttotalseconds += ($currentseconds);
+
 						//LogTime was less then befor, then the server was restarted 
 						$logfilerestart = true;
 						PrintHTMLDebugInfo( DEBUG_WARN, "Gamelog", "Attention, gamelogtime was restarted from " . $lastseconds . " seconds to " . $currentseconds . " seconds");
@@ -785,14 +818,18 @@ function RunParserNow()
 								$gl_newlastline = $currentline;				// Ser lastline counter only if a complete game was found!
 								
 								// BEGIN TimeMod, thx to Ramirez!
-								if ( strlen($custserverstarttime) > 0 ) 
-									$realstarttime = strtotime($custserverstarttime) + GetSecondsFromLogLine( $gl_linebuffer );
+								if ( isset($custserverstarttime) && strlen($custserverstarttime) > 0 ) 
+								{
+									// Set realstart time by using the server start time
+									$realstarttime = strtotime($custserverstarttime) + $initgameseconds;
+									PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Roundstart time detected through CVAR: " . date('Y-m-d h:i:s', $realstarttime));
+								}
+								// END TimeMod
 								else
 								{
 									// Needed to find the time when the round started
 									$realstarttime = $gl_logfiletimemod	- ( $gl_totallogtimesecs - $currenttotalseconds );
 								}
-								// END TimeMod
 
 								// Now process the Round
 								$processingtime = ProcessGameRound($CurrentGame, $realstarttime);			
@@ -802,7 +839,7 @@ function RunParserNow()
 								unset($CurrentGame);						
 
 								// Write FileCounter into database
-								SetLastLogLine($myserver['ID'], $gl_newlastline);
+								SetLastLogLine($myserver['ID'], $gl_newlastline, $currenttotalseconds);
 
 								// Keep user informed where processing is
 								PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Processed in $processingtime | " . 
