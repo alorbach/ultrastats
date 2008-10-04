@@ -22,7 +22,7 @@ include($gl_root_path . 'include/functions_common.php');
 include($gl_root_path . 'include/class_template.php');
 
 InitUltraStats();
-CheckForUserLogin( true );
+CheckForUserLogin( false );
 // ***					*** //
 
 // --- BEGIN Custom Code
