@@ -1358,9 +1358,9 @@ function Parser_AddPlayer( $myArray )
 	// --- Check if already exists!
 	if ( isset($myPlayers[$myArray[PARSER_GUID]]) )
 	{
-print_r( $myArray );
-print_r ( $myPlayers);
-exit;
+//print_r( $myArray );
+//print_r ( $myPlayers);
+//exit;
 		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddPlayer", "Player Array '" . implode(",", $myPlayers[$myArray[PARSER_GUID]]) . "' is already on the server! Possible duplicate GUID!");
 		return;
 	}
