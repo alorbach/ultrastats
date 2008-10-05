@@ -875,6 +875,11 @@ function RunParserNow()
 										)
 											&&
 										*/
+										(	// Now way, only use workaround for Search And Destroy!
+											$currentgametype != "sd" &&
+											$currentgametype !== "snd" 
+										)
+											&&
 										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
 									) 
 										||
