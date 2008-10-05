@@ -1361,7 +1361,8 @@ function Parser_AddPlayer( $myArray )
 //print_r( $myArray );
 //print_r ( $myPlayers);
 //exit;
-		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddPlayer", "Player Array '" . implode(",", $myPlayers[$myArray[PARSER_GUID]]) . "' is already on the server! Possible duplicate GUID!");
+		// Changed to DEBUG facility for now!
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddPlayer", "Player Array '" . implode(",", $myPlayers[$myArray[PARSER_GUID]]) . "' is already on the server! Possible duplicate GUID!");
 		return;
 	}
 	// --- 
