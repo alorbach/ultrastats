@@ -34,6 +34,11 @@ if ( !defined('IN_ULTRASTATS') )
 $gl_newlastline = 0;
 $gl_linebuffer = "";
 
+// Global variable Scope!
+$myPlayers = array(); 
+$myRound = array();
+$myKills = array();
+
 // SQL Counters
 $SQL_UDPATE_Batch_Count = 0;								// Counter for the batched UPDATE statements
 $SQL_UDPATE_Direct_Count = 0;								// Counter for direct UPDATE statements
@@ -847,7 +852,11 @@ function RunParserNow()
 								= If the Init and ExitSeconds are the same, the "ExitLevel: executed" is missing so we also quit the round here. 
 							*	(preg_match ("/ExitLevel: executed/", $gl_linebuffer))
 								= ExitLevel is a RoundFinish in ANY case!
-							*	($currentgametype == "dm" || $currentgametype == "tdm" || $currentgametype == "war" || $currentgametype == "twar" || $currentgametype == "vtdm") && (preg_match ("/ShutdownGame:/", $gl_linebuffer))
+							*	(	$currentgametype == "dm" || 
+									$currentgametype == "tdm" || 
+									$currentgametype == "war" || 
+									$currentgametype == "twar" || 
+									$currentgametype == "vtdm") && (preg_match ("/ShutdownGame:/", $gl_linebuffer))
 								= If we reach this, it proberly was an "Unclean mapshutdown" - anyway, the session ends here
 							*	( isset($roundfilerestart) && $roundfilerestart == true )
 								= If a server is restarted, we need to finish the session exactly HERE as well ;)!
@@ -857,12 +866,15 @@ function RunParserNow()
 									( stripos($gl_linebuffer, "ShutdownGame:") !== false && $lastseconds == $currentseconds) ||
 									( stripos($gl_linebuffer, "ExitLevel: executed") !== false ) || 
 									(
+										/* DISCUSS THIS 
 										(	$currentgametype == "dm" || 
 											$currentgametype == "tdm" || 
 											$currentgametype == "war"  || 
 											$currentgametype == "twar" || 
-											$currentgametype == "vtdm" )
+											$currentgametype == "vtdm" 
+										)
 											&&
+										*/
 										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
 									) 
 										||
@@ -1341,6 +1353,9 @@ function Parser_AddPlayer( $myArray )
 	// --- Check if already exists!
 	if ( isset($myPlayers[$myArray[PARSER_GUID]]) )
 	{
+print_r( $myArray );
+print_r ( $myPlayers);
+exit;
 		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddPlayer", "Player Array '" . implode(",", $myPlayers[$myArray[PARSER_GUID]]) . "' is already on the server! Possible duplicate GUID!");
 		return;
 	}
