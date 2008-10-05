@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------
+Version 0.3.11 (beta), 2008-10-05
+Changes and bugfixes:
+- Fixed race condition, when a new logfile is used the LastLogLine 
+  was only reseted internal. We are reseting the playedseconds as well now.
+- Fixed typing issues and removed notices issues
+- Changed display name of Marine Soldier to American Soldier
+- Removed TM from frontpage logo
+- Fixed RoundEnd Detection in Parser, which caused following errors.
+---------------------------------------------------------------------------
 Version 0.3.10 (beta), 2008-10-04
 New features:
 - Added missing .357 Magnum Pistol including images and description. 
