@@ -15,6 +15,20 @@ INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_castle', 'Castle', 'mp_castle_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_airfield', 'Airfield', 'mp_airfield_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_kneedeep', 'Kneedeep', 'mp_kneedeep_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_roundhouse', 'Roundhouse', 'mp_roundhouse_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_outskirts', 'Outskirts', 'mp_outskirts_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_nachtfeuer', 'Nachtfeuer', 'mp_nachtfeuer_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_makin', 'Makin', 'mp_makin_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_hangar', 'Hangar', 'mp_hangar_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_downfall', 'Downfall', 'mp_downfall_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_courtyard', 'Courtyard', 'mp_courtyard_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_seelow', 'Seelow', 'mp_seelow_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_shrine', 'Shrine', 'mp_shrine_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_wetlands', 'Wetlands', 'mp_wetlands_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_suburban', 'Suburban', 'mp_suburban_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_beachhead', 'Beachhead', 'mp_beachhead_description', '');
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_asylum  ', 'Asylum', 'mp_asylum_description', '');
+
 
 -- Insert language strings for CodWW
 

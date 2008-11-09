@@ -126,6 +126,13 @@ if ( isset($content['database_forcedatabaseupdate']) && $content['database_force
 								else 
 									$mycommands[$i] = str_replace("-- Cod4 only%$&1337&%&", "", $mycommands[$i]); // Remove appendix!
 							}
+							else if ( strpos($mycommands[$i], "-- Codww only%$&1337&%&") !== false )
+							{
+								if ( $content['gen_gameversion'] != CODWW )
+									continue; // Ignore this database statement!
+								else 
+									$mycommands[$i] = str_replace("-- Codww only%$&1337&%&", "", $mycommands[$i]); // Remove appendix!
+							}
 
 							$result = DB_Query( $mycommands[$i], false );
 							if ($result == FALSE)

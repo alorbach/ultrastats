@@ -1,0 +1,24 @@
+-- New Database Structure Updates
+
+--
+-- Table structure for table `stats_attachments`
+--
+
+-- --------------------------------------------------------
+-- New Insert stuff
+-- ID's are auto generated
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_roundhouse', 'Roundhouse', 'mp_roundhouse_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_outskirts', 'Outskirts', 'mp_outskirts_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_nachtfeuer', 'Nachtfeuer', 'mp_nachtfeuer_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_makin', 'Makin', 'mp_makin_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_hangar', 'Hangar', 'mp_hangar_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_downfall', 'Downfall', 'mp_downfall_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_courtyard', 'Courtyard', 'mp_courtyard_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_seelow', 'Seelow', 'mp_seelow_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_shrine', 'Shrine', 'mp_shrine_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_wetlands', 'Wetlands', 'mp_wetlands_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_suburban', 'Suburban', 'mp_suburban_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_beachhead', 'Beachhead', 'mp_beachhead_description', ''); -- Codww only%$&1337&%&;
+INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_asylum  ', 'Asylum', 'mp_asylum_description', ''); -- Codww only%$&1337&%&;
+
+-- Updated data records stuff
