@@ -5,8 +5,24 @@
 --
 
 -- --------------------------------------------------------
+-- Delete Stuff first!
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'bar_bipod_stand_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 't34_mp_explosion_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'panzer4_mp_explosion_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'gewehr43_aperture_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'dp28_bipod_stand_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'dp28_bipod_crouch_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'bar_bipod_crouch_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'panzer4_gunner_front_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'mg42_bipod_crouch_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'mg42_bipod_stand_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 't34_gunner_front_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'type99_lmg_bipod_stand_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'type99_lmg_bipod_crouch_mp'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'destructible_car'; -- Codww only%$&1337&%&;
+DELETE FROM `stats_weapons` WHERE `stats_weapons`.`INGAMENAME` = 'bar_bipod_prone_mp'; -- Codww only%$&1337&%&;
+
 -- New Insert stuff
--- ID's are auto generated
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_roundhouse', 'Roundhouse', 'mp_roundhouse_description', ''); -- Codww only%$&1337&%&;
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_outskirts', 'Outskirts', 'mp_outskirts_description', ''); -- Codww only%$&1337&%&;
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_nachtfeuer', 'Nachtfeuer', 'mp_nachtfeuer_description', ''); -- Codww only%$&1337&%&;

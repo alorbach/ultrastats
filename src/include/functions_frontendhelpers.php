@@ -735,6 +735,9 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_aperture", 
 							"_bayonet", 
 							"_bipod",	
+							"_prone",
+							"_crouch",
+							"_stand",
 							"_silenced", 
 							"_sawoff",	
 							"_singleshot", 
@@ -749,14 +752,20 @@ function ReturnWeaponBaseName($weaponnameid)
 							"_20mm",	
 							"_ffar",	
 							"_turret",	
-							"_gunner",	
+							"_gunner",
+							"_front", 
 							"_defuse", 
 							"_telescopic",	
+							"_explosion_mp", 
 						);
-	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-	
+	$arrayReplace = array ("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+
 	// return result
-	$stReturn = str_replace($arraySearch, $arrayReplace, $weaponnameid);
+	$stReturn = str_replace($arraySearch, "", $weaponnameid);
+	
+	// Extra replace!
+	$stReturn = str_replace(array( "type99_lmg_mp" ), array ("type99lmg_mp"), $stReturn);
+		
 	return $stReturn;
 }
 
