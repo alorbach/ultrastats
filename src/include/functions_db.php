@@ -42,7 +42,7 @@ function DB_Connect()
 	global $link_id, $CFG;
 
 	//TODO: Check variables first
-	$link_id = mysql_connect($CFG['DBServer'],$CFG['User'],$CFG['Pass']);
+	$link_id = @mysql_connect($CFG['DBServer'],$CFG['User'],$CFG['Pass']);
 	if (!$link_id) 
 		DB_PrintError("Link-ID == false, connect to ".$CFG['DBServer']." failed", true);
 	
@@ -67,7 +67,7 @@ function DB_Connect()
 	// ---
 	
 	// check if database exists!
-	$db_selected = mysql_select_db($CFG['DBName'], $link_id);
+	$db_selected = @mysql_select_db($CFG['DBName'], $link_id);
 	if(!$db_selected) 
 		DB_PrintError("Cannot use database '" . $CFG['DBName'] . "'", true);
 

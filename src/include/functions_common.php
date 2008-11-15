@@ -1402,21 +1402,16 @@ function GetConfigSetting($szSettingName, $szDefaultValue = "", $DesiredConfigLe
 */
 function StartPHPSession()
 {
-	global $RUNMODE;
-	if ( $RUNMODE == RUNMODE_WEBSERVER )
-	{
-		// Start Session in any case!
-		session_start();
-//		if (session_id() == "")
+//	global $RUNMODE;
+//	if ( $RUNMODE == RUNMODE_WEBSERVER )
+//	{
 
+		// Start Session in any case!
+		@session_start();
 		if ( !isset($_SESSION['SESSION_STARTED']) )
 			$_SESSION['SESSION_STARTED'] = "true";
-		else
-		{	
-			// TODO: SHOW DEBUG ERROR!
 
-		}
-	}
+//	}
 }
 
 /*
