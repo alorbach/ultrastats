@@ -8,7 +8,7 @@ CREATE TABLE `stats_attachments` (
   `DisplayName` varchar(255) NOT NULL,
   `Description_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM COMMENT='Helper table to store known attachments / perks';
+) TYPE=MyISAM COMMENT='Helper table to store known attachments / perks';
 
 --
 -- Table structure for table `stats_damagetypes_kills`
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `stats_damagetypes_kills` (
   `PlayersCount` int(11) NOT NULL,
   `Deaths` int(11) NOT NULL,
   PRIMARY KEY  (`damagetypeid`,`SERVERID`,`Time_Year`,`Time_Month`)
-) ENGINE=MyISAM COMMENT='Helper table to store and combine damagetype kills';
+) TYPE=MyISAM COMMENT='Helper table to store and combine damagetype kills';
 
 --
 -- Table structure for table `stats_weapons_kills`
@@ -35,7 +35,7 @@ CREATE TABLE `stats_weapons_kills` (
   `Kills` int(11) NOT NULL,
   `PlayersCount` int(11) NOT NULL,
   PRIMARY KEY  (`WEAPONID`,`SERVERID`,`Time_Year`,`Time_Month`)
-) ENGINE=MyISAM COMMENT='Helper table to store and combine weapon kills';
+) TYPE=MyISAM COMMENT='Helper table to store and combine weapon kills';
 
 --
 -- Added new fields for possible future database performance!

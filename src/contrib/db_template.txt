@@ -33,7 +33,7 @@ CREATE TABLE `stats_attachments` (
   `DisplayName` varchar(255) NOT NULL,
   `Description_id` varchar(255) NOT NULL,
   PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM COMMENT='Helper table to store known attachments / perks';
+) TYPE=MyISAM COMMENT='Helper table to store known attachments / perks';
 
 -- 
 -- Table structure for table `stats_chat`
@@ -185,7 +185,7 @@ CREATE TABLE `stats_rounds` (
   `AlliesGuids` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`ID`),
   KEY `SERVERID` (`SERVERID`)
-) ENGINE=MyISAM COMMENT='Will contain all rounds which have been played' AUTO_INCREMENT=1 ;
+) TYPE=MyISAM COMMENT='Will contain all rounds which have been played' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -393,7 +393,7 @@ CREATE TABLE `stats_damagetypes_kills` (
   `Kills` int(11) NOT NULL,
   `PlayersCount` int(11) NOT NULL,
   PRIMARY KEY  (`damagetypeid`,`SERVERID`,`Time_Year`,`Time_Month`)
-) ENGINE=MyISAM COMMENT='Helper table to store and combine damagetype kills';
+) TYPE=MyISAM COMMENT='Helper table to store and combine damagetype kills';
 
 -- --------------------------------------------------------
 
@@ -410,7 +410,7 @@ CREATE TABLE `stats_weapons_kills` (
   `Kills` int(11) NOT NULL,
   `PlayersCount` int(11) NOT NULL,
   PRIMARY KEY  (`WEAPONID`,`SERVERID`,`Time_Year`,`Time_Month`)
-) ENGINE=MyISAM COMMENT='Helper table to store and combine weapon kills';
+) TYPE=MyISAM COMMENT='Helper table to store and combine weapon kills';
 
 -- --------------------------------------------------------
 
