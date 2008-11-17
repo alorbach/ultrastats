@@ -122,10 +122,11 @@ if ( isset($_GET['id']) )
 				$content['playerenabled'] = "true";
 
 				// Set Playervars 
-				if ( isset($playervars['PBGuid']) && strlen( trim($playervars['PBGuid']) ) > 0 )
+				if ( isset($playervars['PBGuid']) && strlen( trim($playervars['PBGuid']) ) > 16 ) // Must be at least more then 16 chars, proberly more
 				{
 					// Enable Showing GUID
 					$content['EnableShowPBGuid'] = true;
+					echo $playervars['PBGuid'];
 					$content['PBGuid'] = substr($playervars['PBGuid'], 24); // Only show last 8 digits for security reasons!
 				}
 				else
