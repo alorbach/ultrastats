@@ -303,7 +303,7 @@ function CheckAndSetRunMode()
 
 function InitPostDbConfigRuntime()
 {
-	global $content;
+	global $content, $MaxExecutionTime;
 
 	// --- Enable GZIP Compression if available
 	if (	
@@ -322,11 +322,14 @@ function InitPostDbConfigRuntime()
 
 	// --- Try to extend the script timeout if possible!
 	$iTmp = GetConfigSetting("gen_maxexecutiontime", 30, CFGLEVEL_GLOBAL);
-	if ( $iTmp != $content['MaxExecutionTime'] && $iTmp > 10 )
+	if ( $iTmp != $MaxExecutionTime && $iTmp > 10 )
 	{	//Try to extend the runtime in this case!
 		@ini_set("max_execution_time", $iTmp);
-		$content['MaxExecutionTime'] = ini_get("max_execution_time");
 	}
+	
+	// copy to display var!
+	$content['MaxExecutionTime'] = ini_get("max_execution_time");
+
 	// ---
 }
 
