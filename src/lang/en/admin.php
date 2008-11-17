@@ -146,7 +146,8 @@ $content['LN_RUNTOTALUPDATE_MORE'] = "This includes consolidating server stats, 
 $content['LN_RUNDAMAGETYPEKILLS_MORE'] = "Consolidates all kills made grouped by damagetypes.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
 $content['LN_RUNWEAPONKILLS_MORE'] = "Consolidates all kills made grouped by weapons.<br>The results are stored in a helper table, and<br>calculated for each server, year and month.";
 $content['LN_CREATEALIASES_MORE'] = "Generates top used aliases for each player in a helper table.<br>This is also used for peformance reasons.";
-$content['LN_CALCMEDALSONLY_MORE'] = "Calculates all enabled medals only, for all Servers. ";
+$content['LN_CALCMEDALSONLY_MORE'] = "Calculates all enabled medals only, for all Servers.";
+$content['LN_ADMINCREATEFTP_TEXT'] = "This will help you building a valid FTP Url.<br><br><b>Attention!</b> The Create button is only available after the server has been added.<br>Add the Server first, then edit it to access the Create button.";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";

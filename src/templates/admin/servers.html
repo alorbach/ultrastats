@@ -116,7 +116,7 @@
 				<td align="left" class="cellmenu1" nowrap><b>{LN_REMOTEGAMELOGLOCATION}</b></td>
 				<td align="left" class="line1">
 				<input type="text" name="remotegameloglocation" size="35" maxlength="255" value="{REMOTEGAMELOGLOCATION}">
-				<input type="button" value="{LN_BUILDFTPSTRING}" {BUILDFTP_DISABLED} OnClick="NewWindow('servers-ftpbuilder.php?id={SERVERID}', 'BuildFTP', 500, 500, '');">
+				<input type="button" value="{LN_BUILDFTPSTRING}" {BUILDFTP_DISABLED} OnClick="NewWindow('servers-ftpbuilder.php?id={SERVERID}', 'BuildFTP', 500, 500, '');"  OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINCREATEFTP_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
 				</td>
 			</tr>
 			<tr>

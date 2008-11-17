@@ -146,6 +146,7 @@ $content['LN_RUNDAMAGETYPEKILLS_MORE'] = "Zusammenführung aller Kills gruppiert 
 $content['LN_RUNWEAPONKILLS_MORE'] = "Zusammenführung aller Kills gruppiert nach Waffen.<br>Das Ergebnis wird in einer Hilfstabelle gespeichert und<br>für jeden Server berechnet, Jahr und Monat.";
 $content['LN_CREATEALIASES_MORE'] = "Berechne meist genutzte Aliases für jeden Spieler in einer Hilfstabelle.<br>Dies wird auch für eine Leistungssteigerung genutzt.";
 $content['LN_CALCMEDALSONLY_MORE'] = "Berechne alle aktivierten Medaillen für alle Server. ";
+$content['LN_ADMINCREATEFTP_TEXT'] = "Diese Funktion hilft dabei, eine FTP Url zu erstellen.<br><br><b>Achtung!</b> Der Erstellen button ist erst verfügbar, sobald der Server hinzugefügt wurde!<br>Füge den Server also zuerst hinzu, und editiere ihn anschließend, um die FTP Url zu erstellen.";
 
 // Server FTP Builder
 $content['LN_ADMINCENTER_FTPBUILDER'] = "FTP Builder";
