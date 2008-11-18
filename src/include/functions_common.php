@@ -268,6 +268,9 @@ function CreateGameVersionsList()
 	$content['GAMEVERSIONS'][CODWW]['gamevertitle'] = LN_GEN_CODWW;
 	if ( $content['gen_gameversion'] == $content['GAMEVERSIONS'][CODWW]['gamever'] ) { $content['GAMEVERSIONS'][CODWW]['selected'] = "selected"; } else { $content['GAMEVERSIONS'][CODWW]['selected'] = ""; }
 	// ---
+	
+	// Set for display!
+	$content['CONFIGUREDGAME_TITLE'] = $content['GAMEVERSIONS'][ $content['gen_gameversion'] ]['gamevertitle'];
 }
 
 function CreateParseByTypesList()

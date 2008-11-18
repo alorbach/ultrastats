@@ -38,6 +38,7 @@ $content['LN_FOOTER_GZIPENABLED'] = "GZIP aktiviert";
 $content['LN_FOOTER_SCRIPTTIMEOUT'] = "Script Timeout";
 $content['LN_FOOTER_SECONDS'] = "Sekunden";
 $content['LN_WARN_NOFTPEXTENSIONS'] = "Achtung, die FTP Erweiterungen wurden auf diesen Webserver deaktiviert. UltraStats ist nicht in der Lage das gamelog über FTP zu downloaden.";
+$content['LN_CONFIGUREDGAME'] = "Konfiguriert für: ";
 
 // Index Site
 $content['LN_MAINSELECTSERVER'] = "Server wählen";
