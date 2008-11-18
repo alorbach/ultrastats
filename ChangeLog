@@ -1,9 +1,30 @@
 ---------------------------------------------------------------------------
 Version 0.3.12 (beta), 2008-11-18
 New features:
-- 
+- Added new general frotnend options, to inject html code at certain 
+  places, prepend a string in the title tag and customize the 
+  UltraStats Logo url.
+- Added help text for FTP Create button.
+- Added display of the current configured game.
+- Added check if gamelogfile is actually writeable. 
+- Added quick and dirty support for download gamelogfiles over http.
+  Just a fully qualified http url instead of ftp, the stats parser 
+  automatically detect. 
 Changes and bugfixes:
-- 
+- Fixed Sniper Medal for Codww
+- Removed some minor issues with missing templates variables. 
+- Fixed serious security issue of reading the serverid parameter. 
+- Fixed problem with session initialization on Microsoft IIS Webservers.
+- Fixed a problem in the default db templates, causing some mysql 4 
+  version to fail durign installation. 
+- Added support to display new weapon ids proberly and correct. 
+- Fixed minor notice bug when reading script timeout from db settings. 
+- Fixed PB Guid detection string
+- Fixed Knife medal for CodWW and fixed minor bug in the medals 
+  page template. 
+- Fix detection of command line mode, which also fixes php 
+  session management. 
+- Added fix for "SQL_BIG_SELECT" errors in logparser.
 ---------------------------------------------------------------------------
 Version 0.3.11 (beta), 2008-10-05
 Changes and bugfixes:
