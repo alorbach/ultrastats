@@ -342,6 +342,10 @@ function CreateServerListArray()
 		// Resort the Array
 		array_unshift( $content['serverlist'], $splitter );
 		array_unshift( $content['serverlist'], $allservers );
+		
+		// Add selected value
+		foreach($content['serverlist'] as $myKey => $myServer)
+			$content['serverlist'][$myKey]['selected'] = "";
 	}
 	else
 	{
