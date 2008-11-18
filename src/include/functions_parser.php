@@ -69,10 +69,19 @@ function GetLastLogFile( $overwritepasswd = "" )
 			!isset( $myserver['ID'] ) || 
 			intval( $myserver['ID'] ) <= 0 ||
 			!isset( $myserver['GameLogLocation'] ) || 
-			(strlen($myserver['GameLogLocation']) <= 0 ) )
+			(strlen($myserver['GameLogLocation']) <= 0)
+		)
 	{
 		// Error, we can not go on!
 		PrintHTMLDebugInfo( DEBUG_ERROR, "FTP", "Error, invalid Server or logfile location specified!" );
+		return;
+	}
+	
+	// check if local file is writeable
+	if ( !is_writeable($myserver['GameLogLocation']) )
+	{
+		// Error, we can not go on!
+		PrintHTMLDebugInfo( DEBUG_ERROR, "FTP", "Error, the local gameloglocation is NOT writeable! Please check file permission on '" . $myserver['GameLogLocation'] . "'!" );
 		return;
 	}
 
