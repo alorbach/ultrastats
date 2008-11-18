@@ -71,7 +71,13 @@ function DB_Connect()
 	if(!$db_selected) 
 		DB_PrintError("Cannot use database '" . $CFG['DBName'] . "'", true);
 
-	// TODO: Maybe some more error checking
+	// TODO: Maybe some more error checking 
+}
+
+function EnableBigSelects()
+{
+	// Extra command to enable BIG sql commands! And we don't care for error messages!
+	@mysql_query("SET OPTION SQL_BIG_SELECTS=1");
 }
 
 function DB_Disconnect()

@@ -46,6 +46,9 @@ $SQL_INSERT_Count = 0;										// Counter for direct INSERT statements
 $SQL_SELECT_Count = 0;										// Counter for direct SELECT statements
 // ---
 
+// --- Enable BIG Selects when the parser code runs
+EnableBigSelects();
+// ---
 
 /*
 *	Function to reset the GetLastLogFile
@@ -215,7 +218,7 @@ function GetLastLogFile( $overwritepasswd = "" )
 						clearstatcache();
 
 						// Dbg Info
-						PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Download of " . $ftpfilename . " finished - New Filesize = " . filesize($myserver['GameLogLocation']) );
+						PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Download of " . $ftpfilename . " finished - New Filesize = " . @filesize($myserver['GameLogLocation']) );
 					} 
 					else 
 					{ 
