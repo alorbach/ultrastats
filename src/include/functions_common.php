@@ -495,7 +495,10 @@ function InitConfigurationValues()
 	if ( isset($rows ) )
 	{
 		for($i = 0; $i < count($rows); $i++)
+		{
 			$content[ $rows[$i]['name'] ] = $rows[$i]['value'];
+			$CFG[ $rows[$i]['name'] ] = $rows[$i]['value']; // Also copy into CFG Array!
+		}
 	}
 	// General defaults 
 	// --- Language Handling
@@ -1451,9 +1454,10 @@ function InitPageTitle()
 {
 	global $content, $currentSourceID;
 
-	$tmpTitle = GetConfigSetting("PrependTitle", "", CFGLEVEL_USER);
-	if ( strlen($tmpTitle) > 0 )
-		$szReturn = $tmpTitle . " :: ";
+	$content['PrependTitle'] = GetConfigSetting("PrependTitle", "", CFGLEVEL_GLOBAL);
+//	$tmpTitle = GetConfigSetting("PrependTitle", "", CFGLEVEL_USER);
+	if ( strlen($content['PrependTitle']) > 0 )
+		$szReturn = $content['PrependTitle'] . " :: ";
 	else
 		$szReturn = "";
 

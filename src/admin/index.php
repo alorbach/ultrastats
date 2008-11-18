@@ -120,7 +120,7 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['InjectHtmlHeader']) ) { $content['InjectHtmlHeader'] = DB_RemoveBadChars($_POST['InjectHtmlHeader']); }
 	if ( isset ($_POST['InjectBodyHeader']) ) { $content['InjectBodyHeader'] = DB_RemoveBadChars($_POST['InjectBodyHeader']); }
 	if ( isset ($_POST['InjectBodyFooter']) ) { $content['InjectBodyFooter'] = DB_RemoveBadChars($_POST['InjectBodyFooter']); }
-	if ( isset ($_POST['PhplogconLogoUrl']) ) { $content['PhplogconLogoUrl'] = DB_RemoveBadChars($_POST['PhplogconLogoUrl']); }
+	if ( isset ($_POST['UltrastatsLogoUrl']) ) { $content['UltrastatsLogoUrl'] = DB_RemoveBadChars($_POST['UltrastatsLogoUrl']); }
 
 
 	// Write Gen Config Vars
@@ -156,7 +156,7 @@ if ( isset($_POST['op']) )
 	WriteConfigValue( "InjectHtmlHeader" );
 	WriteConfigValue( "InjectBodyHeader" );
 	WriteConfigValue( "InjectBodyFooter" );
-	WriteConfigValue( "PhplogconLogoUrl" );
+	WriteConfigValue( "UltrastatsLogoUrl" );
 
 	// Write Medal Config Vars
 	foreach ($content['medals'] as $key => $medal)

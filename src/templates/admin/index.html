@@ -42,7 +42,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_LANGUAGE}</b></td>
 		<td align="right" class="line1" width="100%">
-			<select name="gen_lang" size="1">
+			<select name="gen_lang" size="1" STYLE="width: 250px">
 				<!-- BEGIN LANGUAGES -->
 				<option {selected}>{langcode}</option>
 				<!-- END LANGUAGES -->
@@ -52,7 +52,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_GAMEVERSION}</b></td>
 		<td align="right" class="line2" width="100%">
-			<select name="gen_gameversion" size="1">
+			<select name="gen_gameversion" size="1" STYLE="width: 250px">
 				<!-- BEGIN GAMEVERSIONS -->
 				<option {selected} value="{gamever}">{gamevertitle}</option>
 				<!-- END GAMEVERSIONS -->
@@ -62,7 +62,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PARSEBYTYPE}</b></td>
 		<td align="right" class="line1">
-			<select name="gen_parseby" size="1">
+			<select name="gen_parseby" size="1" STYLE="width: 250px">
 				<!-- BEGIN PARSEBYTYPES -->
 				<option {selected} value="{parsebytype}">{parsebytypetitle}</option>
 				<!-- END PARSEBYTYPES -->
@@ -79,7 +79,7 @@
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXTIMEOUT}</b></td>
-		<td align="right" class="line2"><input type="text" name="gen_maxexecutiontime" size="30" maxlength="16" value="{gen_maxexecutiontime}">
+		<td align="right" class="line2"><input type="text" name="gen_maxexecutiontime" size="40" maxlength="16" value="{gen_maxexecutiontime}">
 	</tr>
 	</table>
 
@@ -95,7 +95,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_WEB_STYLE}</b></td>
 		<td align="right" class="line1" width="100%">
-			<select name="web_theme" size="1">
+			<select name="web_theme" size="1" STYLE="width: 250px">
 				<!-- BEGIN STYLES -->
 				<option {selected}>{StyleName}</option>
 				<!-- END STYLES -->
@@ -105,7 +105,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_TOPPLAYERS}</b></td>
 		<td align="right" class="line2" >
-			<select name="web_topplayers" size="1">
+			<select name="web_topplayers" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPPLAYERS -->
@@ -115,7 +115,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_DETAILLISTTOPPLAYERS}</b></td>
 		<td align="right" class="line1" >
-			<select name="web_detaillistsplayers" size="1">
+			<select name="web_detaillistsplayers" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPLISTPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPLISTPLAYERS -->
@@ -125,7 +125,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_TOPROUNDS}</b></td>
 		<td align="right" class="line2" >
-			<select name="web_toprounds" size="1">
+			<select name="web_toprounds" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPROUNDS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPROUNDS -->
@@ -136,7 +136,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXPAGES}</b></td>
 		<td align="right" class="line1" >
-			<select name="web_maxpages" size="1">
+			<select name="web_maxpages" size="1" STYLE="width: 250px">
 				<!-- BEGIN WEBMAXPAGES -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXPAGES -->
@@ -146,7 +146,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXMAPSPERPAGE}</b></td>
 		<td align="right" class="line2" >
-			<select name="web_maxmapsperpage" size="1">
+			<select name="web_maxmapsperpage" size="1" STYLE="width: 250px">
 				<!-- BEGIN WEBMAXMAPSPERPAGE -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXMAPSPERPAGE -->
@@ -156,11 +156,11 @@
 	
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MINKILLS}</b></td>
-		<td align="right" class="line1" ><input type="text" name="web_minkills" size="30" maxlength="255" value="{web_minkills}"></td>
+		<td align="right" class="line1" ><input type="text" name="web_minkills" size="40" maxlength="255" value="{web_minkills}"></td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MINTIME}</b></td>
-		<td align="right" class="line2" ><input type="text" name="web_mintime" size="30" maxlength="16" value="{web_mintime}"></td>
+		<td align="right" class="line2" ><input type="text" name="web_mintime" size="40" maxlength="16" value="{web_mintime}"></td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_SHOWMEDALS}</b></td>
@@ -168,11 +168,11 @@
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PREPENDTITLE}</b></td>
-		<td align="right" class="line1" ><input type="text" name="PrependTitle" size="35" maxlength="255" value="{PrependTitle}"></td>
+		<td align="right" class="line1" ><input type="text" name="PrependTitle" size="50" maxlength="255" value="{PrependTitle}"></td>
 	</tr>
 	<tr>
 		<td align="left" class="cellmenu2_naked"><b>{LN_ADMIN_ULTRASTATS_LOGOURL}</b></td>
-		<td align="right" class="line1" colspan="2"><input type="text" name="UltrastatsLogoUrl" size="85" maxlength="255" value="{UltrastatsLogoUrl}"></td>
+		<td align="right" class="line1"><input type="text" name="UltrastatsLogoUrl" size="50" maxlength="255" value="{UltrastatsLogoUrl}"></td>
 	</tr>
 <!-- TODO
 	<tr>
@@ -202,7 +202,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_PD_KILLERMODEL}</b></td>
 		<td align="right" class="line1" >
-			<select name="web_playermodel_killer" size="1">
+			<select name="web_playermodel_killer" size="1" STYLE="width: 250px">
 				<!-- BEGIN PLAYERMODELKILLER -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLER -->
@@ -212,7 +212,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PD_KILLEDBYMODEL}</b></td>
 		<td align="right" class="line2" >
-			<select name="web_playermodel_killedby" size="1">
+			<select name="web_playermodel_killedby" size="1" STYLE="width: 250px">
 				<!-- BEGIN PLAYERMODELKILLEDBY -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLEDBY -->
@@ -235,7 +235,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_PARSER_DEBUGMODE}</b></td>
 		<td align="right" class="line2" width="100%">
-			<select name="parser_debugmode" size="1">
+			<select name="parser_debugmode" size="1" STYLE="width: 250px">
 				<!-- BEGIN DBGMODES -->
 				<option {selected}>{DisplayName}</option>
 				<!-- END DBGMODES -->
