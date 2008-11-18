@@ -161,6 +161,7 @@ define('FTP_TIMEOUT', 10);
 
 define('TRANSFERTYPE_FTP', 0);
 define('TRANSFERTYPE_SCP', 1);
+define('TRANSFERTYPE_HTTP', 2);
 // --- 
 
 // --- WeaponTypes

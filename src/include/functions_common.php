@@ -308,6 +308,9 @@ function CheckAndSetRunMode()
 	if ( in_array("gd", $loadedExtensions) ){ $content['GD_IS_ENABLED'] = true; } else { $content['GD_IS_ENABLED'] = false; }
 	// Check MYSQL Extension
 	if ( in_array("mysql", $loadedExtensions) ) { $content['MYSQL_IS_ENABLED'] = true; } else { $content['MYSQL_IS_ENABLED'] = false; }
+	
+	// Set if fopen is allowed
+	$content["allow_url_fopen"] = ini_get("allow_url_fopen");
 }
 
 function InitPostDbConfigRuntime()

@@ -101,6 +101,8 @@ function GetLastLogFile( $overwritepasswd = "" )
 			$nTransferType = TRANSFERTYPE_FTP;
 		else if ( strpos($fullftpstr, "scp://") !== false )
 			$nTransferType = TRANSFERTYPE_SCP;
+		else if ( strpos($fullftpstr, "http://") !== false )
+			$nTransferType = TRANSFERTYPE_HTTP;
 		else
 		{
 			//Error!
@@ -214,7 +216,7 @@ function GetLastLogFile( $overwritepasswd = "" )
 						// close the connection
 						ftp_close($connid);
 
-						// Clear Filecache!
+						// Bugfix for race conditions, clear file stats cache!
 						clearstatcache();
 
 						// Dbg Info
@@ -289,10 +291,10 @@ function GetLastLogFile( $overwritepasswd = "" )
 						fclose($streamIn);
 						fclose($streamOut);
 
-						// WTF OMFG HWO THE HELL TO CLOSE SSH? 
-
-						// Clear Filecache!
+						// Bugfix for race conditions, clear file stats cache!
 						clearstatcache();
+
+						// WTF OMFG HWO THE HELL TO CLOSE SSH? 
 
 						// Debug Info!
 						PrintHTMLDebugInfo( DEBUG_INFO, "SCP", "Download of " . $ftpfilename . " finished - New Filesize = " . filesize($myserver['GameLogLocation']) );
@@ -301,6 +303,55 @@ function GetLastLogFile( $overwritepasswd = "" )
 					{
 						//Error!
 						PrintHTMLDebugInfo( DEBUG_ERROR, "SCP", "Could not initialize SFTP subsystem." );
+						return;
+					}
+				}
+				else if ( $nTransferType == TRANSFERTYPE_HTTP ) 
+				{
+					// QUICK AND DIRTY FOR NOW!
+					if ( $content["allow_url_fopen"] )
+					{
+						PrintHTMLDebugInfo( DEBUG_INFO, "HTTP", "Getting full logfile from " . $fullftpstr . " ... standby");
+						
+						//Flush output
+						FlushParserOutput();
+
+						// Create InHandle
+						$streamIn = @fopen($fullftpstr, "r");
+						if ( $streamIn )
+						{
+							// Create local stream handle to the file for writing!
+							$streamOut = @fopen($myserver['GameLogLocation'], 'a+'); //w
+							if ( $streamOut ) 
+							{
+								// Move to beginning
+								fseek($streamOut, 0);
+								
+								// Loop through file and copy 8192 blocks
+								while (!feof($streamIn))
+								{
+									$tmpstr = fread($streamIn, 8192);
+									@fwrite($streamOut, $tmpstr); 
+								}
+								// close outstream
+								fclose($streamOut);
+							}
+							
+							// Close handle
+							fclose($streamIn);
+
+							// Bugfix for race conditions, clear file stats cache!
+							clearstatcache();
+
+							// Debug Info!
+							PrintHTMLDebugInfo( DEBUG_INFO, "HTTP", "Download of " . $fullftpstr . " finished - New Filesize = " . filesize($myserver['GameLogLocation']) );
+						}
+						else
+							PrintHTMLDebugInfo( DEBUG_ERROR, "HTTP", "Failed to obtain gamelog from '" . $fullftpstr . "'!" );
+					}
+					else
+					{
+						PrintHTMLDebugInfo( DEBUG_ERROR, "HTTP", "The setting ftp 'allow_url_fopen' is not enabled. Fopen cannot open remote http files." );
 						return;
 					}
 				}
@@ -339,6 +390,8 @@ function server_connect($server, $port)
 		$connid = ftp_connect($server, $port, FTP_TIMEOUT);
 	else if ( $nTransferType == TRANSFERTYPE_SCP ) 
 	    $connid = ssh2_connect($server, $port);
+	else if ( $nTransferType == TRANSFERTYPE_HTTP ) 
+		$connid = true;
 	
 	// return connection id
 	return $connid;
@@ -359,6 +412,8 @@ function server_login($connid, $username, $password)
 	{
 		$res = ssh2_auth_password($connid, $username, $password);
 	}
+	else if ( $nTransferType == TRANSFERTYPE_HTTP ) 
+		$res = true;
 	
 	// return resukt
 	return $res;
