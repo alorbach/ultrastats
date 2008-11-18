@@ -457,7 +457,7 @@ function InitFrontEndVariables()
 	if ( isset($_GET['serverid']) )
 	{
 		if ( intval($_GET['serverid']) > 0 )
-			$content['serverid'] = $_GET['serverid'];
+			$content['serverid'] = intval($_GET['serverid']);
 	}
 
 }
