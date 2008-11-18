@@ -284,7 +284,7 @@ function CheckAndSetRunMode()
 	global $content, $RUNMODE, $MaxExecutionTime;
 
 	// Set to command line mode if argv is set! 
-	if ( !isset($_SERVER["GATEWAY_INTERFACE"]) )
+	if ( !isset($_SERVER["SERVER_SOFTWARE"]) )
 		$RUNMODE = RUNMODE_COMMANDLINE;
 
 	// Obtain max_execution_time
@@ -1405,16 +1405,15 @@ function GetConfigSetting($szSettingName, $szDefaultValue = "", $DesiredConfigLe
 */
 function StartPHPSession()
 {
-//	global $RUNMODE;
-//	if ( $RUNMODE == RUNMODE_WEBSERVER )
-//	{
-
-		// Start Session in any case!
+	global $RUNMODE;
+	if ( $RUNMODE == RUNMODE_WEBSERVER )
+	{
+		// Start Session environment
 		@session_start();
+
 		if ( !isset($_SESSION['SESSION_STARTED']) )
 			$_SESSION['SESSION_STARTED'] = "true";
-
-//	}
+	}
 }
 
 /*
