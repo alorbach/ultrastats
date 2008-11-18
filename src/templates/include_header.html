@@ -3,7 +3,6 @@
 <head>
 	<title>{TITLE}</title>
 	{EXTRA_METATAGS}
-
 	<link rel="stylesheet" href="{BASEPATH}css/defaults.css" type="text/css">
 	<link rel="stylesheet" href="{BASEPATH}css/menu.css" type="text/css">
 	<link rel="stylesheet" href="{BASEPATH}themes/{user_theme}/main.css" type="text/css">
@@ -11,12 +10,14 @@
 
 	<script type='text/javascript' src='{BASEPATH}js/common.js'></script>
 	{EXTRA_JAVASCRIPT}
+	{EXTRA_HTMLHEAD}
 </head>
 <body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+{EXTRA_HEADER}
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainheader">
 <tr> 
-	<td rowspan="4" width="400" align="left"><a href="{BASEPATH}index.php"><img src="{BASEPATH}images/main/Header-Logo.png" width="400" height="100" name="HeaderLogo"></a></td>
+	<td rowspan="4" width="400" align="left"><a href="{BASEPATH}index.php"><img src="{EXTRA_ULTRASTATS_LOGO}" width="400" height="100" name="HeaderLogo"></a></td>
 	<td width="100%" align="center" valign="top" height="20">
 
 	<!-- IF IS_LOGINPAGE!="true" -->

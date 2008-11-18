@@ -75,6 +75,11 @@ $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation Model für 'Treffezonen auf dein
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation Model für 'Wo du getroffen wurdest'";
 $content['LN_GEN_WEB_GZIP'] = "Aktiviere GZIP Kompression";
 $content['LN_GEN_WEB_MAXTIMEOUT'] = "Versuche die Script Ausführungs Zeit zu überschreiben (in Sekunden)";
+$content['LN_GEN_PREPENDTITLE'] = "Diesen Text an den Anfang des Seitentitels schreiben";
+$content['LN_GEN_INJECTHTMLHEADER'] = "Diesen html code in den &lt;head&gt; Bereich einfügen.";
+$content['LN_GEN_INJECTBODYHEADER'] = "Diesen html code direkt nach dem &lt;body&gt;-tags einfügen.";
+$content['LN_GEN_INJECTBODYFOOTER'] = "Diesen html code vor dem Ende des &lt;body&gt;-tags einfügen.";
+$content['LN_ADMIN_ULTRASTATS_LOGOURL'] = "Optionale UltraStats Logoadresse. Leer lassen, um das Standardlogo zu verwenden.";
 
 // Server Page
 $content['LN_ADMINCENTER_SERVER'] = "Server Administration";

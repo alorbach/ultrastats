@@ -58,9 +58,15 @@ $content['BUILDNUMBER'] = "0.3.11";
 $content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
+
+// PreInit overall user variables
+$content['EXTRA_ULTRASTATS_LOGO'] = $content['BASEPATH'] . "images/main/Header-Logo.png";
 $content['EXTRA_METATAGS'] = "";
 $content['EXTRA_JAVASCRIPT'] = "";
 $content['EXTRA_STYLESHEET'] = "";
+$content['EXTRA_HTMLHEAD'] = "";
+$content['EXTRA_HEADER'] = "";
+$content['EXTRA_FOOTER'] = "";
 $content['additional_url'] = "";
 // --- 
 
@@ -559,6 +565,28 @@ function InitConfigurationValues()
 
 	// --- Init Theme About Info ^^
 	InitThemeAbout($content['user_theme']);
+	// --- 
+
+	// --- Handle HTML Injection stuff
+	if ( strlen(GetConfigSetting("InjectHtmlHeader", false)) > 0 ) 
+		$content['EXTRA_HTMLHEAD'] .= $CFG['InjectHtmlHeader'];
+	else
+		$content['InjectHtmlHeader'] = ""; // Init Option
+	if ( strlen(GetConfigSetting("InjectBodyHeader", false)) > 0 ) 
+		$content['EXTRA_HEADER'] .= $CFG['InjectBodyHeader'];
+	else
+		$content['InjectBodyHeader'] = ""; // Init Option
+	if ( strlen(GetConfigSetting("InjectBodyFooter", false)) > 0 ) 
+		$content['EXTRA_FOOTER'] .= $CFG['InjectBodyFooter'];
+	else
+		$content['InjectBodyFooter'] = ""; // Init Option
+	// --- 
+
+	// --- Handle Optional Logo URL!
+	if ( strlen(GetConfigSetting("UltrastatsLogoUrl", false)) > 0 ) 
+		$content['EXTRA_ULTRASTATS_LOGO'] = $CFG['UltrastatsLogoUrl'];
+	else
+		$content['UltrastatsLogoUrl'] = ""; // Init Option
 	// --- 
 
 	// --- Init main langauge file now!

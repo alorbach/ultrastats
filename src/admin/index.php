@@ -115,6 +115,14 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['web_playermodel_killer']) && CheckIfPlayerModelExists($_POST['web_playermodel_killer']) ) { $content['web_playermodel_killer'] = DB_RemoveBadChars($_POST['web_playermodel_killer']); } 
 	if ( isset ($_POST['web_playermodel_killedby']) && CheckIfPlayerModelExists($_POST['web_playermodel_killedby'])) { $content['web_playermodel_killedby'] = DB_RemoveBadChars($_POST['web_playermodel_killedby']); } 
 
+	// Read Text fields
+	if ( isset ($_POST['PrependTitle']) ) { $content['PrependTitle'] = DB_RemoveBadChars($_POST['PrependTitle']); }
+	if ( isset ($_POST['InjectHtmlHeader']) ) { $content['InjectHtmlHeader'] = DB_RemoveBadChars($_POST['InjectHtmlHeader']); }
+	if ( isset ($_POST['InjectBodyHeader']) ) { $content['InjectBodyHeader'] = DB_RemoveBadChars($_POST['InjectBodyHeader']); }
+	if ( isset ($_POST['InjectBodyFooter']) ) { $content['InjectBodyFooter'] = DB_RemoveBadChars($_POST['InjectBodyFooter']); }
+	if ( isset ($_POST['PhplogconLogoUrl']) ) { $content['PhplogconLogoUrl'] = DB_RemoveBadChars($_POST['PhplogconLogoUrl']); }
+
+
 	// Write Gen Config Vars
 	WriteConfigValue( "gen_lang" );
 	WriteConfigValue( "gen_gameversion" );
@@ -142,6 +150,13 @@ if ( isset($_POST['op']) )
 	// Write PlayerDetail Options
 	WriteConfigValue( "web_playermodel_killer" );
 	WriteConfigValue( "web_playermodel_killedby" );
+
+	// Global new options
+	WriteConfigValue( "PrependTitle" );
+	WriteConfigValue( "InjectHtmlHeader" );
+	WriteConfigValue( "InjectBodyHeader" );
+	WriteConfigValue( "InjectBodyFooter" );
+	WriteConfigValue( "PhplogconLogoUrl" );
 
 	// Write Medal Config Vars
 	foreach ($content['medals'] as $key => $medal)
