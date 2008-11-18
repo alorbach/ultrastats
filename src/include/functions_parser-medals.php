@@ -128,8 +128,7 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 
 	if (	$content['gen_gameversion'] == COD || 
 			$content['gen_gameversion'] == CODUO || 
-			$content['gen_gameversion'] == COD2 || 
-			$content['gen_gameversion'] == CODWW )
+			$content['gen_gameversion'] == COD2 )
 	{
 		$content['medals']['medal_pro_sniper']['DisplayName'] = "Sniper";
 		$content['medals']['medal_pro_sniper']['GroupedPlayerID'] = "PLAYERID";
@@ -143,6 +142,26 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
 					") " . 
 					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('springfield_mp', 'enfield_scope_mp', 'kar98k_sniper_mp', 'mosin_nagant_sniper_mp') " . 
+					GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false, false, $serverid) . 
+					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
+					$szTimeFilter . 
+					" GROUP BY " . STATS_PLAYER_KILLS . ".PLAYERID " . 
+					" ORDER BY AllKills";
+	}
+	else if($content['gen_gameversion'] == CODWW )
+	{
+		$content['medals']['medal_pro_sniper']['DisplayName'] = "Sniper";
+		$content['medals']['medal_pro_sniper']['GroupedPlayerID'] = "PLAYERID";
+		$content['medals']['medal_pro_sniper']['sql'] = "SELECT " .
+					STATS_PLAYER_KILLS . ".PLAYERID, " .
+					" sum(" . STATS_PLAYER_KILLS . ".Kills) as AllKills" . 
+					" FROM " . STATS_PLAYER_KILLS . 
+					" INNER JOIN (" . STATS_WEAPONS . ", " . STATS_ROUNDS . 
+					") ON (" . 
+					STATS_WEAPONS . ".ID=" . STATS_PLAYER_KILLS . ".WEAPONID AND " . 
+					STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID " . 
+					") " . 
+					" WHERE " . STATS_WEAPONS . ".INGAMENAME IN ('svt40_telescopic_mp', 'springfield_scoped_mp', 'mosinrifle_scoped_mp', 'm1garand_scoped_mp', 'kar98k_scoped_mp', 'gewehr43_telescopic_mp', 'type99rifle_scoped_mp') " . 
 					GetCustomServerWhereQuery(STATS_PLAYER_KILLS, false, false, $serverid) . 
 					GetBannedPlayerWhereQuery(STATS_PLAYER_KILLS, "PLAYERID", false) . 
 					$szTimeFilter . 
@@ -501,14 +520,14 @@ function CreateAllMedals( $serverid )
 
 			$topplayer = ReturnMedalValue($sqlquery); 
 			if ( isset($topplayer['PLAYERID']) ) 
-			InsertOrUpdateMedalValue(   "medal_pro_sniper", 
-							   $content['medals']['medal_pro_sniper']['DisplayName'], 
-							   $serverid, 
-							   "medal_pro_sniper", 
-							   $topplayer['AllKills'], 
-							   "Kills", 
-							   $topplayer['PLAYERID'], 
-							   4 ); 
+			InsertOrUpdateMedalValue(  "medal_pro_sniper", 
+									   $content['medals']['medal_pro_sniper']['DisplayName'], 
+									   $serverid, 
+									   "medal_pro_sniper", 
+									   $topplayer['AllKills'], 
+									   "Kills", 
+									   $topplayer['PLAYERID'], 
+									   4 ); 
 			else 
 				PrintHTMLDebugInfo( DEBUG_INFO, "Medal", "medal_pro_sniper is empty!" ); 
 		}
