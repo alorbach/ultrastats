@@ -321,7 +321,7 @@ function GetLastLogFile( $overwritepasswd = "" )
 						if ( $streamIn )
 						{
 							// Create local stream handle to the file for writing!
-							$streamOut = @fopen($myserver['GameLogLocation'], 'a+'); //w
+							$streamOut = @fopen($myserver['GameLogLocation'], 'w+'); //a+ for append later
 							if ( $streamOut ) 
 							{
 								// Move to beginning

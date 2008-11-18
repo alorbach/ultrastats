@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------
+Version 0.3.12 (beta), 2008-11-18
+New features:
+- 
+Changes and bugfixes:
+- 
+---------------------------------------------------------------------------
 Version 0.3.11 (beta), 2008-10-05
 Changes and bugfixes:
 - Fixed race condition, when a new logfile is used the LastLogLine 
