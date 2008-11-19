@@ -1690,8 +1690,8 @@ function Parser_AddRoundAction( $myArray )
 		return;
 	}
 	// --- 
-print_r ( $myArray );
-exit;
+//print_r ( $myArray );
+//exit;
 	// --- Making ActionEntry
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundAction", "Adding Action '" . $myArray[ACTION_THEACTION] . "' for PlayerID '" . $myArray[KILL_OPFER_GUID] . "'");
 	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
