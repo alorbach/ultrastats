@@ -126,7 +126,7 @@ if ( isset($_GET['id']) )
 				{
 					// Enable Showing GUID
 					$content['EnableShowPBGuid'] = true;
-					echo $playervars['PBGuid'];
+//					echo $playervars['PBGuid'];
 					$content['PBGuid'] = substr($playervars['PBGuid'], 24); // Only show last 8 digits for security reasons!
 				}
 				else

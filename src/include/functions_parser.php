@@ -1665,7 +1665,9 @@ function Parser_AddChatLine( $myArray )
 
 /*	----------------------------------------------------*/
 /*	Function to add a RoundAction into the Database
-	SampleLogPrint: A;0;2;allies;^3[IW]^1Ned^1 Man;bel_alive_tick
+	SampleLogPrint:			A;0;2;allies;^3[IW]^1Ned^1 Man;bel_alive_tick
+	SampleLogPrint PAM4:	A;c5b244c8;{NYA}VicDog:Z;3;shots_fired
+
 	Description:
 	Type: A 
 	Client GUID: 0 
@@ -1688,7 +1690,8 @@ function Parser_AddRoundAction( $myArray )
 		return;
 	}
 	// --- 
-
+print_r ( $myArray );
+exit;
 	// --- Making ActionEntry
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundAction", "Adding Action '" . $myArray[ACTION_THEACTION] . "' for PlayerID '" . $myArray[KILL_OPFER_GUID] . "'");
 	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
