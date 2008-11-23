@@ -61,7 +61,7 @@ else
 	$content['INSTALL_STEP'] = 1;
 
 // Set Next Step 
-$content['INSTALL_NEXT_STEP'] = $content['INSTALL_STEP'];
+$content['INSTALL_NEXT_STEP'] = intval($content['INSTALL_STEP']);
 
 if ( MAX_STEPS > $content['INSTALL_STEP'] )
 {
