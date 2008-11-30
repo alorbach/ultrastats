@@ -268,7 +268,8 @@ CREATE TABLE `stats_damagetypes` (
   `ID` tinyint(4) NOT NULL auto_increment,
   `DAMAGETYPE` varchar(64) NOT NULL default '',
   `DisplayName` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`ID`)
+  PRIMARY KEY  (`ID`),
+  UNIQUE KEY `DAMAGETYPE` (`DAMAGETYPE`)
 ) TYPE=MyISAM COMMENT='Helpertable to store the damage types' AUTO_INCREMENT=1 ;
 
 
@@ -283,7 +284,8 @@ CREATE TABLE `stats_gameactions` (
   `NAME` varchar(64) NOT NULL default '',
   `DisplayName` varchar(255) NOT NULL default '',
   `SkillPoints` tinyint(4) NOT NULL default '0',
-  PRIMARY KEY  (`ID`)
+  PRIMARY KEY  (`ID`),
+  UNIQUE KEY `NAME` (`NAME`)
 ) TYPE=MyISAM COMMENT='Helper table to game actions' AUTO_INCREMENT=11 ;
 
 -- --------------------------------------------------------
@@ -299,7 +301,7 @@ CREATE TABLE `stats_gametypes` (
   `DisplayName` varchar(127) NOT NULL default '',
   `Description_id` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`ID`),
-  KEY `NAME` (`NAME`)
+  UNIQUE KEY `NAME` (`NAME`)
 ) TYPE=MyISAM COMMENT='Contains some detailed informations about the Gametypes' AUTO_INCREMENT=12 ;
 
 -- 
@@ -350,6 +352,7 @@ CREATE TABLE `stats_maps` (
   PRIMARY KEY  (`ID`,`MAPNAME`),
   UNIQUE KEY `MAPNAME_UNIQUE` (`MAPNAME`),
   KEY `MAPNAME` (`MAPNAME`)
+
 ) TYPE=MyISAM COMMENT='The parser will fill this table with map lists. You can enan' AUTO_INCREMENT=1 ;
 
 -- 
@@ -375,6 +378,7 @@ CREATE TABLE `stats_weapons` (
   `Accuracy` int(11) NOT NULL default '0',
   `Ammotype` varchar(64) NOT NULL default '',
   PRIMARY KEY  (`ID`),
+  UNIQUE KEY `INGAMENAME_UNIQUE` (`INGAMENAME`),
   KEY `INGAMENAME` (`INGAMENAME`,`BULLETNAME`)
 ) TYPE=MyISAM COMMENT='Table containing Informations about weapons' AUTO_INCREMENT=1 ;
 
