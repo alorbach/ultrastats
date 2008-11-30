@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------
+Version 0.3.13 (beta), 2008-11-30
+New features:
+- Added Icons for gameversions to the top left on the menubar.
+- Added SQL_BIG_SELECTS workaround for certain databases.
+- Number of Top Players on main page is configureable now
+- Added searchpage for searching in the chatlogs
+- Added workaround for changed ACTION logging format of Pam4 in Cod4! 
+  However Pam4 still breaks log format in a way that some features like
+  chatlogging will not work with PAM4.
+Changes and bugfixes:
+- Fixed PHP4 compatibility issues in logparser
+- Fixed Donate Button ;)
+- Added database upgrade V7, including important changes in the database.
+  Adds also missing weapons, maps and other stuff automatically, 
+  also on existing installations.
+- Fixed SD Gametype default for codww, empty gametypes will be displayed 
+  with gametype id on main page now.
+- Fixed "WTF OMFG" Error when playertime was 0 seconds, proberly because 
+  client directly disconnected
+- Fixed strange increment error in install.php
+---------------------------------------------------------------------------
 Version 0.3.12 (beta), 2008-11-18
 New features:
 - Added new general frotnend options, to inject html code at certain 
