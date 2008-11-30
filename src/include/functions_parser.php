@@ -1150,12 +1150,12 @@ function ProcessGameRound($myRoundArray, $myrealstarttime)
 						break;
 					case "Q":	// Quit: 592:49 Q;185269;5;^2|OCG|^1UnDead
 						$timelasted = $timeroundend - $timeroundbegin;
-						if ( $timelasted <= 0 )
+						if ( $timelasted < 0 )
 						{
 							PrintHTMLDebugInfo( DEBUG_ERROR_WTF, "ProcessGameRound", "NEGATIV Time for RemovePlayer returned! - " . $timeroundend . " - " . $timeroundbegin . " logline = '" . $mybuffer . "'");
 							break;
 						}
-						Parser_RemovePlayer($myLogArray, $timeroundend - $timeroundbegin);
+						Parser_RemovePlayer($myLogArray, $timelasted);
 						break;
 					case "say":		// Chat: 59:22 say;14352;25;|OCG|Anarchy; No we're not atm
 					case "sayteam":	// Chat: 62:34 sayteam;14352;25;|OCG|Anarchy; take it south
