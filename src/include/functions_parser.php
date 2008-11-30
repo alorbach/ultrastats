@@ -1240,6 +1240,13 @@ function Parser_RoundInit( $therealstarttime, $buffer )
 
 	$myRound[ROUND_GAMETYPE]	= DB_RemoveBadChars( $gameinitarray['g_gametype'] );
 	$myRound[ROUND_MAPID]		= DB_RemoveBadChars( $gameinitarray['mapname'] );
+	
+	// Copy optional values!
+	if ( isset($gameinitarray['fs_game']) )
+		$myRound[ROUND_MODVERSION] = DB_RemoveBadChars( $gameinitarray['fs_game'] );
+	else 
+		$myRound[ROUND_MODVERSION] = "";
+	
 
 	// Init Values!
 	$myRound[ROUND_AXIS_WINS] = 0;
@@ -1659,7 +1666,7 @@ function Parser_AddChatLine( $myArray )
 				)");
 		}
 		else
-			PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddChatLine", "Error, PlayerID '" . $myArray[PARSER_GUID] . "' not found in the Array!");
+			PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddChatLine", "Error, PlayerID '" . $myArray[PARSER_GUID] . "' not found in the Array!");
 	}
 	else
 		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddChatLine", "Chatline ignored due missing Chatcontent: '" . $strchatmsg . "'");
@@ -1673,7 +1680,7 @@ function Parser_AddChatLine( $myArray )
 /*	----------------------------------------------------*/
 /*	Function to add a RoundAction into the Database
 	SampleLogPrint:			A;0;2;allies;^3[IW]^1Ned^1 Man;bel_alive_tick
-	SampleLogPrint PAM4:	A;c5b244c8;{NYA}VicDog:Z;3;shots_fired
+	SampleLogPrint Cod4PAM4:A;c5b244c8;{NYA}VicDog:Z;3;shots_fired
 
 	Description:
 	Type: A 
@@ -1685,10 +1692,29 @@ function Parser_AddChatLine( $myArray )
 */
 function Parser_AddRoundAction( $myArray )
 {
-	global $myPlayers, $myserver, $myRound;
+	global $content, $myPlayers, $myserver, $myRound;
+	
+	// Workaround for changed Action Logging of PAM4 Mod in Cod4!
+	if ( $content['gen_gameversion'] == COD4 && $myRound[ROUND_MODVERSION] == "mods/pam4" )
+	{
+		// Convert GUID into 32Bit Number
+		$myArray[PARSER_GUID] = ParsePlayerGuid( $myArray, PARSER_GUID, PAM4_ACTION_CLIENT_NAME );
+		
+		// Obtain Team from player array!
+		if ( !isset($myPlayers[$myArray[PARSER_GUID]]) )
+			$szClientTeam = $myPlayers[ $myArray[PARSER_GUID] ][PLAYER_TEAM];
+		else 
+			$szClientTeam = "";
+		$szAction = $myArray[PAM4_ACTION_THEACTION];
+	}
+	else
+	{
+		// Convert GUID into 32Bit Number
+		$myArray[PARSER_GUID] = ParsePlayerGuid( $myArray, PARSER_GUID, ACTION_CLIENT_NAME );
 
-	// Convert GUID into 32Bit Number
-	$myArray[PARSER_GUID] = ParsePlayerGuid( $myArray, PARSER_GUID, ACTION_CLIENT_NAME );
+		$szClientTeam = $myArray[ACTION_CLIENT_TEAM];
+		$szAction = $myArray[ACTION_THEACTION];
+	}
 
 	// --- Check for GUID 0
 	if ( $myArray[PARSER_GUID] == 0 )
@@ -1697,15 +1723,14 @@ function Parser_AddRoundAction( $myArray )
 		return;
 	}
 	// --- 
-//print_r ( $myArray );
-//exit;
+
 	// --- Making ActionEntry
-	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundAction", "Adding Action '" . $myArray[ACTION_THEACTION] . "' for PlayerID '" . $myArray[KILL_OPFER_GUID] . "'");
+	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundAction", "Adding Action '" . $szAction . "' for PlayerID '" . $myArray[PARSER_GUID] . "'");
 	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
 					ROUNDID = " . $myRound[ROUND_DBID] . " AND 
 					PLAYERID = " . $myArray[PARSER_GUID] . " AND 
-					Team = '" . $myArray[ACTION_CLIENT_TEAM] . "' AND 
-					ACTIONID = " . GetActionIDByName( $myArray[ACTION_THEACTION] );
+					Team = '" . $szClientTeam . "' AND 
+					ACTIONID = " . GetActionIDByName( $szAction );
 
 	$result = DB_Query("SELECT * FROM " . STATS_ROUNDACTIONS . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
@@ -1722,8 +1747,8 @@ function Parser_AddRoundAction( $myArray )
 			 " . $myserver['ID'] . ", 
 			 " . $myRound[ROUND_DBID] . ", 
 			 " . $myArray[PARSER_GUID] . ", 
-			 '" . $myArray[ACTION_CLIENT_TEAM] . "', 
-			 " . GetActionIDByName( $myArray[ACTION_THEACTION] ) . ", 
+			 '" . $szClientTeam . "', 
+			 " . GetActionIDByName( $szAction ) . ", 
 			 " . "1" . ")");
 	}
 	// --- 

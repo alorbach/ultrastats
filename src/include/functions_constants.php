@@ -112,6 +112,10 @@ define('ACTION_CLIENTID', 2);
 define('ACTION_CLIENT_TEAM', 3);
 define('ACTION_CLIENT_NAME', 4);
 define('ACTION_THEACTION', 5);
+
+define('PAM4_ACTION_CLIENTID', 3);
+define('PAM4_ACTION_CLIENT_NAME', 2);
+define('PAM4_ACTION_THEACTION', 4);
 // --- 
 
 // --- Constants for the processing
@@ -140,6 +144,7 @@ define('ROUND_ALLIES_GUIDS', 10);
 define('ROUND_DBID', 11);
 define('ROUND_TOTALKILLS', 12);
 define('ROUND_DURATION', 13);
+define('ROUND_MODVERSION', 14);
 
 define('DBKILLS_ATTACKERGUID', 0);
 define('DBKILLS_OPFERGUID', 1);
