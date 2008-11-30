@@ -205,6 +205,12 @@ $content['LN_SEARCH_FOUND'] = "Ergebnisse gefunden für";
 $content['LN_SEARCH_IGNORECOLORCODES'] = "Farbcode ignorieren";
 $content['LN_SEARCH_PLAYERPBGUID'] = "Suche nach Punkbuster GUID";
 
+// Search in Chatlog
+$content['LN_SEARCH_CHATSTRING'] = "Suche im Chatlog nach diesem Text";
+$content['LN_SEARCH_CHATTITLE'] = "Suche im Chatlog";
+$content['LN_SEARCH_CHATNOTFOUND'] = "Fehler, keine Übereinstimmungen mit '%1' im Chatlog gefunden.";
+$content['LN_SEARCH_CHATTOSHORT'] = "Fehler, deine Suche war zu kurz, mindestens drei Zeichen benötigt.";
+
 // Weapon Defs
 $content['LN_WEAPONTYPE_MACHINEGUN'] = "Maschinengewehr";
 $content['LN_WEAPONTYPE_SNIPER'] = "Sniper";
@@ -311,6 +317,8 @@ $content['LN_MENU_PLAYER_BYTEAMKILLS'] = "Top Spieler nach Teamkills";
 $content['LN_MENU_PLAYER_BYSUICIDES'] = "Top Spieler nach Selbstmorden";
 $content['LN_MENU_PLAYER_RATIO'] = "Top Spieler nach Ratio";
 $content['LN_MENU_SEARCH'] = "Suche";
+$content['LN_MENU_SEARCH_PLAYERS'] = "Suche nach Spielern";
+$content['LN_MENU_SEARCH_CHAT'] = "Suche im Chatlog";
 $content['LN_MENU_WEAPONSTATS'] = "Waffen Statistik";
 $content['LN_MENU_DAMAGESTATS'] = "Schadenstype Statistik";
 $content['LN_MENU_SERVERSTATS'] = "Server Statistik";

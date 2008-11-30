@@ -205,6 +205,12 @@ $content['LN_SEARCH_FOUND'] = "Results found for ";
 $content['LN_SEARCH_IGNORECOLORCODES'] = "Ignore Color Codes";
 $content['LN_SEARCH_PLAYERPBGUID'] = "Search by Punkbuster GUID";
 
+// Search in Chatlog
+$content['LN_SEARCH_CHATSTRING'] = "Search in Chatlog for this";
+$content['LN_SEARCH_CHATTITLE'] = "Search in Chatlog";
+$content['LN_SEARCH_CHATNOTFOUND'] = "Error, no chats found that match your search '%1'.";
+$content['LN_SEARCH_CHATTOSHORT'] = "Error, your search phrase was to short, at least three Charaters are needed.";
+
 // Weapon Defs
 $content['LN_WEAPONTYPE_MACHINEGUN'] = "Machine Gun";
 $content['LN_WEAPONTYPE_SNIPER'] = "Sniper Rifles";
@@ -311,6 +317,8 @@ $content['LN_MENU_PLAYER_BYTEAMKILLS'] = "Top Players by Teamkills";
 $content['LN_MENU_PLAYER_BYSUICIDES'] = "Top Players by Suicides";
 $content['LN_MENU_PLAYER_RATIO'] = "Top Players by Ratio";
 $content['LN_MENU_SEARCH'] = "Search";
+$content['LN_MENU_SEARCH_PLAYERS'] = "Search for Players";
+$content['LN_MENU_SEARCH_CHAT'] = "Search in Chatlog";
 $content['LN_MENU_WEAPONSTATS'] = "Weapon Stats";
 $content['LN_MENU_DAMAGESTATS'] = "Damagetype Stats";
 $content['LN_MENU_SERVERSTATS'] = "Server Stats";

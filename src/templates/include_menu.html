@@ -2,7 +2,24 @@
 <tr>
 	<td class="topmenu1begin" nowrap align="center" width="16"><img align="left" src="{MENU_BULLET_GREEN}" width="16" height="16" vspace="0"></td>
 	<td class="topmenu1" nowrap align="center" width="75"><a class="topmenu1_link" href="{BASEPATH}index.php?{additional_url}" target="_top"><img align="left" src="{MENU_HOMEPAGE}" width="16" height="16" vspace="0">{LN_MENU_HOME}</a></td>
-	<td class="topmenu1" nowrap align="center" width="75"><a class="topmenu1_link" href="{BASEPATH}find-players.php?{additional_url}" target="_top"><img align="left" src="{MENU_SEARCH}" width="16" height="16" vspace="0">{LN_MENU_SEARCH}</a></td>
+	<td class="topmenu1" nowrap align="left" width="75">
+		<div id="menu"><ul>
+		  <li class="topmenu1_link">
+
+			<img align="left" src="{MENU_SEARCH}" width="16" height="16" title="{LN_MENU_SEARCH}" OnClick="ToggleDisplayTypeById('menu_find');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_SEARCH}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
+			<a class="topmenu1_link" href="{BASEPATH}find-players.php?{additional_url}" target="_top">
+			{LN_MENU_SEARCH}
+			</a>
+
+			<ul id="menu_find" OnMouseMove="ToggleDisplayEnhanceTimeOut('menu_find');">
+				<li class="topmenu2"><a class="topmenu1_link" href="{BASEPATH}find-players.php?{additional_url}" target="_top"><img align="left" src="{MENU_SEARCH}" width="16" height="16" vspace="0">{LN_MENU_SEARCH_PLAYERS}</a></li>
+				<li class="topmenu2"><a class="topmenu1_link" href="{BASEPATH}find-chat.php?{additional_url}" target="_top"><img align="left" src="{MENU_SEARCH}" width="16" height="16" vspace="0">{LN_MENU_SEARCH_CHAT}</a></li>
+			</ul>
+		  </li>
+		</ul></div>
+		
+
+	</td>
 	<td class="topmenu1" nowrap align="left" width="100">
 		<div id="menu">
 		<ul>
