@@ -80,6 +80,7 @@ if ($content['parser_disablelastline'] == "yes") { $content['parser_disablelastl
 if ($content['gen_phpdebug'] == "yes") { $content['gen_phpdebug_checked'] = "checked"; } else { $content['gen_phpdebug_checked'] = ""; }
 if ($content['parser_chatlogging'] == "yes") { $content['parser_chatlogging_checked'] = "checked"; } else { $content['parser_chatlogging_checked'] = ""; }
 if ($content['gen_gzipcompression'] == "yes") { $content['gen_gzipcompression_checked'] = "checked"; } else { $content['gen_gzipcompression_checked'] = ""; }
+if ($content['gen_bigselects'] == "yes") { $content['gen_bigselects_checked'] = "checked"; } else { $content['gen_bigselects_checked'] = ""; }
 
 // Now the processing Part
 if ( isset($_POST['op']) )
@@ -95,7 +96,9 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['gen_parseby']) ) { $content['gen_parseby'] = Intval(DB_RemoveBadChars($_POST['gen_parseby'])); }
 	if ( isset ($_POST['gen_phpdebug']) ) { $content['gen_phpdebug'] = "yes"; } else { $content['gen_phpdebug'] = "no"; } 
 	if ( isset ($_POST['gen_gzipcompression']) ) { $content['gen_gzipcompression'] = "yes"; } else { $content['gen_gzipcompression'] = "no"; } 
+	if ( isset ($_POST['gen_bigselects']) ) { $content['gen_bigselects'] = "yes"; } else { $content['gen_bigselects'] = "no"; } 
 	if ( isset ($_POST['gen_maxexecutiontime']) && is_numeric($_POST['gen_maxexecutiontime']) ) { $content['gen_maxexecutiontime'] = $_POST['gen_maxexecutiontime']; }
+	
 
 	// Read Parser Config Vars
 	if ( isset ($_POST['parser_debugmode']) ) { $content['parser_debugmode'] = DB_RemoveBadChars($_POST['parser_debugmode']); }
@@ -131,6 +134,7 @@ if ( isset($_POST['op']) )
 	WriteConfigValue( "gen_parseby" );
 	WriteConfigValue( "gen_phpdebug" );
 	WriteConfigValue( "gen_gzipcompression" );
+	WriteConfigValue( "gen_bigselects" );
 	WriteConfigValue( "gen_maxexecutiontime" );
 
 	// Read Parser Config Vars

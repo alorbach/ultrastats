@@ -77,6 +77,7 @@ $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation model used for 'where you hit o
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation model used for 'where you got klled by others'";
 $content['LN_GEN_WEB_GZIP'] = "Enable GZIP Compression";
 $content['LN_GEN_WEB_MAXTIMEOUT'] = "Try to overwrite script execution timeout (in seconds)";
+$content['LN_GEN_WEB_BIGSELECTS'] = "Enable SET SQL_BIG_SELECTS=1 workaround";
 $content['LN_GEN_PREPENDTITLE'] = "Prepend this string in title";
 $content['LN_GEN_INJECTHTMLHEADER'] = "Inject this html code into the &lt;head&gt; area.";
 $content['LN_GEN_INJECTBODYHEADER'] = "Inject this html code at the beginning of the &lt;body&gt; area.";

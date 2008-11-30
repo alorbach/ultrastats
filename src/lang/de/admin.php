@@ -75,6 +75,7 @@ $content['LN_ADMINPLAYERDETAILS'] = "Optionen für Spielerdetails Seite";
 $content['LN_GEN_PD_KILLERMODEL'] = "Hitlocation Model für 'Treffezonen auf deine Gegenspieler'";
 $content['LN_GEN_PD_KILLEDBYMODEL'] = "Hitlocation Model für 'Wo du getroffen wurdest'";
 $content['LN_GEN_WEB_GZIP'] = "Aktiviere GZIP Kompression";
+$content['LN_GEN_WEB_BIGSELECTS'] = "Aktiviere SET SQL_BIG_SELECTS=1 für Mysql";
 $content['LN_GEN_WEB_MAXTIMEOUT'] = "Versuche die Script Ausführungs Zeit zu überschreiben (in Sekunden)";
 $content['LN_GEN_PREPENDTITLE'] = "Diesen Text an den Anfang des Seitentitels schreiben";
 $content['LN_GEN_INJECTHTMLHEADER'] = "Diesen html code in den &lt;head&gt; Bereich einfügen.";

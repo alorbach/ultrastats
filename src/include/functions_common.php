@@ -547,6 +547,12 @@ function InitConfigurationValues()
 	}
 	// --- 
 
+	// --- SQL Workaround
+	if ( !isset($content['gen_bigselects']) ) { $content['gen_bigselects'] = "no"; }
+	if ( $content['gen_bigselects'] == "yes")
+		EnableBigSelects();
+	// --- 
+
 	// --- Parseby Type
 	// Set Default!	- TODO, set in install.php!
 	if ( !isset($content['gen_parseby']) ) { $content['gen_parseby'] = PARSEBY_GUIDS; }
