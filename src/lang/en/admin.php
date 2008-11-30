@@ -53,7 +53,9 @@ $content['LN_CURRDBVERSION'] = "Internal Database Version";
 // Main Options
 $content['LN_ADMINFRONTEND'] = "Frontend Options";
 $content['LN_GEN_WEB_STYLE'] = "Select your favourite Theme";
-$content['LN_GEN_WEB_TOPPLAYERS'] = "How many Player should be listed per Page?";
+
+$content['LN_GEN_WEB_MAINTPPLAYERS'] = "How many Player should be listed on the Main UltraStats Page?";
+$content['LN_GEN_WEB_TOPPLAYERS'] = "How many Player should be listed on the Playerlist Page?";
 $content['LN_GEN_WEB_DETAILLISTTOPPLAYERS'] = "How many Player should be listed in Detail Views?";
 $content['LN_GEN_WEB_TOPROUNDS'] = "How many Rounds do you show per page?";
 $content['LN_GEN_WEB_MAXPAGES'] = "Maximum number of Pages, if paging is needed!";

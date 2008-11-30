@@ -50,6 +50,7 @@ CreateTopPlayersArray( 200, "TOPPLAYERS", "web_topplayers" );
 CreateTopPlayersArray( 200, "TOPLISTPLAYERS", "web_detaillistsplayers" );
 CreateTopPlayersArray( 100, "WEBMAXPAGES", "web_maxpages" );
 CreateTopPlayersArray( 50, "WEBMAXMAPSPERPAGE", "web_maxmapsperpage" );
+CreateTopPlayersArray( 100, "MAINPAGEPLAYERS", "web_mainpageplayers" );
 
 // Create Helper Lists for Player Models!
 CreatePlayerModelList( "PLAYERMODELKILLER", $content['web_playermodel_killer'] );
@@ -103,9 +104,10 @@ if ( isset($_POST['op']) )
 
 	// Read WEB Config Vars
 	if ( isset ($_POST['web_theme']) ) { $content['web_theme'] = DB_RemoveBadChars($_POST['web_theme']); }
-	if ( isset ($_POST['web_toprounds']) ) { $content['web_toprounds'] = DB_RemoveBadChars($_POST['web_toprounds']); } 
-	if ( isset ($_POST['web_topplayers']) ) { $content['web_topplayers'] = DB_RemoveBadChars($_POST['web_topplayers']); } 
-	if ( isset ($_POST['web_detaillistsplayers']) ) { $content['web_detaillistsplayers'] = DB_RemoveBadChars($_POST['web_detaillistsplayers']); } 
+	if ( isset ($_POST['web_toprounds']) ) { $content['web_toprounds'] = intval(DB_RemoveBadChars($_POST['web_toprounds'])); } 
+	if ( isset ($_POST['web_topplayers']) ) { $content['web_topplayers'] = intval(DB_RemoveBadChars($_POST['web_topplayers'])); } 
+	if ( isset ($_POST['web_mainpageplayers']) ) { $content['web_mainpageplayers'] = intval(DB_RemoveBadChars($_POST['web_mainpageplayers'])); } 
+	if ( isset ($_POST['web_detaillistsplayers']) ) { $content['web_detaillistsplayers'] = intval(DB_RemoveBadChars($_POST['web_detaillistsplayers'])); } 
 	if ( isset ($_POST['web_minkills']) && is_numeric($_POST['web_minkills']) ) { $content['web_minkills'] = DB_RemoveBadChars($_POST['web_minkills']); }
 	if ( isset ($_POST['web_mintime']) && is_numeric($_POST['web_mintime'])) { $content['web_mintime'] = DB_RemoveBadChars($_POST['web_mintime']); } 
 	if ( isset ($_POST['web_maxpages']) && is_numeric($_POST['web_maxpages'])) { $content['web_maxpages'] = DB_RemoveBadChars($_POST['web_maxpages']); } 
@@ -139,6 +141,7 @@ if ( isset($_POST['op']) )
 	// Write Web Config vars	
 	WriteConfigValue( "web_theme" );
 	WriteConfigValue( "web_toprounds" );
+	WriteConfigValue( "web_mainpageplayers" );
 	WriteConfigValue( "web_topplayers" );
 	WriteConfigValue( "web_detaillistsplayers" );
 	WriteConfigValue( "web_minkills" );

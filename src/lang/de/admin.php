@@ -53,7 +53,8 @@ $content['LN_CURRDBVERSION'] = "Interne Datenbank Version";
 // Main Options
 $content['LN_ADMINFRONTEND'] = "Haupt Einstellungen";
 $content['LN_GEN_WEB_STYLE'] = "Wähle dein lieblings Style";
-$content['LN_GEN_WEB_TOPPLAYERS'] = "Wieviele Spieler sollen angezeigt werden?";
+$content['LN_GEN_WEB_MAINTPPLAYERS'] = "Wieviele Spieler sollen auf der Hauptseite pro Seite angezeigt werden?";
+$content['LN_GEN_WEB_TOPPLAYERS'] = "Wieviele Spieler sollen in den Spielerlisten pro Seite angezeigt werden?";
 $content['LN_GEN_WEB_DETAILLISTTOPPLAYERS'] = "Wieviele Spieler sollen detailiert angezeigt werden?";
 $content['LN_GEN_WEB_TOPROUNDS'] = "Wieviele Runden willst du pro Seite anzeigen?";
 $content['LN_GEN_WEB_MAXPAGES'] = "Wieviele Seiten sollen aufgelistet werden auf der Seite?";

@@ -212,7 +212,7 @@ $sqlquery =		"SELECT " .
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 				GetTimeWhereQueryString(STATS_PLAYERS) . 
 				" GROUP BY " . STATS_PLAYERS . ".GUID " .
-				" ORDER BY Kills DESC LIMIT 20";
+				" ORDER BY Kills DESC LIMIT " . $content["web_mainpageplayers"];
 //echo $sqlquery;
 $result = DB_Query($sqlquery);
 

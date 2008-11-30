@@ -603,6 +603,7 @@ function InitConfigurationValues()
 	// --- 
 
 	if ( !isset($content['web_toprounds']) ) { $content['web_toprounds'] = 50; }
+	if ( !isset($content['web_mainpageplayers']) ) { $content['web_mainpageplayers'] = 20; }
 	if ( !isset($content['web_topplayers']) ) { $content['web_topplayers'] = 50; }
 	if ( !isset($content['web_detaillistsplayers']) ) { $content['web_detaillistsplayers'] = 20; }
 	if ( !isset($content['web_minkills']) ) { $content['web_minkills'] = 25; }
