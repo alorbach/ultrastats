@@ -889,7 +889,9 @@ function RunParserNow()
 
 					if ( $currentseconds != -1 ) // Init starts at -1
 					{
-						if ( ($findmode == 0) && ( stripos($gl_linebuffer, "InitGame:")  !== false ) )
+						// PHP4 workaround!
+						if ( ($findmode == 0) && ( strpos( strtoupper($gl_linebuffer), strtoupper("InitGame:") )  !== false ) )
+//						if ( ($findmode == 0) && ( stripos($gl_linebuffer, "InitGame:")  !== false ) )
 						{
 							$findmode = 1;	// From here start copying the game session into the buffer
 							PrintHTMLDebugInfo( DEBUG_DEBUG, "Gamelog", "Gameround found at Line $currentline");
@@ -929,9 +931,12 @@ function RunParserNow()
 								= If a server is restarted, we need to finish the session exactly HERE as well ;)!
 							*		
 							*/
+							// PHP4 workaround!
+//									( stripos($gl_linebuffer, "ShutdownGame:") !== false && $lastseconds == $currentseconds) ||
+//									( stripos($gl_linebuffer, "ExitLevel: executed") !== false ) || 
 							if (	( $lastseconds > $currentseconds) ||
-									( stripos($gl_linebuffer, "ShutdownGame:") !== false && $lastseconds == $currentseconds) ||
-									( stripos($gl_linebuffer, "ExitLevel: executed") !== false ) || 
+									( strpos( strtoupper($gl_linebuffer), strtoupper("ShutdownGame:") ) !== false && $lastseconds == $currentseconds) ||
+									( strpos( strtoupper($gl_linebuffer), strtoupper("ExitLevel: executed") ) !== false ) || 
 									(
 										/* DISCUSS THIS 
 										(	$currentgametype == "dm" || 
@@ -947,7 +952,9 @@ function RunParserNow()
 											$currentgametype !== "snd" 
 										)
 											&&
-										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
+										// PHP4 workaround!
+//										( stripos ($gl_linebuffer, "ShutdownGame:") !== false )
+										( strpos ( strtoupper($gl_linebuffer), strtoupper("ShutdownGame:") ) !== false )
 									) 
 										||
 									( isset($logfilerestart) && $logfilerestart == true )
