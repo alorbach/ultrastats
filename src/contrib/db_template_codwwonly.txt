@@ -2,7 +2,7 @@
 
 INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('dm', 'Deathmatch', 'gametype_dm');
 INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('tdm', 'Team Deathmatch', 'gametype_tdm');
-INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('snd', 'Search and Destroy', 'gametype_sd');
+INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('sd', 'Search and Destroy', 'gametype_sd');
 INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('koth', 'Headquarters', 'gametype_hq');
 INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('ctf', 'Capture the Flag', 'gametype_ctf');
 INSERT INTO `stats_gametypes` (`NAME`, `DisplayName`, `Description_id`) VALUES('sab', 'Sabotage', 'gametype_sab');

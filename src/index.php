@@ -93,7 +93,7 @@ if ( isset($content['roundsonly']) )
 		// --- 
 
 		// --- Set GametypeName 
-		if ( isset($content['roundsonly'][$i]['GameTypeDisplayName']) )
+		if ( isset($content['roundsonly'][$i]['GameTypeDisplayName']) && strlen($content['roundsonly'][$i]['GameTypeDisplayName']) > 0 )
 			$content['roundsonly'][$i]['FinalGameTypeDisplayName'] = $content['roundsonly'][$i]['GameTypeDisplayName'];
 		else
 			$content['roundsonly'][$i]['FinalGameTypeDisplayName'] = $content['roundsonly'][$i]['GameTypeName'];
@@ -200,14 +200,13 @@ $sqlquery =		"SELECT " .
 				"sum(" . STATS_PLAYERS . ".Deaths) as Deaths, " . 
 //					"round(AVG( " . STATS_PLAYERS . ".KillRatio),2) as KillRatio " .
 				"sum(" . STATS_PLAYERS . ".Kills) / sum(" . STATS_PLAYERS . ".Deaths) as KillRatio " .	// TRUE l33tAGE!
-//					STATS_PLAYERS . ".KillRatio " .
-//					STATS_ALIASES . ".Alias, " . 
-//					STATS_ALIASES . ".AliasAsHtml " .
+//				"sum(" . STATS_TIME . ".TIMEPLAYED) as TIMEPLAYED " . 
 				" FROM " . STATS_PLAYERS . 
-//					" INNER JOIN (" . STATS_ALIASES . 
-//					") ON (" . 
-//					STATS_ALIASES . ".PLAYERID=" . STATS_PLAYERS . ".GUID) " . 
-				" WHERE Kills > " . $content['web_minkills'] .
+//				" INNER JOIN (" . STATS_TIME . 
+//				") ON (" . 
+//				STATS_TIME . ".PLAYERID=" . STATS_PLAYERS . ".GUID) " . 
+				" WHERE Kills > " . $content['web_minkills'] . " " . 
+//				" AND TIMEPLAYED > " . $content['web_mintime'] . " " . 
 				GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 				GetTimeWhereQueryString(STATS_PLAYERS) . 

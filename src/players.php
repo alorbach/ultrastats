@@ -68,7 +68,11 @@ if ( isset($_GET['sorting']) )
 	$sqlquery = "SELECT " .
 						"count(" . STATS_PLAYERS . ".GUID) as AllPlayersCount " . 
 						" FROM " . STATS_PLAYERS . 
+//						" INNER JOIN (" . STATS_TIME . 
+//						") ON (" . 
+//						STATS_PLAYERS . ".GUID=" . STATS_TIME . ".PLAYERID) " . 
 						" WHERE Kills > " . $content['web_minkills'] . " " . 
+//						" AND " . STATS_TIME . ".TIMEPLAYED > " . $content['web_mintime'] . " " . 
 						GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 						GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 						GetTimeWhereQueryString(STATS_PLAYERS) . 
@@ -109,6 +113,7 @@ $sqlquery = "SELECT " .
 //					") ON (" . 
 //					STATS_PLAYERS . ".GUID=" . STATS_TIME . ".PLAYERID) " . 
 					" WHERE Kills > " . $content['web_minkills'] . " " . 
+//					" AND TotalSeconds > " . $content['web_mintime'] . " " . 
 					GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 					GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 					GetTimeWhereQueryString(STATS_PLAYERS) . 
