@@ -54,7 +54,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.12";
+$content['BUILDNUMBER'] = "0.3.13";
 $content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
