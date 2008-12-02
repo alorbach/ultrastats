@@ -171,7 +171,7 @@ $sqlquery = "SELECT " .
 					STATS_SERVERS . ".ID as ServerID, " . 
 					"count(" . STATS_TIME . ".PLAYERID) as PlayerCount " . 
 					" FROM " . STATS_ROUNDS . 
-					" INNER JOIN (" . STATS_GAMETYPES . ", " . STATS_MAPS . ", " . STATS_TIME . ", " . STATS_SERVERS . 
+					" LEFT OUTER JOIN (" . STATS_GAMETYPES . ", " . STATS_MAPS . ", " . STATS_TIME . ", " . STATS_SERVERS . 
 					") ON (" . 
 					STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " . 
 					STATS_ROUNDS . ".MAPID=" . STATS_MAPS . ".ID AND " . 
