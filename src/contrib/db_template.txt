@@ -331,7 +331,7 @@ CREATE TABLE `stats_hitlocations` (
 DROP TABLE IF EXISTS `stats_language_strings`;
 CREATE TABLE `stats_language_strings` (
   `LANG` char(2) NOT NULL default '',
-  `STRINGID` varchar(255) NOT NULL default '',
+  `STRINGID` varchar(191) NOT NULL default '',
   `TEXT` text NOT NULL,
   PRIMARY KEY  (`LANG`,`STRINGID`)
 ) TYPE=MyISAM COMMENT='This table holds strings which can be editied by the user (m';

@@ -238,15 +238,13 @@ else if ( $content['INSTALL_STEP'] == 4 )
 	else
 		RevertOneStep( $content['INSTALL_STEP']-1, $content['LN_CFG_PARAMMISSING'] . $content['LN_CFG_GAMEVER'] );
 
-	// Now Check database connect
-	$link_id = mysql_connect( $_SESSION['DB_HOST'], $_SESSION['DB_USER'], $_SESSION['DB_PASS']);
-	if (!$link_id) 
-		RevertOneStep( $content['INSTALL_STEP']-1, GetAndReplaceLangStr( $content['LN_INSTALL_ERRORCONNECTFAILED'], $_SESSION['DB_HOST']) . "<br>" . DB_ReturnSimpleErrorMsg() );
-	
-	// Try to select the DB!
-	$db_selected = mysql_select_db($_SESSION['DB_NAME'], $link_id);
-	if(!$db_selected) 
-		RevertOneStep( $content['INSTALL_STEP']-1, GetAndReplaceLangStr( $content['LN_INSTALL_ERRORACCESSDENIED'], $_SESSION['DB_NAME']) . "<br>" . DB_ReturnSimpleErrorMsg() );
+	// Now Check database connect (uses mysqli; session stores port from step 3/4)
+	$dbport = isset( $_SESSION['DB_PORT'] ) ? (int) $_SESSION['DB_PORT'] : 3306;
+	$install_mysqli = @mysqli_connect( $_SESSION['DB_HOST'], $_SESSION['DB_USER'], $_SESSION['DB_PASS'], $_SESSION['DB_NAME'], $dbport );
+	if ( ! $install_mysqli || mysqli_connect_errno() ) {
+		RevertOneStep( $content['INSTALL_STEP']-1, GetAndReplaceLangStr( $content['LN_INSTALL_ERRORCONNECTFAILED'], $_SESSION['DB_HOST'] ) . "<br>" . mysqli_connect_error() );
+	}
+	mysqli_close( $install_mysqli );
 
 	// Looks good, now we write the config.php file!
 //	ini_set('error_reporting', E_WARNING); // Enable Warnings!
@@ -286,11 +284,7 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		$totaldbdefs = str_replace( "`stats_", "`" . $_SESSION["DB_PREFIX"], $totaldbdefs );
 		
 		// Now split by sql command
-		$mycommands = split( ";\r\n", $totaldbdefs );
-		
-		// check for different linefeed
-		if ( count($mycommands) <= 1 )
-			$mycommands = split( ";\n", $totaldbdefs );
+		$mycommands = UltraStats_SplitSqlStatements( $totaldbdefs );
 
 		//Still only one? Abort
 		if ( count($mycommands) <= 1 )

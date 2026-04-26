@@ -630,7 +630,11 @@ function ExtendPlayerData ( &$myplayers )
 {
 	global $content, $gl_root_path;
 
-	for($i = 0; $i < count($myplayers); $i++)
+	if ( ! is_array( $myplayers ) || count( $myplayers ) < 1 ) {
+		return;
+	}
+
+	for ( $i = 0; $i < count( $myplayers ); $i++ )
 	{
 		if ( isset($playerguids) ) { $playerguids .= ", "; } else { $playerguids = ""; }
 		$playerguids .= $myplayers[$i]['PLAYERID'];

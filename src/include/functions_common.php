@@ -45,8 +45,6 @@ $DEBUGMODE = DEBUG_INFO;
 @ini_set( "register_argc_argv", "Off" );
 // --- 
 
-// Enable error tracking
-@ini_set( "track_errors", "On" );
 // --- 
 
 // Default language
@@ -70,11 +68,15 @@ $content['EXTRA_FOOTER'] = "";
 $content['additional_url'] = "";
 // --- 
 
-// --- Check PHP Version! If lower the 4, UltraStats will not work proberly!
-$myPhpVer = phpversion();
-$myPhpVerArray = explode('.', $myPhpVer);
-if ( $myPhpVerArray[0] < 4 )
-	DieWithErrorMsg( 'Error, the PHP Version on this Server does not meet the installation requirements.<br> <A HREF="http://www.php.net"><B>PHP4</B></A> or higher is needed. Current installed Version is: <B>' . $myPhpVer . '</B>');
+// --- Check PHP version (7.4+; mysqli required)
+if ( version_compare( PHP_VERSION, '7.4.0', '<' ) ) {
+	@header( 'Content-Type: text/html; charset=utf-8' );
+	die( 'UltraStats requires <b>PHP 7.4.0</b> or higher. This server reports PHP <b>' . htmlspecialchars( PHP_VERSION, ENT_QUOTES, 'UTF-8' ) . '</b>.' );
+}
+if ( ! extension_loaded( 'mysqli' ) ) {
+	@header( 'Content-Type: text/html; charset=utf-8' );
+	die( 'The PHP <b>mysqli</b> extension is required. Enable it in php.ini (e.g. extension=mysqli) and restart the web server.' );
+}
 // ---
 
 
@@ -185,6 +187,11 @@ function GetFileLength($szFileName)
 		return 0;
 }
 
+/**
+ * Main application bootstrap: session, config, DB, runtime options, theme/lang lists, banned-player filter, DB version.
+ * Every public script that serves HTML should call this (after defining IN_ULTRASTATS and setting $gl_root_path) unless
+ * a minimal path is required (e.g. install uses InitBasicUltraStats() only in early steps).
+ */
 function InitUltraStats()
 {
 	// Needed to make global
@@ -306,8 +313,8 @@ function CheckAndSetRunMode()
 	if ( in_array("ftp", $loadedExtensions) ){ $content['FTP_IS_ENABLED'] = true; } else { $content['FTP_IS_ENABLED'] = false; }
 	// Check for GD libary
 	if ( in_array("gd", $loadedExtensions) ){ $content['GD_IS_ENABLED'] = true; } else { $content['GD_IS_ENABLED'] = false; }
-	// Check MYSQL Extension
-	if ( in_array("mysql", $loadedExtensions) ) { $content['MYSQL_IS_ENABLED'] = true; } else { $content['MYSQL_IS_ENABLED'] = false; }
+	// Check mysqli extension
+	if ( in_array( "mysqli", $loadedExtensions ) ) { $content['MYSQL_IS_ENABLED'] = true; } else { $content['MYSQL_IS_ENABLED'] = false; }
 	
 	// Set if fopen is allowed
 	$content["allow_url_fopen"] = ini_get("allow_url_fopen");
@@ -318,8 +325,9 @@ function InitPostDbConfigRuntime()
 	global $content, $MaxExecutionTime;
 
 	// --- Enable GZIP Compression if available
+	$httpAcceptEncoding = isset( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ? (string) $_SERVER['HTTP_ACCEPT_ENCODING'] : '';
 	if (	
-			strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false && 
+			strpos( $httpAcceptEncoding, 'gzip' ) !== false && 
 			GetConfigSetting("gen_gzipcompression", "yes", CFGLEVEL_USER) == "yes" &&
 			!defined('IS_PARSERPAGE') /* Do not GZIP in this case!*/
 		) 
@@ -713,7 +721,7 @@ function CheckUrlOrIP($ip)
 
 function DieWithErrorMsg( $szerrmsg )
 {
-	global $RUNMODE, $content;
+	global $RUNMODE, $content, $gl_root_path;
 	if		( $RUNMODE == RUNMODE_COMMANDLINE )
 	{
 		print("\n\n\t\tCritical Error occured\n");
@@ -743,6 +751,7 @@ function DieWithErrorMsg( $szerrmsg )
 
 function DieWithFriendlyErrorMsg( $szerrmsg )
 {
+	global $gl_root_path;
 	echo 
 		"<html><title>UltraStats :: Error occured</title><head>" . 
 		"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/default/main.css\" type=\"text/css\"></head><body><br><br>" .
@@ -791,15 +800,41 @@ function IncludeLanguageFile( $langfile )
 	}
 }
 
+/**
+ * Allow only in-app relative targets (no scheme, no //host); blocks open redirects.
+ */
+function UltraStats_SanitizeRedirectTarget( $url )
+{
+	$url = is_string( $url ) ? trim( $url ) : '';
+	if ( $url === '' ) {
+		return 'index.php';
+	}
+	if ( strpbrk( $url, "\r\n" ) !== false ) {
+		return 'index.php';
+	}
+	if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.-]*://#', $url ) ) {
+		return 'index.php';
+	}
+	if ( strlen( $url ) >= 2 && $url[0] === '/' && $url[1] === '/' ) {
+		return 'index.php';
+	}
+	if ( $url[0] === '/' || $url[0] === '\\' ) {
+		return 'index.php';
+	}
+	return $url;
+}
+
 function RedirectPage( $newpage )
 {
-	header("Location: $newpage");
+	$newpage = UltraStats_SanitizeRedirectTarget( $newpage );
+	header( "Location: " . $newpage );
 	exit;
 }
 
 function RedirectResult( $szMsg, $newpage )
 {
-	header("Location: result.php?msg=" . urlencode($szMsg) . "&redir=" . urlencode($newpage));
+	$newpage = UltraStats_SanitizeRedirectTarget( $newpage );
+	header( "Location: result.php?msg=" . urlencode( $szMsg ) . "&redir=" . urlencode( $newpage ) );
 	exit;
 }
 
@@ -1450,13 +1485,25 @@ function GetConfigSetting($szSettingName, $szDefaultValue = "", $DesiredConfigLe
 function StartPHPSession()
 {
 	global $RUNMODE;
-	if ( $RUNMODE == RUNMODE_WEBSERVER )
-	{
-		// Start Session environment
+	if ( $RUNMODE == RUNMODE_WEBSERVER ) {
+		$secure = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] !== 'off' );
+		if ( PHP_VERSION_ID >= 70300 ) {
+			@session_set_cookie_params( array(
+				'lifetime' => 0,
+				'path'     => '/',
+				'domain'   => '',
+				'secure'   => $secure,
+				'httponly' => true,
+				'samesite' => 'Lax',
+			) );
+		} else {
+			@session_set_cookie_params( 0, '/' );
+		}
+		@ini_set( 'session.use_strict_mode', '1' );
 		@session_start();
-
-		if ( !isset($_SESSION['SESSION_STARTED']) )
+		if ( ! isset( $_SESSION['SESSION_STARTED'] ) ) {
 			$_SESSION['SESSION_STARTED'] = "true";
+		}
 	}
 }
 

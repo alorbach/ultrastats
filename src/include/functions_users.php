@@ -125,6 +125,9 @@ function CheckUserLogin( $username, $password )
 	$rows = DB_GetAllRows($result, true);
 	if ( isset($rows) )
 	{
+		if ( function_exists( 'session_regenerate_id' ) ) {
+			@session_regenerate_id( true );
+		}
 		$_SESSION['SESSION_LOGGEDIN'] = true;
 		$_SESSION['SESSION_USERNAME'] = $username;
 		$_SESSION['SESSION_ACCESSLEVEL'] = $rows[0]['access_level'];

@@ -1,0 +1,18 @@
+# Local configuration (copy from src/contrib/config.sample.php)
+src/config.php
+
+# OS / editor
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Optional local/dev artifacts
+.env
+.env.local
+*.log

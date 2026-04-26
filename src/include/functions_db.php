@@ -1,18 +1,12 @@
 <?php
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
+	* Copyright by Andre Lorbach | 2006, 2007, 2008
+	* -> www.ultrastats.org <-
 	* ------------------------------------------------------------------
-	*
-	* Use this script at your own risk!									
-	*
-	* ------------------------------------------------------------------
-	* ->	DB Functions File 
-	*		Database Helper functions are in this file
-	*																	
+	* ->	DB Functions File
+	*		Database helper functions (mysqli)
 	* This file is part of UltraStats
-	*
 	* UltraStats is free software: you can redistribute it and/or modify
 	* it under the terms of the GNU General Public License as published
 	* by the Free Software Foundation, either version 3 of the License,
@@ -20,267 +14,289 @@
 	********************************************************************
 */
 
-// --- Avoid directly accessing this file! 
 if ( !defined('IN_ULTRASTATS') )
 {
 	die('Hacking attempt');
 	exit;
 }
-// --- 
 
-$link_id  = 0;
+/** @var mysqli|null */
+$link_id  = null;
+$querycount = 0;
 $errdesc = "";
 $errno = 0;
 
-// --- Current Database Version, this is important for automated database Updates!
-$content['database_internalversion'] = "7";	// Whenever incremented, a database upgrade is needed
-$content['database_installedversion'] = "0";	// 0 is default which means Prior Versioning Database
-// --- 
+$content['database_internalversion'] = "7";
+$content['database_installedversion'] = "0";
 
-function DB_Connect() 
+/**
+ * One-time SQL split: legacy files used split(";\n") for multi-statement scripts.
+ * Returns non-empty statement chunks (trimmed, without trailing semicolons in chunk).
+ */
+function UltraStats_SplitSqlStatements( $sql )
+{
+	$sql = str_replace( array( ";\r\n", ";\r" ), ";\n", $sql );
+	$parts = explode( ";\n", $sql );
+	$out   = array();
+	foreach ( $parts as $p ) {
+		$p = trim( $p );
+		if ( strlen( $p ) > 1 ) {
+			$out[] = $p;
+		}
+	}
+	return $out;
+}
+
+function DB_Connect()
 {
 	global $link_id, $CFG;
 
-	//TODO: Check variables first
-	$link_id = @mysql_connect($CFG['DBServer'],$CFG['User'],$CFG['Pass']);
-	if (!$link_id) 
-		DB_PrintError("Link-ID == false, connect to ".$CFG['DBServer']." failed", true);
-	
-	// --- Now, check Mysql DB Version!
-	$strmysqlver = mysql_get_server_info();
-	if ( strpos($strmysqlver, "-") !== false )
-	{
-		$sttmp = explode("-", $strmysqlver );
-		$szVerInfo = $sttmp[0];
+	$port = isset( $CFG['Port'] ) ? (int) $CFG['Port'] : 3306;
+	$link_id = @mysqli_connect( $CFG['DBServer'], $CFG['User'], $CFG['Pass'], $CFG['DBName'], $port );
+	if ( ! $link_id || mysqli_connect_errno() ) {
+		$err = mysqli_connect_error();
+		if ( $err ) {
+			$errdesc = $err;
+		}
+		DB_PrintError( "Link-ID == false, connect to " . $CFG['DBServer'] . " failed", true );
 	}
-	else
+
+	$strmysqlver = mysqli_get_server_info( $link_id );
+	if ( strpos( $strmysqlver, "-" ) !== false ) {
+		$sttmp     = explode( "-", $strmysqlver );
+		$szVerInfo = $sttmp[0];
+	} else
 		$szVerInfo = $strmysqlver;
 
-	$szVerSplit = explode(".", $szVerInfo );
+	$szVerSplit = explode( ".", $szVerInfo );
 
-	//Now check for Major Version
-	if ( $szVerSplit[0] <= 3 ) 
-	{
-		//Unfortunatelly MYSQL 3.x is NOT Supported dude!
-		DieWithFriendlyErrorMsg( "You are running an MySQL 3.x Database Server Version. Unfortunately MySQL 3.x is NOT supported by UltraStats due the limited SQL Statement support. If this is a commercial webspace, contact your webhoster in order to upgrade to a higher MySQL Database Version. If this is your own rootserver, consider updating your MySQL Server.");
+	if ( (int) $szVerSplit[0] <= 3 ) {
+		DieWithFriendlyErrorMsg( "You are running an MySQL 3.x Database Server Version. Unfortunately MySQL 3.x is NOT supported by UltraStats due the limited SQL Statement support. If this is a commercial webspace, contact your webhoster in order to upgrade to a higher MySQL Database Version. If this is your own rootserver, consider updating your MySQL Server." );
 	}
-	// ---
-	
-	// check if database exists!
-	$db_selected = @mysql_select_db($CFG['DBName'], $link_id);
-	if(!$db_selected) 
-		DB_PrintError("Cannot use database '" . $CFG['DBName'] . "'", true);
 
-	// TODO: Maybe some more error checking 
+	@mysqli_set_charset( $link_id, 'utf8' );
 }
 
 function EnableBigSelects()
 {
-	// Extra command to enable BIG sql commands! And we don't care for error messages!
-	@mysql_query("SET OPTION SQL_BIG_SELECTS=1");
+	global $link_id;
+	@mysqli_query( $link_id, "SET SESSION sql_big_selects=1" );
 }
 
 function DB_Disconnect()
 {
 	global $link_id;
-	mysql_close($link_id);
+	if ( $link_id instanceof mysqli ) {
+		mysqli_close( $link_id );
+		$link_id = null;
+	}
 }
 
-function DB_Query($query_string, $bProcessError = true, $bCritical = false)
+function DB_Query( $query_string, $bProcessError = true, $bCritical = false )
 {
 	global $link_id, $querycount;
 
-	$query_id = mysql_query($query_string,$link_id);
-	if (!$query_id && $bProcessError) 
-		DB_PrintError("Invalid SQL: ".$query_string, $bCritical);
+	$query_id = mysqli_query( $link_id, $query_string );
+	if ( ! $query_id && $bProcessError ) {
+		DB_PrintError( "Invalid SQL: " . $query_string, $bCritical );
+	}
 
-	// For the Stats ;)
 	$querycount++;
-	
+
 	return $query_id;
 }
 
-function DB_FreeQuery($query_id)
+function DB_FreeQuery( $query_id )
 {
-	if ($query_id != false && $query_id != 1 )
-		mysql_free_result($query_id);
+	if ( $query_id instanceof mysqli_result ) {
+		mysqli_free_result( $query_id );
+	}
 }
 
-function DB_GetRow($query_id) 
+function DB_GetRow( $query_id )
 {
-	$tmp = mysql_fetch_row($query_id);
+	if ( ! $query_id || ! ( $query_id instanceof mysqli_result ) ) {
+		return null;
+	}
+	$tmp = mysqli_fetch_row( $query_id );
+	$results = array();
 	$results[] = $tmp;
 	return $results[0];
 }
 
-function DB_GetSingleRow($query_id, $bClose) 
+function DB_GetSingleRow( $query_id, $bClose )
 {
-	if ($query_id != false && $query_id != 1 )
-	{
-		$row = mysql_fetch_array($query_id,  MYSQL_ASSOC);
-		
-		if ( $bClose )
-			DB_FreeQuery ($query_id); 
+	if ( $query_id && ( $query_id instanceof mysqli_result ) ) {
+		$row = mysqli_fetch_array( $query_id, MYSQLI_ASSOC );
 
-		if ( isset($row) )
-		{
-			// Return array
+		if ( $bClose ) {
+			DB_FreeQuery( $query_id );
+		}
+
+		if ( isset( $row ) ) {
 			return $row;
 		}
-		else
-			return;
 	}
 }
 
-function DB_GetAllRows($query_id, $bClose)
+function DB_GetAllRows( $query_id, $bClose )
 {
-	if ($query_id != false && $query_id != 1 )
-	{
-		while ($row  =  mysql_fetch_array($query_id,  MYSQL_ASSOC))
+	if ( $query_id && ( $query_id instanceof mysqli_result ) ) {
+		$var = array();
+		while ( $row  =  mysqli_fetch_array( $query_id, MYSQLI_ASSOC ) ) {
 			$var[]  =  $row;
-		
-		if ( $bClose )
-			DB_FreeQuery ($query_id); 
+		}
 
-		if ( isset($var) )
-		{
-			// Return array
+		if ( $bClose ) {
+			DB_FreeQuery( $query_id );
+		}
+
+		if ( isset( $var ) ) {
 			return $var;
 		}
-		else
-			return;
 	}
 }
 
 function DB_GetMysqlStats()
 {
 	global $link_id;
-	$status = explode('  ', mysql_stat($link_id));
+	$status = explode( '  ', mysqli_stat( $link_id ) );
 	return $status;
 }
 
 function DB_ReturnSimpleErrorMsg()
 {
-	// Return Mysql Error
-	return "Mysql Error " . mysql_errno() . " - Description: " . mysql_error();
+	global $link_id;
+	if ( $link_id instanceof mysqli && mysqli_errno( $link_id ) ) {
+		return "MySQLi Error " . mysqli_errno( $link_id ) . " - Description: " . mysqli_error( $link_id );
+	}
+	$e = function_exists( 'mysqli_connect_error' ) ? mysqli_connect_error() : '';
+	if ( $e ) {
+		return "MySQLi connect error: " . $e;
+	}
+	return "MySQLi Error: (no link)";
 }
 
-function DB_PrintError($MyErrorMsg, $DieOrNot)
+function DB_PrintError( $MyErrorMsg, $DieOrNot )
 {
-	global $n,$HTTP_COOKIE_VARS, $errdesc, $errno, $linesep, $CFG;
+	global $errdesc, $errno, $linesep, $link_id, $CFG;
 
-	$errdesc = mysql_error();
-	$errno = mysql_errno();
+	if ( $link_id instanceof mysqli ) {
+		$errdesc = mysqli_error( $link_id );
+		$errno   = mysqli_errno( $link_id );
+	} else {
+		$errdesc = function_exists( 'mysqli_connect_error' ) ? mysqli_connect_error() : '';
+		$errno   = function_exists( 'mysqli_connect_errno' ) ? mysqli_connect_errno() : 0;
+	}
 
-	$errormsg="Database error: $MyErrorMsg $linesep";
-	$errormsg.="mysql error: $errdesc $linesep";
-	$errormsg.="mysql error number: $errno $linesep";
-	$errormsg.="Date: ".date("d.m.Y @ H:i").$linesep;
-	$errormsg.="Script: ".getenv("REQUEST_URI").$linesep;
-	$errormsg.="Referer: ".getenv("HTTP_REFERER").$linesep;
+	$errormsg = "Database error: $MyErrorMsg $linesep";
+	$errormsg .= "mysqli error: $errdesc $linesep";
+	$errormsg .= "mysqli error number: $errno $linesep";
+	$errormsg .= "Date: " . date( "d.m.Y @ H:i" ) . $linesep;
+	$errormsg .= "Script: " . getenv( "REQUEST_URI" ) . $linesep;
+	$errormsg .= "Referer: " . getenv( "HTTP_REFERER" ) . $linesep;
 
-	if ($DieOrNot == true)
+	if ( $DieOrNot == true ) {
 		DieWithErrorMsg( "$linesep" . $errormsg );
-	else
+	} else
 		echo $errormsg;
 }
 
-function DB_RemoveParserSpecialBadChars($myString)
+function DB_RemoveParserSpecialBadChars( $myString )
 {
-// DO NOT REPLACD!	$returnstr = str_replace("\\","\\\\",$myString);
-	$returnstr = str_replace("'","\\'",$myString);
+	$returnstr = str_replace( "'", "\\'", $myString );
 	return $returnstr;
 }
 
-function DB_RemoveBadChars($myString)
+/**
+ * String escaping for legacy concatenated SQL. Prefer prepared statements for new code.
+ */
+function DB_RemoveBadChars( $myString )
 {
-	// Replace with internal PHP Functions!
-	if ( !get_magic_quotes_runtime() )
-		return addslashes($myString);
-	else
-		return $myString;
-
-	/* OLD CODE!
-	$returnstr = str_replace("\\","\\\\",$myString);
-	$returnstr = str_replace("'","\\'",$returnstr);
-	return $returnstr;
-	*/
+	return addslashes( (string) $myString );
 }
 
-function DB_StripSlahes($myString)
+function DB_StripSlahes( $myString )
 {
-	// Replace with internal PHP Functions!
-	if ( !get_magic_quotes_runtime() )
-		return stripslashes($myString);
-	else
-		return $myString;
+	return stripslashes( (string) $myString );
 }
 
-
-function DB_GetRowCount($query)
+function DB_GetRowCount( $query )
 {
-	// Init num rows
+	global $link_id;
+
 	$num_rows = -1;
 
-	if ($result = mysql_query($query)) 
-	{   
-		$num_rows = mysql_num_rows($result);
-		mysql_free_result ($result); 
+	if ( $result = mysqli_query( $link_id, $query ) ) {
+		if ( $result instanceof mysqli_result ) {
+			$num_rows = mysqli_num_rows( $result );
+			mysqli_free_result( $result );
+		}
 	}
 	return $num_rows;
 }
 
-function DB_GetRowCountByResult($myresult)
+function DB_GetRowCountByResult( $myresult )
 {
-	if ($myresult) 
-		return mysql_num_rows($myresult);
+	if ( $myresult && ( $myresult instanceof mysqli_result ) ) {
+		return mysqli_num_rows( $myresult );
+	}
 }
 
-function DB_Exec($query)
+function DB_Exec( $query )
 {
-	if(mysql_query($query)) 
+	global $link_id;
+	if ( mysqli_query( $link_id, $query ) ) {
 		return true;
-	else 
-		return false; 
-} 
+	} else
+		return false;
+}
 
-function WriteConfigValue($szValue)
+function WriteConfigValue( $szValue )
 {
 	global $content;
 
 	$sqlquery = "SELECT name FROM " . STATS_CONFIG . " WHERE name = '" . $szValue . "'";
-	$result = DB_Query($sqlquery);
-	$rows = DB_GetAllRows($result, true);
-	if ( !isset($rows) )
-	{
-		// New Entry
-		$sqlquery = "INSERT INTO  " . STATS_CONFIG . " (name, value) VALUES ( '" . $szValue . "', '" . $content[$szValue] . "')";
-		$result = DB_Query($sqlquery);
-		DB_FreeQuery($result);
+	$result   = DB_Query( $sqlquery );
+	$rows     = DB_GetAllRows( $result, true );
+	if ( ! isset( $rows ) ) {
+		$sqlquery = "INSERT INTO  " . STATS_CONFIG . " (name, value) VALUES ( '" . $szValue . "', '" . $content[ $szValue ] . "')";
+		$result   = DB_Query( $sqlquery );
+		DB_FreeQuery( $result );
+	} else {
+		$result = DB_Query( "UPDATE " . STATS_CONFIG . " SET value = '" . $content[ $szValue ] . "' WHERE name = '" . $szValue . "'" );
+		DB_FreeQuery( $result );
 	}
-	else
-	{
-		// Update Entry
-		$result = DB_Query("UPDATE " . STATS_CONFIG . " SET value = '" . $content[$szValue] . "' WHERE name = '" . $szValue . "'");
-		DB_FreeQuery($result);
-	}
-} 
+}
 
 function GetSingleDBEntryOnly( $myqry )
 {
 	$result = DB_Query( $myqry );
-	$row = DB_GetRow($result);
-	DB_FreeQuery ($result); 
+	$row    = DB_GetRow( $result );
+	DB_FreeQuery( $result );
 
-	if ( isset($row) )
+	if ( isset( $row ) ) {
 		return $row[0];
-	else
+	} else
 		return -1;
 }
 
 function GetRowsAffected()
 {
-	return mysql_affected_rows();
+	global $link_id;
+	return mysqli_affected_rows( $link_id );
+}
+
+/**
+ * Escape value for use inside SQL string literals. Uses mysqli real_escape.
+ */
+function DB_EscapeString( $s )
+{
+	global $link_id;
+	if ( ! ( $link_id instanceof mysqli ) ) {
+		return addslashes( (string) $s );
+	}
+	return mysqli_real_escape_string( $link_id, (string) $s );
 }
 
 ?>

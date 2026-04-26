@@ -492,7 +492,8 @@ function ProcessExtendedInsertStatement( $sqlStatement, $nStatementCount, $execD
 	$SQL_INSERT_Count += $nStatementCount;
 
 	// Get ID and free result
-	$InsertID = mysql_insert_id();
+	global $link_id;
+	$InsertID = mysqli_insert_id( $link_id );
 	DB_FreeQuery($result);
 
 	//Return ID
@@ -516,7 +517,8 @@ function ProcessInsertStatement( $sqlStatement, $execDirect = true)
 	$SQL_INSERT_Count++;
 
 	// Get ID and free result
-	$InsertID = mysql_insert_id();
+	global $link_id;
+	$InsertID = mysqli_insert_id( $link_id );
 	DB_FreeQuery($result);
 
 	//Return ID

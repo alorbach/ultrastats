@@ -1,12 +1,16 @@
  UltraStats Installation help
  ----------------------------------
 
+ Current project notes: see README.md and AGENTS.md in the repository root.
+ For a local test stack, use: docker compose -f docker/docker-compose.yml up --build
+ (from the repo root; app on http://localhost:8091/ ).
+
  To install UltraStats, you will need:
 
- * Apache or IIS Webserver
- * PHP5 ( PHP4 should still work )
- * MySQL Database
- * A gamelog from a Call Of Duty 1/Uo/2/4/WaW gameserver. 
+ * Apache, IIS, nginx, the PHP built-in server, or another HTTP front-end
+ * PHP 7.4 or later with the mysqli extension
+ * MySQL 5.7+ or MariaDB 10.x+ (or MySQL 8 in Docker for development)
+ * A gamelog from a Call Of Duty 1/Uo/2/4/WaW gameserver 
 
  Preperations 
  ------------

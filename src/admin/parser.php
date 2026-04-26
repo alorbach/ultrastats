@@ -1,16 +1,15 @@
 <?php
+/**
+ * Admin entry for the log parser. Requires admin login. Query `op` and optional `id` (server) drive parser-core.
+ * @package UltraStats
+ */
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
+	* Copyright by Andre Lorbach | 2006, 2007, 2008
+	* -> www.ultrastats.org <-
 	* ------------------------------------------------------------------
-	*
-	* Use this script at your own risk!									
-	*
-	* ------------------------------------------------------------------
-	* ->	Parser File													
-	*		This file wraps the parser 
-	*																	
+	* ->	Parser File
+	*		This file wraps the parser
 	* This file is part of UltraStats
 	*
 	* UltraStats is free software: you can redistribute it and/or modify

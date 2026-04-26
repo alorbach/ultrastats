@@ -36,9 +36,12 @@ if ( !defined('IN_ULTRASTATS') )
 	die('Hacking attempt');
 	exit;
 }
-// --- 
+// ---
 
-
+/**
+ * UltraStats template engine: loads HTML, replaces `{VARS}`, and handles <!-- IF --> / `BEGIN` blocks.
+ * @package UltraStats
+ */
 class Template {
 
 	var $path    = '';
@@ -46,9 +49,13 @@ class Template {
 	var $extension  = '';
 	var $template,  $vars,  $page;
 
-	function Template ($fname = '') {
-		if ($fname)
+	/**
+	 * PHP 8+ requires __construct; legacy PHP4-style "Template" constructor is no longer invoked.
+	 */
+	function __construct( $fname = '' ) {
+		if ( $fname ) {
 			$this->filename  =  $fname;
+		}
 	}
 
 	function set_path ($path) {

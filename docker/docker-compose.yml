@@ -1,0 +1,50 @@
+# Local development. From repository root: docker compose -f docker/docker-compose.yml up --build
+# App: http://localhost:8091/   MySQL: localhost:3306 (user ultrastats / pass ultrastats, DB ultrastats)
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ultrastats_dev_root
+      MYSQL_DATABASE: ultrastats
+      MYSQL_USER: ultrastats
+      MYSQL_PASSWORD: ultrastats
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --sql-mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO
+    ports:
+      - "3306:3306"
+    volumes:
+      - ultrastats_mysql_data:/var/lib/mysql
+      - ./initdb/01-import.sh:/docker-entrypoint-initdb.d/01-import.sh:ro
+      - ../src/contrib/db_template.txt:/schema/db_template.txt:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pultrastats_dev_root"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    volumes:
+      - ../src:/var/www/html:rw
+    environment:
+      ULTRASTATS_DB_HOST: db
+      ULTRASTATS_DB_PORT: "3306"
+      ULTRASTATS_DB_NAME: ultrastats
+      ULTRASTATS_DB_USER: ultrastats
+      ULTRASTATS_DB_PASS: ultrastats
+      ULTRASTATS_TBPREF: stats_
+      ULTRASTATS_OVERWRITE_CONFIG: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+    # First DB init can take a few seconds after healthcheck; web script waits for tables.
+
+volumes:
+  ultrastats_mysql_data:

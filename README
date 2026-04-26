@@ -34,7 +34,8 @@
  The UltraStats license can be found in the COPYING document. 
 
  
- BUGS
+ BUGS / DOCS
  --------------------------------
- If you experience problems or any bugs within UltraStats, 
- feel free to post into our Forums at http://www.ultrastats.org
+ See README.md in the repository root for current requirements and development
+ setup. Historical community sites may no longer exist; use the project issue
+ tracker for this fork.

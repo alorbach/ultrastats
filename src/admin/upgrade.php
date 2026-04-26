@@ -96,11 +96,7 @@ if ( isset($content['database_forcedatabaseupdate']) && $content['database_force
 				$totaldbdefs = str_replace( "`stats_", "`" . $CFG['TBPref'], $totaldbdefs );
 			
 				// Now split by sql command
-				$mycommands = split( ";\r\n", $totaldbdefs );
-			
-				// check for different linefeed
-				if ( count($mycommands) <= 1 )
-					$mycommands = split( ";\n", $totaldbdefs );
+				$mycommands = UltraStats_SplitSqlStatements( $totaldbdefs );
 	
 				//Still only one? Abort
 				if ( count($mycommands) <= 1 )

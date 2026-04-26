@@ -1,16 +1,13 @@
 <?php
+/**
+ * Core parser entry (CLI or included from `parser.php`). After bootstrap, `RunParsingProcess*`
+ * functions load gamelogs and invoke `functions_parser.php` to populate the DB.
+ * @package UltraStats
+ */
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
-	* ------------------------------------------------------------------
-	*
-	* Use this script at your own risk!									
-	*
-	* ------------------------------------------------------------------
-	* ->	Parser Core File													
-	*		This file actually calls the parser 
-	*																	
+	* ->	Parser Core File
+	*		This file actually calls the parser
 	* This file is part of UltraStats
 	*
 	* UltraStats is free software: you can redistribute it and/or modify

@@ -46,21 +46,20 @@ if ( isset($_GET['search']) )
 	
 	if ( strlen($content['searchfor']) > 2 )
 	{
-		// Set SQL Query
-		$sqlquery = " WHERE " . STATS_ALIASES . ".PLAYERID = " . $content['searchfor']; 
-
-		// --- Read Chatlog ;)!
+		// --- Read Chatlog (LIKE pattern escaped for SQL and LIKE metacharacters)
+		$likepat = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $content['searchfor'] );
+		$likepat = DB_EscapeString( '%' . $likepat . '%' );
 		$sqlquery = "SELECT " .
-							STATS_ROUNDS . ".ID, " . 
-							STATS_CHAT . ".PLAYERID, " . 
+							STATS_ROUNDS . ".ID, " .
+							STATS_CHAT . ".PLAYERID, " .
 							STATS_CHAT . ".TextSaid " .
-							" FROM " . STATS_CHAT . 
-							" INNER JOIN (" . STATS_ROUNDS . 
-							") ON (" . 
-							STATS_ROUNDS . ".ID=" . STATS_CHAT . ".ROUNDID) " . 
-							" WHERE " . STATS_CHAT . ".TextSaid LIKE '%" . $content['searchfor'] . "%' " . 
-							GetBannedPlayerWhereQuery(STATS_CHAT, "PLAYERID", false) . 
-							" GROUP BY " . STATS_CHAT . ".ROUNDID" . 
+							" FROM " . STATS_CHAT .
+							" INNER JOIN (" . STATS_ROUNDS .
+							") ON (" .
+							STATS_ROUNDS . ".ID=" . STATS_CHAT . ".ROUNDID) " .
+							" WHERE " . STATS_CHAT . ".TextSaid LIKE '" . $likepat . "' " .
+							GetBannedPlayerWhereQuery(STATS_CHAT, "PLAYERID", false) .
+							" GROUP BY " . STATS_CHAT . ".ROUNDID" .
 							" ORDER BY " . STATS_CHAT . ".ROUNDID DESC";
 
 		// NO Order should be like said in the game

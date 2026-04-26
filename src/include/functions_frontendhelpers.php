@@ -532,15 +532,24 @@ function FindAndFillWithTime(&$myplayers, $idfield, $TimeSecondsField, $TimeStri
 {
 	global $content;
 
-	// Get Guids first ;)
-	for($i = 0; $i < count($myplayers); $i++)
-	{
-		if ( isset($playerguids) )
-			$playerguids .= ", ";
-		else
-			$playerguids = "";	// INIT!
+	if ( ! is_array( $myplayers ) || count( $myplayers ) < 1 ) {
+		return;
+	}
 
-		$playerguids .= $myplayers[$i][$idfield];
+	// Get Guids first ;)
+	$playerguids = null;
+	for ( $i = 0; $i < count( $myplayers ); $i++ ) {
+		if ( isset( $playerguids ) ) {
+			$playerguids .= ", ";
+		} else {
+			$playerguids = "";
+		}
+		$playerguids .= $myplayers[ $i ][ $idfield ];
+	}
+
+	// MySQL 8+ rejects "IN ()" (empty list); can happen on empty stats before first parse
+	if ( $playerguids === null || trim( (string) $playerguids ) === "" ) {
+		return;
 	}
 
 	$sqlquery = "SELECT " .

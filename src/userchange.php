@@ -32,10 +32,21 @@ InitFrontEndDefaults();	// Only in WebFrontEnd
 // ***					*** //
 
 // --- BEGIN Custom Code
-if ( isset($_SERVER['HTTP_REFERER']) )
-	$szRedir = $_SERVER['HTTP_REFERER']; 
-else
-	$szRedir = "index.php"; // Default
+$szRedir = "index.php";
+if ( isset( $_SERVER['HTTP_REFERER'] ) && $_SERVER['HTTP_REFERER'] !== "" ) {
+	$ref  = $_SERVER['HTTP_REFERER'];
+	$p    = @parse_url( $ref );
+	$ourH = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
+	if ( is_array( $p ) && isset( $p['host'] ) && $ourH !== "" && strcasecmp( $p['host'], $ourH ) === 0 ) {
+		$path = isset( $p['path'] ) ? ltrim( $p['path'], '/' ) : "";
+		if ( $path === "" ) {
+			$path = "index.php";
+		}
+		$q = isset( $p['query'] ) && $p['query'] !== "" ? "?" . $p['query'] : "";
+		$szRedir = $path . $q;
+	}
+	$szRedir = UltraStats_SanitizeRedirectTarget( $szRedir );
+}
 
 
 if ( isset($_GET['op']) )
