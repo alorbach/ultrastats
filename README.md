@@ -34,6 +34,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Development
 
+- **Releases:** Push a SemVer tag `vX.Y.Z` (e.g. `v0.3.15`). [GitHub Actions](.github/workflows/release-on-tag.yml) builds a source archive `ultrastats-X.Y.Z.tar.gz` (`git archive` with top folder `ultrastats-X.Y.Z/`) and creates a **GitHub Release** whose notes combine the matching block from [ChangeLog](ChangeLog) with GitHub’s auto-generated compare text. There is no separate packaging script in the repository.
 - **AGENTS and Docker:** [AGENTS.md](AGENTS.md) describes structure, conventions, and how to run the stack with Docker (web on **port 8091** by default: `http://localhost:8091/`).
 - **Agent skills (assistants & handoff):** [`.agent/README.md`](.agent/README.md) and [`.agent/skills/`](.agent/skills/summarize-handoff.md) — playbooks in plain Markdown for Copilot, Codex, and similar.
 - **Security:** [SECURITY.md](SECURITY.md) — hardening, admin hygiene, and [Content-Security-Policy (why not enabled by default; staged rollout)](SECURITY.md#content-security-policy).

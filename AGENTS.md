@@ -27,6 +27,7 @@ Guidance for humans and AI agents working in this repository.
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `docker/` | `Dockerfile` and `docker-compose.yml` for local dev (see below). |
+| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) publishes a **GitHub Release** and `ultrastats-X.Y.Z.tar.gz` when you push tag `vX.Y.Z`. |
 
 ## Entry points (HTTP)
 

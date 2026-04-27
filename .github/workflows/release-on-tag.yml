@@ -1,0 +1,50 @@
+# Build ultrastats-{version}.tar.gz from git archive and publish a GitHub Release
+# when a tag like v0.3.15 is pushed. Release body: ChangeLog excerpt + GitHub notes.
+name: Release on tag
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set version and create archive
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -eux
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          git archive --format=tar --prefix="ultrastats-${VERSION}/" "${GITHUB_REF_NAME}" | gzip -n > "ultrastats-${VERSION}.tar.gz"
+          ls -la "ultrastats-${VERSION}.tar.gz"
+
+      - name: Build release notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: python3 .github/scripts/build_release_body.py release.md
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: UltraStats ${{ github.ref_name }}
+          body_path: release.md
+          files: ultrastats-${{ env.VERSION }}.tar.gz
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
