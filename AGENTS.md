@@ -29,7 +29,7 @@ Guidance for humans and AI agents working in this repository.
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |
 | `docker/` | `Dockerfile`, `docker-compose.yml` (dev seed), and `docker-compose.install-e2e.yml` (clean install + Playwright). |
-| `e2e/` | Playwright tests for the install wizard (`npm ci` / run via install-e2e compose). |
+| `e2e/` | Playwright tests: install wizard plus post-install admin smoke (e.g. add server) — `npm ci` / run via install-e2e compose. |
 | `doc-site/` | **MkDocs** public handbook (deployed to GitHub Pages from `main`). Includes [project-history.md](doc-site/docs/project-history.md) (2000s origins, dormancy, 2026 revival with AI-assisted maintenance). |
 | `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`), [install-e2e.yml](.github/workflows/install-e2e.yml) (install wizard browser test). |
 
@@ -92,6 +92,7 @@ The default compose stack **pre-seeds** the database and writes `config.php`, so
 docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-container-exit --exit-code-from playwright
 ```
 
+- **Windows:** run [`docker/testbench-install.bat`](docker/testbench-install.bat) (or double-click in Explorer); it `cd`s to the repo root, then runs `docker compose … down -v`, restores `src/config.php` from `config.php.ultrastats-e2e-stash` when that file exists, then the same `up --build … playwright` as above. Use `docker\testbench-install.bat noreset` to skip `down -v` for faster iteration.
 - **Host URL** during the run: **http://localhost:8092/** (port **8092** avoids clashing with dev **8091**).
 - **Reset MySQL** for a fresh run: `docker compose -f docker/docker-compose.install-e2e.yml down -v`.
 - **Step 2 in the browser:** [`install.php`](src/install.php) treats directories as OK only if POSIX “other” has read+write (`755` bind mounts fail). The E2E entrypoint runs **`chmod 777`** on `gamelogs/`, `images/maps/`, `images/serverlogos/`, `images/weapons/` before `php -S` so the Next button appears (same idea as the installer error text).

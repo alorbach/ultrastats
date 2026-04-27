@@ -1,4 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { loginAsAdmin } from '../lib/admin-login';
+import { E2E_ADMIN_PASS, E2E_ADMIN_USER } from '../lib/e2e-credentials';
 import {
   captureInstallStep,
   finalizeInstallReport,
@@ -63,17 +65,15 @@ test.describe.serial('install.php wizard', () => {
 
       // Step 6 — admin user
       await expect(page.locator('h1')).toContainText(/step 6/i);
-      const user = 'e2eadmin';
-      const pass = 'e2ePass9';
-      await page.locator('input[name="username"]').fill(user);
-      await page.locator('input[name="password1"]').fill(pass);
-      await page.locator('input[name="password2"]').fill(pass);
+      await page.locator('input[name="username"]').fill(E2E_ADMIN_USER);
+      await page.locator('input[name="password1"]').fill(E2E_ADMIN_PASS);
+      await page.locator('input[name="password2"]').fill(E2E_ADMIN_PASS);
       await captureInstallStep(page, testInfo, 6, 'Step 6 — First admin user');
       await clickInstallerNext(page);
 
       // Step 7 — done + user created
       await expect(page.getByText(/successfully created user/i)).toBeVisible();
-      await expect(page.getByText(new RegExp(user, 'i')).first()).toBeVisible();
+      await expect(page.getByText(new RegExp(E2E_ADMIN_USER, 'i')).first()).toBeVisible();
       await captureInstallStep(page, testInfo, 7, 'Step 7 — Done (user created)');
 
       await page.getByRole('link', { name: 'Finish!' }).click();
@@ -82,12 +82,40 @@ test.describe.serial('install.php wizard', () => {
 
       // Smoke: admin login with new user
       await page.goto('/admin/login.php');
-      await page.locator('input[name="uname"]').fill(user);
-      await page.locator('input[name="pass"]').fill(pass);
+      await page.locator('input[name="uname"]').fill(E2E_ADMIN_USER);
+      await page.locator('input[name="pass"]').fill(E2E_ADMIN_PASS);
       await captureInstallStep(page, testInfo, 9, 'Admin login form');
       await page.locator('form input[type="submit"]').click();
       await expect(page).toHaveURL(/admin\/index\.php/);
       await captureInstallStep(page, testInfo, 10, 'Admin home after login');
+    } finally {
+      finalizeInstallReport();
+    }
+  });
+});
+
+test.describe.serial('post-install admin', () => {
+  test('add server', async ({ page }, testInfo) => {
+    const serverName = 'E2E Test Server';
+    try {
+      await loginAsAdmin(page);
+      await captureInstallStep(page, testInfo, 11, 'Admin home (before add server)');
+
+      await page.goto('/admin/servers.php?op=add');
+      await expect(page.locator('input[name="servername"]')).toBeVisible();
+      await page.locator('input[name="servername"]').fill(serverName);
+      await page.locator('input[name="serverip"]').fill('127.0.0.1');
+      await page.locator('input[name="port"]').fill('28960');
+      await captureInstallStep(page, testInfo, 12, 'Add server form');
+      await page.getByRole('button', { name: /add server/i }).click();
+
+      await expect(page).toHaveURL(/result\.php/);
+      await expect(page.getByText(/successfully added/i)).toBeVisible();
+      await captureInstallStep(page, testInfo, 13, 'Result after add server');
+
+      await expect(page).toHaveURL(/servers\.php/i, { timeout: 10_000 });
+      await expect(page.getByRole('link', { name: serverName })).toBeVisible();
+      await captureInstallStep(page, testInfo, 14, 'Server list with new server');
     } finally {
       finalizeInstallReport();
     }

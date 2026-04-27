@@ -236,7 +236,8 @@ if ( isset($_GET['op']) )
 				{
 					$ok = DB_ExecBound(
 						"INSERT INTO " . STATS_SERVERS . " (Name, IP, Port, Description, ModName, AdminName, AdminEmail, ClanName, GameLogLocation, ftppath, ServerLogo, ServerEnabled, ParsingEnabled, FTPPassiveMode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-						'ssisssssssiii',
+						// 14: ss (Name, IP) + i (Port) + 8×s (Description..ServerLogo) + iii (flags)
+						'ss' . 'i' . str_repeat( 's', 8 ) . 'iii',
 						array(
 							$content['SERVERNAME'],
 							$content['SERVERIP'],
@@ -276,7 +277,8 @@ if ( isset($_GET['op']) )
 				{
 					$ok = DB_ExecBound(
 						"UPDATE " . STATS_SERVERS . " SET Name = ?, IP = ?, Port = ?, Description = ?, ModName = ?, AdminName = ?, AdminEmail = ?, ClanName = ?, GameLogLocation = ?, ftppath = ?, ServerLogo = ?, ServerEnabled = ?, ParsingEnabled = ?, FTPPassiveMode = ? WHERE ID = ?",
-						'ssisssssssiiiii',
+						// 15: same as insert + i (id)
+						'ss' . 'i' . str_repeat( 's', 8 ) . 'iiii',
 						array(
 							$content['SERVERNAME'],
 							$content['SERVERIP'],
