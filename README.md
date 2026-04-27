@@ -36,7 +36,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 - **AGENTS and Docker:** [AGENTS.md](AGENTS.md) describes structure, conventions, and how to run the stack with Docker (web on **port 8091** by default: `http://localhost:8091/`).
 - **Agent skills (assistants & handoff):** [`.agent/README.md`](.agent/README.md) and [`.agent/skills/`](.agent/skills/summarize-handoff.md) — playbooks in plain Markdown for Copilot, Codex, and similar.
-- **Security:** [SECURITY.md](SECURITY.md) — hardening notes and admin hygiene.
+- **Security:** [SECURITY.md](SECURITY.md) — hardening, admin hygiene, and [Content-Security-Policy (why not enabled by default; staged rollout)](SECURITY.md#content-security-policy).
 - **UI (legacy) compatibility:** [docs/ui-compatibility-review.md](docs/ui-compatibility-review.md) — static review only; no UI changes in that pass.
 - Report issues through your project’s issue tracker (historical public forums may no longer exist).
 

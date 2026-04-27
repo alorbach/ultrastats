@@ -72,7 +72,7 @@ docker compose -f docker/docker-compose.yml up --build
 
 ## Security notes
 
-- See [SECURITY.md](SECURITY.md) in this repo for redirect/session/SQL hardening and operational notes.
+- See [SECURITY.md](SECURITY.md) in this repo for redirect/session/SQL hardening, operational notes, and **[Content-Security-Policy (documentation only; not set by the app by default)](SECURITY.md#content-security-policy)**.
 - **Never** commit real production database passwords.
 
 ## Where to look when changing things
