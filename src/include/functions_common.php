@@ -518,16 +518,28 @@ function InitFrontEndVariables()
 // Lang Helper for Strings with ONE variable
 function GetAndReplaceLangStr( $strlang, $param1 = "", $param2 = "", $param3 = "", $param4 = "", $param5 = "" )
 {
-	$strfinal = str_replace ( "%1", $param1, $strlang );
-	if ( strlen($param2) > 0 )
-		$strfinal = str_replace ( "%2", $param2, $strfinal );
-	if ( strlen($param3) > 0 )
-		$strfinal = str_replace ( "%3", $param3, $strfinal );
-	if ( strlen($param4) > 0 )
-		$strfinal = str_replace ( "%4", $param4, $strfinal );
-	if ( strlen($param5) > 0 )
-		$strfinal = str_replace ( "%5", $param5, $strfinal );
-	
+	// PHP 8.1+: str_replace rejects null for subject/replacement; callers may pass null for optional slots.
+	$strlang = (string) ( $strlang ?? '' );
+	$param1  = (string) ( $param1 ?? '' );
+	$param2  = (string) ( $param2 ?? '' );
+	$param3  = (string) ( $param3 ?? '' );
+	$param4  = (string) ( $param4 ?? '' );
+	$param5  = (string) ( $param5 ?? '' );
+
+	$strfinal = str_replace( '%1', $param1, $strlang );
+	if ( $param2 !== '' ) {
+		$strfinal = str_replace( '%2', $param2, $strfinal );
+	}
+	if ( $param3 !== '' ) {
+		$strfinal = str_replace( '%3', $param3, $strfinal );
+	}
+	if ( $param4 !== '' ) {
+		$strfinal = str_replace( '%4', $param4, $strfinal );
+	}
+	if ( $param5 !== '' ) {
+		$strfinal = str_replace( '%5', $param5, $strfinal );
+	}
+
 	// And return
 	return $strfinal;
 }
