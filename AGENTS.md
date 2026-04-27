@@ -54,6 +54,7 @@ Guidance for humans and AI agents working in this repository.
 - **Upgrades** run from `src/contrib/db_update_vN.txt` via `src/admin/upgrade.php`. A file with **one** SQL statement is valid (the upgrader must not require more than one chunk).
 - **Version 9:** `stats_aliases.AliasChecksum` is **`INT UNSIGNED`** so PHP `sprintf('%u', crc32(...))` values (0–4294967295) fit; legacy signed `INT` caused MySQL **1264** on insert for many aliases.
 - **Version 10:** non-unique index **`idx_aliases_server_player_alias` (`SERVERID`, `PLAYERID`, `Alias`)** on `stats_aliases` to speed the parser’s lookup-by-natural-key path (see `EXPLAIN` on that query if tuning).
+- **Version 13:** non-unique index **`idx_aliases_playerid_alias` (`PLAYERID`, `Alias`)** on `stats_aliases` for global `CreateTopAliases` (Run total stats) aggregating across all servers (see `parser_performance_explain_baseline.sql`).
 
 **Performance / profiling (gamelog and SQL):**
 

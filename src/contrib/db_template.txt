@@ -20,7 +20,8 @@ CREATE TABLE `stats_aliases` (
   `AliasStrippedCodes` varchar(128) NOT NULL default '',
   `Count` int(11) NOT NULL default '0',
   PRIMARY KEY  (`ID`,`SERVERID`,`PLAYERID`,`Alias`),
-  KEY `idx_aliases_server_player_alias` (`SERVERID`,`PLAYERID`,`Alias`)
+  KEY `idx_aliases_server_player_alias` (`SERVERID`,`PLAYERID`,`Alias`),
+  KEY `idx_aliases_playerid_alias` (`PLAYERID`,`Alias`)
 ) TYPE=MyISAM COMMENT='Holds a List of names player used on servers' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

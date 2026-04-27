@@ -946,55 +946,27 @@ function CreateTopAliases( $serverid )
 	}
 
 	PrintHTMLDebugInfo( DEBUG_INFO, "CreateTopAliases", "Starting Total TopAliases Calculation ..." );
-	$wheresinglesql1 = "";
-	$wheresinglesql2 = "";
-	$whereaddupdatesql = " AND SERVERID = " . $serverid;
-
-	$sqlquery = "SELECT " .
-		STATS_PLAYERS . ".GUID " .
-		" FROM " . STATS_PLAYERS .
-		$wheresinglesql1 .
-		" GROUP BY " . STATS_PLAYERS . ".GUID ";
-	$result   = DB_Query( $sqlquery );
-	$allplayers = DB_GetAllRows( $result, true );
-	if ( ! empty( $allplayers ) ) {
-		for ( $i = 0; $i < count( $allplayers ); $i++ ) {
-			$sqlquery = "SELECT " .
-				STATS_ALIASES . ".ID, " .
-				STATS_ALIASES . ".Alias, " .
-				"sum( " . STATS_ALIASES . ".Count) as MyCount " .
-				" FROM " . STATS_ALIASES .
-				" WHERE PLAYERID = " . $allplayers[ $i ]['GUID'] . " " .
-				$wheresinglesql2 .
-				" GROUP BY " . STATS_ALIASES . ".Alias " .
-				" ORDER BY MyCount DESC LIMIT 1";
-			$result     = DB_Query( $sqlquery );
-			$mytmparray = DB_GetSingleRow( $result, true );
-			if ( isset( $mytmparray['ID'] ) ) {
-				$sqlquery = " SELECT " .
-					STATS_PLAYERS_TOPALIASES . ".GUID " .
-					" FROM " . STATS_PLAYERS_TOPALIASES .
-					" WHERE " . STATS_PLAYERS_TOPALIASES . ".GUID = " . $allplayers[ $i ]['GUID'] .
-					$whereaddupdatesql;
-				$result  = DB_Query( $sqlquery );
-				$tmpvars = DB_GetSingleRow( $result, true );
-
-				if ( isset( $tmpvars['GUID'] ) ) {
-					ProcessUpdateStatement( " UPDATE " . STATS_PLAYERS_TOPALIASES . " SET " .
-						" ALIASID = " . $mytmparray['ID'] .
-						" WHERE GUID = " . $allplayers[ $i ]['GUID'] .
-						$whereaddupdatesql );
-				} else {
-					ProcessInsertStatement( " INSERT INTO " . STATS_PLAYERS_TOPALIASES . " (GUID, SERVERID, ALIASID) " .
-						" VALUES ( "
-						. $allplayers[ $i ]['GUID'] . ", "
-						. $serverid . ", "
-						. $mytmparray['ID'] . " )", false );
-				}
-			} else {
-				PrintHTMLDebugInfo( DEBUG_ERROR, "CreateTopAliases", "No AliasName found for GUID " . $allplayers[ $i ]['GUID'] . "! This may caused by a parsing bug or logfile corruption" );
-			}
-		}
+	$globalSid = (int) $serverid;
+	ProcessDeleteStatement( "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE SERVERID = " . $globalSid );
+	$sql = "INSERT INTO " . STATS_PLAYERS_TOPALIASES . " (GUID, SERVERID, ALIASID) " .
+		"WITH alias_sums AS ( " .
+		"  SELECT PLAYERID, `Alias`, SUM(`Count`) AS MyCount, MAX(ID) AS AliasRowId " .
+		"  FROM " . STATS_ALIASES . " " .
+		"  GROUP BY PLAYERID, `Alias` " .
+		"), ranked AS ( " .
+		"  SELECT PLAYERID AS GUID, AliasRowId AS ALIASID, " .
+		"    ROW_NUMBER() OVER (PARTITION BY PLAYERID ORDER BY MyCount DESC, AliasRowId DESC) AS rn " .
+		"  FROM alias_sums " .
+		") " .
+		"SELECT r.GUID, " . $globalSid . ", r.ALIASID " .
+		"FROM ranked r " .
+		"INNER JOIN ( SELECT GUID FROM " . STATS_PLAYERS . " GROUP BY GUID ) p ON p.GUID = r.GUID " .
+		"WHERE r.rn = 1";
+	$res = DB_Query( $sql );
+	if ( $res === false ) {
+		PrintHTMLDebugInfo( DEBUG_ERROR, "CreateTopAliases", "Bulk top-alias insert failed for global SERVERID " . $globalSid );
+	} else {
+		DB_FreeQuery( $res );
 	}
 }
 
