@@ -12,8 +12,8 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 | Parser server load | `src/admin/parser-core.php`, `src/admin/parser.php` | `SELECT * … WHERE ID = ?` (server id) |
 | CLI parser | `src/admin/parser-shell.php` | `WHERE ID = ?` for argv server id |
 | Admin servers | `src/admin/servers.php` | Server add/edit/duplicate check; `ID` for edit/dbstats; list unchanged |
-| Admin players (partial) | `src/admin/players.php` | Quick clan/ban toggles; post edit `PBGUID` / ban / clan fields |
-| Admin string editor (partial) | `src/admin/stringeditor.php` | Add/edit `STRINGID` / `LANG` / `TEXT` |
+| Admin players (partial) | `src/admin/players.php` | Quick clan/ban toggles; post edit `PBGUID` / ban / clan fields; list filter `Alias` `LIKE` via `UltraStats_SqlLikeContainsPattern` + bound `?`; edit `SELECT` by `GUID`; delete chains use `DB_ExecBound` |
+| Admin string editor (partial) | `src/admin/stringeditor.php` | Add/edit/update `STRINGID` / `LANG` / `TEXT`; list filter `STRINGID` `LIKE` bound; edit `SELECT` / `DELETE` bound |
 | Config write | `src/include/functions_db.php` `WriteConfigValue()` | Values escaped; empty-row `INSERT` vs `UPDATE` |
 | Admin login | `src/include/functions_users.php` | `CheckUserLogin` `SELECT` by `username` only; verify + optional rehash |
 
@@ -21,9 +21,9 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 
 | Pattern | Examples |
 |--------|----------|
-| Large list/report queries | `players.php` default list, `rounds`, `index` — some filters; often `intval` for limits |
-| Install wizard | `src/install.php` — lower exposure if not internet-facing |
-| Core helpers | `functions_common.php` / `functions_frontendhelpers.php` — server filters, time filters, stats |
+| Large list/report queries | Other front/admin list UIs not yet migrated (e.g. some `rounds`, `index`) — often `intval` for limits |
+| Install wizard | `src/install.php` step 5 — DDL batch via `DB_Query` (install-only); config `INSERT` values cast to int for `gen_gameversion` / `database_installedversion` |
+| Core helpers | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()` loads server by `ID` with `DB_QueryBound`; remaining `DB_Query` builds in this file may still use string SQL for stats filters |
 
 ## API notes
 
@@ -33,5 +33,6 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 
 ## Follow-up candidates
 
-- `src/install.php` — bind session-driven SQL when refactored
-- Remaining `players.php` / `stringeditor.php` list queries where dynamic `WHERE` is built
+- `src/install.php` — optional: prepared/bound `INSERT` for config rows if the install wizard is refactored for non-admin use
+- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where `serverwherequery` or time filters are built as strings
+- Other admin front pages not covered in the table above

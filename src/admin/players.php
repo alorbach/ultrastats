@@ -50,12 +50,10 @@ else
 if ( isset($_GET['playerfilter']) && strlen($_GET['playerfilter']) > 0 )
 {
 	$content['playerfilter'] = DB_RemoveBadChars($_GET['playerfilter']);
-	$content['playersqlwhere'] = " WHERE " . STATS_ALIASES . ".Alias LIKE '%" . $content['playerfilter'] . "%' ";
 }
 else
 {
 	$content['playerfilter'] = "";
-	$content['playersqlwhere'] = ""; 
 }
 
 if ( isset($_GET['playerop']) )
@@ -121,6 +119,7 @@ if ( isset($_GET['op']) )
 		{
 			//PreInit these values 
 			$content['GUID'] = DB_RemoveBadChars($_GET['id']);
+			$guidEdit        = (int) $content['GUID'];
 
 			$sqlquery = "SELECT " . 
 						STATS_PLAYERS_STATIC . ".GUID, " . 
@@ -134,11 +133,11 @@ if ( isset($_GET['op']) )
 						" INNER JOIN (" . STATS_ALIASES . 
 						") ON (" . 
 						STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
-						" WHERE " . STATS_PLAYERS_STATIC . ".GUID = " . $content['GUID'] . 
+						" WHERE " . STATS_PLAYERS_STATIC . ".GUID = ? " . 
 						" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " . 
 						" ORDER BY " . STATS_ALIASES . ".Alias " ; 
 
-			$result = DB_Query($sqlquery);
+			$result = DB_QueryBound( $sqlquery, 'i', array( $guidEdit ) );
 			$myrow = DB_GetSingleRow($result, true);
 			if ( isset($myrow['GUID'] ) )
 			{
@@ -180,57 +179,59 @@ if ( isset($_GET['op']) )
 				// Disable Verify few
 				$content['ISVERIFY'] = "false";
 
-				// Start Deleting the User stats!
-				$content['DeletedData'][0]['SQL_CMD'] = "DELETE FROM " . STATS_ALIASES .		" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][0]['SQL_CMD'] );
+				$delGuid = (int) $content['GUID'];
+
+				// Start Deleting the User stats! (bound deletes; SQL_CMD kept for display with numeric id)
+				DB_ExecBound( "DELETE FROM " . STATS_ALIASES . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][0]['SQL_CMD'] = "DELETE FROM " . STATS_ALIASES . " WHERE PLAYERID = " . $delGuid;
 				$content['DeletedData'][0]['NAME'] = STATS_ALIASES;
 				$content['DeletedData'][0]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][0]['cssclass'] = "line1";
 
-				$content['DeletedData'][1]['SQL_CMD'] = "DELETE FROM " . STATS_CHAT .			" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][1]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_CHAT . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][1]['SQL_CMD'] = "DELETE FROM " . STATS_CHAT . " WHERE PLAYERID = " . $delGuid;
 				$content['DeletedData'][1]['NAME'] = STATS_CHAT;
 				$content['DeletedData'][1]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][1]['cssclass'] = "line2";
 
-				$content['DeletedData'][2]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS .	" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][2]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][2]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE PLAYERID = " . $delGuid;
 				$content['DeletedData'][2]['NAME'] = STATS_PLAYER_KILLS;
 				$content['DeletedData'][2]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][2]['cssclass'] = "line1";
 
-				$content['DeletedData'][3]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS .	" WHERE ENEMYID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][3]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE ENEMYID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][3]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE ENEMYID = " . $delGuid;
 				$content['DeletedData'][3]['NAME'] = STATS_PLAYER_KILLS;
 				$content['DeletedData'][3]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][3]['cssclass'] = "line2";
 
-				$content['DeletedData'][4]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS .		" WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][4]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS . " WHERE GUID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][4]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS . " WHERE GUID = " . $delGuid;
 				$content['DeletedData'][4]['NAME'] = STATS_PLAYERS;
 				$content['DeletedData'][4]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][4]['cssclass'] = "line1";
 
-				$content['DeletedData'][5]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_STATIC .	" WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][5]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][5]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = " . $delGuid;
 				$content['DeletedData'][5]['NAME'] = STATS_PLAYERS_STATIC;
 				$content['DeletedData'][5]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][5]['cssclass'] = "line2";
 
-				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][6]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = " . $delGuid;
 				$content['DeletedData'][6]['NAME'] = STATS_PLAYERS_TOPALIASES;
 				$content['DeletedData'][6]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][6]['cssclass'] = "line1";
 
-				$content['DeletedData'][7]['SQL_CMD'] = "DELETE FROM " . STATS_ROUNDACTIONS .	" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][7]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_ROUNDACTIONS . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][7]['SQL_CMD'] = "DELETE FROM " . STATS_ROUNDACTIONS . " WHERE PLAYERID = " . $delGuid;
 				$content['DeletedData'][7]['NAME'] = STATS_ROUNDACTIONS;
 				$content['DeletedData'][7]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][7]['cssclass'] = "line2";
 
-				$content['DeletedData'][8]['SQL_CMD'] = "DELETE FROM " . STATS_TIME .			" WHERE PLAYERID = " . $content['GUID'];
-				ProcessDeleteStatement( $content['DeletedData'][8]['SQL_CMD'] );
+				DB_ExecBound( "DELETE FROM " . STATS_TIME . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
+				$content['DeletedData'][8]['SQL_CMD'] = "DELETE FROM " . STATS_TIME . " WHERE PLAYERID = " . $delGuid;
 				$content['DeletedData'][8]['NAME'] = STATS_TIME;
 				$content['DeletedData'][8]['DELETED_RECORD'] = GetRowsAffected();
 				$content['DeletedData'][8]['cssclass'] = "line1";
@@ -301,21 +302,30 @@ else
 	// Default Mode = List Players
 	$content['LISTPLAYERS'] = "true";
 
-	// --- First get the Count and Set Pager Variables
-	$sqlquery = "SELECT " . 
-				"count(" . STATS_PLAYERS_STATIC . ".GUID) as PlayersCount " . 
-				" FROM " . STATS_PLAYERS_STATIC . 
-				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . ", " . STATS_ALIASES .
-				") ON (" . 
-				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID AND " . 
-				STATS_PLAYERS_TOPALIASES . ".ALIASID=" . STATS_ALIASES . ".ID " . 
-				") " . 
-				$content['playersqlwhere'] . 
-				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID "; 
-//	$result = DB_Query($sqlquery);
-//	$tmpvar = DB_GetSingleRow($result, true);
-//	$content['players_count'] = $tmpvar['PlayersCount'];
-	$content['players_count'] = DB_GetRowCount( $sqlquery );
+	// --- First get the Count and Set Pager Variables (optional filter: bound LIKE on alias)
+	$fromPart = " FROM " . STATS_PLAYERS_STATIC .
+		" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . ", " . STATS_ALIASES .
+		") ON (" .
+		STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID AND " .
+		STATS_PLAYERS_TOPALIASES . ".ALIASID=" . STATS_ALIASES . ".ID " .
+		") ";
+	$countSelect = "SELECT count(" . STATS_PLAYERS_STATIC . ".GUID) as PlayersCount " . $fromPart;
+	$groupBy       = " GROUP BY " . STATS_PLAYERS_STATIC . ".GUID ";
+
+	if ( strlen( $content['playerfilter'] ) > 0 ) {
+		$likepat    = UltraStats_SqlLikeContainsPattern( $content['playerfilter'] );
+		$where      = " WHERE " . STATS_ALIASES . ".Alias LIKE ? ";
+		$countSql   = $countSelect . $where . $groupBy;
+		$cres       = DB_QueryBound( $countSql, 's', array( $likepat ) );
+		$content['players_count'] = 0;
+		if ( $cres instanceof mysqli_result ) {
+			$content['players_count'] = mysqli_num_rows( $cres );
+			DB_FreeQuery( $cres );
+		}
+	} else {
+		$countSql = $countSelect . $groupBy;
+		$content['players_count'] = DB_GetRowCount( $countSql );
+	}
 	if ( $content['players_count'] > $content['admin_maxplayers'] ) 
 	{
 		$pagenumbers = $content['players_count'] / $content['admin_maxplayers'];
@@ -340,26 +350,34 @@ else
 	// --- 
 
 // --- Now the final query !
-	// Read all Players
-	$sqlquery = "SELECT " . 
-				STATS_PLAYERS_STATIC . ".GUID, " . 
-				STATS_PLAYERS_STATIC . ".PBGUID, " . 
-				STATS_PLAYERS_STATIC . ".ISCLANMEMBER, " . 
-				STATS_PLAYERS_STATIC . ".ISBANNED, " . 
-				STATS_ALIASES . ".Alias, " . 
+	$listSelect = "SELECT " .
+				STATS_PLAYERS_STATIC . ".GUID, " .
+				STATS_PLAYERS_STATIC . ".PBGUID, " .
+				STATS_PLAYERS_STATIC . ".ISCLANMEMBER, " .
+				STATS_PLAYERS_STATIC . ".ISBANNED, " .
+				STATS_ALIASES . ".Alias, " .
 				STATS_ALIASES . ".AliasAsHtml " .
-				" FROM " . STATS_PLAYERS_STATIC . 
-				" INNER JOIN (" . STATS_PLAYERS_TOPALIASES . ", " . STATS_ALIASES .
-				") ON (" . 
-				STATS_PLAYERS_STATIC . ".GUID=" . STATS_PLAYERS_TOPALIASES . ".GUID AND " . 
-				STATS_PLAYERS_TOPALIASES . ".ALIASID=" . STATS_ALIASES . ".ID " . 
-				") " . 
-				$content['playersqlwhere'] . 
-				" GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " . 
-				" ORDER BY " . STATS_ALIASES . ".Alias " .  
-				" LIMIT " . $content['current_pagebegin'] . " , " . $content['admin_maxplayers'];
-	$result = DB_Query($sqlquery);
-	$content['PLAYERS'] = DB_GetAllRows($result, true);
+				$fromPart;
+	$orderLimit = " GROUP BY " . STATS_PLAYERS_STATIC . ".GUID " .
+				" ORDER BY " . STATS_ALIASES . ".Alias " .
+				" LIMIT ?, ?";
+	$pb         = (int) $content['current_pagebegin'];
+	$pl         = (int) $content['admin_maxplayers'];
+
+	if ( strlen( $content['playerfilter'] ) > 0 ) {
+		$likepat  = UltraStats_SqlLikeContainsPattern( $content['playerfilter'] );
+		$where    = " WHERE " . STATS_ALIASES . ".Alias LIKE ? ";
+		$listSql  = $listSelect . $where . $orderLimit;
+		$result   = DB_QueryBound( $listSql, 'sii', array( $likepat, $pb, $pl ) );
+	} else {
+		$listSql = $listSelect . $orderLimit;
+		$result  = DB_QueryBound( $listSql, 'ii', array( $pb, $pl ) );
+	}
+	if ( ! $result || ! ( $result instanceof mysqli_result ) ) {
+		$content['PLAYERS'] = array();
+	} else {
+		$content['PLAYERS'] = DB_GetAllRows( $result, true );
+	}
 
 	// For the eye
 	$css_class = "line";
@@ -441,17 +459,4 @@ $page -> parser($content, "admin/players.html");
 $page -> output(); 
 // --- 
 
-// --- Helper function
-
-function ProcessDeleteStatement( $sqlStatement )
-{
-	$result = DB_Query( $sqlStatement );
-	if ($result == FALSE)
-		return false;
-	DB_FreeQuery($result);
-
-	// Done
-	return true;
-}
-// ---
 ?>

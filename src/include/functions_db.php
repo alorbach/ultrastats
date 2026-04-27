@@ -235,8 +235,13 @@ function DB_GetRowCount( $query )
 	global $link_id;
 
 	$num_rows = -1;
-
-	if ( $result = mysqli_query( $link_id, $query ) ) {
+	$result   = false;
+	try {
+		$result = mysqli_query( $link_id, $query );
+	} catch ( mysqli_sql_exception $e ) {
+		$result = false;
+	}
+	if ( $result ) {
 		if ( $result instanceof mysqli_result ) {
 			$num_rows = mysqli_num_rows( $result );
 			mysqli_free_result( $result );

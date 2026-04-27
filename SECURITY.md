@@ -14,15 +14,17 @@ This document describes hardening applied during the modernisation pass and safe
 - **Admin login** — `CheckUserLogin()` uses a bound `SELECT` by username; verifies **legacy MD5** or **`password_hash()`**; on successful MD5 login, rehashes to `password_hash()` after database upgrade **v8** widens `stats_users.password`. Run **Database Upgrade** (`admin/upgrade.php`) so internal version matches the app (including v8).
 - **Parser** — `parser-core.php`, `parser.php`, and `parser-shell.php` load server rows with `WHERE ID = ?`.
 - **Database API** — legacy `mysql_*` calls were removed; the app uses **mysqli** only (PHP 7+ compatible). Prepared helpers require **mysqlnd** (see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md)).
+- **Admin servers / players / string editor (partial)** — high-risk create/update and edit paths in `admin/servers.php`, `admin/players.php`, and `admin/stringeditor.php` use `DB_QueryBound` / `DB_ExecBound` where user or post data drives SQL. List views and some filters may still use string-built `DB_Query` with `intval` / `DB_RemoveBadChars`; see the inventory below.
 
 ## What you should still do
 
 - **Password hashing** — new and changed passwords use **`password_hash()`**. Legacy **MD5** values still work until the user logs in successfully (then the row is rehashed). Apply database upgrade to **v8** so the `password` column is wide enough for bcrypt. If rehash fails (e.g. column still `VARCHAR(32)`), run `admin/upgrade.php` first.
-- **HTTPS** — deploy behind TLS in production; restrict admin to HTTPS if possible.
 - **Database credentials** — do not commit `config.php` with real secrets. Use `contrib/config.sample.php` as a template; keep `config.php` out of VCS in production.
 - **Display errors** — keep `display_errors=Off` in production `php.ini`.
-- **SQL injection (general)** — other pages (e.g. large parts of `admin/servers.php`, `players.php`, `stringeditor.php`, install wizard) still build SQL with `DB_RemoveBadChars` / `addslashes`. Prefer `DB_QueryBound` / `DB_ExecBound` in `functions_db.php` when adding or refactoring user-influenced queries; see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md) for a migration checklist.
+- **SQL injection (remaining surface)** — several areas still use `DB_Query` with escaped or cast input (not bound parameters) for list/report queries, the install wizard, and some helpers. **Migrated** paths are listed in [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md); that document also lists **follow-up candidates** (e.g. `install.php`, dynamic `WHERE` in list UIs, core filters). Prefer `DB_QueryBound` / `DB_ExecBound` for new code and when refactoring user-influenced SQL.
 - **Admin surface** — keep the `admin/` area behind network controls or additional auth (HTTP basic, VPN, or IP allowlist) if the app is exposed to the internet.
+
+**Maintainer hosting** — HTTPS/TLS, production `php.ini`, secrets, `admin/` exposure, debug settings, and similar are **maintainer / operator** duties. See [docs/maintainer-deployment.md](docs/maintainer-deployment.md). This repository does not track those as development tasks.
 
 ## Content-Security-Policy
 
@@ -35,6 +37,8 @@ UltraStats **does not** set a `Content-Security-Policy` header in PHP or Docker 
 - **Risk of a blind strict policy** — turning on a **strict** default without validation can break menus, server pickers, admin forms, and parser UIs. Prefer **staged** rollout (below).
 
 ### Staged hardening (operators)
+
+Short walkthrough: [docs/csp-staging.md](docs/csp-staging.md).
 
 1. **Report-Only first** — serve **`Content-Security-Policy-Report-Only`** with the policy you intend, plus a `report-to` or `report-uri` endpoint (or use the browser’s developer tools / extension to inspect reports). Fix violations you care about, then move to an enforcing policy.
 2. **Temporary relaxations (documented)** — if you must allow legacy inline script until a UI refresh, a **short-term** option is to allow `'unsafe-inline'` in `script-src` **only** in a *deliberate* policy and **only** on routes you have tested, then tighten. Prefer **refactoring** to external scripts and non-inline handlers in a future UI pass (see the UI review).

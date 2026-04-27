@@ -364,14 +364,15 @@ function GetAndSetCurrentServer()
 	if ( isset($content['serverid']) )
 	{
 		// Get ServerDetails
-		$result = DB_Query("SELECT * FROM " . STATS_SERVERS . " WHERE ID = " . $content['serverid']);
+		$serveridInt = (int) $content['serverid'];
+		$result        = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $serveridInt ) );
 		$content['myserver'] = DB_GetSingleRow($result, true);
 		if ( isset( $content['myserver']['ID'] ) )
 		{
 //not needed			$content['myserver'] = $serverdetails[0];
 			$content['additional_url'] = "&serverid=" . $content['serverid'];
-			$serverwherequery = " WHERE SERVERID = " . $content['serverid'];
-			$serverwherequery_and = " AND SERVERID = " . $content['serverid'];
+			$serverwherequery = " WHERE SERVERID = " . $serveridInt;
+			$serverwherequery_and = " AND SERVERID = " . $serveridInt;
 			
 			// Helper variable for frontend
 			$content['serverselected'] = true;

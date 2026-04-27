@@ -52,12 +52,10 @@ else
 if ( isset($_GET['strfilter']) && strlen($_GET['strfilter']) > 0 )
 {
 	$content['strfilter'] = DB_RemoveBadChars($_GET['strfilter']);
-	$content['strsqlwhere'] = " WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID LIKE '%" . $content['strfilter'] . "%' ";
 }
 else
 {
 	$content['strfilter'] = "";
-	$content['strsqlwhere'] = ""; 
 }
 // ---
 
@@ -117,9 +115,9 @@ if ( isset($_GET['op']) )
 						STATS_LANGUAGE_STRINGS . ".STRINGID, " . 
 						STATS_LANGUAGE_STRINGS . ".TEXT " . 
 						" FROM " . STATS_LANGUAGE_STRINGS . 
-						" WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID = '" . $content['STRINGID'] . "' 
-						  AND " . STATS_LANGUAGE_STRINGS . ".LANG = '" . $content['LANG'] . "'";
-			$result = DB_Query($sqlquery);
+						" WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID = ? " .
+						" AND " . STATS_LANGUAGE_STRINGS . ".LANG = ? ";
+			$result = DB_QueryBound( $sqlquery, 'ss', array( $content['STRINGID'], $content['LANG'] ) );
 			$myrow = DB_GetSingleRow($result, true);
 			if ( isset($myrow['STRINGID'] ) )
 			{
@@ -165,9 +163,13 @@ if ( isset($_GET['op']) )
 				// Disable Verify few
 				$content['ISVERIFY'] = "false";
 
-				// Start Deleting the User stats!
-				$sqlquery = "DELETE FROM " . STATS_LANGUAGE_STRINGS .	" WHERE STRINGID = '" . $content['STRINGID'] . "' AND LANG = '" . $content['LANG'] . "'";
-				ProcessDeleteStatement( $sqlquery );
+				// Start Deleting the string row
+				DB_ExecBound(
+					"DELETE FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = ? AND LANG = ?",
+					'ss',
+					array( $content['STRINGID'], $content['LANG'] ),
+					false
+				);
 
 				// For confirmation
 				RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_DELETEDSTRING'], $content['STRINGID'] ), "stringeditor.php?strfilter=" . $content['strfilter'] . "&start=" . $content['current_pagebegin'] );
@@ -279,12 +281,22 @@ else
 	$content['LISTSTRINGS'] = "true";
 
 	// --- First get the Count and Set Pager Variables
-	$sqlquery = "SELECT " . 
-				"count(" . STATS_LANGUAGE_STRINGS . ".STRINGID) as StringCount " . 
-				" FROM " . STATS_LANGUAGE_STRINGS . 
-				$content['strsqlwhere'] . 
-				" GROUP BY " . STATS_LANGUAGE_STRINGS . ".STRINGID ";
-	$content['string_count'] = DB_GetRowCount( $sqlquery );
+	$fromStr = " FROM " . STATS_LANGUAGE_STRINGS . " ";
+	$grp     = " GROUP BY " . STATS_LANGUAGE_STRINGS . ".STRINGID ";
+	$countBase = "SELECT count(" . STATS_LANGUAGE_STRINGS . ".STRINGID) as StringCount " . $fromStr;
+	if ( strlen( $content['strfilter'] ) > 0 ) {
+		$likepat = UltraStats_SqlLikeContainsPattern( $content['strfilter'] );
+		$where   = " WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID LIKE ? ";
+		$cq      = $countBase . $where . $grp;
+		$cres    = DB_QueryBound( $cq, 's', array( $likepat ) );
+		$content['string_count'] = 0;
+		if ( $cres instanceof mysqli_result ) {
+			$content['string_count'] = mysqli_num_rows( $cres );
+			DB_FreeQuery( $cres );
+		}
+	} else {
+		$content['string_count'] = DB_GetRowCount( $countBase . $grp );
+	}
 	if ( $content['string_count'] > $content['admin_maxplayers'] ) 
 	{
 		$pagenumbers = $content['string_count'] / $content['admin_maxplayers'];
@@ -304,17 +316,29 @@ else
 	// --- 
 
 // --- Now the final query !
-	// Read all Strings
-	$sqlquery = "SELECT " . 
+	$listSel = "SELECT " . 
 				STATS_LANGUAGE_STRINGS . ".LANG, " . 
 				STATS_LANGUAGE_STRINGS . ".STRINGID, " . 
 				STATS_LANGUAGE_STRINGS . ".TEXT " . 
-				" FROM " . STATS_LANGUAGE_STRINGS . 
-				$content['strsqlwhere'] . 
-				" ORDER BY " . STATS_LANGUAGE_STRINGS . ".STRINGID " .  
-				" LIMIT " . $content['current_pagebegin'] . " , " . $content['admin_maxplayers'];
-	$result = DB_Query($sqlquery);
-	$content['STRINGS'] = DB_GetAllRows($result, true);
+				$fromStr;
+	$ordLim  = " ORDER BY " . STATS_LANGUAGE_STRINGS . ".STRINGID " .  
+				" LIMIT ?, ?";
+	$sb = (int) $content['current_pagebegin'];
+	$sp = (int) $content['admin_maxplayers'];
+	if ( strlen( $content['strfilter'] ) > 0 ) {
+		$likepat  = UltraStats_SqlLikeContainsPattern( $content['strfilter'] );
+		$where    = " WHERE " . STATS_LANGUAGE_STRINGS . ".STRINGID LIKE ? ";
+		$listSql  = $listSel . $where . $ordLim;
+		$result   = DB_QueryBound( $listSql, 'sii', array( $likepat, $sb, $sp ) );
+	} else {
+		$listSql = $listSel . $ordLim;
+		$result  = DB_QueryBound( $listSql, 'ii', array( $sb, $sp ) );
+	}
+	if ( ! $result || ! ( $result instanceof mysqli_result ) ) {
+		$content['STRINGS'] = array();
+	} else {
+		$content['STRINGS'] = DB_GetAllRows( $result, true );
+	}
 
 	// For the eye
 	$css_class = "line0";
@@ -373,17 +397,4 @@ $page -> parser($content, "admin/stringeditor.html");
 $page -> output(); 
 // --- 
 
-// --- Helper function
-
-function ProcessDeleteStatement( $sqlStatement )
-{
-	$result = DB_Query( $sqlStatement );
-	if ($result == FALSE)
-		return false;
-	DB_FreeQuery($result);
-
-	// Done
-	return true;
-}
-// ---
 ?>
