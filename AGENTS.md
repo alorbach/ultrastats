@@ -27,9 +27,10 @@ Guidance for humans and AI agents working in this repository.
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |
-| `docker/` | `Dockerfile` and `docker-compose.yml` for local dev (see below). |
+| `docker/` | `Dockerfile`, `docker-compose.yml` (dev seed), and `docker-compose.install-e2e.yml` (clean install + Playwright). |
+| `e2e/` | Playwright tests for the install wizard (`npm ci` / run via install-e2e compose). |
 | `doc-site/` | **MkDocs** public handbook (deployed to GitHub Pages from `main`). Includes [project-history.md](doc-site/docs/project-history.md) (2000s origins, dormancy, 2026 revival with AI-assisted maintenance). |
-| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`). |
+| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`), [install-e2e.yml](.github/workflows/install-e2e.yml) (install wizard browser test). |
 
 ## Entry points (HTTP)
 
@@ -81,6 +82,22 @@ docker compose -f docker/docker-compose.yml up --build
 - App (PHP built-in server) and MySQL 8 are wired in `docker/docker-compose.yml` — web UI: **http://localhost:8091/** (host port `8091`).
 - **Schema:** the web container runs `docker/seed-database.php` (same logic as `install.php` step 5: `db_template.txt` + `db_template_cod4only.txt`, `TYPE=MyISAM` → `ENGINE=InnoDB` or `ENGINE=MyISAM` via [`UltraStats_ApplyStorageEngineToSchemaSql`](src/include/functions_db.php); default matches the installer: **InnoDB**. Override with env **`ULTRASTATS_DB_STORAGE_ENGINE=MyISAM`** (or `InnoDB`) if needed. Then `gen_gameversion` = COD4, two sample `stats_servers` rows pointing at `gamelogs/cod4_normal.log` and `gamelogs/cod4_hq_new.log`, and a default **`stats_users` row: username `admin`, password `pass`** for local dev only — **change or remove this in any shared or production deployment**). If MySQL init (`01-import.sh`) already created tables without `gen_gameversion`, the seed **replaces** the schema when `ULTRASTATS_NUKE_PARTIAL` is enabled (default). If you get stuck, `docker compose -f docker/docker-compose.yml down -v` resets the DB volume.
 - Gamelogs: bundled CoD4 samples live under `src/gamelogs/`; the bind mount `../src:/var/www/html` serves them to the container. **WaW** (`cod5_*`) is not used for the default Docker seed.
+
+### Install wizard E2E (clean DB + Playwright)
+
+The default compose stack **pre-seeds** the database and writes `config.php`, so it does not exercise [`src/install.php`](src/install.php). For a **full browser run** of steps 1–7 on an **empty** MySQL database (including step 5 SQL), use [`docker/docker-compose.install-e2e.yml`](docker/docker-compose.install-e2e.yml):
+
+```bash
+docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-container-exit --exit-code-from playwright
+```
+
+- **Host URL** during the run: **http://localhost:8092/** (port **8092** avoids clashing with dev **8091**).
+- **Reset MySQL** for a fresh run: `docker compose -f docker/docker-compose.install-e2e.yml down -v`.
+- **Local `config.php`:** the install-e2e compose sets **`ULTRASTATS_INSTALL_E2E_STASH_CONFIG=1`**, so a non-empty `src/config.php` is **moved to** `src/config.php.ultrastats-e2e-stash` before the server starts (then the installer can create a fresh `config.php`). Restore your old file with `mv -f src/config.php.ultrastats-e2e-stash src/config.php` when you want it back. To force the old “fail if config exists” behavior, unset that env on the `web` service.
+- Tests live under [`e2e/`](e2e/) ([`e2e/tests/install-wizard.spec.ts`](e2e/tests/install-wizard.spec.ts)). To run Playwright against an already-up stack from the host: `cd e2e && npm ci && set PLAYWRIGHT_BASE_URL=http://127.0.0.1:8092&& npx playwright test` (Unix: `export PLAYWRIGHT_BASE_URL=...`).
+- CI: [.github/workflows/install-e2e.yml](.github/workflows/install-e2e.yml) (on **push to `main`**, **pull requests**, and **manual** `workflow_dispatch`). Each run uploads artifact **`install-e2e-reports`**: open **`install-e2e-report/index.html`** for a step-by-step screenshot gallery, or **`playwright-report/index.html`** for the full Playwright HTML report (includes the same shots as attachments). Artifacts are kept **14 days**.
+- **Local reports** after `docker compose … install-e2e`: under [`e2e/install-e2e-report/`](e2e/install-e2e-report/) and [`e2e/playwright-report/`](e2e/playwright-report/) (both gitignored).
+- **Installer DB charset:** during `IN_ULTRASTATS_INSTALL`, [`DB_Connect()`](src/include/functions_db.php) uses **`latin1`** for the mysqli session so `contrib/*.txt` schema (legacy 8-bit strings) matches the Docker seed path; normal app traffic still uses **utf8mb4**.
 
 **Do not** hardcode host-specific paths in committed files. Copy sample logs from your own backup location into `src/gamelogs/` or a bind mount.
 

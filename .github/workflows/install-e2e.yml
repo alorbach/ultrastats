@@ -1,0 +1,28 @@
+name: Install wizard E2E
+
+# Runs on main updates and PRs; uploads HTML screenshot gallery + Playwright report as artifacts.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  install-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run install wizard E2E (Docker Compose)
+        run: |
+          docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-container-exit --exit-code-from playwright
+
+      - name: Upload install screenshot gallery and Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: install-e2e-reports
+          path: |
+            e2e/install-e2e-report
+            e2e/playwright-report
+          retention-days: 14

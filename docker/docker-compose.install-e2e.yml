@@ -1,0 +1,72 @@
+# Clean-install wizard E2E: empty DB, no seed, no auto config.php.
+# From repo root: docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-container-exit --exit-code-from playwright
+# App on host: http://localhost:8092/  (MySQL not published; use internal network only)
+# Reset DB: docker compose -f docker/docker-compose.install-e2e.yml down -v
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ultrastats_e2e_root
+      MYSQL_DATABASE: ultrastats_e2e
+      MYSQL_USER: ultrastats
+      MYSQL_PASSWORD: ultrastats
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --sql-mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO
+    volumes:
+      - ultrastats_install_e2e_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pultrastats_e2e_root"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8092:8091"
+    volumes:
+      - ../src:/var/www/html:rw
+    environment:
+      ULTRASTATS_DB_HOST: db
+      ULTRASTATS_DB_PORT: "3306"
+      ULTRASTATS_DB_NAME: ultrastats_e2e
+      ULTRASTATS_DB_USER: ultrastats
+      ULTRASTATS_DB_PASS: ultrastats
+      # Move aside bind-mounted config.php so the wizard can run (restores nothing automatically).
+      ULTRASTATS_INSTALL_E2E_STASH_CONFIG: "1"
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: ["/entrypoint-install-e2e.sh"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "php",
+          "-r",
+          "exit(@file_get_contents('http://127.0.0.1:8091/install.php')!==false?0:1);",
+        ]
+      interval: 3s
+      timeout: 5s
+      retries: 25
+      start_period: 15s
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.49.1-noble
+    depends_on:
+      web:
+        condition: service_healthy
+    environment:
+      PLAYWRIGHT_BASE_URL: http://web:8091
+    volumes:
+      - ../e2e:/e2e
+    working_dir: /e2e
+    command: sh -c "npm ci && npx playwright test"
+
+volumes:
+  ultrastats_install_e2e_mysql:

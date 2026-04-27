@@ -116,8 +116,13 @@ function DB_Connect()
 		DieWithFriendlyErrorMsg( "You are running an MySQL 3.x Database Server Version. Unfortunately MySQL 3.x is NOT supported by UltraStats due the limited SQL Statement support. If this is a commercial webspace, contact your webhoster in order to upgrade to a higher MySQL Database Version. If this is your own rootserver, consider updating your MySQL Server." );
 	}
 
-	// utf8mb4 matches typical MySQL 8 defaults and allows full Unicode after normalization (chat, names).
-	@mysqli_set_charset( $link_id, 'utf8mb4' );
+	// Schema SQL in contrib/*.txt uses legacy 8-bit strings; latin1 matches install/seed (see docker/seed-database.php).
+	// Normal runtime uses utf8mb4 for chat and full Unicode.
+	if ( defined( 'IN_ULTRASTATS_INSTALL' ) && IN_ULTRASTATS_INSTALL ) {
+		@mysqli_set_charset( $link_id, 'latin1' );
+	} else {
+		@mysqli_set_charset( $link_id, 'utf8mb4' );
+	}
 }
 
 function EnableBigSelects()

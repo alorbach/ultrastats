@@ -1,5 +1,6 @@
 # Local configuration (copy from src/contrib/config.sample.php)
 src/config.php
+src/config.php.ultrastats-e2e-stash
 
 # OS / editor
 Thumbs.db
@@ -11,6 +12,12 @@ desktop.ini
 # IDE
 .idea/
 .vscode/
+
+# Playwright install E2E (run npm ci in e2e/ or use Docker)
+e2e/node_modules/
+e2e/test-results/
+e2e/playwright-report/
+e2e/install-e2e-report/
 
 # Optional local/dev artifacts
 .env
