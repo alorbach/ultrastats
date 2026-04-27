@@ -61,6 +61,34 @@ function UltraStats_ValidateTablePrefix( $p ) {
 	return 'stats_';
 }
 
+/**
+ * Normalizes a MySQL table storage engine to InnoDB or MyISAM, or null if invalid.
+ */
+function UltraStats_NormalizeStorageEngine( $engine ) {
+	if ( ! is_string( $engine ) || $engine === '' ) {
+		return null;
+	}
+	$e = strtoupper( trim( $engine ) );
+	if ( $e === 'INNODB' ) {
+		return 'InnoDB';
+	}
+	if ( $e === 'MYISAM' ) {
+		return 'MyISAM';
+	}
+	return null;
+}
+
+/**
+ * Replaces legacy TYPE=MyISAM in schema SQL with ENGINE=<InnoDB|MyISAM> (install, Docker seed, etc.).
+ */
+function UltraStats_ApplyStorageEngineToSchemaSql( $sql, $engine ) {
+	$norm = UltraStats_NormalizeStorageEngine( $engine );
+	if ( $norm === null ) {
+		$norm = 'InnoDB';
+	}
+	return (string) preg_replace( '/\bTYPE=MyISAM\b/i', 'ENGINE=' . $norm, (string) $sql );
+}
+
 function DB_Connect()
 {
 	global $link_id, $CFG;

@@ -313,7 +313,7 @@ INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_village', 'Village', 'mp_village_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_warehouse', 'Warehouse', 'mp_warehouse_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_rubberaim', 'Rubberaim', 'mp_rubberaim_description', '');
-INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_subway', 'Subway', 'mp_subway_description', '');
+-- mp_subway: already in db_template.txt (WaW seed REPLACE); omit here to avoid duplicate key with install/seed
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_pst_devilslair', 'Devilsair', 'mp_pst_devilslair_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_pst_hilltofar', 'Hill To Farr', 'mp_pst_hilltofar_description', '');
 INSERT INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES ('mp_moh_stalingrad', 'Stalingrad', 'mp_moh_stalingrad_description', '');

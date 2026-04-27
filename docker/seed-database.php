@@ -139,7 +139,12 @@ $total .= $cod4;
 
 $total = str_replace( '`stats_', '`' . $prefix, $total );
 $total = preg_replace( '/\r\n|\r/', "\n", $total );
-$total = preg_replace( '/TYPE=MyISAM/i', 'ENGINE=MyISAM', $total );
+$envStorageEngine = getenv( 'ULTRASTATS_DB_STORAGE_ENGINE' );
+if ( $envStorageEngine === false || $envStorageEngine === '' ) {
+	$envStorageEngine = 'InnoDB';
+}
+$seNorm = UltraStats_NormalizeStorageEngine( $envStorageEngine );
+$total  = UltraStats_ApplyStorageEngineToSchemaSql( $total, $seNorm !== null ? $seNorm : 'InnoDB' );
 
 $stmts   = UltraStats_SplitSqlStatements( $total );
 $stmts[] = "INSERT INTO `{$prefix}config` (`name`, `value`) VALUES ('gen_gameversion', '{$genGameVer}')";

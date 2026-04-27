@@ -27,6 +27,8 @@ $CFG['DBName'] = "";
 $CFG['TBPref'] = "stats_"; 
 $CFG['User'] = "root";
 $CFG['Pass'] = "";
+// Informational: InnoDB or MyISAM used at install time (see installer / db_template); not read at runtime.
+$CFG['DBStorageEngine'] = 'InnoDB';
 // --- 
 
 // --- Other Configfile only Options 

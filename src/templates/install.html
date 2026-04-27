@@ -132,6 +132,16 @@
 					<td align="right" class="line1" width="100%"><input type="text" name="db_pass" size="40" maxlength="255" value="{DB_PASS}"></td>
 				</tr>
 				<tr>
+					<td align="left" class="cellmenu2" width="150" nowrap valign="top"><b>{LN_CFG_DBSTORAGEENGINE}</b></td>
+					<td align="right" class="line0" width="100%">
+						<select name="db_storage_engine" size="1">
+							<option value="InnoDB" {DB_SE_INNODB_SEL}>InnoDB</option>
+							<option value="MyISAM" {DB_SE_MYISAM_SEL}>MyISAM</option>
+						</select>
+						<br><br><span style="font-size: 11px;">{LN_CFG_DBSTORAGEENGINE_HELP}</span>
+					</td>
+				</tr>
+				<tr>
 					<td colspan="2" align="left" class="cellmenu1" nowrap><b>{LN_INSTALL_WARNGAMESEL}</b></td>
 				</tr>
 				<tr>

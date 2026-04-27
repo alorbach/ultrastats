@@ -1,0 +1,3 @@
+-- --------------------------------------------------------
+-- Database internal version 13: index for global CreateTopAliases (GROUP BY PLAYERID, Alias across all servers).
+ALTER TABLE `stats_aliases` ADD INDEX `idx_aliases_playerid_alias` (`PLAYERID`, `Alias`);

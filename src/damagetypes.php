@@ -122,7 +122,7 @@ if ( isset($_GET['id']) )
 			$result = DB_Query($sqlquery);
 			$content['mostkills_count'] = DB_GetRowCountByResult( $result );
 			$tmpvars = DB_GetSingleRow($result, true);
-			$content['mostskills_maxkills'] = $tmpvars['AllKills'];
+			$content['mostskills_maxkills'] = ( is_array( $tmpvars ) && isset( $tmpvars['AllKills'] ) ) ? $tmpvars['AllKills'] : 0;
 
 			if ( $content['mostkills_count'] > $content['web_detaillistsplayers'] ) 
 			{
@@ -243,7 +243,7 @@ if ( isset($_GET['id']) )
 			$result = DB_Query($sqlquery);
 			$content['killedby_count'] = DB_GetRowCountByResult( $result );
 			$tmpvars = DB_GetSingleRow($result, true);
-			$content['killedby_maxkills'] = $tmpvars['AllKills'];
+			$content['killedby_maxkills'] = ( is_array( $tmpvars ) && isset( $tmpvars['AllKills'] ) ) ? $tmpvars['AllKills'] : 0;
 			if ( $content['killedby_count'] > $content['web_detaillistsplayers'] ) 
 			{
 				$killedby_pagenumbers = $content['killedby_count'] / $content['web_detaillistsplayers'];

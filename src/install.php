@@ -188,6 +188,13 @@ else if ( $content['INSTALL_STEP'] == 3 )
 	if ( isset($_SESSION['DB_PREFIX']) ) { $content['DB_PREFIX'] = $_SESSION['DB_PREFIX']; } else { $content['DB_PREFIX'] = "stats_"; }
 	if ( isset($_SESSION['DB_USER']) ) { $content['DB_USER'] = $_SESSION['DB_USER']; } else { $content['DB_USER'] = "user"; }
 	if ( isset($_SESSION['DB_PASS']) ) { $content['DB_PASS'] = $_SESSION['DB_PASS']; } else { $content['DB_PASS'] = ""; }
+	if ( isset( $_SESSION['DB_STORAGE_ENGINE'] ) && $_SESSION['DB_STORAGE_ENGINE'] === 'MyISAM' ) {
+		$content['DB_SE_INNODB_SEL'] = '';
+		$content['DB_SE_MYISAM_SEL'] = 'selected';
+	} else {
+		$content['DB_SE_INNODB_SEL'] = 'selected';
+		$content['DB_SE_MYISAM_SEL'] = '';
+	}
 
 	// Check for Error Msg
 	if ( isset($_GET['errormsg']) )
@@ -238,6 +245,16 @@ else if ( $content['INSTALL_STEP'] == 4 )
 	else
 		RevertOneStep( $content['INSTALL_STEP']-1, $content['LN_CFG_PARAMMISSING'] . $content['LN_CFG_GAMEVER'] );
 
+	if ( isset( $_POST['db_storage_engine'] ) ) {
+		$se = UltraStats_NormalizeStorageEngine( DB_RemoveBadChars( $_POST['db_storage_engine'] ) );
+		if ( $se === null ) {
+			RevertOneStep( $content['INSTALL_STEP'] - 1, $content['LN_CFG_PARAMMISSING'] . $content['LN_CFG_DBSTORAGEENGINE'] );
+		}
+		$_SESSION['DB_STORAGE_ENGINE'] = $se;
+	} else {
+		RevertOneStep( $content['INSTALL_STEP'] - 1, $content['LN_CFG_PARAMMISSING'] . $content['LN_CFG_DBSTORAGEENGINE'] );
+	}
+
 	// Now Check database connect (uses mysqli; session stores port from step 3/4)
 	$dbport = isset( $_SESSION['DB_PORT'] ) ? (int) $_SESSION['DB_PORT'] : 3306;
 	$install_mysqli = @mysqli_connect( $_SESSION['DB_HOST'], $_SESSION['DB_USER'], $_SESSION['DB_PASS'], $_SESSION['DB_NAME'], $dbport );
@@ -284,6 +301,8 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		$installTablePrefix = UltraStats_ValidateTablePrefix( isset( $_SESSION['DB_PREFIX'] ) ? $_SESSION['DB_PREFIX'] : 'stats_' );
 		$_SESSION['DB_PREFIX'] = $installTablePrefix;
 		$totaldbdefs = str_replace( "`stats_", "`" . $installTablePrefix, $totaldbdefs );
+		$installStorageEngine = isset( $_SESSION['DB_STORAGE_ENGINE'] ) ? $_SESSION['DB_STORAGE_ENGINE'] : 'InnoDB';
+		$totaldbdefs = UltraStats_ApplyStorageEngineToSchemaSql( $totaldbdefs, $installStorageEngine );
 		
 		// Now split by sql command
 		$mycommands = UltraStats_SplitSqlStatements( $totaldbdefs );
@@ -421,13 +440,16 @@ else if ( $content['INSTALL_STEP'] == 7 )
 	$patterns[] = "/\\\$CFG\['TBPref'\] = (.*?);/";
 	$patterns[] = "/\\\$CFG\['User'\] = (.*?);/";
 	$patterns[] = "/\\\$CFG\['Pass'\] = (.*?);/";
+	$patterns[] = "/\\\$CFG\['DBStorageEngine'\] = (.*?);/";
 
+	$cfgSe = isset( $_SESSION['DB_STORAGE_ENGINE'] ) ? $_SESSION['DB_STORAGE_ENGINE'] : 'InnoDB';
 	$replacements[] = "\$CFG['DBServer'] = '" . $_SESSION['DB_HOST'] . "';";
 	$replacements[] = "\$CFG['Port'] = " . $_SESSION['DB_PORT'] . ";";
 	$replacements[] = "\$CFG['DBName'] = '" . $_SESSION['DB_NAME'] . "';";
 	$replacements[] = "\$CFG['TBPref'] = '" . $_SESSION['DB_PREFIX'] . "';";
 	$replacements[] = "\$CFG['User'] = '" . $_SESSION['DB_USER'] . "';";
 	$replacements[] = "\$CFG['Pass'] = '" . $_SESSION['DB_PASS'] . "';";
+	$replacements[] = "\$CFG['DBStorageEngine'] = '" . $cfgSe . "';";
 
 	// One call to replace them all ^^
 	$filebuffer = preg_replace( $patterns, $replacements, $filebuffer );
