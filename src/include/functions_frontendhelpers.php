@@ -660,7 +660,7 @@ function GetAndSetGlobalInfo()
 		for($i = 0; $i < count($content['globals']); $i++)
 		{
 			if ( $content['globals'][$i]['NAME'] == "global_lastupdate" )
-				$content['global_lastupdate_TimeFormat'] = date('Y-m-d H:i:s', $content['globals'][$i]['VALUE_INT']);
+				$content['global_lastupdate_TimeFormat'] = date( 'Y-m-d H:i:s', (int) $content['globals'][$i]['VALUE_INT'] );
 		}
 	}
 	// --- 

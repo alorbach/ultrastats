@@ -205,13 +205,13 @@ $sqlquery =		"SELECT " .
 //				" INNER JOIN (" . STATS_TIME . 
 //				") ON (" . 
 //				STATS_TIME . ".PLAYERID=" . STATS_PLAYERS . ".GUID) " . 
-				" WHERE Kills > " . $content['web_minkills'] . " " . 
+				" WHERE Kills > " . (int) $content['web_minkills'] . " " . 
 //				" AND TIMEPLAYED > " . $content['web_mintime'] . " " . 
 				GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 				GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 				GetTimeWhereQueryString(STATS_PLAYERS) . 
 				" GROUP BY " . STATS_PLAYERS . ".GUID " .
-				" ORDER BY Kills DESC LIMIT " . $content["web_mainpageplayers"];
+				" ORDER BY Kills DESC LIMIT " . (int) $content["web_mainpageplayers"];
 //echo $sqlquery;
 $result = DB_Query($sqlquery);
 

@@ -261,6 +261,19 @@ function DB_GetRowCount( $query )
 	return $num_rows;
 }
 
+/**
+ * Run a SELECT with bound parameters and return mysqli_num_rows, or -1 on failure. Frees the result.
+ */
+function DB_GetRowCountBound( $sql, $types, array $params, $bProcessError = true, $bCritical = false ) {
+	$result = DB_QueryBound( $sql, $types, $params, $bProcessError, $bCritical );
+	if ( $result && ( $result instanceof mysqli_result ) ) {
+		$num_rows = mysqli_num_rows( $result );
+		mysqli_free_result( $result );
+		return $num_rows;
+	}
+	return -1;
+}
+
 function DB_GetRowCountByResult( $myresult )
 {
 	if ( $myresult && ( $myresult instanceof mysqli_result ) ) {

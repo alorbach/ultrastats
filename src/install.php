@@ -304,6 +304,7 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		// Establish DB Connection
 		DB_Connect();
 
+		// Each DDL fragment: DB_Query catches mysqli_sql_exception; second arg false suppresses per-statement error UI while we record failures in $content['failedstatements'].
 		for ( $i = 0; $i < count( $mycommands ); $i++ ) {
 			if ( strlen( trim( $mycommands[ $i ] ) ) > 1 ) {
 				$result = DB_Query( $mycommands[ $i ], false );

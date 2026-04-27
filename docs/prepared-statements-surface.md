@@ -19,6 +19,9 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 | Install config (step 5) | `src/install.php` | After DDL loop, `DB_ExecBound` for `gen_gameversion` and `database_installedversion`; `UltraStats_ValidateTablePrefix` on `DB_PREFIX` before schema replace and inserts |
 | Player display name by id | `functions_common.php` `GetPlayerHtmlNameFromID()` | `PLAYERID` and optional `SERVERID` bound |
 | Frontend helpers (partial) | `functions_frontendhelpers.php` | `GetAndSetCurrentServer`, `FillPlayerWithAlias`, `FillPlayerWithTime`, `GetTextFromDescriptionID`, `FindAndFillTopAliases`, `FindAndFillWithTime` (bound `IN` for bulk player time) use bound params where shown in code; other queries in the same file may still use `DB_Query` (see below) |
+| Rounds list (partial) | `src/rounds.php` | `?id=` gametype `NAME = ?` bound; paged `LIMIT ? , ?` bound; `DB_GetRowCountBound` for filtered count; other fragments (server/time) unchanged |
+| Home index (partial) | `src/index.php` | Top-players list: `web_minkills` / `web_mainpageplayers` as `(int)` in SQL; remaining blocks still `DB_Query` (consolidated / medals / server) |
+| Server scoping in SQL | `functions_common.php` `GetCustomServerWhereQuery()` | `SERVERID` in `AND` / `WHERE` uses `(int) $content['serverid']` or int `customserverid` |
 
 *Note:* A file can appear in **Migrated** and still have unmigrated `DB_Query` calls elsewhere in the file—the **Still using** section tracks remaining patterns, not a second count of the same line items.
 
@@ -26,21 +29,21 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 
 | Pattern | Examples |
 |--------|----------|
-| Large list/report queries | Some front/admin UIs (e.g. `rounds`, `index`) — often `intval` for limits; not fully audited to bound parameters |
-| Install wizard (DDL only) | `src/install.php` step 5 — table/schema batch via `DB_Query(…, false)` (multi-statement import) |
-| Aggregates / globals | `functions_frontendhelpers.php` — e.g. `GetAndSetMaxKillRation`, `GetAndSetGlobalInfo`: server/time/banned fragments still concatenated; `Kills` threshold cast to int in query |
+| Large list/report queries | `src/index.php` home blocks (last rounds, server totals, medals, server list) still `DB_Query` with helper fragments; `rounds` gametype filter + paging bound as above |
+| Install wizard (DDL only) | `src/install.php` step 5 — one statement per `DB_Query(…, false)`; `DB_Query` catches `mysqli_sql_exception` (see comment above DDL loop) |
+| Aggregates / globals | `functions_frontendhelpers.php` — e.g. `GetAndSetMaxKillRation`, `GetAndSetGlobalInfo`: `DB_Query` with fixed `LIKE` / consolidated time / `GetCustomServerWhereQuery` (int server id); not placeholder-bound end-to-end |
 | Time filter string | `functions_common.php` `GetTimeWhereQueryString` — appends `AND Time_Year = N` / `Time_Month = N` from session (int-cast; not placeholder-bound) |
 | Banned filter | `functions_common.php` — `GetBannedPlayerWhereQuery` uses `NOT IN (…)`; GUID list is built from int-cast DB rows in `CreateBannedPlayerFilter` |
 | mysqli helpers | `functions_db.php` — `DB_Query` / `DB_GetRowCount` / `DB_Exec` catch `mysqli_sql_exception` where applicable; `UltraStats_ValidateTablePrefix` |
 
 ## API notes
 
-- Helpers live in `src/include/functions_db.php`: `DB_QueryBound()`, `DB_ExecBound()`, `UltraStats_SqlLikeContainsPattern()`.
+- Helpers live in `src/include/functions_db.php`: `DB_QueryBound()`, `DB_ExecBound()`, `DB_GetRowCountBound()` (row count for bound `SELECT`), `UltraStats_SqlLikeContainsPattern()`.
 - **mysqlnd** is required for `DB_QueryBound()` (`mysqli_stmt_get_result()`). The Docker PHP 8.2 image includes mysqlnd.
 - `LIKE` “contains” search must escape `%`, `_`, `\` in the user fragment before binding; use `UltraStats_SqlLikeContainsPattern()`.
 
 ## Follow-up candidates
 
-- `src/install.php` — only if desired: move DDL to a loader that also uses `mysqli` exception-safe paths consistently (large refactor)
-- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where banned-player `NOT IN` lists, time slices in other helpers, or `serverwherequery` fragments are still string-built
+- `src/install.php` — optional large refactor: split/execute DDL differently; current loop already relies on `DB_Query`’s `mysqli_sql_exception` handling
+- `functions_frontendhelpers.php` / `functions_common.php` — full placeholder binding for `GetTimeWhereQueryString` / `GetTimeWhereConsolidatedQueryString` + `NOT IN` would require new helper APIs; banned GUID list and server id are int-safe
 - Other admin front pages not covered in the table above

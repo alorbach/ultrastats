@@ -1357,8 +1357,8 @@ function GetTimeWhereQueryStringForRoundTable( )
 
 	if ( isset($content['TIME_SELECTEDYEAR_UNIXSTART']) && isset($content['TIME_SELECTEDYEAR_UNIXEND']) )
 	{
-		$szReturn .=	" AND " . STATS_ROUNDS . ".TIMEADDED >= " . $content['TIME_SELECTEDYEAR_UNIXSTART'] . 
-						" AND " . STATS_ROUNDS . ".TIMEADDED <= " . $content['TIME_SELECTEDYEAR_UNIXEND'];
+		$szReturn .=	" AND " . STATS_ROUNDS . ".TIMEADDED >= " . (int) $content['TIME_SELECTEDYEAR_UNIXSTART'] . 
+						" AND " . STATS_ROUNDS . ".TIMEADDED <= " . (int) $content['TIME_SELECTEDYEAR_UNIXEND'];
 	}
 
 	// return result
@@ -1622,12 +1622,12 @@ function GetCustomServerWhereQuery( $customtable, $withwhere = true, $alsoreturn
 	if ( $customserverid == 0) 
 	{
 		if ( isset($content['serverid']) ) 
-			$myServerID = $content['serverid'];
+			$myServerID = (int) $content['serverid'];
 		else
 			$myServerID = -1;
 	}
 	else
-		$myServerID = $customserverid;
+		$myServerID = (int) $customserverid;
 	
 	// --- Special Check for special cases
 	if ( $alsoreturnifempty && $myServerID == -1 ) 

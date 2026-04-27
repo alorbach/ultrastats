@@ -57,12 +57,16 @@ else
 
 
 // --- Get/Set Sorting
-$strsortingsql = " WHERE 1 = 1 "; // Dummy query begin 
+$strsortingsql = " WHERE 1 = 1 "; // Dummy query begin
+$roundsSortBound = false;
+$roundsSortParam  = null;
 if ( isset($_GET['id']) && strlen($_GET['id']) > 0 )
 {
 	// Set new Sorting
 	$content['sorting'] = DB_RemoveBadChars($_GET['id']);
-	$strsortingsql .= " AND " . STATS_GAMETYPES . ".NAME = '" . $content['sorting'] . "'";
+	$strsortingsql .= " AND " . STATS_GAMETYPES . ".NAME = ?";
+	$roundsSortBound = true;
+	$roundsSortParam = $content['sorting'];
 }
 else
 {
@@ -135,7 +139,11 @@ if ( isset($content['roundgametypes']) )
 						$strsortingsql . 
 						" GROUP BY " . STATS_ROUNDS . ".ID " . 
 						" ORDER BY TIMEADDED DESC ";
-	$content['rounds_count'] = DB_GetRowCount( $sqlquery );
+	if ( $roundsSortBound ) {
+		$content['rounds_count'] = DB_GetRowCountBound( $sqlquery, 's', array( $roundsSortParam ) );
+	} else {
+		$content['rounds_count'] = DB_GetRowCount( $sqlquery );
+	}
 	if ( $content['rounds_count'] > $content['web_toprounds'] ) 
 	{
 		$pagenumbers = $content['rounds_count'] / $content['web_toprounds'];
@@ -155,6 +163,8 @@ if ( isset($content['roundgametypes']) )
 	// --- 
 
 // Now the real Query begins
+$rounds_limit_begin = (int) $content['current_pagebegin'];
+$rounds_limit_n     = (int) $content['web_toprounds'];
 $sqlquery = "SELECT " .
 					STATS_ROUNDS . ".ID, " .
 					STATS_ROUNDS . ".TIMEADDED, " . 
@@ -180,9 +190,12 @@ $sqlquery = "SELECT " .
 					$strsortingsql . 
 					" GROUP BY " . STATS_ROUNDS . ".ID " . 
 					" ORDER BY TIMEADDED DESC " .
-					" LIMIT " . $content['current_pagebegin'] . " , " . $content['web_toprounds'];
-
-$result = DB_Query($sqlquery);
+					" LIMIT ? , ?";
+if ( $roundsSortBound ) {
+	$result = DB_QueryBound( $sqlquery, 'sii', array( $roundsSortParam, $rounds_limit_begin, $rounds_limit_n ) );
+} else {
+	$result = DB_QueryBound( $sqlquery, 'ii', array( $rounds_limit_begin, $rounds_limit_n ) );
+}
 $content['roundsonly'] = DB_GetAllRows($result, true);
 if ( isset($content['roundsonly']) )
 {
