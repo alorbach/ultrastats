@@ -1,5 +1,9 @@
 ---------------------------------------------------------------------------
 Version 0.3.20, 2026-04-27
+New features:
+- Log parser: JT (join team); FT/FR/FC/RC/RD/BP/BD advanced round actions; CoD:WaW compact W/L lines.
+- Medals (CoD/UO/CoD2): pro shotgun, MG, Thompson, Panzerschreck.
+- Database internal version 12: WaW stats_maps seeds (db_update_v12.txt + db_template.txt).
 Changes and bugfixes:
 - rounds-detail.php: fixed PHP 8 fatal when a round has no round-action rows (empty `gameactions` still passed `isset()` but never populated `$content['gameactions']`).
 - rounds-detail.php: initialize `$AllPlayers` and skip medal/awards when there are no players; harden `GetRoundPlayerDetails` when the kills query returns no mysqli result.

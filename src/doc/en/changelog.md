@@ -6,6 +6,12 @@ Release history. Plain-text: [../../ChangeLog](../../ChangeLog).
 
 ## Version 0.3.20, 2026-04-27
 
+### New features
+
+- **Log parser:** `JT` (join team); advanced round-action lines `FT`, `FR`, `FC`, `RC`, `RD`, `BP`, `BD` (CTF / KOTH / bomb events); **CoD:WaW** compact `W` / `L` win/loss lines when `gen_gameversion` is WaW.
+- **Medals (CoD / UO / CoD2):** pro medals for shotgun, MG, Thompson, and Panzerschreck (weapon kill rankings).
+- **Database internal version 12:** `db_update_v12.txt` seeds **CoD:WaW** `stats_maps` display names; same rows added to `db_template.txt` for new installs.
+
 ### Changes and bugfixes
 
 - **rounds-detail.php:** fixed PHP 8 fatal when a round has no round-action rows (empty `gameactions` still passed `isset()` but never populated `$content['gameactions']`).

@@ -76,6 +76,10 @@ define('PARSER_GUID', 1);
 define('JOIN_CLIENTID', 2);
 define('JOIN_CLIENTNAME', 3);
 
+define('JOINTEAM_CLIENTID', 2);
+define('JOINTEAM_CLIENTTEAM', 3);
+define('JOINTEAM_CLIENTNAME', 4);
+
 define('QUIT_CLIENTID', 2);
 define('QUIT_CLIENTNAME', 3);
 
@@ -107,6 +111,14 @@ define('DAMAGE_ATTACKER_NAME', 8);
 
 define('RWIN_TEAM', 1);
 define('RLOS_TEAM', 1);
+
+define('RWINLOSS_GUID', 1);
+define('RWINLOSS_ID', 2);
+define('RWINLOSS_NAME', 3);
+
+define('ACTIONV2_GUID', 1);
+define('ACTIONV2_CLIENTID', 2);
+define('ACTIONV2_CLIENT_NAME', 3);
 
 define('ACTION_CLIENTID', 2);
 define('ACTION_CLIENT_TEAM', 3);
@@ -171,7 +183,7 @@ define('TRANSFERTYPE_HTTP', 2);
 
 // --- WeaponTypes
 define('WEAPONTYPE_MACHINEGUN', 0);			// MachineGun, Maschinenpistolen
-define('WEAPONTYPE_SNIPER', 1);				// Sniper, Scharfsch¸tzengewehre
+define('WEAPONTYPE_SNIPER', 1);				// Sniper, Scharfschùtzengewehre
 define('WEAPONTYPE_PISTOL', 2);				// Pistol, Pistole
 define('WEAPONTYPE_GRENADE', 3);			// Grenade, Granaten
 define('WEAPONTYPE_STANDWEAPON', 4);		// Stand-MG, Stand-MG's

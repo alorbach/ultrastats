@@ -1211,6 +1211,9 @@ function ProcessGameRound($myRoundArray, $myrealstarttime)
 					case "J":	// Join: 592:07 J;185269;5;^2|OCG|^1UnDead
 						Parser_AddPlayer($myLogArray);
 						break;
+					case "JT":	// Join Team: JT;1033987968;0;allies;[BAD]GIJoe101st;
+						Parser_ChangePlayerTeam($myLogArray);
+						break;
 					case "Q":	// Quit: 592:49 Q;185269;5;^2|OCG|^1UnDead
 						$timelasted = $timeroundend - $timeroundbegin;
 						if ( $timelasted < 0 )
@@ -1250,6 +1253,15 @@ function ProcessGameRound($myRoundArray, $myrealstarttime)
 								*/
 						// TODO: Maybe later we log this 
 						Parser_AddRoundAction($myLogArray);
+						break;
+					case "FT":	// CTF — flag taken
+					case "FR":	// CTF — flag returned
+					case "FC":	// CTF / TWAR — flag captured
+					case "RC":	// KOTH — headquarters captured
+					case "RD":	// KOTH — headquarters destroyed
+					case "BP":	// SD/SAB — bomb planted
+					case "BD":	// SD/SAB — bomb defused
+						Parser_AddAdvancedRoundAction($myLogArray);
 						break;
 				}
 			}
@@ -1465,6 +1477,30 @@ function Parser_FinalizeRound( $roundlastedtime )
 	else
 		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_FinalizeRound", "NO Players found");
 	// --- 
+}
+/*	----------------------------------------------------*/
+
+
+/*	----------------------------------------------------*/
+/*	Function to change a player's team (JT log line).
+	SampleLogPrint: JT;1033987968;0;allies;[BAD]GIJoe101st;
+*/
+function Parser_ChangePlayerTeam( $myArray )
+{
+	global $myPlayers;
+
+	$myArray[PARSER_GUID] = ParsePlayerGuid( $myArray, PARSER_GUID, JOINTEAM_CLIENTNAME );
+
+	if ( $myArray[PARSER_GUID] != 0 && isset( $myPlayers[ $myArray[PARSER_GUID] ] ) )
+	{
+		$myPlayer = &$myPlayers[ $myArray[PARSER_GUID] ];
+		$myPlayer[PLAYER_TEAM] = $myArray[JOINTEAM_CLIENTTEAM];
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_ChangePlayerTeam", "Set Team '" . $myArray[JOINTEAM_CLIENTTEAM] . "' on player GUID '" . $myArray[PARSER_GUID] . "'");
+	}
+	else if ( $myArray[PARSER_GUID] == 0 )
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_ChangePlayerTeam", "ChangeTeam ignored, GUID was 0!");
+	else
+		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_ChangePlayerTeam", "JT ignored, player GUID '" . $myArray[PARSER_GUID] . "' not in round player list");
 }
 /*	----------------------------------------------------*/
 
@@ -1734,6 +1770,83 @@ function Parser_AddChatLine( $myArray )
 	// --- 
 
 	PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddChatLine", "Adding Chatline of PlayerID '" . $myArray[PARSER_GUID] . "'");
+}
+/*	----------------------------------------------------*/
+
+
+/*	----------------------------------------------------*/
+/*	Advanced round actions (CoD:WaW-style FT/FR/FC/… lines).
+	SampleLogPrint: FR;1589597861;0;juanBM
+*/
+function Parser_AddAdvancedRoundAction( $myArray )
+{
+	global $myPlayers, $myserver, $myRound;
+
+	$myArray[PARSER_GUID] = ParsePlayerGuid( $myArray, PARSER_GUID, ACTIONV2_CLIENT_NAME );
+
+	if ( $myArray[PARSER_GUID] == 0 )
+	{
+		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddAdvancedRoundAction", "LogLine Ignored, GUID was 0!");
+		return;
+	}
+
+	if ( ! isset( $myPlayers[ $myArray[PARSER_GUID] ] ) )
+	{
+		PrintHTMLDebugInfo( DEBUG_WARN, "Parser_AddAdvancedRoundAction", "Player GUID '" . $myArray[PARSER_GUID] . "' not in round player list");
+		return;
+	}
+
+	$szClientTeam = $myPlayers[ $myArray[PARSER_GUID] ][PLAYER_TEAM];
+
+	switch ( $myArray[PARSER_TYPE] )
+	{
+		case "FT":
+			$szAction = "flag_taken";
+			break;
+		case "FR":
+			$szAction = "flag_returned";
+			break;
+		case "FC":
+			$szAction = "flag_captured";
+			break;
+		case "RC":
+			$szAction = "headquaters_captured";
+			break;
+		case "RD":
+			$szAction = "headquaters_destroyed";
+			break;
+		case "BP":
+			$szAction = "bomb_planted";
+			break;
+		case "BD":
+			$szAction = "bomb_defused";
+			break;
+		default:
+			$szAction = "unknown_action";
+			break;
+	}
+
+	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddAdvancedRoundAction", "Adding Action '" . $szAction . "' for PlayerID '" . $myArray[PARSER_GUID] . "'");
+	$actionId = GetActionIDByName( $szAction );
+	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
+					ROUNDID = " . $myRound[ROUND_DBID] . " AND 
+					PLAYERID = " . $myArray[PARSER_GUID] . " AND 
+					Team = '" . DB_RemoveBadChars( $szClientTeam ) . "' AND 
+					ACTIONID = " . $actionId;
+
+	$result = DB_Query( "SELECT * FROM " . STATS_ROUNDACTIONS . " " . $wherequery );
+	$rows = DB_GetAllRows( $result, true );
+	if ( ! empty( $rows ) )
+		ProcessUpdateStatement( "UPDATE " . STATS_ROUNDACTIONS . " SET Count = Count + 1 " . $wherequery );
+	else
+		ProcessInsertStatement( "INSERT INTO " . STATS_ROUNDACTIONS . " (SERVERID, ROUNDID, PLAYERID, Team, ACTIONID, Count) 
+		VALUES (
+			 " . $myserver['ID'] . ", 
+			 " . $myRound[ROUND_DBID] . ", 
+			 " . $myArray[PARSER_GUID] . ", 
+			 '" . DB_RemoveBadChars( $szClientTeam ) . "', 
+			 " . $actionId . ", 
+			 1)" );
 }
 /*	----------------------------------------------------*/
 
@@ -2100,69 +2213,106 @@ function Parser_AddKillAndDeath( $myArray )
 /*	----------------------------------------------------*/
 /*	Function to add RoundWin - only for Round based Gametypes
 	SampleLogPrint: W;axis;107521;^2|OCG|^4STINKYPETE;186276;^2|OCG|^9CerealKilla
-	Description:
-	Type:	W	
-	Team:	axis	
-	GUID + Players:	107521;^2|OCG|^4STINKYPETE;186276;^2|OCG|^9CerealKilla
+	SampleLogPrint CodWAW: W;2046792331;3;Kasosunn
 */
 function Parser_AddRoundWin( $myArray )
 {
-	global $myRound;
+	global $myRound, $content, $myPlayers;
 
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundWin", "Adding RoundWin");
 
-	// Add RoundWin
-	if ( $myArray[RWIN_TEAM] == "axis" ) 
+	$winningteam = null;
+	$losingteam = null;
+
+	if ( $content['gen_gameversion'] == CODWW )
 	{
-		$winningteam = ROUND_AXIS_GUIDS;
-		$losingteam = ROUND_ALLIES_GUIDS;
-		$myRound[ROUND_AXIS_WINS]++;
+		$mytmpguid = ParsePlayerGuid( $myArray, RWINLOSS_GUID, RWINLOSS_NAME );
+
+		if ( $mytmpguid != 0 )
+		{
+			if ( isset( $myPlayers[ $mytmpguid ] ) )
+			{
+				if ( ! isset( $winningteam ) )
+				{
+					$myPlayer = &$myPlayers[ $mytmpguid ];
+
+					if ( $myPlayer[PLAYER_TEAM] == "axis" )
+					{
+						$winningteam = ROUND_AXIS_GUIDS;
+						$losingteam = ROUND_ALLIES_GUIDS;
+						$myRound[ROUND_AXIS_WINS]++;
+					}
+					else
+					{
+						$winningteam = ROUND_ALLIES_GUIDS;
+						$losingteam = ROUND_AXIS_GUIDS;
+						$myRound[ROUND_ALLIES_WINS]++;
+					}
+				}
+
+				if ( $winningteam !== null )
+				{
+					if ( ! isset( $myRound[ $winningteam ] ) )
+						$myRound[ $winningteam ][ $mytmpguid ] = $mytmpguid;
+					else if ( ! array_key_exists( $mytmpguid, $myRound[ $winningteam ] ) )
+						$myRound[ $winningteam ][ $mytmpguid ] = $mytmpguid;
+				}
+			}
+			else
+				PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "CODWW W line: GUID '" . $mytmpguid . "' not in player list" );
+		}
+		else
+			PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "CODWW W line: could not resolve player GUID" );
 	}
 	else
 	{
-		$winningteam = ROUND_ALLIES_GUIDS;
-		$losingteam = ROUND_AXIS_GUIDS;
-		$myRound[ROUND_ALLIES_WINS]++;
-	}
-
-	// Create tmp Winner PlayerList now
-	for($i = 2; $i < count($myArray); $i+=2)
-		$tmpplayers[ DB_RemoveBadChars($myArray[$i]) ] = DB_RemoveBadChars($myArray[$i]);
-
-	// Add guids to the winner team
-	if ( isset($tmpplayers) && count($tmpplayers) > 0 )
-	{
-		foreach ($tmpplayers as $myguid )
+		if ( $myArray[RWIN_TEAM] == "axis" )
 		{
-			// Add if not already there
-			if ( $myguid != 0) 
+			$winningteam = ROUND_AXIS_GUIDS;
+			$losingteam = ROUND_ALLIES_GUIDS;
+			$myRound[ROUND_AXIS_WINS]++;
+		}
+		else
+		{
+			$winningteam = ROUND_ALLIES_GUIDS;
+			$losingteam = ROUND_AXIS_GUIDS;
+			$myRound[ROUND_ALLIES_WINS]++;
+		}
+
+		for ( $i = 2; $i < count( $myArray ); $i += 2 )
+			$tmpplayers[ DB_RemoveBadChars( $myArray[ $i ] ) ] = DB_RemoveBadChars( $myArray[ $i ] );
+
+		if ( isset( $tmpplayers ) && count( $tmpplayers ) > 0 )
+		{
+			foreach ( $tmpplayers as $myguid )
 			{
-				if ( !isset($myRound[$winningteam]) )								// Add in any case
-					$myRound[$winningteam][$myguid] = $myguid;
-				else if ( !array_key_exists($myguid, $myRound[$winningteam]) )		// Add only if not already there
-					$myRound[$winningteam][$myguid] = $myguid;
+				if ( $myguid != 0 )
+				{
+					if ( ! isset( $myRound[ $winningteam ] ) )
+						$myRound[ $winningteam ][ $myguid ] = $myguid;
+					else if ( ! array_key_exists( $myguid, $myRound[ $winningteam ] ) )
+						$myRound[ $winningteam ][ $myguid ] = $myguid;
+				}
+			}
+		}
+
+		if ( isset( $myRound[ $losingteam ] ) &&
+			count( $myRound[ $losingteam ] ) > 0 &&
+			isset( $tmpplayers ) &&
+			count( $tmpplayers ) > 0 )
+		{
+			foreach ( $myRound[ $losingteam ] as $myguid )
+			{
+				if ( array_key_exists( $myguid, $tmpplayers ) )
+					unset( $myRound[ $losingteam ][ $myguid ] );
 			}
 		}
 	}
 
-	// If loser Team exists, we remove changed players guids
-	if (	isset($myRound[$losingteam]) && 
-			count($myRound[$losingteam]) > 0 &&
-			isset($tmpplayers) && 
-			count($tmpplayers) > 0 )
-	{
-		foreach ( $myRound[$losingteam] as $myguid )
-		{
-			// Remove from!
-			if ( array_key_exists($myguid, $tmpplayers) )
-				unset($myRound[$losingteam][$myguid]);
-		}
-	}
-
-	if (isset($myRound[$winningteam]))
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "Winning Team Playercount: " . count($myRound[$winningteam]) );
-	if (isset($myRound[$losingteam]))
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "Losing Team Playercount: " . count($myRound[$losingteam]) );
+	if ( $winningteam !== null && isset( $myRound[ $winningteam ] ) )
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "Winning Team Playercount: " . count( $myRound[ $winningteam ] ) );
+	if ( $losingteam !== null && isset( $myRound[ $losingteam ] ) )
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundWin", "Losing Team Playercount: " . count( $myRound[ $losingteam ] ) );
 }
 /*	----------------------------------------------------*/
 
@@ -2170,67 +2320,102 @@ function Parser_AddRoundWin( $myArray )
 /*	----------------------------------------------------*/
 /*	Function to add a RoundLoss - only for Round based Gametypes
 	SampleLogPrint: L;allies;185269;^2|OCG|^1UnDead;104252;^2[OCG]^4Paulaner_Pils
-	Description:
-	Type:	L	
-	Team:	allies	
-	GUID + Players:	185269;^2|OCG|^1UnDead;104252;^2[OCG]^4Paulaner_Pils
+	SampleLogPrint CodWAW: L;441826654;42;ATZE07
 */
 function Parser_AddRoundLoss( $myArray )
 {
-	global $myRound;
+	global $myRound, $content, $myPlayers;
 
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundLoss", "Adding RoundLoss");
 
-	// Add RoundLoss
-	if ( $myArray[RLOS_TEAM] == "axis" ) 
+	$winningteam = null;
+	$losingteam = null;
+
+	if ( $content['gen_gameversion'] == CODWW )
 	{
-		$losingteam = ROUND_AXIS_GUIDS;
-		$winningteam = ROUND_ALLIES_GUIDS;
+		$tmpguid = ParsePlayerGuid( $myArray, RWINLOSS_GUID, RWINLOSS_NAME );
+
+		if ( $tmpguid != 0 )
+		{
+			if ( isset( $myPlayers[ $tmpguid ] ) )
+			{
+				if ( ! isset( $losingteam ) )
+				{
+					$myPlayer = &$myPlayers[ $tmpguid ];
+
+					if ( $myPlayer[PLAYER_TEAM] == "axis" )
+					{
+						$losingteam = ROUND_AXIS_GUIDS;
+						$winningteam = ROUND_ALLIES_GUIDS;
+					}
+					else
+					{
+						$losingteam = ROUND_ALLIES_GUIDS;
+						$winningteam = ROUND_AXIS_GUIDS;
+					}
+				}
+
+				if ( $losingteam !== null )
+				{
+					if ( ! isset( $myRound[ $losingteam ] ) )
+						$myRound[ $losingteam ][ $tmpguid ] = $tmpguid;
+					else if ( ! array_key_exists( $tmpguid, $myRound[ $losingteam ] ) )
+						$myRound[ $losingteam ][ $tmpguid ] = $tmpguid;
+				}
+			}
+			else
+				PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddRoundLoss", "CODWW L line: GUID '" . $tmpguid . "' not in player list" );
+		}
+		else
+			PrintHTMLDebugInfo( DEBUG_ERROR, "Parser_AddRoundLoss", "CODWW L line: could not resolve player GUID" );
 	}
 	else
 	{
-		$losingteam = ROUND_ALLIES_GUIDS;
-		$winningteam = ROUND_AXIS_GUIDS;
-	}
-
-	// Create tmp Loser PlayerList now
-	for($i = 2; $i < count($myArray); $i+=2)
-		$tmpplayers[ DB_RemoveBadChars($myArray[$i]) ] = DB_RemoveBadChars($myArray[$i]);
-
-	// Add guids to the loser team
-	if ( isset($tmpplayers) && count($tmpplayers) > 0 )
-	{
-		foreach ($tmpplayers as $myguid )
+		if ( $myArray[RLOS_TEAM] == "axis" )
 		{
-			// Add if not already there
-			if ( $myguid != 0) 
+			$losingteam = ROUND_AXIS_GUIDS;
+			$winningteam = ROUND_ALLIES_GUIDS;
+		}
+		else
+		{
+			$losingteam = ROUND_ALLIES_GUIDS;
+			$winningteam = ROUND_AXIS_GUIDS;
+		}
+
+		for ( $i = 2; $i < count( $myArray ); $i += 2 )
+			$tmpplayers[ DB_RemoveBadChars( $myArray[ $i ] ) ] = DB_RemoveBadChars( $myArray[ $i ] );
+
+		if ( isset( $tmpplayers ) && count( $tmpplayers ) > 0 )
+		{
+			foreach ( $tmpplayers as $myguid )
 			{
-				if ( !isset($myRound[$losingteam]) )									// Add in any case
-					$myRound[$losingteam][$myguid] = $myguid;
-				else if ( !array_key_exists($myguid, $myRound[$losingteam]) )			// Add only if not already there
-					$myRound[$losingteam][$myguid] = $myguid;
+				if ( $myguid != 0 )
+				{
+					if ( ! isset( $myRound[ $losingteam ] ) )
+						$myRound[ $losingteam ][ $myguid ] = $myguid;
+					else if ( ! array_key_exists( $myguid, $myRound[ $losingteam ] ) )
+						$myRound[ $losingteam ][ $myguid ] = $myguid;
+				}
+			}
+		}
+
+		if ( isset( $myRound[ $winningteam ] ) &&
+			count( $myRound[ $winningteam ] ) > 0 &&
+			isset( $tmpplayers ) &&
+			count( $tmpplayers ) > 0 )
+		{
+			foreach ( $myRound[ $winningteam ] as $myguid )
+			{
+				if ( array_key_exists( $myguid, $tmpplayers ) )
+					unset( $myRound[ $winningteam ][ $myguid ] );
 			}
 		}
 	}
 
-	// If Winner Team exists, we remove changed players guids
-	if (	isset($myRound[$winningteam]) && 
-			count($myRound[$winningteam]) > 0 &&
-			isset($tmpplayers) && 
-			count($tmpplayers) > 0 )
-	{
-		foreach ( $myRound[$winningteam] as $myguid )
-		{
-			// Remove from!
-			if ( array_key_exists($myguid, $tmpplayers) )
-				unset($myRound[$winningteam][$myguid]);
-		}
-	}
-	
-	if (isset($myRound[$winningteam]))
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundLoss", "Winning Team Playercount: " . count($myRound[$winningteam]) );
-	if (isset($myRound[$losingteam]))
-		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundLoss", "Losing Team Playercount: " . count($myRound[$losingteam]) );
+	if ( $winningteam !== null && isset( $myRound[ $winningteam ] ) )
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundLoss", "Winning Team Playercount: " . count( $myRound[ $winningteam ] ) );
+	if ( $losingteam !== null && isset( $myRound[ $losingteam ] ) )
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Parser_AddRoundLoss", "Losing Team Playercount: " . count( $myRound[ $losingteam ] ) );
 }
 /*	----------------------------------------------------*/
 
