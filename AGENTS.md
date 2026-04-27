@@ -4,7 +4,7 @@ Guidance for humans and AI agents working in this repository.
 
 ## What this project is
 
-**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.13** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
+**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.14** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
 
 **Repository overview for humans:** [README.md](README.md) at the root (the plain [README](README) file is a one-screen pointer to that file).
 
@@ -25,7 +25,7 @@ Guidance for humans and AI agents working in this repository.
 | `src/lang/` | Language packs (`en/`, `de/`) — `main.php` / `admin.php` string files. |
 | `src/contrib/` | **SQL:** `db_template.txt` (base schema), `db_update_v*.txt` (incremental upgrades), `config.sample.php`, helper scripts. |
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
-| `src/doc/` | Legacy static HTML documentation (EN/DE). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
+| `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `docker/` | `Dockerfile` and `docker-compose.yml` for local dev (see below). |
 
 ## Entry points (HTTP)

@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------
+Version 0.3.14, 2026-04-26
+New features:
+- Documented project for PHP 7.4+ / MySQL 8, Docker dev stack, and security in README, AGENTS, SECURITY, and .agent skills.
+- Replaced ext/mysql with mysqli; prepared statements for high-risk web/admin SQL (find-chat, find-players, user admin, parser).
+Changes and bugfixes:
+- Hardened redirects and sessions; chat/player search and admin user flows use bound parameters; schema tweaks for MySQL 8 (utf8mb4).
+- Bundled static docs converted to Markdown under src/doc/en/; added Content-Security-Policy operator notes in SECURITY.md.
+---------------------------------------------------------------------------
 Version 0.3.13 (beta), 2008-11-30
 New features:
 - Added Icons for gameversions to the top left on the menubar.

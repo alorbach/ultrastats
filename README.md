@@ -2,7 +2,7 @@
 
 UltraStats is a log parser and web front-end for **Call of Duty** game server logs. It reads match logs, stores statistics in MySQL, and serves rankings, player pages, round history, and an admin area (parser, config, users).
 
-**Version:** 0.3.13 (see `src/include/functions_common.php`).
+**Version:** 0.3.14 (see `src/include/functions_common.php`).
 
 **License:** See [LICENSE](LICENSE) and [COPYING](COPYING) (GPL-3.0+).
 
@@ -20,7 +20,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Installation
 
-- Legacy step-by-step text: [INSTALL](INSTALL) (and bundled HTML under `src/doc/en/install.htm`).
+- Legacy step-by-step text: [INSTALL](INSTALL) (and bundled Markdown under [src/doc/en/install.md](src/doc/en/install.md)).
 - **First-time setup:** open `src/install.php` in a browser (with `config.php` empty or missing as required by the installer) and follow the wizard.
 - **Configuration:** copy `src/contrib/config.sample.php` to `src/config.php` and set database credentials, or let the installer create `config.php`. **Do not commit real production passwords**; `src/config.php` is listed in `.gitignore` for local development.
 
@@ -42,11 +42,11 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Changelog
 
-- Packaged and repository history: [ChangeLog](ChangeLog) in the repository root (also mirrored in [src/doc/en/changelog.htm](src/doc/en/changelog.htm) as legacy HTML).
+- Packaged and repository history: [ChangeLog](ChangeLog) in the repository root (also mirrored as Markdown in [src/doc/en/changelog.md](src/doc/en/changelog.md)).
 
 ## Historical documentation
 
-Static HTML in `src/doc/en/` (readme, install, changelog) is preserved for reference. Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were.
+Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/en/readme.md), [install](src/doc/en/install.md), [changelog](src/doc/en/changelog.md), [copyright](src/doc/en/copyright.md)); see [src/doc/README.md](src/doc/README.md). Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were.
 
 ## Sample gamelogs
 

@@ -52,7 +52,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.13";
+$content['BUILDNUMBER'] = "0.3.14";
 $content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
@@ -172,7 +172,7 @@ function CheckForInstallPhp()
 						. 'If you need help for the installation process, you should take a look into the <B>INSTALL</B> document!<br>'
 //						. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
 //						. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
-//						. 'Also take a look to the <a href="docs/readme.htm" target="_blank">Readme</a> for some basics around UltraStats!<br>'
+//						. 'Also take a look to the <a href="doc/en/readme.md" target="_blank">Readme</a> for some basics around UltraStats!<br>'
 						. '</center>';
 	else
 		$strinstallmsg = "";

@@ -30,7 +30,7 @@ UltraStats **does not** set a `Content-Security-Policy` header in PHP or Docker 
 ### Why CSP is not enabled out of the box
 
 - **Inline handlers** — templates use legacy patterns such as `OnChange="document.serveridform.submit();"` and similar attributes. A strict `script-src` (without `'unsafe-inline'`) can block or alter behavior in ways that are hard to predict without a full UI regression pass.
-- **Older JavaScript** — **MooTools**-era code (`src/js/mootools.js`, `src/js/common.js`) and **inline scripts** in pages may not satisfy a tight CSP. Some patterns in old libraries can resemble or use dynamic code paths; see the static review in [docs/ui-compatibility-review.md](docs/ui-compatibility-review.md) (CSP, MooTools, and **Recommended follow-ups** there).
+- **Legacy JavaScript** — `src/js/common.js` (vanilla DOM helpers, older IE branches) and **inline scripts** in pages may not satisfy a tight CSP. See the static review in [docs/ui-compatibility-review.md](docs/ui-compatibility-review.md) (CSP and **Recommended follow-ups** there).
 - **Risk of a blind strict policy** — turning on a **strict** default without validation can break menus, server pickers, admin forms, and parser UIs. Prefer **staged** rollout (below).
 
 ### Staged hardening (operators)
