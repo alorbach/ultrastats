@@ -217,6 +217,44 @@
 	background-attachment: local;
 }
 
+/* Final completion strip at bottom of embedded parser log (SSE `event: done`) */
+#parser-log-wrap .parser-done-banner
+{
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+	box-sizing: border-box;
+	width: 100%;
+	margin: 0;
+	padding: 0.45rem 0.75rem;
+	font-family: Consolas, "Lucida Console", monospace;
+	font-size: 13px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	color: #0a1a0a;
+	background: linear-gradient( 180deg, #4caf50 0%, #2e7d32 100% );
+	border-top: 1px solid #81c784;
+	text-align: center;
+	box-shadow: 0 -4px 12px rgba( 0, 0, 0, 0.35 );
+}
+#parser-log-wrap .parser-done-banner a.parser-done-banner-link
+{
+	color: #0d1f0d;
+	font-weight: 800;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+#parser-log-wrap .parser-done-banner a.parser-done-banner-link:hover,
+#parser-log-wrap .parser-done-banner a.parser-done-banner-link:focus
+{
+	color: #000;
+	text-decoration-thickness: 2px;
+}
+#parser-log-wrap .parser-done-banner[hidden]
+{
+	display: none !important;
+}
+
 @supports ( height: 100dvh )
 {
 	#parser-log-wrap

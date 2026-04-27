@@ -183,7 +183,7 @@ define('TRANSFERTYPE_HTTP', 2);
 
 // --- WeaponTypes
 define('WEAPONTYPE_MACHINEGUN', 0);			// MachineGun, Maschinenpistolen
-define('WEAPONTYPE_SNIPER', 1);				// Sniper, Scharfschùtzengewehre
+define('WEAPONTYPE_SNIPER', 1);				// Sniper, ScharfschÔøΩtzengewehre
 define('WEAPONTYPE_PISTOL', 2);				// Pistol, Pistole
 define('WEAPONTYPE_GRENADE', 3);			// Grenade, Granaten
 define('WEAPONTYPE_STANDWEAPON', 4);		// Stand-MG, Stand-MG's

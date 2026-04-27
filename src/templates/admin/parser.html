@@ -72,9 +72,10 @@
 		<p id="parser-stream-status" style="margin:0; color:#cccccc; font-size:12px;">Running…</p>
 		<button type="button" id="parser-cancel-btn" class="line0" style="display:none;padding:4px 10px;cursor:pointer;">{LN_PARSER_CANCEL}</button>
 	</div>
-	<div id="parser-log-wrap" data-parser-op="{parseroperation}" data-parser-id="{serverid}" data-msg-cancelling="{LN_PARSER_CANCELLING}" data-msg-cancelled="{LN_PARSER_CANCELLED_STATUS}">
+	<div id="parser-log-wrap" data-parser-op="{parseroperation}" data-parser-id="{serverid}" data-msg-cancelling="{LN_PARSER_CANCELLING}" data-msg-cancelled="{LN_PARSER_CANCELLED_STATUS}" data-msg-done="{LN_PARSER_DONE}" data-msg-return-serverlist="{LN_PARSER_RETURN_SERVERLIST}" data-parser-serverlist-href="servers.php">
 		<div id="parser-log-header" class="parser-sse-cols" style="display:none;"></div>
 		<pre id="parser-log-pre" class="parser-sse-pre" spellcheck="false"></pre>
+		<div id="parser-done-banner" class="parser-done-banner" role="status" aria-live="polite" hidden></div>
 	</div>
 	<script>
 	(function () {
@@ -83,6 +84,7 @@
 		var logHeader = document.getElementById('parser-log-header');
 		var statusEl = document.getElementById('parser-stream-status');
 		var cancelBtn = document.getElementById('parser-cancel-btn');
+		var doneBanner = document.getElementById('parser-done-banner');
 		/** Batched plain-text log: fewer DOM nodes than one &lt;tr&gt; per line (huge logs stay responsive). */
 		var lineBuf = [];
 		var LOG_FLUSH = 100;
@@ -125,6 +127,31 @@
 			pre.appendChild(document.createTextNode(lineBuf.join('\n') + '\n'));
 			lineBuf.length = 0;
 			wrap.scrollTop = wrap.scrollHeight;
+		}
+		function hideDoneBanner() {
+			if (!doneBanner) { return; }
+			doneBanner.setAttribute('hidden', '');
+			doneBanner.innerHTML = '';
+		}
+		function showDoneBanner(doneData) {
+			if (!doneBanner) { return; }
+			var label = wrap.getAttribute('data-msg-done') || 'DONE';
+			var sec = doneData && doneData.seconds != null && doneData.seconds !== '' ? String(doneData.seconds) : '';
+			var returnLbl = wrap.getAttribute('data-msg-return-serverlist') || 'Server list';
+			var listHref = wrap.getAttribute('data-parser-serverlist-href') || 'servers.php';
+			hideDoneBanner();
+			doneBanner.removeAttribute('hidden');
+			var main = document.createElement('span');
+			main.className = 'parser-done-banner-main';
+			main.textContent = sec ? (label + '  ·  ' + sec + 's') : label;
+			doneBanner.appendChild(main);
+			doneBanner.appendChild(document.createTextNode('  '));
+			var a = document.createElement('a');
+			a.className = 'parser-done-banner-link';
+			a.href = listHref;
+			a.textContent = returnLbl;
+			doneBanner.appendChild(a);
+			try { wrap.scrollTop = wrap.scrollHeight; } catch (eSc) {}
 		}
 		function appendLogRow(d) {
 			if (!d || d.t !== 'log') { return; }
@@ -222,6 +249,7 @@
 		}
 
 		function startParserStream(url) {
+			hideDoneBanner();
 			if (es) { try { es.close(); } catch (e) {} }
 			var oldBox = document.getElementById('parser-confirm-box');
 			if (oldBox) { try { oldBox.remove(); } catch (e0) {} }
@@ -295,6 +323,7 @@
 				var d = JSON.parse(ev.data);
 				flushLogBuf();
 				if (es) { try { es.close(); } catch (e4) {} es = null; }
+				hideDoneBanner();
 				if (statusEl) { statusEl.textContent = d.message || 'Error'; }
 			});
 			es.addEventListener('cancelled', function (ev) {
@@ -302,6 +331,7 @@
 					var d = JSON.parse(ev.data);
 					flushLogBuf();
 					streamEndedCancelled = true;
+					hideDoneBanner();
 					if (statusEl) {
 						statusEl.style.display = 'block';
 						statusEl.textContent = d.message || wrap.getAttribute('data-msg-cancelled') || 'Cancelled.';
@@ -320,13 +350,16 @@
 				if (cancelBtn) { cancelBtn.style.display = 'none'; }
 				var doneData = {};
 				try { doneData = JSON.parse(ev.data); } catch (eDone) {}
+				var willChainRunTotals = pendingRunTotals && pendingRunTotals.url;
 				if (statusEl) {
 					if (doneData.awaitingConfirm) {
+						hideDoneBanner();
 						statusEl.textContent = 'Confirmation required — choose an action below.';
 						if (doneData.confirm) {
 							renderParserConfirmPanel(doneData.confirm);
 						}
 					} else if (doneData.awaitingPassword) {
+						hideDoneBanner();
 						statusEl.textContent = 'FTP login failed — use the link below to enter your password on the classic page.';
 						if (doneData.passwordForm) {
 							renderParserFtpPasswordPanel(doneData.passwordForm);
@@ -335,13 +368,16 @@
 						statusEl.textContent = streamEndedCancelled ? (statusEl.textContent) : 'Done.';
 					}
 				}
-				if (pendingRunTotals && pendingRunTotals.url) {
+				if (willChainRunTotals) {
+					hideDoneBanner();
 					var del = Math.max(0, parseInt(pendingRunTotals.delayMs, 10) || 0);
 					var u = pendingRunTotals.url;
 					var p = pendingRunTotals;
 					pendingRunTotals = null;
 					if (p.label && statusEl) { statusEl.textContent = p.label + ' in ' + (del / 1000) + 's…'; }
 					setTimeout(function () { startParserStream(u); }, del);
+				} else if (!doneData.awaitingConfirm && !doneData.awaitingPassword && !streamEndedCancelled) {
+					showDoneBanner(doneData);
 				}
 			});
 		}
