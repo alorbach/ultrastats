@@ -14,7 +14,7 @@ This document describes hardening applied during the modernisation pass and safe
 - **Admin login** — `CheckUserLogin()` uses a bound `SELECT` by username; verifies **legacy MD5** or **`password_hash()`**; on successful MD5 login, rehashes to `password_hash()` after database upgrade **v8** widens `stats_users.password`. Run **Database Upgrade** (`admin/upgrade.php`) so internal version matches the app (including v8).
 - **Parser** — `parser-core.php`, `parser.php`, and `parser-shell.php` load server rows with `WHERE ID = ?`.
 - **Database API** — legacy `mysql_*` calls were removed; the app uses **mysqli** only (PHP 7+ compatible). Prepared helpers require **mysqlnd** (see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md)).
-- **Admin servers / players / string editor (partial)** — high-risk create/update and edit paths in `admin/servers.php`, `admin/players.php`, and `admin/stringeditor.php` use `DB_QueryBound` / `DB_ExecBound` where user or post data drives SQL. List views and some filters may still use string-built `DB_Query` with `intval` / `DB_RemoveBadChars`; see the inventory below.
+- **Admin servers / players / string editor** — `admin/servers.php` uses bound parameters for high-risk server create/edit and id-scoped loads; some list or secondary paths may still use string-built `DB_Query`. `admin/players.php` and `admin/stringeditor.php` use `DB_QueryBound` / `DB_ExecBound` for list filters (including `LIKE`), edit loads, and delete chains; details and any remaining surface are in [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md).
 
 ## What you should still do
 

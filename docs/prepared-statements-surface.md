@@ -23,7 +23,9 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 |--------|----------|
 | Large list/report queries | Other front/admin list UIs not yet migrated (e.g. some `rounds`, `index`) — often `intval` for limits |
 | Install wizard | `src/install.php` step 5 — DDL batch via `DB_Query` (install-only); config `INSERT` values cast to int for `gen_gameversion` / `database_installedversion` |
-| Core helpers | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()` loads server by `ID` with `DB_QueryBound`; remaining `DB_Query` builds in this file may still use string SQL for stats filters |
+| Core helpers (partial) | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()` loads server by `ID` with `DB_QueryBound`; other queries may still use string SQL for stats filters |
+| Core helpers (partial) | `functions_common.php` — `GetPlayerHtmlNameFromID()` uses `DB_QueryBound` for `PLAYERID` and optional `SERVERID` |
+| mysqli helpers | `functions_db.php` — `DB_Query` and `DB_GetRowCount` catch `mysqli_sql_exception`; `DB_Exec` catches `mysqli_sql_exception` and returns false |
 
 ## API notes
 
@@ -34,5 +36,5 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 ## Follow-up candidates
 
 - `src/install.php` — optional: prepared/bound `INSERT` for config rows if the install wizard is refactored for non-admin use
-- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where `serverwherequery` or time filters are built as strings
+- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where time filters, banned-player `NOT IN` lists, or `serverwherequery` fragments are still built as strings
 - Other admin front pages not covered in the table above

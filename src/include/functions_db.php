@@ -260,10 +260,14 @@ function DB_GetRowCountByResult( $myresult )
 function DB_Exec( $query )
 {
 	global $link_id;
-	if ( mysqli_query( $link_id, $query ) ) {
-		return true;
-	} else
-		return false;
+	try {
+		if ( mysqli_query( $link_id, $query ) ) {
+			return true;
+		}
+	} catch ( mysqli_sql_exception $e ) {
+		// PHP 8.1+ can throw on SQL errors; match legacy false return
+	}
+	return false;
 }
 
 function WriteConfigValue( $szValue )

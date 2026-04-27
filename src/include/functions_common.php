@@ -885,15 +885,28 @@ function GetTimeStringDays($mysecs)
 
 function GetPlayerHtmlNameFromID($myplayedid)
 {
-	global $serverwherequery_and;
+	global $serverwherequery_and, $content;
 
 	if ( !isset($myplayedid) ||	intval($myplayedid) <= 0 )
 		return false;
 	else
 	{
 		// Try to get Playname from DB
-		// Get ServerDetails
-		$result = DB_Query("SELECT Alias, AliasAsHtml FROM " . STATS_ALIASES . " WHERE PLAYERID = " . $myplayedid . $serverwherequery_and . " ORDER BY Count DESC LIMIT 1");
+		$pid = (int) $myplayedid;
+		$order = " ORDER BY Count DESC LIMIT 1";
+		if ( strlen( (string) $serverwherequery_and ) > 0 && isset( $content['serverid'] ) ) {
+			$result = DB_QueryBound(
+				"SELECT Alias, AliasAsHtml FROM " . STATS_ALIASES . " WHERE PLAYERID = ? AND SERVERID = ?" . $order,
+				'ii',
+				array( $pid, (int) $content['serverid'] )
+			);
+		} else {
+			$result = DB_QueryBound(
+				"SELECT Alias, AliasAsHtml FROM " . STATS_ALIASES . " WHERE PLAYERID = ?" . $order,
+				'i',
+				array( $pid )
+			);
+		}
 		$playerdetails = DB_GetAllRows($result, true);
 		if ( isset( $playerdetails ) )
 		{
