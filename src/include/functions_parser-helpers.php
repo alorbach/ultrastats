@@ -42,6 +42,10 @@ function CreateHTMLHeader()
 	$currentclass = "line0";
 	$currentmenuclass = "cellmenu1";
 
+	$parserBodyStyle = ( defined( 'IS_PARSERPAGE' ) && IS_PARSERPAGE )
+		? ' style="background-color:#1a1a1a;color:#e0e0e0;"'
+		: '';
+
 	print ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 			<html>
 			<head>
@@ -56,9 +60,9 @@ function CreateHTMLHeader()
 					scrollTo(0, 1000000);
 				}
 				// Always scroll down
-				g_intervalID = setInterval("scrolldown()",250);
+				g_intervalID = setInterval(scrolldown, 250);
 			</SCRIPT>
-			<body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0" OnLoad="scrolldown; clearInterval(g_intervalID);"><br>
+			<body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"' . $parserBodyStyle . ' OnLoad="scrolldown(); clearInterval(g_intervalID);"><br>
 			');
 }
 
@@ -266,7 +270,7 @@ function GetLastPlayedSeconds( $serverid )
 	// --- Get last FilePosition
 	$result = DB_Query("SELECT PlayedSeconds FROM " . STATS_SERVERS . " WHERE id = $serverid");
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 		return $rows[0]['PlayedSeconds'];
 	else
 		return 0;
@@ -277,7 +281,7 @@ function GetLastLogLine( $serverid )
 	// --- Get last FilePosition
 	$result = DB_Query("SELECT LastLogLine FROM " . STATS_SERVERS . " WHERE id = $serverid");
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 		return $rows[0]['LastLogLine'];
 	else
 		return 0;
@@ -453,7 +457,7 @@ function GetHitLocationTypeIDByName( $hitloaction )
 {
 	$result = DB_Query("SELECT ID FROM " . STATS_HITLOCATIONS . " WHERE BODYPART = '$hitloaction'");
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 		return $rows[0]['ID'];
 	else
 	{
@@ -575,28 +579,34 @@ function ProcessUpdateStatement( $sqlStatement, $execDirect = false )
 function ProcessQueuedUpdateStatement()
 {
 	// Now run bulk updates :)!
-	global $content, $SQL_UDPATE_Direct_Count, $SQL_UDPATE_Batch_Count, $sqlupdatestatements;
+	global $content, $CFG, $SQL_UDPATE_Direct_Count, $SQL_UDPATE_Batch_Count, $sqlupdatestatements;
 	
 	// Nothing to do!
-	if ( strlen($sqlupdatestatements) <= 0 )
-		return; 
+	if ( ! isset( $sqlupdatestatements ) || strlen( (string) $sqlupdatestatements ) === 0 ) {
+		return;
+	}
 	
 	// Dump into file now
 	$myhandle = @fopen( $content['sqltmpfile'], "w" );
 	if ($myhandle)
-		fwrite($myhandle, $sqlupdatestatements . "\r\n");
+		fwrite($myhandle, (string) $sqlupdatestatements . "\r\n");
 	
 	// Create command for the pipe
-	if ( strlen($CFG['Pass'] > 0) )
-		$myCommand = $content['MYSQLPATH'] . " -u " . $CFG['User'] . " -p" .$CFG['Pass'] . " " . $CFG['DBName'] . " < " . $content['sqltmpfile'];
-	else
+	$hasPass = isset( $CFG['Pass'] ) && strlen( (string) $CFG['Pass'] ) > 0;
+	if ( $hasPass ) {
+		$myCommand = $content['MYSQLPATH'] . " -u " . $CFG['User'] . " -p" . $CFG['Pass'] . " " . $CFG['DBName'] . " < " . $content['sqltmpfile'];
+	} else {
 		$myCommand = $content['MYSQLPATH'] . " -u " . $CFG['User'] . " " . $CFG['DBName'] . " < " . $content['sqltmpfile'];
+	}
 
-	$myOutput = shell_exec($myCommand);
-	if (strlen($myOutput > 0) )
-		PrintHTMLDebugInfo(DEBUG_WARN, "QueuedUpdates", "MySQL Pipe Output: " . $myOutput);
-	else
-		PrintHTMLDebugInfo(DEBUG_DEBUG, "QueuedUpdates", "MySQL Command: " . $myCommand . " Error Output: " . $myOutput);
+	$myOutput = shell_exec( $myCommand );
+	if ( is_string( $myOutput ) && strlen( $myOutput ) > 0 ) {
+		PrintHTMLDebugInfo( DEBUG_WARN, "QueuedUpdates", "MySQL Pipe Output: " . $myOutput );
+	} else {
+		PrintHTMLDebugInfo( DEBUG_DEBUG, "QueuedUpdates", "MySQL Command: " . $myCommand . " Error Output: " . ( is_string( $myOutput ) ? $myOutput : '' ) );
+	}
+
+	$sqlupdatestatements = '';
 
 	// TODO Check for PHP5 and use
 	// mysqli_multi_query
@@ -643,7 +653,7 @@ function GenerateStrippedCodeAliases()
 				" WHERE AliasStrippedCodes = '' ";
 	$result = DB_Query( $sqlquery );
 	$allaliases = DB_GetAllRows($result, true);
-	if ( isset($allaliases) )
+	if ( ! empty( $allaliases ) )
 	{
 		PrintHTMLDebugInfo( DEBUG_INFO, "GenerateStrippedCodeAliases", "Starting Stripped Alias Calculation for '" . count($allaliases) . "' Aliases ...");
 		for($i = 0; $i < count($allaliases); $i++)
@@ -671,7 +681,7 @@ function ReCreateAliases()
 						" FROM " . STATS_ALIASES;
 	$result = DB_Query( $sqlquery );
 	$allplayers = DB_GetAllRows($result, true);
-	if ( isset($allplayers) )
+	if ( ! empty( $allplayers ) )
 	{
 		for($i = 0; $i < count($allplayers); $i++)
 		{
@@ -739,7 +749,7 @@ function CreateTopAliases( $serverid )
 						" GROUP BY " . STATS_PLAYERS . ".GUID ";
 	$result = DB_Query( $sqlquery );
 	$allplayers = DB_GetAllRows($result, true);
-	if ( isset($allplayers) )
+	if ( ! empty( $allplayers ) )
 	{
 		for($i = 0; $i < count($allplayers); $i++)
 		{

@@ -68,9 +68,18 @@
 		</tr>
 	</table>
 
-	<iframe id="container" src="parser-core.php?op={parseroperation}&id={serverid}" width="90%" height="500" name="parser_in_a_box" class="with_border">
+	<p id="parser-iframe-status" style="margin:10px 0; color:#cccccc; font-size:12px;">Running…</p>
+	<iframe id="container" src="parser-core.php?op={parseroperation}&id={serverid}" width="90%" name="parser_in_a_box" class="with_border" style="min-height:60vh; height:70vh; max-height:90vh; background-color:#2a2a2a; border:1px solid #444444;">
 		<p>{NO_INFRAME_POSSIBLE}</p>
 	</iframe>
+	<script>
+	(function () {
+		var iframe = document.getElementById('container');
+		var status = document.getElementById('parser-iframe-status');
+		if (!iframe || !status) { return; }
+		iframe.addEventListener('load', function () { status.style.display = 'none'; });
+	})();
+	</script>
 	</center>
 
 <!-- ENDIF RUNPARSER="true" -->

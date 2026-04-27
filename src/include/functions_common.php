@@ -940,7 +940,7 @@ function GetPlayerHtmlNameFromID($myplayedid)
 			);
 		}
 		$playerdetails = DB_GetAllRows($result, true);
-		if ( isset( $playerdetails ) )
+		if ( ! empty( $playerdetails ) )
 		{
 			if ( !isset($playerdetails[0]['AliasAsHtml']) )
 				return $playerdetails[0]['Alias'];

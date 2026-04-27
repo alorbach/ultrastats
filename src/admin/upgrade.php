@@ -98,8 +98,8 @@ if ( isset($content['database_forcedatabaseupdate']) && $content['database_force
 				// Now split by sql command
 				$mycommands = UltraStats_SplitSqlStatements( $totaldbdefs );
 	
-				//Still only one? Abort
-				if ( count($mycommands) <= 1 )
+				// Abort only when no executable statements (a single ALTER/INSERT is valid).
+				if ( count($mycommands) < 1 )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = $content['LN_DBUPGRADE_DBDEFFILESHORT']; 

@@ -26,7 +26,7 @@ $querycount = 0;
 $errdesc = "";
 $errno = 0;
 
-$content['database_internalversion'] = "8";
+$content['database_internalversion'] = "9";
 $content['database_installedversion'] = "0";
 
 /**
@@ -88,7 +88,8 @@ function DB_Connect()
 		DieWithFriendlyErrorMsg( "You are running an MySQL 3.x Database Server Version. Unfortunately MySQL 3.x is NOT supported by UltraStats due the limited SQL Statement support. If this is a commercial webspace, contact your webhoster in order to upgrade to a higher MySQL Database Version. If this is your own rootserver, consider updating your MySQL Server." );
 	}
 
-	@mysqli_set_charset( $link_id, 'utf8' );
+	// utf8mb4 matches typical MySQL 8 defaults and allows full Unicode after normalization (chat, names).
+	@mysqli_set_charset( $link_id, 'utf8mb4' );
 }
 
 function EnableBigSelects()
@@ -234,6 +235,42 @@ function DB_RemoveParserSpecialBadChars( $myString )
 function DB_RemoveBadChars( $myString )
 {
 	return addslashes( (string) $myString );
+}
+
+/**
+ * Coerce game-log text to valid UTF-8 for MySQL utf8mb3/utf8mb4. Logs are often Windows-1252 / Latin-1; invalid
+ * multibyte sequences are stripped (iconv) or converted (mb) so INSERT does not fail with error 1366.
+ *
+ * @param string $s Raw substring from the log line
+ * @return string
+ */
+function UltraStats_Utf8StringForDatabase( $s ) {
+	$s = (string) $s;
+	if ( $s === '' ) {
+		return '';
+	}
+	if ( function_exists( 'mb_check_encoding' ) && mb_check_encoding( $s, 'UTF-8' ) ) {
+		return $s;
+	}
+	if ( function_exists( 'mb_convert_encoding' ) ) {
+		$u = @mb_convert_encoding( $s, 'UTF-8', 'Windows-1252' );
+		if ( is_string( $u ) && ( ! function_exists( 'mb_check_encoding' ) || mb_check_encoding( $u, 'UTF-8' ) ) ) {
+			return $u;
+		}
+	}
+	if ( function_exists( 'mb_convert_encoding' ) ) {
+		$u = @mb_convert_encoding( $s, 'UTF-8', 'ISO-8859-1' );
+		if ( is_string( $u ) && ( ! function_exists( 'mb_check_encoding' ) || mb_check_encoding( $u, 'UTF-8' ) ) ) {
+			return $u;
+		}
+	}
+	if ( function_exists( 'iconv' ) ) {
+		$u = @iconv( 'UTF-8', 'UTF-8//IGNORE', $s );
+		if ( is_string( $u ) && $u !== false ) {
+			return $u;
+		}
+	}
+	return '';
 }
 
 function DB_StripSlahes( $myString )

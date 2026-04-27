@@ -478,7 +478,7 @@ function FindAndFillTopAliases(&$myplayers, $idfield, $AliasField, $AliasHtmlFie
 				" GROUP BY " . STATS_ALIASES . ".PLAYERID ";
 	$result = DB_Query($sqlquery);
 	$aliasvars = DB_GetAllRows($result, true);
-	if ( isset($aliasvars) )
+	if ( ! empty( $aliasvars ) )
 	{
 		for ($i=0 ; $i<count($aliasvars); $i++)
 		{

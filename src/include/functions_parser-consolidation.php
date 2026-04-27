@@ -296,7 +296,7 @@ function RunDamagetypeKillsConsolidation( $serverid )
 					"ORDER BY ID";
 		$result = DB_Query($sqlquery, true); 
 		$content['serverlist'] = DB_GetAllRows($result, true);
-		if ( isset($content['serverlist']) )
+		if ( ! empty( $content['serverlist'] ) )
 		{
 			PrintHTMLDebugInfo( DEBUG_INFO, "RunDamagetypeKillsConsolidation", "Start consolidating damagetype data...");
 			foreach ( $content['serverlist'] as $myServerRecord)
@@ -323,7 +323,7 @@ function RunDamagetypeKillsConsolidation( $serverid )
 		
 		$result = DB_Query($sqlquery);
 		$content['timeresults'] = DB_GetAllRows($result, true);
-		if ( isset($content['timeresults']) )
+		if ( ! empty( $content['timeresults'] ) )
 		{
 			// Process each month!
 			foreach( $content['timeresults'] as $myTimeRecord)
@@ -349,7 +349,7 @@ function RunDamagetypeKillsConsolidation( $serverid )
 									" GROUP BY " . STATS_DAMAGETYPES . ".ID ";
 				$result = DB_Query($sqlquery);
 				$content['damagetypeslist'] = DB_GetAllRows($result, true);
-				if ( isset($content['damagetypeslist']) )
+				if ( ! empty( $content['damagetypeslist'] ) )
 				{
 					// Process each damagetype and insert data!
 					foreach( $content['damagetypeslist'] as $myDamageType)
@@ -376,7 +376,7 @@ function RunWeaponKillsConsolidation( $serverid )
 					"ORDER BY ID";
 		$result = DB_Query($sqlquery, true); 
 		$content['serverlist'] = DB_GetAllRows($result, true);
-		if ( isset($content['serverlist']) )
+		if ( ! empty( $content['serverlist'] ) )
 		{
 			PrintHTMLDebugInfo( DEBUG_INFO, "RunWeaponKillsConsolidation", "Start consolidating weapons data...");
 			foreach ( $content['serverlist'] as $myServerRecord)
@@ -403,7 +403,7 @@ function RunWeaponKillsConsolidation( $serverid )
 		
 		$result = DB_Query($sqlquery);
 		$content['timeresults'] = DB_GetAllRows($result, true);
-		if ( isset($content['timeresults']) )
+		if ( ! empty( $content['timeresults'] ) )
 		{
 			// Process each month!
 			foreach( $content['timeresults'] as $myTimeRecord)
@@ -428,7 +428,7 @@ function RunWeaponKillsConsolidation( $serverid )
 									" GROUP BY " . STATS_WEAPONS . ".ID ";
 				$result = DB_Query($sqlquery);
 				$content['weaponslist'] = DB_GetAllRows($result, true);
-				if ( isset($content['weaponslist']) )
+				if ( ! empty( $content['weaponslist'] ) )
 				{
 					// Process each damagetype and insert data!
 					foreach( $content['weaponslist'] as $myWeaponType)
@@ -453,7 +453,7 @@ function InsertOrUpdateWeaponkills( $myServerID, $timeyear, $timemonth, $myWeapo
 
 	$result = DB_Query("SELECT WEAPONID FROM " . STATS_WEAPONS_KILLS . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Update Calc
 		ProcessUpdateStatement(	" UPDATE " . STATS_WEAPONS_KILLS . " SET " . 
@@ -485,7 +485,7 @@ function InsertOrUpdateDamagetypekills( $myServerID, $timeyear, $timemonth, $myD
 
 	$result = DB_Query("SELECT damagetypeid FROM " . STATS_DAMAGETYPES_KILLS . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Update Calc
 		ProcessUpdateStatement(	" UPDATE " . STATS_DAMAGETYPES_KILLS . " SET " . 

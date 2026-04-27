@@ -59,7 +59,7 @@ if ( isset($_GET['op']) )
 		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $serverid ) );
 		$serverdetails = DB_GetAllRows( $result, true );
 
-		if ( isset( $serverdetails ) )
+		if ( ! empty( $serverdetails ) )
 		{
 			// Get Parser OP and Set myserver ref!
 			$myserver = $serverdetails[0];
@@ -86,7 +86,7 @@ if ( isset($_GET['op']) )
 				{
 					// Print reload statement
 					print ('<center><B>Automatically running ' . $content["LN_RUNTOTALUPDATE"] . ' in 10 seconds.</B><br>
-							<script language="Javascript">function reload() { location = "parser-core.php?op=runtotals"; } setTimeout("reload()", 10000);</script>');
+							<script>function usParserReloadToTotals() { location.replace("parser-core.php?op=runtotals"); } setTimeout(usParserReloadToTotals, 10000);</script>');
 				}
 			}
 			else if ( $parseroperation == 'delete' )

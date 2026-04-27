@@ -1,0 +1,4 @@
+-- --------------------------------------------------------
+-- Database internal version 9: stats_aliases.AliasChecksum must hold unsigned CRC32 (0..4294967295).
+-- PHP uses sprintf("%u", crc32(...)); signed INT overflows MySQL (error 1264).
+ALTER TABLE `stats_aliases` MODIFY `AliasChecksum` INT UNSIGNED NOT NULL;

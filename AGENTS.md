@@ -50,7 +50,8 @@ Guidance for humans and AI agents working in this repository.
 ## Database
 
 - **Internal schema version** is tracked in `functions_db.php` as `$content['database_internalversion']` and in table `…config` key `database_installedversion`.
-- **Upgrades** run from `src/contrib/db_update_vN.txt` via `src/admin/upgrade.php`.
+- **Upgrades** run from `src/contrib/db_update_vN.txt` via `src/admin/upgrade.php`. A file with **one** SQL statement is valid (the upgrader must not require more than one chunk).
+- **Version 9:** `stats_aliases.AliasChecksum` is **`INT UNSIGNED`** so PHP `sprintf('%u', crc32(...))` values (0–4294967295) fit; legacy signed `INT` caused MySQL **1264** on insert for many aliases.
 
 ## How to run locally (Docker)
 
@@ -81,6 +82,8 @@ docker compose -f docker/docker-compose.yml up --build
 - **DB API:** `src/include/functions_db.php` (single place to adjust connection, query helpers, **mysqli**).
 - **Session / login:** `src/include/functions_users.php`, `StartPHPSession()` in `functions_common.php`.
 - **Parser pipeline:** `src/admin/parser.php`, `src/admin/parser-core.php`, `src/include/functions_parser.php`.
+
+**Alias / top-alias data after the `DB_GetAllRows` + `isset()` fix:** Older parses may have **missing** rows in `stats_aliases`, `stats_players_static`, or derived top-alias data because empty result sets were mis-handled. After upgrading, use **reset last log line** and **re-parse**, or **delete server stats** and parse again, or run **Run total update** / **Create top aliases** once the underlying tables are populated.
 
 ## Modernisation backlog
 

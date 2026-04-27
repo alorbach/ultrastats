@@ -58,11 +58,11 @@ if ( isset($_GET['op']) )
 		// Get ServerDetails first 
 		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $sid ) );
 		$content['SERVER'] = DB_GetAllRows( $result, true );
-		$content['GameLogLocation'] = $content['SERVER'][0]['GameLogLocation'];
-		$content['LastLogLine'] = $content['SERVER'][0]['LastLogLine'];
 
-		if ( isset( $content['SERVER'] ) )
+		if ( ! empty( $content['SERVER'] ) )
 		{
+			$content['GameLogLocation'] = $content['SERVER'][0]['GameLogLocation'];
+			$content['LastLogLine'] = $content['SERVER'][0]['LastLogLine'];
 			// Server found - now check for the action
 			if (	$content['parseroperation'] == 'updatestats' || 
 					$content['parseroperation'] == 'delete' || 

@@ -44,6 +44,7 @@ $SQL_UDPATE_Batch_Count = 0;								// Counter for the batched UPDATE statements
 $SQL_UDPATE_Direct_Count = 0;								// Counter for direct UPDATE statements
 $SQL_INSERT_Count = 0;										// Counter for direct INSERT statements
 $SQL_SELECT_Count = 0;										// Counter for direct SELECT statements
+$sqlupdatestatements = '';									// Batched UPDATE buffer (see ProcessUpdateStatement)
 // ---
 
 // --- Enable BIG Selects when the parser code runs
@@ -93,7 +94,7 @@ function GetLastLogFile( $overwritepasswd = "" )
 	// --- Now we get FTP URL!
 	$result = DB_Query("SELECT ftppath FROM " . STATS_SERVERS . " WHERE id = " . $myserver['ID']);
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Full ftp String
 		$fullftpstr = $rows[0]['ftppath'];
@@ -793,7 +794,7 @@ function RunParserNow()
 			print ('<br><center><B>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</B><br>
 					Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
 					This site will automatically reload in 5 seconds.<br></center>
-					<script language="Javascript">function reload() { location = "' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"; } setTimeout("reload()", 5000);</script>');
+					<script>function usParserReloadSame() { location.replace("' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"); } setTimeout(usParserReloadSame, 5000);</script>');
 
 			// Return from the function
 			return;
@@ -1017,7 +1018,7 @@ function RunParserNow()
 										print ('<br><center><B>Timelimit hit (' . $MaxExecutionTime . ' seconds).</B><br>
 												Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
 												This site will automatically reload in 5 seconds.<br></center>
-												<script language="Javascript">function reload() { location = "' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"; } setTimeout("reload()", 5000);</script>');
+												<script>function usParserReloadSame() { location.replace("' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"); } setTimeout(usParserReloadSame, 5000);</script>');
 
 										// Run an update of the LastUpdate Time
 										SetLastUpdateTime( $myserver['ID'] );
@@ -1081,13 +1082,14 @@ function RunParserNow()
 function ProcessGameRound($myRoundArray, $myrealstarttime)
 {
 	global $content, $myPlayers, $myRound, $myKills, $gl_newlastline;
-	global $SQL_UDPATE_Batch_Count, $SQL_UDPATE_Direct_Count, $SQL_INSERT_Count, $SQL_SELECT_Count;
+	global $SQL_UDPATE_Batch_Count, $SQL_UDPATE_Direct_Count, $SQL_INSERT_Count, $SQL_SELECT_Count, $sqlupdatestatements;
 
 	// Reset Counters
 	$SQL_UDPATE_Batch_Count = 0;
 	$SQL_UDPATE_Direct_Count = 0;								
 	$SQL_INSERT_Count = 0;
 	$SQL_SELECT_Count = 0;
+	$sqlupdatestatements = '';
 	
 	// Unset Arrays
 	unset ($myPlayers);
@@ -1466,7 +1468,8 @@ function Parser_AddPlayer( $myArray )
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_GUID] = $myArray[PARSER_GUID];
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_ID] = $myArray[JOIN_CLIENTID];
 //WTF?	$myPlayers[ $myArray[PLAYER_ID] ][PLAYER_ID] = $myArray[JOIN_CLIENTID];
-	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_NAME] = $myArray[JOIN_CLIENTNAME];
+	$clientUtf8 = UltraStats_Utf8StringForDatabase( (string) $myArray[JOIN_CLIENTNAME] );
+	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_NAME] = $clientUtf8;
 
 	// Init Values!
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_TEAM] = "";
@@ -1476,14 +1479,15 @@ function Parser_AddPlayer( $myArray )
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_SUICIDES] = 0;
 	$myPlayers[ $myArray[PARSER_GUID] ][PLAYER_PBGUID] = $playerpbguid;
 
-	// Add Alias and increment Counter
-	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
+	// Add Alias and increment Counter (UTF-8 for MySQL utf8mb4; logs are often Latin-1 / Windows-1252)
+	$plainaliasForKey = GetPlayerNameAsWithHTMLCodes( $clientUtf8 );
+	$wherequery       = "WHERE SERVERID = " . $myserver['ID'] . " AND 
 					PLAYERID = " . $myArray[PARSER_GUID] . " AND 
-					Alias = '" . DB_RemoveBadChars($myArray[JOIN_CLIENTNAME]) . "'";
+					Alias = '" . DB_RemoveBadChars( $plainaliasForKey ) . "'";
 
 	$result = DB_Query("SELECT * FROM " . STATS_ALIASES . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Update Calc
 		ProcessUpdateStatement("UPDATE " . STATS_ALIASES . " SET Count = Count + 1 " . $wherequery );
@@ -1491,18 +1495,18 @@ function Parser_AddPlayer( $myArray )
 	else
 	{
 		// Set variables first!
-		$plainalias = GetPlayerNameAsWithHTMLCodes( DB_RemoveBadChars($myArray[JOIN_CLIENTNAME]) );
-		$aliaschecksum = sprintf( "%u", crc32 ( $plainalias )); 
-		$aliasashtmlcode = GetPlayerNameAsHTML(DB_RemoveBadChars($myArray[JOIN_CLIENTNAME]));
+		$plainalias        = $plainaliasForKey;
+		$aliaschecksum     = sprintf( "%u", crc32( $plainalias ) );
+		$aliasashtmlcode   = GetPlayerNameAsHTML( $clientUtf8 );
 
 		// Insert New
 		ProcessInsertStatement("INSERT INTO " . STATS_ALIASES . " (SERVERID, PLAYERID, Alias, AliasChecksum, AliasAsHtml, Count) 
 		VALUES (
 			 " . $myserver['ID'] . ", 
 			 " . $myArray[PARSER_GUID] . ", 
-			 '" . $plainalias . "', 
+			 '" . DB_RemoveBadChars( $plainalias ) . "', 
 			 " . $aliaschecksum . ", 
-			 '" . $aliasashtmlcode . "', 
+			 '" . DB_RemoveBadChars( $aliasashtmlcode ) . "', 
 			 " . "1" . "
 				)");
 	}
@@ -1553,7 +1557,7 @@ function Parser_AddStaticPlayerData( $myCurrPlayer )
 	$wherequery =  "WHERE GUID = " . $myCurrPlayer[PLAYER_GUID]; 
 	$result = DB_Query("SELECT * FROM " . STATS_PLAYERS_STATIC . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( !isset($rows) )
+	if ( empty( $rows ) )
 	{
 		PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddStaticPlayerData", "Adding static entry for Player with ID '" . $myCurrPlayer[PLAYER_GUID] . "'");
 		// Insert New
@@ -1656,20 +1660,21 @@ function Parser_AddChatLine( $myArray )
 	// --- 
 
 	// Check Len
-	$strchatmsg = substr($myArray[CHAT_MESSAGE], 1);
-	if ( strlen($strchatmsg) > 1 )
+	$strchatmsg = isset( $myArray[CHAT_MESSAGE] ) ? substr( (string) $myArray[CHAT_MESSAGE], 1 ) : '';
+	if ( strlen( $strchatmsg ) > 1 )
 	{
 		// Get the Player entry
 		if ( isset($myPlayers[ $myArray[PARSER_GUID] ]) && isset( $myPlayers[ $myArray[PARSER_GUID] ][PLAYER_GUID] ) )
 		{
 			$currentplayer = $myPlayers[ $myArray[PARSER_GUID] ];
+			$chattext = UltraStats_Utf8StringForDatabase( $strchatmsg );
 			// --- Insert new Chat Record
 			ProcessInsertStatement("INSERT INTO " . STATS_CHAT . " (PLAYERID, SERVERID, ROUNDID, TextSaid) 
 			VALUES (
 				 " . $currentplayer[PLAYER_GUID] . ", 
 				 " . $myserver['ID'] . ", 
 				 " . $myRound[ROUND_DBID] . ", 
-				 '" . DB_RemoveBadChars( $strchatmsg ) . "' 
+				 '" . DB_RemoveBadChars( $chattext ) . "' 
 				)");
 		}
 		else
@@ -1741,7 +1746,7 @@ function Parser_AddRoundAction( $myArray )
 
 	$result = DB_Query("SELECT * FROM " . STATS_ROUNDACTIONS . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Update Calc
 		ProcessUpdateStatement("UPDATE " . STATS_ROUNDACTIONS . " SET Count = Count + 1 " . $wherequery );

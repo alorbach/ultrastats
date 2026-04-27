@@ -710,7 +710,7 @@ function InsertOrUpdateMedalValue( $myname, $mydisplayname, $myserverid, $Descri
 
 	$result = DB_Query("SELECT ID FROM " . STATS_CONSOLIDATED . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
+	if ( ! empty( $rows ) )
 	{
 		// Update Calc
 		ProcessUpdateStatement("UPDATE " . STATS_CONSOLIDATED . " SET 
