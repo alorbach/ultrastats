@@ -23,7 +23,8 @@ Guidance for humans and AI agents working in this repository.
 | `src/admin/` | Admin UI: `login.php`, `parser.php`, `upgrade.php`, `servers.php`, etc. |
 | `src/templates/` | HTML templates for front-end and admin. |
 | `src/lang/` | Language packs (`en/`, `de/`) — `main.php` / `admin.php` string files. |
-| `src/contrib/` | **SQL:** `db_template.txt` (base schema), `db_update_v*.txt` (incremental upgrades), `config.sample.php`, helper scripts. |
+| `src/contrib/` | **SQL:** `db_template.txt` (base schema), `db_update_v*.txt` (incremental upgrades), `config.sample.php`, helper scripts. Optional `config.custommedals.sample.php` (custom medals). |
+| `src/images/medals/normal/` | Medal PNGs for the main UI (`medal_pro_*.png`, etc.). Shipped `medal_custom_*.png` files match the sample custom medals (defaults copy `medal_generic.png`). |
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |

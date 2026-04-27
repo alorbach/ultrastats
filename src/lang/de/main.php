@@ -61,6 +61,7 @@ $content['LN_TOPPLAY_Suicides'] = "Selbstmorde";
 $content['LN_TOPPLAY_KillRatio'] = "Ratio";
 $content['LN_TOPPLAY_PlayedTime'] = "Gesamtspielzeit";
 $content['LN_PRO_Medals'] = "Pro Medaillien";
+$content['LN_CUSTOM_Medals'] = "Benutzerdefinierte Medaillien";
 $content['LN_ANTI_Medals'] = "Anti Medaillien";
 $content['LN_Medals'] = "Medaille";
 $content['LN_GLOBAL_STATS'] = "UltraStats pr�sentiert von ";

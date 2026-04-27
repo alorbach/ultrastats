@@ -36,4 +36,7 @@ $CFG["ShowPageRenderStats"] = 1;						// If enabled, you will see Pagerender Set
 $CFG["ShowDebugMsg"] = 0;								// Print additional debug informations!					
 // --- 
 
+// Optional custom medals: copy config.custommedals.sample.php from contrib to config.custommedals.php in this directory (see public handbook, Custom medals).
+// --- 
+
 ?>

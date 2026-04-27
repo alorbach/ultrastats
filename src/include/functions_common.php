@@ -670,6 +670,7 @@ function InitConfigurationValues()
 	if ( !isset($content['web_maxpages']) ) { $content['web_maxpages'] = 25; }
 	if ( !isset($content['web_maxmapsperpage']) ) { $content['web_maxmapsperpage'] = 10; }
 	if ( !isset($content['web_medals']) ) { $content['web_medals'] = "yes"; }
+	if ( !isset($content['web_medals_anti']) ) { $content['web_medals_anti'] = "yes"; }
 
 	// Set default Player models!
 	if ( !isset($content['web_playermodel_killer']) ) { $content['web_playermodel_killer'] = "marine"; }

@@ -62,6 +62,10 @@ CreateDebugModes();
 // --- Init MedalSQLCode!
 CreateMedalsSQLCode(-1);
 
+$content['medals_admin_pro']    = array();
+$content['medals_admin_anti']   = array();
+$content['medals_admin_custom'] = array();
+
 // Can't use this core yet, it only works on PHP5: foreach ($content['medals'] as $key => &$medal)
 foreach ($content['medals'] as $key => $medal)
 {
@@ -71,11 +75,29 @@ foreach ($content['medals'] as $key => $medal)
 		$content['medals'][$key]['MedalChecked'] = "checked"; 
 	else 
 		$content['medals'][$key]['MedalChecked'] = "";
-}	
+
+	$row = array(
+		'medalid'          => $medal['medalid'],
+		'AdminDisplayName' => $content['medals'][$key]['AdminDisplayName'],
+		'MedalChecked'     => $content['medals'][$key]['MedalChecked'],
+	);
+	if ( strncmp( $key, 'medal_pro_', 10 ) == 0 )
+		$content['medals_admin_pro'][] = $row;
+	else if ( strncmp( $key, 'medal_anti_', 11 ) == 0 )
+		$content['medals_admin_anti'][] = $row;
+	else if ( strncmp( $key, 'medal_custom_', 13 ) == 0 )
+		$content['medals_admin_custom'][] = $row;
+	else
+		$content['medals_admin_pro'][] = $row;
+}
+$content['medalsadmingrouppro']    = ( count( $content['medals_admin_pro'] ) > 0 ) ? "true" : "false";
+$content['medalsadmingroupanti']   = ( count( $content['medals_admin_anti'] ) > 0 ) ? "true" : "false";
+$content['medalsadmingroupcustom'] = ( count( $content['medals_admin_custom'] ) > 0 ) ? "true" : "false";
 // --- 
 
 // Some other things which need to be done
 if ($content['web_medals'] == "yes") { $content['web_medals_checked'] = "checked"; } else { $content['web_medals_checked'] = ""; }
+if ( isset( $content['web_medals_anti'] ) && $content['web_medals_anti'] == "yes" ) { $content['web_medals_anti_checked'] = "checked"; } else { $content['web_medals_anti_checked'] = ""; }
 if ($content['parser_disablelastline'] == "yes") { $content['parser_disablelastline_checked'] = "checked"; } else { $content['parser_disablelastline_checked'] = ""; }
 if ($content['gen_phpdebug'] == "yes") { $content['gen_phpdebug_checked'] = "checked"; } else { $content['gen_phpdebug_checked'] = ""; }
 if ($content['parser_chatlogging'] == "yes") { $content['parser_chatlogging_checked'] = "checked"; } else { $content['parser_chatlogging_checked'] = ""; }
@@ -116,6 +138,7 @@ if ( isset($_POST['op']) )
 	if ( isset ($_POST['web_maxpages']) && is_numeric($_POST['web_maxpages'])) { $content['web_maxpages'] = DB_RemoveBadChars($_POST['web_maxpages']); } 
 	if ( isset ($_POST['web_maxmapsperpage']) && is_numeric($_POST['web_maxmapsperpage'])) { $content['web_maxmapsperpage'] = DB_RemoveBadChars($_POST['web_maxmapsperpage']); } 
 	if ( isset ($_POST['web_medals']) ) { $content['web_medals'] = "yes"; } else { $content['web_medals'] = "no"; }
+	if ( isset ($_POST['web_medals_anti']) ) { $content['web_medals_anti'] = "yes"; } else { $content['web_medals_anti'] = "no"; }
 
 	if ( isset ($_POST['web_playermodel_killer']) && CheckIfPlayerModelExists($_POST['web_playermodel_killer']) ) { $content['web_playermodel_killer'] = DB_RemoveBadChars($_POST['web_playermodel_killer']); } 
 	if ( isset ($_POST['web_playermodel_killedby']) && CheckIfPlayerModelExists($_POST['web_playermodel_killedby'])) { $content['web_playermodel_killedby'] = DB_RemoveBadChars($_POST['web_playermodel_killedby']); } 
@@ -153,6 +176,7 @@ if ( isset($_POST['op']) )
 	WriteConfigValue( "web_maxpages" );
 	WriteConfigValue( "web_maxmapsperpage" );
 	WriteConfigValue( "web_medals" );
+	WriteConfigValue( "web_medals_anti" );
 
 	// Write PlayerDetail Options
 	WriteConfigValue( "web_playermodel_killer" );
@@ -174,6 +198,12 @@ if ( isset($_POST['op']) )
 			$content[$key] = "no";
 		//Write into DB!
 		WriteConfigValue( $key );
+	}
+
+	if ( isset( $_POST['ajax_save'] ) && $_POST['ajax_save'] === '1' ) {
+		header( 'Content-Type: application/json; charset=utf-8' );
+		echo json_encode( array( 'ok' => true ) );
+		exit;
 	}
 
 	// Done and redirect

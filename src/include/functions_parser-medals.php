@@ -29,6 +29,30 @@ if ( !defined('IN_ULTRASTATS') )
 }
 // --- 
 
+/**
+ * Optional custom medals: config.custommedals.php in app root (see config.php) or contrib/; root file wins. Copy from config.custommedals.sample.php.
+ * Included file may define $content['medals']['medal_custom_*'] with DisplayName, sql, GroupedPlayerID (PLAYERID only),
+ * and optional value_label, description_id, sort_id.
+ */
+function LoadCustomMedalsConfig( $serverid, $includeTimeFilter = false )
+{
+	global $content, $gl_root_path;
+
+	if ( $includeTimeFilter ) {
+		$szTimeFilter = GetTimeWhereQueryStringForRoundTable();
+	} else {
+		$szTimeFilter = '';
+	}
+
+	$path = $gl_root_path . 'config.custommedals.php';
+	if ( ! is_file( $path ) ) {
+		$path = $gl_root_path . 'contrib/config.custommedals.php';
+	}
+	if ( is_file( $path ) ) {
+		include $path;
+	}
+}
+
 // --- We use an medal array to save the SQL Codes, so we can use them on another page at a later step. 
 function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 {
@@ -325,7 +349,6 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 	}
 	// --- 
 
-/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
 	// --- ANTI Medals
 	$content['medals']['medal_anti_no1target']['DisplayName'] = "No 1 Target";
 	$content['medals']['medal_anti_no1target']['GroupedPlayerID'] = "ENEMYID";
@@ -405,7 +428,8 @@ function CreateMedalsSQLCode( $serverid, $includeTimeFilter = false )
 				" GROUP BY " . STATS_CHAT . ".PLAYERID " . 
 				" ORDER BY AllKills";
 	// ---
-*/
+
+	LoadCustomMedalsConfig( $serverid, $includeTimeFilter );
 
 	// Can't use this core yet, it only works on PHP5: foreach ($content['medals'] as $key => &$medal)
 	foreach ($content['medals'] as $key => $medal)
@@ -651,7 +675,6 @@ function CreateAllMedals( $serverid )
 	// --- 
 	// ==========================            =================================
 
-/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
 	// ========================== ANTI MEDALS =================================
 	// --- Calc: medal_anti_no1target
 	if ( $content["medal_anti_no1target"] == "yes" ) 
@@ -758,7 +781,46 @@ function CreateAllMedals( $serverid )
 	}
 	// --- 
 	// ==========================            =================================
-*/
+
+	// ========================== CUSTOM MEDALS (config.custommedals.php) =================================
+	foreach ( $content['medals'] as $key => $medaldef )
+	{
+		if ( strncmp( $key, 'medal_custom_', 13 ) != 0 ) {
+			continue;
+		}
+		if ( ! isset( $content[ $key ] ) || $content[ $key ] != 'yes' ) {
+			continue;
+		}
+		if ( empty( $medaldef['sql'] ) || ! isset( $medaldef['DisplayName'] ) ) {
+			continue;
+		}
+		$groupCol = isset( $medaldef['GroupedPlayerID'] ) ? $medaldef['GroupedPlayerID'] : 'PLAYERID';
+		if ( $groupCol != 'PLAYERID' ) {
+			PrintHTMLDebugInfo( DEBUG_INFO, "Medal", "Custom medal " . $key . " skipped: only GroupedPlayerID=PLAYERID is supported." );
+			continue;
+		}
+		$sqlquery = $medaldef['sql'] . " DESC LIMIT 1";
+		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Medal", $key . ": " . $sqlquery );
+
+		$topplayer = ReturnMedalValue( $sqlquery );
+		$valueLabel = ( isset( $medaldef['value_label'] ) && $medaldef['value_label'] != '' ) ? $medaldef['value_label'] : "Kills";
+		$descId     = isset( $medaldef['description_id'] ) ? $medaldef['description_id'] : $key;
+		$sortId     = isset( $medaldef['sort_id'] ) ? (int) $medaldef['sort_id'] : 200;
+
+		if ( isset( $topplayer['PLAYERID'] ) && $topplayer['AllKills'] > 0 ) {
+			InsertOrUpdateMedalValue( $key,
+				$medaldef['DisplayName'],
+				$serverid,
+				$descId,
+				$topplayer['AllKills'],
+				$valueLabel,
+				$topplayer['PLAYERID'],
+				$sortId );
+		} else {
+			PrintHTMLDebugInfo( DEBUG_INFO, "Medal", $key . " is empty!" );
+		}
+	}
+	// ---
 
 	// Finished
 	PrintHTMLDebugInfo( DEBUG_INFO, "Medal", "Finished Medal Calculation...");
@@ -813,7 +875,7 @@ function ReturnWhinerQuery()
 	$whining = Array(
 						'noob', 'cheat', 'camper', 'hurensohn', 'fucking', 'wallhacker', 'deine mudda', 
 						'nap', 'nerd', 'gay', 'hure', 'bastard', 'spasst', 'fick', 'sucker', 'arsch', 'pisser',
-						'luckor', 'sau', 'wixer', 'bettnÔøΩsser', 'n00b', 'hoden', 'pissnelke', 'huras', 'deine mutter',
+						'luckor', 'sau', 'wixer', 'bettnùsser', 'n00b', 'hoden', 'pissnelke', 'huras', 'deine mutter',
 						'mowl', 'bitch', 'slut', 'motherfuck', 'assi', 'drecks', 'nigg', 'fresse', 'spack', 
 						'shout up', 'stfu', 'hax0r', 'n00b', 'hate', 'sheiss', 'Affe', 'negg', 'lutscher',
 						'idiot', 'hdf' //, '', 'n00b', 'hate', 'sheiss', 'Affe', 'negg', 'lutscher',

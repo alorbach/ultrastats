@@ -31,7 +31,7 @@
 
 <br><br>
 
-<form action="" method="post">
+<form id="admin-gen-form" action="" method="post">
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
 	<tr>
 		<td colspan="2" align="center" valign="top" class="title">
@@ -181,6 +181,10 @@
 		<td align="right" class="line1" ><input type="checkbox" name="web_medals" value="yes" {web_medals_checked}></td>
 	</tr>
 	<tr>
+		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_SHOWANTIMEDALS}</b></td>
+		<td align="right" class="line2" ><input type="checkbox" name="web_medals_anti" value="yes" {web_medals_anti_checked}></td>
+	</tr>
+	<tr>
 		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PREPENDTITLE}</b></td>
 		<td align="right" class="line1" ><input type="text" name="PrependTitle" size="50" maxlength="255" value="{PrependTitle}"></td>
 	</tr>
@@ -275,13 +279,46 @@
 	</tr>
 	</table>
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
-	<!-- BEGIN medals -->
+	<!-- IF medalsadmingrouppro="true" -->
+	<tr>
+		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_PRO}</b></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="pro" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+	</tr>
+	<!-- ENDIF medalsadmingrouppro="true" -->
+	<!-- BEGIN medals_admin_pro -->
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" name="{medalid}" value="yes" {MedalChecked}></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="pro"></td>
 	</tr>
-	<!-- END medals -->
+	<!-- END medals_admin_pro -->
+	<!-- IF medalsadmingroupanti="true" -->
+	<tr>
+		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_ANTI}</b></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="anti" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+	</tr>
+	<!-- ENDIF medalsadmingroupanti="true" -->
+	<!-- BEGIN medals_admin_anti -->
+	<tr>
+		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="anti"></td>
+	</tr>
+	<!-- END medals_admin_anti -->
+	<!-- IF medalsadmingroupcustom="true" -->
+	<tr>
+		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_CUSTOM}</b></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="custom" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+	</tr>
+	<!-- ENDIF medalsadmingroupcustom="true" -->
+	<!-- BEGIN medals_admin_custom -->
+	<tr>
+		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="custom"></td>
+	</tr>
+	<!-- END medals_admin_custom -->
 
+	<tr>
+		<td align="center" colspan="2" class="line1" id="medal-autorecalc-status">&nbsp;</td>
+	</tr>
 	<tr>
 		<td align="center" colspan="2">
 			<input type="submit" value="{LN_ADMINSEND}">
@@ -289,6 +326,144 @@
 		</td>
 	</tr>
 	</table>
+
+<script type="text/javascript">
+/* Medal admin: group toggles all checkboxes in that group; per-medal changes sync the group box (incl. indeterminate). */
+(function () {
+	var G = { pro:1, anti:1, custom:1 };
+	function q(sel) { return document.querySelectorAll(sel); }
+	function syncGroup(g) {
+		var masters = q('input.us-medal-group-toggle[data-us-medal-group="' + g + '"]');
+		var cbs = q('input.us-medal-cb[data-us-medal-group="' + g + '"]');
+		if (!masters.length || !cbs.length) return;
+		var master = masters[0];
+		var n = 0, on = 0, i;
+		for (i = 0; i < cbs.length; i++) { n++; if (cbs[i].checked) on++; }
+		master.indeterminate = (on > 0 && on < n);
+		if (on === 0) { master.checked = false; } else if (on === n) { master.checked = true; } else { master.checked = false; }
+	}
+	function onMaster(e) {
+		var t = e.target; if (!t || !t.classList || !t.classList.contains('us-medal-group-toggle')) return;
+		var g = t.getAttribute('data-us-medal-group');
+		if (!G[g]) return;
+		t.indeterminate = false;
+		var cbs = q('input.us-medal-cb[data-us-medal-group="' + g + '"]');
+		for (var i = 0; i < cbs.length; i++) cbs[i].checked = t.checked;
+	}
+	function onChild(e) {
+		var t = e.target; if (!t || !t.classList || !t.classList.contains('us-medal-cb')) return;
+		var g = t.getAttribute('data-us-medal-group');
+		if (g) syncGroup(g);
+	}
+	function init() {
+		for (var g in G) { syncGroup(g); }
+		var m = q('input.us-medal-group-toggle');
+		for (var i = 0; i < m.length; i++) m[i].addEventListener('change', onMaster, false);
+		document.getElementById('admin-gen-form').addEventListener('change', onChild, true);
+	}
+	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, false);
+	else init();
+})();
+</script>
+<script type="text/javascript">
+/* After medal option changes: save full form (AJAX), then run parser-sse medal recalc. */
+(function () {
+	var form = document.getElementById('admin-gen-form');
+	if (!form) return;
+	var statusEl = document.getElementById('medal-autorecalc-status');
+	var msgSaving = '{LN_ADMINMEDAL_AUTOSAVE_SAVING}';
+	var msgRecalc = '{LN_ADMINMEDAL_AUTOSAVE_RECALC}';
+	var msgDone = '{LN_ADMINMEDAL_AUTOSAVE_DONE}';
+	var msgErr = '{LN_ADMINMEDAL_AUTOSAVE_ERR}';
+	var debounceMs = 500;
+	var debTimer = null;
+	var doneHide = null;
+	var inFlight = false;
+	var pending = false;
+	var es = null;
+	function setStatus(t) {
+		if (statusEl) { statusEl.textContent = t || '\u00a0'; }
+	}
+	function isMedalOptionTarget(t) {
+		if (!t) return false;
+		if (t.classList && t.classList.contains('us-medal-group-toggle')) return true;
+		if (t.classList && t.classList.contains('us-medal-cb')) return true;
+		var n = t.name;
+		if (typeof n === 'string' && n.indexOf('medal_') === 0) return true;
+		return false;
+	}
+	function closeEs() {
+		if (es) { try { es.close(); } catch (e1) {} es = null; }
+	}
+	function startRecalcThenFinish() {
+		closeEs();
+		setStatus(msgRecalc);
+		var recalcEnded = false;
+		function endRecalc(ok) {
+			if (recalcEnded) return;
+			recalcEnded = true;
+			closeEs();
+			if (ok) {
+				setStatus(msgDone);
+				try { if (doneHide) clearTimeout(doneHide); } catch (e2) {}
+				doneHide = window.setTimeout(function () { setStatus(''); doneHide = null; }, 4000);
+			} else {
+				setStatus(msgErr);
+			}
+			finishCycle();
+		}
+		es = new EventSource('parser-sse.php?op=calcmedalsonly');
+		es.addEventListener('done', function () { endRecalc(true); });
+		es.addEventListener('parser_error', function () { endRecalc(false); });
+		es.addEventListener('error', function () {
+			if (!es) return;
+			if (es.readyState === EventSource.CONNECTING) return;
+			if (recalcEnded) return;
+			if (es.readyState === EventSource.OPEN) return;
+			endRecalc(false);
+		});
+	}
+	function finishCycle() {
+		inFlight = false;
+		if (pending) {
+			pending = false;
+			runSaveAndRecalc();
+		}
+	}
+	function runSaveAndRecalc() {
+		if (inFlight) { pending = true; return; }
+		inFlight = true;
+		setStatus(msgSaving);
+		var fd = new FormData(form);
+		fd.set('ajax_save', '1');
+		fetch(form.action || 'index.php', { method: 'POST', body: fd, credentials: 'same-origin' })
+			.then(function (r) {
+				if (!r.ok) throw new Error('http');
+				return r.json();
+			})
+			.then(function (j) {
+				if (!j || j.ok !== true) throw new Error('json');
+				startRecalcThenFinish();
+			})
+			.catch(function () {
+				setStatus(msgErr);
+				finishCycle();
+			});
+	}
+	function onFormChange(e) {
+		if (!isMedalOptionTarget(e.target)) return;
+		if (debTimer) { try { clearTimeout(debTimer); } catch (e3) {} debTimer = null; }
+		debTimer = window.setTimeout(function () {
+			debTimer = null;
+			if (inFlight) { pending = true; return; }
+			runSaveAndRecalc();
+		}, debounceMs);
+	}
+	if (form.addEventListener) {
+		form.addEventListener('change', onFormChange, false);
+	}
+})();
+</script>
 
 </form>
 

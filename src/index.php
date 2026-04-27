@@ -504,52 +504,80 @@ else
 	$content['medalsproenable'] = "false";
 // --- END PRO Medals Code
 
+// --- BEGIN Custom Medals Code (medal_custom_* from config.custommedals.php; stored in DB after parser)
+$sqlquery = "SELECT " .
+					STATS_CONSOLIDATED . ".NAME, " .
+					STATS_CONSOLIDATED . ".DisplayName, " .
+					STATS_CONSOLIDATED . ".VALUE_INT, " .
+					STATS_CONSOLIDATED . ".VALUE_TXT, " .
+					STATS_CONSOLIDATED . ".DescriptionID, " .
+					STATS_CONSOLIDATED . ".PLAYER_ID " .
+					" FROM " . STATS_CONSOLIDATED .
+					" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'medal_custom%' " .
+					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) .
+					$szTimeWhere .
+					" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
+$result = DB_Query( $sqlquery );
 
-/*  *** ANTI MEDAL CODE REMOVED BY REQUEST ***
+$content['medals_custom'] = DB_GetAllRows( $result, true );
+if ( ! empty( $content['medals_custom'] ) && is_array( $content['medals_custom'] ) && count( $content['medals_custom'] ) > 0 )
+{
+	FindAndFillTopAliases( $content['medals_custom'], "PLAYER_ID", "Alias", "AliasAsHtml" );
+
+	$content['medalscustomenable'] = "true";
+	for ( $i = 0; $i < count( $content['medals_custom'] ); $i++ )
+	{
+		$content['medals_custom'][ $i ]['Description']     = GetTextFromDescriptionID( $content['medals_custom'][ $i ]['DescriptionID'], $content['LN_NODESCRIPTION'] );
+		$content['medals_custom'][ $i ]['MEDAL_DETAILTXT']   = GetAndReplaceLangStr( $content['LN_MEDAL_DETAILS'], $content['medals_custom'][ $i ]['DisplayName'] );
+		$content['medals_custom'][ $i ]['Number']          = $i + 1;
+		if ( ( $i + 1 ) % 6 == 0 && $i > 6 ) {
+			$content['medals_custom'][ $i ]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
+		} else {
+			$content['medals_custom'][ $i ]['rowend'] = "";
+		}
+	}
+}
+else {
+	$content['medalscustomenable'] = "false";
+}
+// --- END Custom Medals Code
+
 // --- BEGIN ANTI Medals Code
 $sqlquery = "SELECT " .
-					STATS_CONSOLIDATED . ".NAME, " . 
-					STATS_CONSOLIDATED . ".DisplayName, " . 
-					STATS_CONSOLIDATED . ".VALUE_INT, " . 
-					STATS_CONSOLIDATED . ".VALUE_TXT, " . 
-					STATS_CONSOLIDATED . ".DescriptionID, " . 
-					STATS_CONSOLIDATED . ".PLAYER_ID " . 
-					" FROM " . STATS_CONSOLIDATED . 
+					STATS_CONSOLIDATED . ".NAME, " .
+					STATS_CONSOLIDATED . ".DisplayName, " .
+					STATS_CONSOLIDATED . ".VALUE_INT, " .
+					STATS_CONSOLIDATED . ".VALUE_TXT, " .
+					STATS_CONSOLIDATED . ".DescriptionID, " .
+					STATS_CONSOLIDATED . ".PLAYER_ID " .
+					" FROM " . STATS_CONSOLIDATED .
 					" WHERE " . STATS_CONSOLIDATED . ".NAME LIKE 'medal_anti%' " .
-					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) . 
+					GetCustomServerWhereQuery(STATS_CONSOLIDATED, false, true) .
+					$szTimeWhere .
 					" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 $result = DB_Query($sqlquery);
 
 $content['medals_anti'] = DB_GetAllRows($result, true);
-if ( isset($content['medals_anti']) )
+if ( ! empty( $content['medals_anti'] ) && is_array( $content['medals_anti'] ) && count( $content['medals_anti'] ) > 0 )
 {
-	// Extend PlayerAliases
 	FindAndFillTopAliases($content['medals_anti'], "PLAYER_ID", "Alias", "AliasAsHtml" );
 
 	$content['medalsantienable'] = "true";
-	for($i = 0; $i < count($content['medals_anti']); $i++)
+	for ( $i = 0; $i < count( $content['medals_anti'] ); $i++ )
 	{
-		// --- Get Description 
-		$content['medals_anti'][$i]['Description'] = GetTextFromDescriptionID( $content['medals_anti'][$i]['DescriptionID'], $content['LN_NODESCRIPTION'] );
-
-		// --- Set MousrOver Text
-		$content['medals_anti'][$i]['MEDAL_DETAILTXT'] = GetAndReplaceLangStr($content['LN_MEDAL_DETAILS'], $content['medals_anti'][$i]['DisplayName']);
-
-		// --- Set Number
-		$content['medals_anti'][$i]['Number'] = $i+1;
-		// ---
-
-		// --- Set TR break | 6 Medals per row!
-		if ( ($i+1) % 6 == 0 )
-			$content['medals_anti'][$i]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
-		else
-			$content['medals_anti'][$i]['rowend'] = "";
-		// ---
+		$content['medals_anti'][ $i ]['Description']   = GetTextFromDescriptionID( $content['medals_anti'][ $i ]['DescriptionID'], $content['LN_NODESCRIPTION'] );
+		$content['medals_anti'][ $i ]['MEDAL_DETAILTXT'] = GetAndReplaceLangStr($content['LN_MEDAL_DETAILS'], $content['medals_anti'][ $i ]['DisplayName'] );
+		$content['medals_anti'][ $i ]['Number']        = $i + 1;
+		if ( ( $i + 1 ) % 6 == 0 && $i > 6 ) {
+			$content['medals_anti'][ $i ]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
+		} else {
+			$content['medals_anti'][ $i ]['rowend'] = "";
+		}
 	}
 }
-else
-*/
+else {
 	$content['medalsantienable'] = "false";
+}
 // --- END ANTI Medals Code
 
 // --- 

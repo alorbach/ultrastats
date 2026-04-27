@@ -18,6 +18,7 @@
 | Parser, SSE, cancel | [Admin & parser](admin-parser.md) |
 | Logos, menu, theme UI | [Theme & navigation](customization.md) |
 | Whiner / anti medals | [Whiner & anti medals](whiner-medal.md) |
+| config-driven weapon medals | [Custom medals](custom-medals.md) |
 | Release history | [Changelog](changelog.md) |
 | Old ultrastats.org & wiki (archived screenshots only) | [Historical site snapshots](historical-reference.md) |
 

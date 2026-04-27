@@ -409,13 +409,14 @@
 	<td width="5" valign="top">&nbsp;</td>
 </tr>
 
+<!-- IF web_medals_anti="yes" -->
 <tr>
 	<td width="5" valign="top">&nbsp;</td>
 	<td colspan="3" valign="top">
 	<!-- IF medalsantienable="true" -->
 
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" align="center" class="with_border_alternate">
-		<tr><td align="center" class="title"><a name="{DisplayName}"><B>{LN_ANTI_Medals}</B></a></td></tr>
+		<tr><td align="center" class="title"><a name="AntiMedals"><B>{LN_ANTI_Medals}</B></a></td></tr>
 		</table>
 
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" align="center" class="with_border">
@@ -457,6 +458,57 @@
 	</td>
 	<td width="5" valign="top">&nbsp;</td>
 </tr>
+<!-- ENDIF web_medals_anti="yes" -->
+
+<!-- IF medalscustomenable="true" -->
+<tr>
+	<td width="5" valign="top">&nbsp;</td>
+	<td colspan="3" valign="top">
+		<table border="0" width="100%" cellspacing="0" cellpadding="0" align="center" class="with_border_alternate">
+		<tr><td align="center" class="title"><a name="{LN_CUSTOM_Medals}"><B>{LN_CUSTOM_Medals}</B></a></td></tr>
+		</table>
+
+		<table border="0" width="100%" cellspacing="0" cellpadding="0" align="center" class="with_border">
+		<tr>
+			<td align="center" width="50%">&nbsp;</td>
+		<!-- BEGIN medals_custom -->
+			<td align="center" valign="top">
+
+			<table width="140" border="0" cellspacing="1" cellpadding="0" align="center" class="with_border">
+			<tr><td align="center" class="cellmenu1"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
+			<tr> 
+				<td width="140" class="line1" nowrap valign="top" align="center">
+				<B>{VALUE_TXT}: &nbsp;{VALUE_INT}&nbsp;</B>
+				<BR><a href="players-detail.php?id={PLAYER_ID}{additional_url}" title="{Alias}">{AliasAsHtml}</a>
+
+				<a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}"><img src="{BASEPATH}images/medals/normal/{NAME}.png" style="filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{BASEPATH}images/medals/normal/{NAME}.png', sizingMethod='scale')" width="128" height="256" name="{NAME}"></a>
+				<script>CheckAlphaPNGImage('{NAME}', '{BASEPATH}images/main/space.gif');</script>
+
+				</td>
+			</tr>
+			<tr> 
+				<td class="line0" valign="top" align="center">
+				{Description}
+				<br><br>
+				</td>
+			</tr>
+			</table>
+
+			</td>
+			<!-- IF rowend="" -->
+			<td align="center" width="3" nowrap></td>
+			<!-- ENDIF rowend="" -->
+			{rowend}
+		<!-- END medals_custom -->
+			<td width="50%">&nbsp;</td>
+		</tr>
+	  </table>
+	  <br>
+	</td>
+	<td width="5" valign="top">&nbsp;</td>
+</tr>
+<!-- ENDIF medalscustomenable="true" -->
+
 <!-- ENDIF web_medals="yes" -->
 
 </table>
