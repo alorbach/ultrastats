@@ -281,7 +281,9 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		}
 
 		// Replace stats_ with the custom one ;)
-		$totaldbdefs = str_replace( "`stats_", "`" . $_SESSION["DB_PREFIX"], $totaldbdefs );
+		$installTablePrefix = UltraStats_ValidateTablePrefix( isset( $_SESSION['DB_PREFIX'] ) ? $_SESSION['DB_PREFIX'] : 'stats_' );
+		$_SESSION['DB_PREFIX'] = $installTablePrefix;
+		$totaldbdefs = str_replace( "`stats_", "`" . $installTablePrefix, $totaldbdefs );
 		
 		// Now split by sql command
 		$mycommands = UltraStats_SplitSqlStatements( $totaldbdefs );
@@ -294,10 +296,6 @@ else if ( $content['INSTALL_STEP'] == 5 )
 			$content['sql_failed']++;
 		}
 
-		// Append INSERT Statement for Config Table to set the GameVersion and Database Version ^^!
-		$mycommands[count( $mycommands )] = "INSERT INTO `" . $_SESSION['DB_PREFIX'] . "config` (`name`, `value`) VALUES ('gen_gameversion', '" . (int) $_SESSION['GEN_GAMEVER'] . "')";
-		$mycommands[count( $mycommands )] = "INSERT INTO `" . $_SESSION['DB_PREFIX'] . "config` (`name`, `value`) VALUES ('database_installedversion', " . (int) $content['database_internalversion'] . ")";
-
 		// --- Now execute all commands
 		@ini_set('error_reporting', E_WARNING); // Enable Warnings!
 		InitUserDbSettings();
@@ -306,30 +304,43 @@ else if ( $content['INSTALL_STEP'] == 5 )
 		// Establish DB Connection
 		DB_Connect();
 
-		for($i = 0; $i < count($mycommands); $i++)
-		{
-			if ( strlen(trim($mycommands[$i])) > 1 )
-			{
-				$result = DB_Query( $mycommands[$i], false );
-				if ($result == FALSE)
-				{
-					$content['failedstatements'][ $content['sql_failed'] ]['myerrmsg'] = DB_ReturnSimpleErrorMsg();
-					$content['failedstatements'][ $content['sql_failed'] ]['mystatement'] = $mycommands[$i];
-
-					// --- Set CSS Class
-					if ( $content['sql_failed'] % 2 == 0 )
-						$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = "line1";
-					else
-						$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = "line2";
-					// --- 
-
+		for ( $i = 0; $i < count( $mycommands ); $i++ ) {
+			if ( strlen( trim( $mycommands[ $i ] ) ) > 1 ) {
+				$result = DB_Query( $mycommands[ $i ], false );
+				if ( $result == false ) {
+					$content['failedstatements'][ $content['sql_failed'] ]['myerrmsg']   = DB_ReturnSimpleErrorMsg();
+					$content['failedstatements'][ $content['sql_failed'] ]['mystatement'] = $mycommands[ $i ];
+					if ( $content['sql_failed'] % 2 == 0 ) {
+						$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = 'line1';
+					} else {
+						$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = 'line2';
+					}
 					$content['sql_failed']++;
-				}
-				else
+				} else {
 					$content['sql_sucess']++;
+				}
+				DB_FreeQuery( $result );
+			}
+		}
 
-				// Free result
-				DB_FreeQuery($result);
+		$cfgTable = '`' . $installTablePrefix . 'config`';
+		$installConfigRows = array(
+			array( 'gen_gameversion', (string) (int) $_SESSION['GEN_GAMEVER'] ),
+			array( 'database_installedversion', (string) (int) $content['database_internalversion'] ),
+		);
+		foreach ( $installConfigRows as $row ) {
+			$ok = DB_ExecBound( "INSERT INTO {$cfgTable} (`name`, `value`) VALUES (?, ?)", 'ss', array( $row[0], $row[1] ), false );
+			if ( ! $ok ) {
+				$content['failedstatements'][ $content['sql_failed'] ]['myerrmsg']   = DB_ReturnSimpleErrorMsg();
+				$content['failedstatements'][ $content['sql_failed'] ]['mystatement'] = "INSERT INTO " . $cfgTable . " (name, value) for " . $row[0];
+				if ( $content['sql_failed'] % 2 == 0 ) {
+					$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = 'line1';
+				} else {
+					$content['failedstatements'][ $content['sql_failed'] ]['cssclass'] = 'line2';
+				}
+				$content['sql_failed']++;
+			} else {
+				$content['sql_sucess']++;
 			}
 		}
 		

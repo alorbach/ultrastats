@@ -16,16 +16,17 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 | Admin string editor (partial) | `src/admin/stringeditor.php` | Add/edit/update `STRINGID` / `LANG` / `TEXT`; list filter `STRINGID` `LIKE` bound; edit `SELECT` / `DELETE` bound |
 | Config write | `src/include/functions_db.php` `WriteConfigValue()` | Values escaped; empty-row `INSERT` vs `UPDATE` |
 | Admin login | `src/include/functions_users.php` | `CheckUserLogin` `SELECT` by `username` only; verify + optional rehash |
+| Install config (step 5) | `src/install.php` | After DDL loop, `DB_ExecBound` for `gen_gameversion` and `database_installedversion`; `UltraStats_ValidateTablePrefix` on `DB_PREFIX` before schema replace and inserts |
 
 ## Still using `DB_Query` / string SQL (not exhaustive)
 
 | Pattern | Examples |
 |--------|----------|
 | Large list/report queries | Other front/admin list UIs not yet migrated (e.g. some `rounds`, `index`) — often `intval` for limits |
-| Install wizard | `src/install.php` step 5 — DDL batch via `DB_Query` (install-only); config `INSERT` values cast to int for `gen_gameversion` / `database_installedversion` |
-| Core helpers (partial) | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()` loads server by `ID` with `DB_QueryBound`; other queries may still use string SQL for stats filters |
-| Core helpers (partial) | `functions_common.php` — `GetPlayerHtmlNameFromID()` uses `DB_QueryBound` for `PLAYERID` and optional `SERVERID` |
-| mysqli helpers | `functions_db.php` — `DB_Query` and `DB_GetRowCount` catch `mysqli_sql_exception`; `DB_Exec` catches `mysqli_sql_exception` and returns false |
+| Install wizard (DDL only) | `src/install.php` step 5 — table/schema batch still via `DB_Query(…, false)` |
+| Core helpers (partial) | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()`, `FillPlayerWithAlias`, `FillPlayerWithTime`, `GetTextFromDescriptionID` use `DB_QueryBound` / `DB_ExecBound` where user-facing data applies; `FindAndFillTopAliases` IN-list built from int player ids; other stats/aggregate queries may still use string SQL |
+| Core helpers (partial) | `functions_common.php` — `GetPlayerHtmlNameFromID()`; `GetTimeWhereQueryString` casts session year/month to int |
+| mysqli helpers | `functions_db.php` — `DB_Query` / `DB_GetRowCount` / `DB_Exec` catch `mysqli_sql_exception` where applicable; `UltraStats_ValidateTablePrefix` |
 
 ## API notes
 
@@ -35,6 +36,6 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 
 ## Follow-up candidates
 
-- `src/install.php` — optional: prepared/bound `INSERT` for config rows if the install wizard is refactored for non-admin use
-- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where time filters, banned-player `NOT IN` lists, or `serverwherequery` fragments are still built as strings
+- `src/install.php` — only if desired: move DDL to a loader that also uses `mysqli` exception-safe paths consistently (large refactor)
+- Remaining `functions_frontendhelpers.php` / `functions_common.php` queries where banned-player `NOT IN` lists, time slices in other helpers, or `serverwherequery` fragments are still string-built
 - Other admin front pages not covered in the table above

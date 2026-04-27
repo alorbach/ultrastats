@@ -406,52 +406,63 @@ function GetAndSetCurrentServer()
 function FillPlayerWithAlias(&$myplayer, $idfield)
 {
 	global $content;
-	$sqlquery = "SELECT " .
+	$pid  = (int) $myplayer[ $idfield ];
+	$sid    = isset( $content['serverid'] ) ? (int) $content['serverid'] : -1;
+	$q      = "SELECT " .
 				STATS_ALIASES . ".PLAYERID, " . 
 				"sum(" . STATS_ALIASES . ".Count) as AliasCount, " .	
 				STATS_ALIASES . ".Alias, " .	
 				STATS_ALIASES . ".AliasAsHtml " .
 				" FROM " . STATS_ALIASES . 
-				" WHERE " . STATS_ALIASES . ".PLAYERID=" . $myplayer[$idfield] .
-				GetCustomServerWhereQuery(STATS_ALIASES, false) . 
+				" WHERE " . STATS_ALIASES . ".PLAYERID = ?" . 
 				" GROUP BY " . STATS_ALIASES . ".Alias " . 
 				" ORDER BY AliasCount DESC LIMIT 1";
-	$result = DB_Query($sqlquery);
-	$aliasvars = DB_GetSingleRow($result, true);
-	
-	// Copy vars
-	$myplayer['Alias'] = $aliasvars['Alias'];
-	$myplayer['AliasAsHtml'] = $aliasvars['AliasAsHtml'];
+	$types  = 'i';
+	$params = array( $pid );
+	if ( $sid !== -1 ) {
+		$q    = "SELECT " .
+				STATS_ALIASES . ".PLAYERID, " . 
+				"sum(" . STATS_ALIASES . ".Count) as AliasCount, " .	
+				STATS_ALIASES . ".Alias, " .	
+				STATS_ALIASES . ".AliasAsHtml " .
+				" FROM " . STATS_ALIASES . 
+				" WHERE " . STATS_ALIASES . ".PLAYERID = ? AND " . STATS_ALIASES . ".SERVERID = ?" . 
+				" GROUP BY " . STATS_ALIASES . ".Alias " . 
+				" ORDER BY AliasCount DESC LIMIT 1";
+		$types = 'ii';
+		$params = array( $pid, $sid );
+	}
+	$result    = DB_QueryBound( $q, $types, $params );
+	$aliasvars = DB_GetSingleRow( $result, true );
+	if ( ! is_array( $aliasvars ) ) {
+		return;
+	}
+	$myplayer['Alias']        = $aliasvars['Alias'];
+	$myplayer['AliasAsHtml']  = $aliasvars['AliasAsHtml'];
 }
 
 function FindAndFillTopAliases(&$myplayers, $idfield, $AliasField, $AliasHtmlField)
 {
 	global $content;
 
-	// Get Guids first ;)
-	for($i = 0; $i < count($myplayers); $i++)
-	{
-		if ( isset($playerguids) )
-			$playerguids .= ", ";
-		else
-			$playerguids = "";	// INIT!
-		$playerguids .= $myplayers[$i][$idfield];
-		
-		// PreINIT fields!
-		$myplayers[$i][$AliasField] = "-Topalias unknown-"; 
-		$myplayers[$i][$AliasHtmlField] = "<i>-Topalias unknown-</i>";
-
+	// Get Guids first (comma list of integers for IN (...))
+	$ids = array();
+	for ( $i = 0; $i < count( $myplayers ); $i++ ) {
+		$ids[] = (int) $myplayers[ $i ][ $idfield ];
+		$myplayers[ $i ][ $AliasField ]     = "-Topalias unknown-";
+		$myplayers[ $i ][ $AliasHtmlField ]  = "<i>-Topalias unknown-</i>";
 	}
-
-	// No GUIDS, then we do not need to run thissql query!
-	if ( !isset($playerguids) ) 
+	$playerguids = implode( ',', $ids );
+	if ( $playerguids === '' ) {
 		return;
+	}
 	
 	// Set Server Where
-	if ( isset($content['serverid']) ) 
-		$mywhereaddon = " AND " . STATS_PLAYERS_TOPALIASES . ".SERVERID = " . $content['serverid'];
-	else
+	if ( isset( $content['serverid'] ) ) {
+		$mywhereaddon = " AND " . STATS_PLAYERS_TOPALIASES . ".SERVERID = " . (int) $content['serverid'];
+	} else {
 		$mywhereaddon = " AND " . STATS_PLAYERS_TOPALIASES . ".SERVERID = -1";
+	}
 
 	$sqlquery = "SELECT " .
 				STATS_ALIASES . ".PLAYERID, " . 
@@ -511,13 +522,14 @@ function FindAndFillTopAliases(&$myplayers, $idfield, $AliasField, $AliasHtmlFie
 function FillPlayerWithTime(&$myplayer, $idfield)
 {
 	global $content;
+	$pid = (int) $myplayer[ $idfield ];
 	$sqlquery = "SELECT " .
 						"sum(" . STATS_TIME . ".TIMEPLAYED) as TotalSeconds " . 
 						" FROM " . STATS_TIME . 
-						" WHERE " . STATS_TIME . ".PLAYERID=" . $myplayer[$idfield] .
+						" WHERE " . STATS_TIME . ".PLAYERID = ?" .
 						GetTimeWhereQueryString(STATS_TIME) . 
 						" GROUP BY " . STATS_TIME . ".PLAYERID ";
-	$result = DB_Query($sqlquery);
+	$result   = DB_QueryBound( $sqlquery, 'i', array( $pid ) );
 	$timevars = DB_GetSingleRow($result, true);
 	
 	// Copy vars
@@ -709,9 +721,9 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 						STATS_LANGUAGE_STRINGS . ".STRINGID, " .
 						STATS_LANGUAGE_STRINGS . ".TEXT as Description " .
 						" FROM " . STATS_LANGUAGE_STRINGS . 
-						" WHERE " . STATS_LANGUAGE_STRINGS . ".LANG = '" . strtoupper($LANG) . "' AND " . STATS_LANGUAGE_STRINGS . ".STRINGID = '" . $szDescriptionID . "' " . 
+						" WHERE " . STATS_LANGUAGE_STRINGS . ".LANG = ? AND " . STATS_LANGUAGE_STRINGS . ".STRINGID = ? " . 
 						" LIMIT 1 ";
-	$result = DB_Query($sqlquery);
+	$result = DB_QueryBound( $sqlquery, 'ss', array( strtoupper( $LANG ), (string) $szDescriptionID ) );
 	$textvars = DB_GetSingleRow($result, true);
 	if ( isset($textvars['STRINGID']) )
 		$szTxtReturn = $textvars['Description'];
@@ -722,9 +734,9 @@ function GetTextFromDescriptionID( $szDescriptionID, $szDefault )
 							STATS_LANGUAGE_STRINGS . ".STRINGID, " .
 							STATS_LANGUAGE_STRINGS . ".TEXT as Description " .
 							" FROM " . STATS_LANGUAGE_STRINGS . 
-							" WHERE " . STATS_LANGUAGE_STRINGS . ".LANG = '" . strtoupper($LANG_EN) . "' AND " . STATS_LANGUAGE_STRINGS . ".STRINGID = '" . $szDescriptionID . "' " . 
+							" WHERE " . STATS_LANGUAGE_STRINGS . ".LANG = ? AND " . STATS_LANGUAGE_STRINGS . ".STRINGID = ? " . 
 							" LIMIT 1 ";
-		$result = DB_Query($sqlquery);
+		$result = DB_QueryBound( $sqlquery, 'ss', array( strtoupper( $LANG_EN ), (string) $szDescriptionID ) );
 		$textvars = DB_GetSingleRow($result, true);
 		if ( isset($textvars['STRINGID']) )
 			$szTxtReturn = $textvars['Description'];

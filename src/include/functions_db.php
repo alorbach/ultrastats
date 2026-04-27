@@ -50,6 +50,17 @@ function UltraStats_SplitSqlStatements( $sql )
 	return $out;
 }
 
+/**
+ * Allow only safe MySQL identifier fragments for custom table prefix (alphanumeric, underscore).
+ */
+function UltraStats_ValidateTablePrefix( $p ) {
+	$s = is_string( $p ) ? $p : 'stats_';
+	if ( preg_match( '/^[A-Za-z0-9_]+$/', $s ) ) {
+		return $s;
+	}
+	return 'stats_';
+}
+
 function DB_Connect()
 {
 	global $link_id, $CFG;

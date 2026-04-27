@@ -1373,11 +1373,12 @@ function GetTimeWhereQueryString( $szTableName, $includeTimeFilter = true )
 	// Only append time filter if wanted
 	if ( $includeTimeFilter ) 
 	{
-		if ( isset($_SESSION['TIME_SELECTEDYEAR']) ) 
-			$szReturn .= " AND " . $szTableName . ".Time_Year = " . $_SESSION['TIME_SELECTEDYEAR'] . " ";
-
-		if ( isset($_SESSION['TIME_SELECTEDMONTH']) ) 
-			$szReturn .= " AND " . $szTableName . ".Time_Month = " . $_SESSION['TIME_SELECTEDMONTH'] . " ";
+		if ( isset( $_SESSION['TIME_SELECTEDYEAR'] ) ) {
+			$szReturn .= " AND " . $szTableName . ".Time_Year = " . (int) $_SESSION['TIME_SELECTEDYEAR'] . " ";
+		}
+		if ( isset( $_SESSION['TIME_SELECTEDMONTH'] ) ) {
+			$szReturn .= " AND " . $szTableName . ".Time_Month = " . (int) $_SESSION['TIME_SELECTEDMONTH'] . " ";
+		}
 	}
 
 	// return result
