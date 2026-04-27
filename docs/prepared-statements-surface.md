@@ -17,15 +17,20 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 | Config write | `src/include/functions_db.php` `WriteConfigValue()` | Values escaped; empty-row `INSERT` vs `UPDATE` |
 | Admin login | `src/include/functions_users.php` | `CheckUserLogin` `SELECT` by `username` only; verify + optional rehash |
 | Install config (step 5) | `src/install.php` | After DDL loop, `DB_ExecBound` for `gen_gameversion` and `database_installedversion`; `UltraStats_ValidateTablePrefix` on `DB_PREFIX` before schema replace and inserts |
+| Player display name by id | `functions_common.php` `GetPlayerHtmlNameFromID()` | `PLAYERID` and optional `SERVERID` bound |
+| Frontend helpers (partial) | `functions_frontendhelpers.php` | `GetAndSetCurrentServer`, `FillPlayerWithAlias`, `FillPlayerWithTime`, `GetTextFromDescriptionID`, `FindAndFillTopAliases`, `FindAndFillWithTime` (bound `IN` for bulk player time) use bound params where shown in code; other queries in the same file may still use `DB_Query` (see below) |
+
+*Note:* A file can appear in **Migrated** and still have unmigrated `DB_Query` calls elsewhere in the file—the **Still using** section tracks remaining patterns, not a second count of the same line items.
 
 ## Still using `DB_Query` / string SQL (not exhaustive)
 
 | Pattern | Examples |
 |--------|----------|
-| Large list/report queries | Other front/admin list UIs not yet migrated (e.g. some `rounds`, `index`) — often `intval` for limits |
-| Install wizard (DDL only) | `src/install.php` step 5 — table/schema batch still via `DB_Query(…, false)` |
-| Core helpers (partial) | `functions_frontendhelpers.php` — `GetAndSetCurrentServer()`, `FillPlayerWithAlias`, `FillPlayerWithTime`, `GetTextFromDescriptionID` use `DB_QueryBound` / `DB_ExecBound` where user-facing data applies; `FindAndFillTopAliases` IN-list built from int player ids; other stats/aggregate queries may still use string SQL |
-| Core helpers (partial) | `functions_common.php` — `GetPlayerHtmlNameFromID()`; `GetTimeWhereQueryString` casts session year/month to int |
+| Large list/report queries | Some front/admin UIs (e.g. `rounds`, `index`) — often `intval` for limits; not fully audited to bound parameters |
+| Install wizard (DDL only) | `src/install.php` step 5 — table/schema batch via `DB_Query(…, false)` (multi-statement import) |
+| Aggregates / globals | `functions_frontendhelpers.php` — e.g. `GetAndSetMaxKillRation`, `GetAndSetGlobalInfo`: server/time/banned fragments still concatenated; `Kills` threshold cast to int in query |
+| Time filter string | `functions_common.php` `GetTimeWhereQueryString` — appends `AND Time_Year = N` / `Time_Month = N` from session (int-cast; not placeholder-bound) |
+| Banned filter | `functions_common.php` — `GetBannedPlayerWhereQuery` uses `NOT IN (…)`; GUID list is built from int-cast DB rows in `CreateBannedPlayerFilter` |
 | mysqli helpers | `functions_db.php` — `DB_Query` / `DB_GetRowCount` / `DB_Exec` catch `mysqli_sql_exception` where applicable; `UltraStats_ValidateTablePrefix` |
 
 ## API notes

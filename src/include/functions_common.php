@@ -1431,17 +1431,13 @@ function CreateBannedPlayerFilter()
 	$result = DB_Query($sqlquery);
 	$content['bannedplayers'] = DB_GetAllRows($result, true);
 
-	if ( isset($content['bannedplayers']) )
+	if ( isset($content['bannedplayers']) && is_array( $content['bannedplayers'] ) )
 	{
-		//--- Set Displayname!
-		for ( $i = 0; $i < count($content['bannedplayers']); $i++ )
-		{
-			if ( isset($content['bannedplayers_guids']) )
-				$content['bannedplayers_guids'] .= ", " . $content['bannedplayers'][$i]['GUID'];
-			else
-				$content['bannedplayers_guids'] = $content['bannedplayers'][$i]['GUID'];
+		$guids = array();
+		for ( $i = 0; $i < count( $content['bannedplayers'] ); $i++ ) {
+			$guids[] = (int) $content['bannedplayers'][ $i ]['GUID'];
 		}
-		//---
+		$content['bannedplayers_guids'] = implode( ',', $guids );
 	}
 	else
 		$content['bannedplayers_guids'] = "";

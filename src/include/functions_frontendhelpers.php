@@ -549,31 +549,27 @@ function FindAndFillWithTime(&$myplayers, $idfield, $TimeSecondsField, $TimeStri
 		return;
 	}
 
-	// Get Guids first ;)
-	$playerguids = null;
+	$playerids = array();
 	for ( $i = 0; $i < count( $myplayers ); $i++ ) {
-		if ( isset( $playerguids ) ) {
-			$playerguids .= ", ";
-		} else {
-			$playerguids = "";
-		}
-		$playerguids .= $myplayers[ $i ][ $idfield ];
+		$playerids[] = (int) $myplayers[ $i ][ $idfield ];
 	}
-
-	// MySQL 8+ rejects "IN ()" (empty list); can happen on empty stats before first parse
-	if ( $playerguids === null || trim( (string) $playerguids ) === "" ) {
+	$playerids = array_values( array_unique( $playerids, SORT_REGULAR ) );
+	$incount = count( $playerids );
+	// MySQL 8+ rejects "IN ()" (empty list)
+	if ( $incount < 1 ) {
 		return;
 	}
 
-	$sqlquery = "SELECT " .
+	$inplace   = implode( ',', array_fill( 0, $incount, '?' ) );
+	$types     = str_repeat( 'i', $incount );
+	$sqlquery  = "SELECT " .
 						STATS_TIME . ".PLAYERID, " . 
 						"sum(" . STATS_TIME . ".TIMEPLAYED) as TotalSeconds " . 
 						" FROM " . STATS_TIME . 
-						" WHERE " . STATS_TIME . ".PLAYERID IN (" . $playerguids . ")" . 
+						" WHERE " . STATS_TIME . ".PLAYERID IN (" . $inplace . ")" . 
 						GetTimeWhereQueryString(STATS_TIME) . 
 						" GROUP BY " . STATS_TIME . ".PLAYERID ";
-//						" ORDER BY Count DESC";
-	$result = DB_Query($sqlquery);
+	$result   = DB_QueryBound( $sqlquery, $types, $playerids );
 	$timevars = DB_GetAllRows($result, true);
 
 	if ( isset($timevars) )
@@ -613,7 +609,7 @@ function GetAndSetMaxKillRation()
 						"sum(" . STATS_PLAYERS . ".Kills) / sum(" . STATS_PLAYERS . ".Deaths) as MaxKillRatio " .	// TRUE l33tAGE!
 //						"round(AVG( " . STATS_PLAYERS . ".KillRatio),2) as MaxKillRatio " .
 						" FROM " . STATS_PLAYERS . 
-						" WHERE Kills > " . $content['web_minkills'] .
+						" WHERE Kills > " . (int) $content['web_minkills'] .
 						GetCustomServerWhereQuery(STATS_PLAYERS, false) . 
 						GetBannedPlayerWhereQuery(STATS_PLAYERS, "GUID", false) . 
 						GetTimeWhereQueryString(STATS_PLAYERS) . 
