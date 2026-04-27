@@ -83,8 +83,11 @@ docker compose -f docker/docker-compose.yml up --build
 
 ## Modernisation backlog
 
-- Broader plan (if present in the repo) may live in `.cursor/plans/` or your issue tracker: mysqli migration, security review, UI compatibility report, inline PHPDoc on critical includes.
+- Broader plan may live in your issue tracker (or a local `plans` folder if you use one): mysqli migration, security review, UI compatibility report, inline PHPDoc on critical includes.
 
-## Agent skills (this repo)
+## Agent skills (`.agent/`)
 
-- **Squashed commit / handoff summaries** — if you need a **SUMMARIZE**-style, paste-ready **commit message** or short PR blurb, follow [.cursor/skills/summarize-handoff/SKILL.md](.cursor/skills/summarize-handoff/SKILL.md) (includes the `git status` / `git diff --stat` commands to run first).
+Playbooks in **[`.agent/README.md`](.agent/README.md)** and **[`.agent/skills/`](.agent/skills/summarize-handoff.md)** — **SUMMARIZE** / squashed commits, local Docker, security hygiene, repository map. **SUMMARIZE** workflow: [`.agent/skills/summarize-handoff.md`](.agent/skills/summarize-handoff.md) (run `git status -sb` and `git diff --stat` from the repo root first).
+
+- [docs/summarize-handoff.md](docs/summarize-handoff.md) is a short redirect to `.agent/`.
+- GitHub **Copilot** also reads [.github/copilot-instructions.md](.github/copilot-instructions.md) (points at AGENTS and summarize skill).
