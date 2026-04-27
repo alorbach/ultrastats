@@ -1,6 +1,6 @@
 # Install (bundled static doc)
 
-Here is **historical** help for installing UltraStats. **Current** requirements (PHP 7.4+, MySQL 8, Docker) and paths are in the root [README.md](../../README.md), [INSTALL](../../INSTALL), and [AGENTS.md](../../AGENTS.md).
+Here is **historical** help for installing UltraStats. **Current** requirements (PHP 7.4+, MySQL 8, Docker) and paths are in the root [README.md](../../README.md) and [AGENTS.md](../../AGENTS.md). (A legacy repository-root `INSTALL` file without an extension is kept for packaging habits only; the maintained install text is in **this** Markdown file and in the [handbook](https://alorbach.github.io/ultrastats/).)
 
 ---
 

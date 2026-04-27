@@ -28,7 +28,8 @@ Guidance for humans and AI agents working in this repository.
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |
 | `docker/` | `Dockerfile` and `docker-compose.yml` for local dev (see below). |
-| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) publishes a **GitHub Release** and `ultrastats-X.Y.Z.tar.gz` when you push tag `vX.Y.Z`. |
+| `doc-site/` | **MkDocs** public handbook (deployed to GitHub Pages from `main`). Includes [project-history.md](doc-site/docs/project-history.md) (2000s origins, dormancy, 2026 revival with AI-assisted maintenance). |
+| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`). |
 
 ## Entry points (HTTP)
 
@@ -86,7 +87,7 @@ docker compose -f docker/docker-compose.yml up --build
 ## External resources (outdated / dead)
 
 - **wiki.ultrastats.org** — **gone**. Do not add or restore links to it in docs or templates.
-- **ultrastats.org** may still be referenced in 2008-era footers; treat as historical, not a support guarantee.
+- The public **handbook** is on GitHub Pages: [https://alorbach.github.io/ultrastats/](https://alorbach.github.io/ultrastats/) (replaces the old project site; templates and update checks point there). **`doc-site/docs/version.txt`** (deployed as `/version.txt`) feeds the admin “new version” check (`UPDATEURL` in `functions_common.php`); bump its **first line** to the new `$content['BUILDNUMBER']` when you ship a release so logged-in admins see the prompt.
 
 ## Security notes
 

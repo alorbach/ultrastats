@@ -1,8 +1,8 @@
 <?php
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
+	* Copyright by Andre Lorbach | 2006-2026						
+	* -> https://alorbach.github.io/ultrastats <-											
 	* ------------------------------------------------------------------
 	*
 	* Use this script at your own risk!									
@@ -813,7 +813,7 @@ function ReturnWhinerQuery()
 	$whining = Array(
 						'noob', 'cheat', 'camper', 'hurensohn', 'fucking', 'wallhacker', 'deine mudda', 
 						'nap', 'nerd', 'gay', 'hure', 'bastard', 'spasst', 'fick', 'sucker', 'arsch', 'pisser',
-						'luckor', 'sau', 'wixer', 'bettnässer', 'n00b', 'hoden', 'pissnelke', 'huras', 'deine mutter',
+						'luckor', 'sau', 'wixer', 'bettnï¿½sser', 'n00b', 'hoden', 'pissnelke', 'huras', 'deine mutter',
 						'mowl', 'bitch', 'slut', 'motherfuck', 'assi', 'drecks', 'nigg', 'fresse', 'spack', 
 						'shout up', 'stfu', 'hax0r', 'n00b', 'hate', 'sheiss', 'Affe', 'negg', 'lutscher',
 						'idiot', 'hdf' //, '', 'n00b', 'hate', 'sheiss', 'Affe', 'negg', 'lutscher',

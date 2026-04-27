@@ -8,6 +8,10 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 **Author:** Andre Lorbach — [github.com/alorbach/ultrastats](https://github.com/alorbach/ultrastats); see original headers in `src/`.
 
+## History
+
+UltraStats dates to the **mid-2000s** community development around **Call of Duty** dedicated servers; public 0.3.x work in [src/doc/en/changelog.md](src/doc/en/changelog.md) runs through **2008** (last classic line: **0.3.13**, 2008-11-30). For many years afterward the **original site and wiki were gone** and there were no official releases in the open record—until **2026**, when the codebase was **modernized** (current PHP/MySQL, security, Docker) with substantial help from **AI-assisted coding**, aimed at the **remaining “old school”** server operators who still want a classic stats stack. A readable timeline is in the handbook: [**Project history**](https://alorbach.github.io/ultrastats/project-history/) ([source](doc-site/docs/project-history.md)).
+
 ## Supported games (original scope)
 
 - Call of Duty, United Offense, CoD 2, CoD 4: Modern Warfare, CoD: World at War
@@ -20,7 +24,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Installation
 
-- Legacy step-by-step text: [INSTALL](INSTALL) (and bundled Markdown under [src/doc/en/install.md](src/doc/en/install.md)).
+- Install guide: [src/doc/en/install.md](src/doc/en/install.md) (legacy root `INSTALL` is optional plain text for old habits only).
 - **First-time setup:** open `src/install.php` in a browser (with `config.php` empty or missing as required by the installer) and follow the wizard.
 - **Configuration:** copy `src/contrib/config.sample.php` to `src/config.php` and set database credentials, or let the installer create `config.php`. **Do not commit real production passwords**; `src/config.php` is listed in `.gitignore` for local development.
 
@@ -34,7 +38,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Development
 
-- **Releases:** Push a SemVer tag `vX.Y.Z` (e.g. `v0.3.15`). [GitHub Actions](.github/workflows/release-on-tag.yml) builds a source archive `ultrastats-X.Y.Z.tar.gz` (`git archive` with top folder `ultrastats-X.Y.Z/`) and creates a **GitHub Release** whose notes combine the matching block from [ChangeLog](ChangeLog) with GitHub’s auto-generated compare text. There is no separate packaging script in the repository.
+- **Releases:** Push a SemVer tag `vX.Y.Z` (e.g. `v0.3.15`). [GitHub Actions](.github/workflows/release-on-tag.yml) builds a source archive `ultrastats-X.Y.Z.tar.gz` (`git archive` with top folder `ultrastats-X.Y.Z/`) and creates a **GitHub Release** whose notes combine the matching block from [src/doc/en/changelog.md](src/doc/en/changelog.md) (mirrored to root `ChangeLog` for tooling) with GitHub’s auto-generated compare text. There is no separate packaging script in the repository.
 - **AGENTS and Docker:** [AGENTS.md](AGENTS.md) describes structure, conventions, and how to run the stack with Docker (web on **port 8091** by default: `http://localhost:8091/`).
 - **Agent skills (assistants & handoff):** [`.agent/README.md`](.agent/README.md) and [`.agent/skills/`](.agent/skills/summarize-handoff.md) — playbooks in plain Markdown for Copilot, Codex, and similar.
 - **Security:** [SECURITY.md](SECURITY.md) — hardening, admin hygiene, and [Content-Security-Policy (why not enabled by default; staged rollout)](SECURITY.md#content-security-policy).
@@ -47,7 +51,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 ## Changelog
 
-- Packaged and repository history: [ChangeLog](ChangeLog) in the repository root (also mirrored as Markdown in [src/doc/en/changelog.md](src/doc/en/changelog.md)).
+- Packaged and repository history: maintained as [src/doc/en/changelog.md](src/doc/en/changelog.md); the root `ChangeLog` file is the same text in plain form for release scripts.
 
 ## Historical documentation
 

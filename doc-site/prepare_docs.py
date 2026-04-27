@@ -17,12 +17,27 @@ SOURCES: list[tuple[str, str]] = [
 ]
 
 
+# GitHub Pages handbook: link to maintained Markdown, not root plain-text copies.
+def _prefer_markdown_path(rel: Path) -> Path:
+    s = rel.as_posix()
+    if s == "ChangeLog" or s.endswith("/ChangeLog"):
+        return Path("src/doc/en/changelog.md")
+    if s == "INSTALL" or s.endswith("/INSTALL"):
+        return Path("src/doc/en/install.md")
+    return rel
+
+
 def _link_replacement(href: str, base: Path) -> str | None:
     if href.startswith(("http://", "https://", "mailto:", "#")):
         return None
     if not (href.startswith("../") or href.startswith("./")):
         return None
-    combined = (base / href).resolve()
+    fragment = ""
+    path_href = href
+    if "#" in href:
+        path_href, frag = href.split("#", 1)
+        fragment = "#" + frag
+    combined = (base / path_href).resolve()
     try:
         rel = combined.relative_to(REPO_ROOT.resolve())
     except ValueError:
@@ -32,7 +47,10 @@ def _link_replacement(href: str, base: Path) -> str | None:
         alt = REPO_ROOT / rel.name
         if alt.is_file():
             rel = Path(alt.name)
-    return f"{REPO_URL}/blob/main/{rel.as_posix()}"
+    rel = _prefer_markdown_path(rel)
+    if not (REPO_ROOT / rel).is_file():
+        return None
+    return f"{REPO_URL}/blob/main/{rel.as_posix()}{fragment}"
 
 
 def rewrite_markdown_links(content: str, source_path: Path) -> str:

@@ -1,6 +1,8 @@
 # Historical site snapshots (2008–2009)
 
-The old **ultrastats.org** site and **wiki.ultrastats.org** are **no longer available**. The material below is preserved only in third-party or archive copies. **Do not treat them as current support**—use this handbook and the [main repository](https://github.com/alorbach/ultrastats) instead.
+**Current documentation:** the live handbook is **[https://alorbach.github.io/ultrastats/](https://alorbach.github.io/ultrastats/)** (this site). For a short **timeline** (2000s origins, dormant period, 2020s revival), see [Project history](project-history.md).
+
+The old **ultrastats.org** site and **wiki.ultrastats.org** are **no longer available**. The material below is preserved only in third-party or archive copies. **Do not treat them as current support**—use the handbook link above and the [main repository](https://github.com/alorbach/ultrastats) instead.
 
 | Snapshot | What it was |
 |----------|-------------|

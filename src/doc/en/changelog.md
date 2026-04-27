@@ -1,6 +1,6 @@
 # Changelog
 
-Release history. Plain-text: [../../ChangeLog](../../ChangeLog).
+Release history. The same content is mirrored as **plain text** in `ChangeLog` at the repository root (used by the release workflow); this file is the **maintained Markdown** copy for readers and tools.
 
 ---
 

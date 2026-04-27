@@ -1,8 +1,8 @@
 <?php
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
+	* Copyright by Andre Lorbach | 2006-2026						
+	* -> https://alorbach.github.io/ultrastats <-											
 	* ------------------------------------------------------------------
 	*
 	* Use this script at your own risk!									
@@ -18,7 +18,7 @@
 	*	any warranty.													
 	*	Feel free to use or edit it. Any comments are welcome!			
 	*																
-	*	Modify Date: 2006-01-20											
+	*	Modify Date: 2026-04-27											
 	*	by Andre Lorbach												
 	*
 	* This file is part of UltraStats

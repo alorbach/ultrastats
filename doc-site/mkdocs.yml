@@ -15,8 +15,10 @@ strict: false
 copyright: |
   <p>Copyright &copy; 2008&ndash;2026 <a href="https://github.com/alorbach" rel="noopener">Andre Lorbach</a>.
   Documentation for <a href="https://github.com/alorbach/ultrastats">UltraStats</a> (Call of Duty log parser)
-  &mdash; free software under <a href="https://github.com/alorbach/ultrastats/blob/main/LICENSE">GPL-3.0+</a>.</p>
-  <p><a href="https://github.com/alorbach/ultrastats">Source</a> &middot;
+  &mdash; free software under <a href="https://github.com/alorbach/ultrastats/blob/main/LICENSE">GPL-3.0+</a>.
+  <a href="https://alorbach.github.io/ultrastats/">This handbook</a> lives on GitHub Pages.</p>
+  <p><a href="https://alorbach.github.io/ultrastats/">Handbook</a> &middot;
+  <a href="https://github.com/alorbach/ultrastats">Source</a> &middot;
   <a href="https://github.com/alorbach/ultrastats/blob/main/LICENSE">License</a> &middot;
   <a href="https://github.com/alorbach/ultrastats/issues">Issues</a> &middot;
   <a href="https://github.com/alorbach/ultrastats/releases">Releases</a></p>
@@ -51,6 +53,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Project history: project-history.md
   - Install & first run: install.md
   - Upgrading: upgrading.md
   - Docker (local dev): docker.md

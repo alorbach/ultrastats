@@ -22,7 +22,7 @@
 
 ## External assets and mixed content
 
-- If the site is served over **HTTPS**, any **HTTP** link (old footers, `http://www.ultrastats.org`) is mixed content for navigation only (usually allowed for links) but not ideal. Prefer `https` or site-relative links in a future refresh.
+- Footers and update fallbacks use **`https://alorbach.github.io/ultrastats/`** (no mixed-content issue with local HTTPS).
 
 ## Accessibility
 

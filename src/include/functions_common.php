@@ -1,8 +1,8 @@
 <?php
 /*
 	********************************************************************
-	* Copyright by Andre Lorbach | 2006, 2007, 2008						
-	* -> www.ultrastats.org <-											
+	* Copyright by Andre Lorbach | 2006-2026						
+	* -> https://alorbach.github.io/ultrastats/ <-
 	* ------------------------------------------------------------------
 	*
 	* Use this script at your own risk!									
@@ -53,7 +53,7 @@ $LANG = "en";		// Default language
 
 // Default Template vars
 $content['BUILDNUMBER'] = "0.3.20";
-$content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
+$content['UPDATEURL'] = "https://alorbach.github.io/ultrastats/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
 
