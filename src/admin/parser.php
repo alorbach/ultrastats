@@ -52,11 +52,12 @@ if ( isset($_GET['op']) )
 {
 	if ( isset($_GET['id']) && is_numeric($_GET['id']) )
 	{
-		$content['serverid'] = DB_RemoveBadChars($_GET['id']);
+		$content['serverid'] = DB_RemoveBadChars( $_GET['id'] );
+		$sid = (int) $content['serverid'];
 
 		// Get ServerDetails first 
-		$result = DB_Query("SELECT * FROM " . STATS_SERVERS . " WHERE ID = " . $content['serverid']);
-		$content['SERVER'] = DB_GetAllRows($result, true);
+		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $sid ) );
+		$content['SERVER'] = DB_GetAllRows( $result, true );
 		$content['GameLogLocation'] = $content['SERVER'][0]['GameLogLocation'];
 		$content['LastLogLine'] = $content['SERVER'][0]['LastLogLine'];
 

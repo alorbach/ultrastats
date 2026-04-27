@@ -32,6 +32,9 @@ $content['database_installedversion'] = "0";
 /**
  * One-time SQL split: legacy files used split(";\n") for multi-statement scripts.
  * Returns non-empty statement chunks (trimmed, without trailing semicolons in chunk).
+ *
+ * Prepared statement entry points: DB_QueryBound, DB_ExecBound, DB_StatementBindParams,
+ * UltraStats_SqlLikeContainsPattern (require mysqlnd for SELECTs returning mysqli_result).
  */
 function UltraStats_SplitSqlStatements( $sql )
 {
@@ -297,6 +300,146 @@ function DB_EscapeString( $s )
 		return addslashes( (string) $s );
 	}
 	return mysqli_real_escape_string( $link_id, (string) $s );
+}
+
+/**
+ * Build a value for `LIKE ?` (contains search): escapes LIKE metacharacters, wraps with %.
+ * Use with mysqli prepared statements only — not for string-concatenated SQL.
+ */
+function UltraStats_SqlLikeContainsPattern( $fragment ) {
+	$s = (string) $fragment;
+	$s = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $s );
+	return '%' . $s . '%';
+}
+
+/**
+ * Bind parameters for mysqli_stmt. $types e.g. "iss"; $params is a zero-indexed list.
+ */
+function DB_StatementBindParams( mysqli_stmt $stmt, $types, array $params ) {
+	$bind = array( (string) $types );
+	$n    = count( $params );
+	for ( $i = 0; $i < $n; $i++ ) {
+		$bind[] = &$params[ $i ];
+	}
+	return call_user_func_array( array( $stmt, 'bind_param' ), $bind );
+}
+
+/**
+ * Run a SELECT (or any statement that returns a result set) with bound parameters.
+ * Requires the mysqlnd driver (mysqli_stmt_get_result). Closes the statement; returns a mysqli result or false.
+ *
+ * @param string $types Parameter types for mysqli::bind_param (e.g. "is").
+ * @return mysqli_result|bool
+ */
+function DB_QueryBound( $sql, $types, array $params, $bProcessError = true, $bCritical = false ) {
+	global $link_id, $querycount;
+
+	if ( ! function_exists( 'mysqli_stmt_get_result' ) ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'DB_QueryBound requires mysqlnd (mysqli_stmt_get_result). SQL: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+	if ( ! ( $link_id instanceof mysqli ) ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'DB_QueryBound: no database link. SQL: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	$stmt = mysqli_prepare( $link_id, $sql );
+	if ( ! $stmt ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'Prepare failed: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	$nt = strlen( (string) $types );
+	$na = count( $params );
+	if ( $nt !== $na ) {
+		mysqli_stmt_close( $stmt );
+		if ( $bProcessError ) {
+			DB_PrintError( "DB_QueryBound: types length ($nt) != param count ($na) for: " . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	if ( $nt > 0 ) {
+		if ( ! DB_StatementBindParams( $stmt, $types, $params ) ) {
+			mysqli_stmt_close( $stmt );
+			if ( $bProcessError ) {
+				DB_PrintError( 'bind_param failed: ' . $sql, $bCritical );
+			}
+			return false;
+		}
+	}
+
+	if ( ! mysqli_stmt_execute( $stmt ) ) {
+		mysqli_stmt_close( $stmt );
+		if ( $bProcessError ) {
+			DB_PrintError( 'Execute failed: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	$rs = mysqli_stmt_get_result( $stmt );
+	mysqli_stmt_close( $stmt );
+	$querycount++;
+	return $rs;
+}
+
+/**
+ * Run INSERT, UPDATE, or DELETE with bound parameters (no result set). Returns true on success.
+ */
+function DB_ExecBound( $sql, $types, array $params, $bProcessError = true, $bCritical = false ) {
+	global $link_id, $querycount;
+
+	if ( ! ( $link_id instanceof mysqli ) ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'DB_ExecBound: no database link. SQL: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	$stmt = mysqli_prepare( $link_id, $sql );
+	if ( ! $stmt ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'Prepare failed: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	$nt = strlen( (string) $types );
+	$na = count( $params );
+	if ( $nt !== $na ) {
+		mysqli_stmt_close( $stmt );
+		if ( $bProcessError ) {
+			DB_PrintError( "DB_ExecBound: types length ($nt) != param count ($na) for: " . $sql, $bCritical );
+		}
+		return false;
+	}
+
+	if ( $nt > 0 ) {
+		if ( ! DB_StatementBindParams( $stmt, $types, $params ) ) {
+			mysqli_stmt_close( $stmt );
+			if ( $bProcessError ) {
+				DB_PrintError( 'bind_param failed: ' . $sql, $bCritical );
+			}
+			return false;
+		}
+	}
+
+	$ok = mysqli_stmt_execute( $stmt );
+	mysqli_stmt_close( $stmt );
+	if ( ! $ok ) {
+		if ( $bProcessError ) {
+			DB_PrintError( 'Execute failed: ' . $sql, $bCritical );
+		}
+		return false;
+	}
+	$querycount++;
+	return true;
 }
 
 ?>

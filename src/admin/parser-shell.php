@@ -64,11 +64,11 @@ if ( $RUNMODE == RUNMODE_COMMANDLINE )
 
 	if ( isset($_SERVER["argv"][2]) )
 	{
-		$serverid = intval(DB_RemoveBadChars( $_SERVER["argv"][2] ));
+		$serverid = intval( DB_RemoveBadChars( $_SERVER['argv'][2] ) );
 
 		// Get ServerDetails now!
-		$result = DB_Query("SELECT * FROM " . STATS_SERVERS . " WHERE ID = " . $serverid);
-		$serverdetails = DB_GetAllRows($result, true);
+		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $serverid ) );
+		$serverdetails = DB_GetAllRows( $result, true );
 		if ( !isset($serverdetails[0]['ID']) ) 
 			DieWithErrorMsg( "Server was not found in the Database!" );
 	}

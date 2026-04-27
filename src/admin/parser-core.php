@@ -53,11 +53,11 @@ if ( isset($_GET['op']) )
 {
 	if ( isset($_GET['id']) && is_numeric($_GET['id']) )
 	{
-		$serverid = DB_RemoveBadChars($_GET['id']);
+		$serverid = (int) DB_RemoveBadChars( $_GET['id'] );
 
 		// Get ServerDetails first 
-		$result = DB_Query("SELECT * FROM " . STATS_SERVERS . " WHERE ID = " . $serverid);
-		$serverdetails = DB_GetAllRows($result, true);
+		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $serverid ) );
+		$serverdetails = DB_GetAllRows( $result, true );
 
 		if ( isset( $serverdetails ) )
 		{

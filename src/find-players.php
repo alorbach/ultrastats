@@ -55,45 +55,7 @@ if ( isset($_GET['search']) )
 	if ( $content['searchtype'] == 2 ) { $content['searchtype_selected_2'] = "selected"; } else { $content['searchtype_selected_2'] = ""; } 
 	if ( $content['searchtype'] == 3 ) { $content['searchtype_selected_3'] = "selected"; } else { $content['searchtype_selected_3'] = ""; } 
 
-	// --- Set wherequery by Searchtype
-	if (	$content['searchtype'] == 1 ) 
-	{
-		// Get as number
-		$content['searchfor'] = intval(DB_RemoveBadChars($_GET['search']));
-		
-		// Set SQL Query
-		$sqlquery = " WHERE " . STATS_ALIASES . ".PLAYERID = " . $content['searchfor']; 
-	}
-	else if($content['searchtype'] == 2 )
-	{
-		// Get normal
-		$content['searchfor'] = DB_RemoveBadChars($_GET['search']);
-		
-		// Check for Ignore Color Codes
-		if ( isset ($_GET['ignorecolorcodes']) ) { $content['IGNORECOLORCODES'] = true; } else {$content['IGNORECOLORCODES'] = 0; }
-		if ( $content['IGNORECOLORCODES'] ) 
-			$alias_wherefield = "AliasStrippedCodes"; 
-		else
-			$alias_wherefield = "Alias"; 
-
-		// Set SQL Query
-		$sqlquery = " WHERE " . STATS_ALIASES . "." . $alias_wherefield . " LIKE '%" . $content['searchfor'] . "%'";
-	}
-	else if($content['searchtype'] == 3 )
-	{
-		// Get normal
-		$content['searchfor'] = DB_RemoveBadChars($_GET['search']);
-		
-		// Check for Ignore Color Codes
-		$wherefield = "PBGUID"; 
-
-		// Set SQL Query
-		$sqlquery = " WHERE " . STATS_PLAYERS_STATIC . "." . $wherefield . " LIKE '%" . $content['searchfor'] . "%'";
-	}
-	// ---
-
-	// --- Now get the players 
-	$sqlquery = "SELECT " .
+	$select = "SELECT " .
 						STATS_ALIASES . ".PLAYERID, " . 
 						STATS_ALIASES . ".Alias, " . 
 						STATS_ALIASES . ".AliasAsHtml, " . 
@@ -101,14 +63,43 @@ if ( isset($_GET['search']) )
 						" FROM " . STATS_ALIASES . 
 						" INNER JOIN (" . STATS_PLAYERS_STATIC . 
 						") ON (" . 
-						STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
-						$sqlquery . 
-						GetCustomServerWhereQuery(STATS_ALIASES, false) . 
+						STATS_PLAYERS_STATIC . ".GUID=" . STATS_ALIASES . ".PLAYERID) ";
+
+	$tail = GetCustomServerWhereQuery(STATS_ALIASES, false) . 
 						GetBannedPlayerWhereQuery(STATS_ALIASES, "PLAYERID", false) . 
 						" GROUP BY " . STATS_ALIASES . ".PLAYERID " . 
 						" ORDER BY Count ";
 
-	$result = DB_Query($sqlquery);
+	// --- Set where + bound params by Searchtype
+	if (	$content['searchtype'] == 1 ) 
+	{
+		$content['searchfor'] = intval( DB_RemoveBadChars( $_GET['search'] ) );
+		$sqlquery = $select . " WHERE " . STATS_ALIASES . ".PLAYERID = ? " . $tail;
+		$result  = DB_QueryBound( $sqlquery, 'i', array( (int) $content['searchfor'] ) );
+	}
+	else if ( $content['searchtype'] == 2 ) {
+		$content['searchfor'] = DB_RemoveBadChars( $_GET['search'] );
+		if ( isset( $_GET['ignorecolorcodes'] ) ) { $content['IGNORECOLORCODES'] = true; } else { $content['IGNORECOLORCODES'] = 0; }
+		if ( $content['IGNORECOLORCODES'] ) {
+			$alias_wherefield = "AliasStrippedCodes";
+		} else {
+			$alias_wherefield = "Alias";
+		}
+		$likepat = UltraStats_SqlLikeContainsPattern( $content['searchfor'] );
+		$sqlquery = $select . " WHERE " . STATS_ALIASES . "." . $alias_wherefield . " LIKE ? " . $tail;
+		$result  = DB_QueryBound( $sqlquery, 's', array( $likepat ) );
+	}
+	else if ( $content['searchtype'] == 3 ) {
+		$content['searchfor'] = DB_RemoveBadChars( $_GET['search'] );
+		$likepat = UltraStats_SqlLikeContainsPattern( $content['searchfor'] );
+		$sqlquery = $select . " WHERE " . STATS_PLAYERS_STATIC . ".PBGUID LIKE ? " . $tail;
+		$result  = DB_QueryBound( $sqlquery, 's', array( $likepat ) );
+	} else {
+		$result = false;
+	}
+	// ---
+
+	// --- Now get the players
 	$content['playersresults'] = DB_GetAllRows($result, true);
 	if ( isset($content['playersresults']) )
 	{

@@ -66,13 +66,14 @@ if ( isset($_GET['op']) )
 		{
 			//PreInit these values 
 			$content['USERID'] = DB_RemoveBadChars($_GET['id']);
+			$uid   = (int) $content['USERID'];
 
-			$sqlquery = "SELECT * " . 
-						" FROM " . STATS_USERS . 
-						" WHERE ID = " . $content['USERID'];
-
-			$result = DB_Query($sqlquery);
-			$myuser = DB_GetSingleRow($result, true);
+			$result = DB_QueryBound(
+				"SELECT * FROM " . STATS_USERS . " WHERE ID = ?",
+				'i',
+				array( $uid )
+			);
+			$myuser = DB_GetSingleRow( $result, true );
 			if ( isset($myuser['username']) )
 			{
 				$content['USERID'] = $myuser['ID'];
@@ -96,6 +97,7 @@ if ( isset($_GET['op']) )
 		{
 			//PreInit these values 
 			$content['USERID'] = DB_RemoveBadChars($_GET['id']);
+			$uid              = (int) $content['USERID'];
 
 			if ( !isset($_SESSION['SESSION_USERNAME']) )
 			{
@@ -105,8 +107,8 @@ if ( isset($_GET['op']) )
 			else
 			{
 				// Get UserInfo
-				$result = DB_Query("SELECT username FROM " . STATS_USERS . " WHERE ID = " . $content['USERID'] ); 
-				$myrow = DB_GetSingleRow($result, true);
+				$result = DB_QueryBound( "SELECT username FROM " . STATS_USERS . " WHERE ID = ?", 'i', array( $uid ) );
+				$myrow = DB_GetSingleRow( $result, true );
 				if ( !isset($myrow['username']) )
 				{
 					$content['ISERROR'] = "true";
@@ -129,14 +131,11 @@ if ( isset($_GET['op']) )
 				else
 				{
 					// do the delete!
-					$result = DB_Query( "DELETE FROM " . STATS_USERS . " WHERE ID = " . $content['USERID'] );
-					if ($result == FALSE)
-					{
+					$ok = DB_ExecBound( "DELETE FROM " . STATS_USERS . " WHERE ID = ?", 'i', array( $uid ) );
+					if ( ! $ok ) {
 						$content['ISERROR'] = "true";
 						$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_DELUSER'], $content['USERID'] ); 
 					}
-					else
-						DB_FreeQuery($result);
 
 					// Do the final redirect
 					RedirectResult( GetAndReplaceLangStr( $content['LN_USER_ERROR_HASBEENDEL'], $myrow['username'] ) , "users.php" );
@@ -169,8 +168,12 @@ if ( isset($_GET['op']) )
 			// Everything was alright, so we go to the next step!
 			if ( $_POST['op'] == "addnewuser" )
 			{
-				$result = DB_Query("SELECT username FROM " . STATS_USERS . " WHERE username = '" . $content['USERNAME'] . "'"); 
-				$myrow = DB_GetSingleRow($result, true);
+				$result = DB_QueryBound(
+					"SELECT username FROM " . STATS_USERS . " WHERE username = ?",
+					's',
+					array( $content['USERNAME'] )
+				);
+				$myrow = DB_GetSingleRow( $result, true );
 				if ( isset($myrow['username']) )
 				{
 					$content['ISERROR'] = "true";
@@ -192,20 +195,22 @@ if ( isset($_GET['op']) )
 						$content['PASSWORDHASH'] = md5( $content['PASSWORD1'] );
 
 						// Add new User now!
-						$result = DB_Query("INSERT INTO " . STATS_USERS . " (username, password) 
-						VALUES ('" . $content['USERNAME'] . "', 
-								'" . $content['PASSWORDHASH'] . "' )");
-						DB_FreeQuery($result);
+						DB_ExecBound(
+							"INSERT INTO " . STATS_USERS . " (username, password) VALUES (?, ?)",
+							'ss',
+							array( $content['USERNAME'], $content['PASSWORDHASH'] )
+						);
 						
 						// Do the final redirect
-						RedirectResult( GetAndReplaceLangStr( $content['LN_USER_ERROR_HASBEENADDED'], $myrow['username'] ) , "users.php" );
+						RedirectResult( GetAndReplaceLangStr( $content['LN_USER_ERROR_HASBEENADDED'], $content['USERNAME'] ) , "users.php" );
 					}
 				}
 			}
 			else if ( $_POST['op'] == "edituser" )
 			{
-				$result = DB_Query("SELECT ID FROM " . STATS_USERS . " WHERE ID = " . $content['USERID']);
-				$myrow = DB_GetSingleRow($result, true);
+				$euid  = (int) $content['USERID'];
+				$result = DB_QueryBound( "SELECT ID FROM " . STATS_USERS . " WHERE ID = ?", 'i', array( $euid ) );
+				$myrow = DB_GetSingleRow( $result, true );
 				if ( !isset($myrow['ID']) )
 				{
 					$content['ISERROR'] = "true";
@@ -229,20 +234,21 @@ if ( isset($_GET['op']) )
 							$content['PASSWORDHASH'] = md5( $content['PASSWORD1'] );
 
 							// Edit the User now!
-							$result = DB_Query("UPDATE " . STATS_USERS . " SET 
-								username = '" . $content['USERNAME'] . "', 
-								password = '" . $content['PASSWORDHASH'] . "' 
-								WHERE ID = " . $content['USERID']);
-							DB_FreeQuery($result);
+							DB_ExecBound(
+								"UPDATE " . STATS_USERS . " SET username = ?, password = ? WHERE ID = ?",
+								'ssi',
+								array( $content['USERNAME'], $content['PASSWORDHASH'], $euid )
+							);
 						}
 					}
 					else
 					{
 						// Edit the User now!
-						$result = DB_Query("UPDATE " . STATS_USERS . " SET 
-							username = '" . $content['USERNAME'] . "' 
-							WHERE ID = " . $content['USERID']);
-						DB_FreeQuery($result);
+						DB_ExecBound(
+							"UPDATE " . STATS_USERS . " SET username = ? WHERE ID = ?",
+							'si',
+							array( $content['USERNAME'], $euid )
+						);
 					}
 
 					// Done redirect!

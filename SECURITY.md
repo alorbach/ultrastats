@@ -8,8 +8,11 @@ This document describes hardening applied during the modernisation pass and safe
 - **User preference redirect** — `userchange.php` no longer follows arbitrary `HTTP_REFERER` URLs; only same-host referrers are used, then sanitized.
 - **Session fixation** — on successful admin login, `session_regenerate_id(true)` is called.
 - **Session cookies** — where supported (PHP 7.3+), `session_set_cookie_params` sets `httponly`, `samesite=Lax`, and `secure` when HTTPS is detected. `session.use_strict_mode` is turned on.
-- **Chat search SQL** — `find-chat.php` builds `LIKE` patterns with `mysqli_real_escape_string` (via `DB_EscapeString`) after escaping `%`, `_`, and `\` for `LIKE` semantics.
-- **Database API** — legacy `mysql_*` calls were removed; the app uses **mysqli** only (PHP 7+ compatible).
+- **Chat search SQL** — `find-chat.php` uses **bound parameters** (`DB_QueryBound`) for the `LIKE` pattern, with `UltraStats_SqlLikeContainsPattern()` so `%` / `_` / `\\` in the search text are treated as literals inside the match.
+- **Player search** — `find-players.php` uses prepared statements for PLAYERID equality and alias / PBGUID `LIKE` searches.
+- **Admin users** — `src/admin/users.php` uses `DB_QueryBound` / `DB_ExecBound` for username and password values and numeric user id on selects/updates/deletes.
+- **Parser** — `parser-core.php`, `parser.php`, and `parser-shell.php` load server rows with `WHERE ID = ?`.
+- **Database API** — legacy `mysql_*` calls were removed; the app uses **mysqli** only (PHP 7+ compatible). Prepared helpers require **mysqlnd** (see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md)).
 
 ## What you should still do
 
@@ -17,7 +20,7 @@ This document describes hardening applied during the modernisation pass and safe
 - **HTTPS** — deploy behind TLS in production; restrict admin to HTTPS if possible.
 - **Database credentials** — do not commit `config.php` with real secrets. Use `contrib/config.sample.php` as a template; keep `config.php` out of VCS in production.
 - **Display errors** — keep `display_errors=Off` in production `php.ini`.
-- **SQL injection (general)** — many queries still use string concatenation with `DB_RemoveBadChars` / `addslashes`. For new or high-risk code, prefer **prepared statements** (`mysqli_prepare` / bound parameters).
+- **SQL injection (general)** — other pages (e.g. large parts of `admin/servers.php`, `players.php`, `stringeditor.php`, install wizard) still build SQL with `DB_RemoveBadChars` / `addslashes`. Prefer `DB_QueryBound` / `DB_ExecBound` in `functions_db.php` when adding or refactoring user-influenced queries; see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md) for a migration checklist.
 - **Admin surface** — keep the `admin/` area behind network controls or additional auth (HTTP basic, VPN, or IP allowlist) if the app is exposed to the internet.
 
 ## Reporting issues

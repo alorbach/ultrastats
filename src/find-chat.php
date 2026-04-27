@@ -46,9 +46,7 @@ if ( isset($_GET['search']) )
 	
 	if ( strlen($content['searchfor']) > 2 )
 	{
-		// --- Read Chatlog (LIKE pattern escaped for SQL and LIKE metacharacters)
-		$likepat = str_replace( array( '\\', '%', '_' ), array( '\\\\', '\\%', '\\_' ), $content['searchfor'] );
-		$likepat = DB_EscapeString( '%' . $likepat . '%' );
+		$likepat = UltraStats_SqlLikeContainsPattern( $content['searchfor'] );
 		$sqlquery = "SELECT " .
 							STATS_ROUNDS . ".ID, " .
 							STATS_CHAT . ".PLAYERID, " .
@@ -57,14 +55,14 @@ if ( isset($_GET['search']) )
 							" INNER JOIN (" . STATS_ROUNDS .
 							") ON (" .
 							STATS_ROUNDS . ".ID=" . STATS_CHAT . ".ROUNDID) " .
-							" WHERE " . STATS_CHAT . ".TextSaid LIKE '" . $likepat . "' " .
+							" WHERE " . STATS_CHAT . ".TextSaid LIKE ? " .
 							GetBannedPlayerWhereQuery(STATS_CHAT, "PLAYERID", false) .
 							" GROUP BY " . STATS_CHAT . ".ROUNDID" .
 							" ORDER BY " . STATS_CHAT . ".ROUNDID DESC";
 
 		// NO Order should be like said in the game
-		$result = DB_Query($sqlquery);
-		$content['ChatLog'] = DB_GetAllRows($result, true);
+		$result = DB_QueryBound( $sqlquery, 's', array( $likepat ) );
+		$content['ChatLog'] = DB_GetAllRows( $result, true );
 		
 		if ( isset($content['ChatLog']) )
 		{
@@ -99,7 +97,6 @@ if ( isset($_GET['search']) )
 		$content['chatsfound'] = "false";
 		$content['chatserror'] = $content["LN_SEARCH_CHATTOSHORT"];
 	}
-
 }
 else
 	$content['searchfor'] = "";
