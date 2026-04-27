@@ -154,3 +154,74 @@
 	z-index: 5;
 */
 }
+
+/* Admin parser.php: embedded EventSource log — fills viewport with sensible min size */
+.parser-embed-section
+{
+	box-sizing: border-box;
+	width: 100%;
+	max-width: min( 1400px, calc(100vw - 1.5rem) );
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0 0.5rem;
+}
+#parser-log-wrap
+{
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 260px;
+	min-height: 220px;
+	overflow: auto;
+	background-color: #1a1a1a;
+	border: 1px solid #444444;
+	text-align: left;
+	/* Responsive height: grow/shrink with viewport, floor + cap */
+	max-height: calc(100vh - 8.5rem);
+	height: clamp( 220px, calc(100vh - 10.5rem), min( 88vh, 1200px ) );
+}
+
+/* Embedded parser SSE: monospace text log (batched pre text, not one table row per line) */
+#parser-log-wrap .parser-sse-cols
+{
+	box-sizing: border-box;
+	width: 100%;
+	font-family: Consolas, "Lucida Console", monospace;
+	font-size: 11px;
+	color: #c8c8c8;
+	padding: 0.35rem 0.5rem 0.25rem;
+	border-bottom: 1px solid #444444;
+	background-color: #2a1a1a;
+}
+#parser-log-wrap pre.parser-sse-pre
+{
+	display: block;
+	margin: 0;
+	padding: 0.35rem 0.5rem 0.75rem;
+	font-family: Consolas, "Lucida Console", monospace;
+	font-size: 12px;
+	line-height: 1.4em;
+	white-space: pre-wrap;
+	word-break: break-word;
+	color: #e0e0e0;
+	border: 0;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: 2em;
+	background: repeating-linear-gradient(
+		180deg,
+		#161b22 0,
+		#161b22 1.4em,
+		#1c222c 1.4em,
+		#1c222c 2.8em
+	);
+	background-attachment: local;
+}
+
+@supports ( height: 100dvh )
+{
+	#parser-log-wrap
+	{
+		max-height: calc(100dvh - 8.5rem);
+		height: clamp( 220px, calc(100dvh - 10.5rem), min( 88dvh, 1200px ) );
+	}
+}

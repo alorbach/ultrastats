@@ -60,27 +60,165 @@
 </table>
 
 	<br>
-	<center>
-	<table width="90%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
+	<div class="parser-embed-section">
+	<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 		<tr>
 			<td colspan="10" align="center" valign="top" class="title">
 			<strong>{LN_EMBEDDED_PARSER}</strong></td>
 		</tr>
 	</table>
 
-	<p id="parser-iframe-status" style="margin:10px 0; color:#cccccc; font-size:12px;">Running…</p>
-	<iframe id="container" src="parser-core.php?op={parseroperation}&id={serverid}" width="90%" name="parser_in_a_box" class="with_border" style="min-height:60vh; height:70vh; max-height:90vh; background-color:#2a2a2a; border:1px solid #444444;">
-		<p>{NO_INFRAME_POSSIBLE}</p>
-	</iframe>
+	<div class="parser-embed-toolbar" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0;">
+		<p id="parser-stream-status" style="margin:0; color:#cccccc; font-size:12px;">Running…</p>
+		<button type="button" id="parser-cancel-btn" class="line0" style="display:none;padding:4px 10px;cursor:pointer;">{LN_PARSER_CANCEL}</button>
+	</div>
+	<div id="parser-log-wrap" data-parser-op="{parseroperation}" data-parser-id="{serverid}" data-msg-cancelling="{LN_PARSER_CANCELLING}" data-msg-cancelled="{LN_PARSER_CANCELLED_STATUS}">
+		<div id="parser-log-header" class="parser-sse-cols" style="display:none;"></div>
+		<pre id="parser-log-pre" class="parser-sse-pre" spellcheck="false"></pre>
+	</div>
 	<script>
 	(function () {
-		var iframe = document.getElementById('container');
-		var status = document.getElementById('parser-iframe-status');
-		if (!iframe || !status) { return; }
-		iframe.addEventListener('load', function () { status.style.display = 'none'; });
+		var wrap = document.getElementById('parser-log-wrap');
+		var pre = document.getElementById('parser-log-pre');
+		var logHeader = document.getElementById('parser-log-header');
+		var statusEl = document.getElementById('parser-stream-status');
+		var cancelBtn = document.getElementById('parser-cancel-btn');
+		/** Batched plain-text log: fewer DOM nodes than one &lt;tr&gt; per line (huge logs stay responsive). */
+		var lineBuf = [];
+		var LOG_FLUSH = 100;
+		if (!wrap || !pre) { return; }
+		var op = wrap.getAttribute('data-parser-op') || '';
+		var sid = wrap.getAttribute('data-parser-id') || '';
+		var es = null;
+		var pendingRunTotals = null;
+		var streamEndedCancelled = false;
+
+		if (cancelBtn && sid) {
+			cancelBtn.addEventListener('click', function () {
+				if (!cancelBtn.disabled) {
+					cancelBtn.disabled = true;
+					if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = wrap.getAttribute('data-msg-cancelling') || 'Cancelling…'; }
+				}
+				fetch('parser-cancel.php?id=' + encodeURIComponent(sid), { method: 'POST', credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+					.then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+					.then(function (j) {
+						if (!j || j.ok === false) { cancelBtn.disabled = false; if (statusEl) { statusEl.textContent = 'Running…'; } }
+					})
+					.catch(function () { cancelBtn.disabled = false; if (statusEl) { statusEl.textContent = 'Running…'; } });
+			});
+		}
+
+		function oneLine(s) {
+			return String(s || '').replace(/\r\n|\n|\r/g, ' \u21b5 ');
+		}
+		function fmtLogLine(d) {
+			var n = String(d.n != null ? d.n : '');
+			if (typeof n.padStart === 'function') {
+				n = n.padStart(5, ' ');
+			} else {
+				while (n.length < 5) { n = ' ' + n; }
+			}
+			return n + '  ' + oneLine(d.lvl) + '  ' + oneLine(d.fac) + '  ' + oneLine(d.msg);
+		}
+		function flushLogBuf() {
+			if (!lineBuf.length) { return; }
+			pre.appendChild(document.createTextNode(lineBuf.join('\n') + '\n'));
+			lineBuf.length = 0;
+			wrap.scrollTop = wrap.scrollHeight;
+		}
+		function appendLogRow(d) {
+			if (!d || d.t !== 'log') { return; }
+			lineBuf.push(fmtLogLine(d));
+			if (lineBuf.length >= LOG_FLUSH) { flushLogBuf(); }
+			if (statusEl) { statusEl.style.display = 'none'; }
+		}
+
+		function buildThead(d) {
+			if (!d || d.t !== 'header' || !d.cols || !logHeader) { return; }
+			logHeader.textContent = d.cols.join('    ');
+			logHeader.style.display = 'block';
+		}
+
+		function startParserStream(url) {
+			if (es) { try { es.close(); } catch (e) {} }
+			streamEndedCancelled = false;
+			var opMatch = /[?&]op=([^&]+)/.exec(url);
+			var streamOp = opMatch ? decodeURIComponent(opMatch[1]) : (op || '');
+			if (cancelBtn) {
+				if (streamOp === 'updatestats' && sid) {
+					cancelBtn.style.display = 'inline-block';
+					cancelBtn.disabled = false;
+				} else {
+					cancelBtn.style.display = 'none';
+				}
+			}
+			es = new EventSource(url);
+			if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = 'Running…'; }
+
+			es.addEventListener('message', function (ev) {
+				try {
+					var d = JSON.parse(ev.data);
+					if (d.t === 'log') { appendLogRow(d); }
+				} catch (err) { /* ignore */ }
+			});
+			es.addEventListener('table_header', function (ev) {
+				try { buildThead(JSON.parse(ev.data)); } catch (err) { }
+			});
+			es.addEventListener('need_resume', function (ev) {
+				var d = JSON.parse(ev.data);
+				if (es) { try { es.close(); } catch (e2) {} es = null; }
+				flushLogBuf();
+				if (d.message) {
+					appendLogRow({ t: 'log', n: '—', lvl: 'Info', fac: 'Parser', msg: d.message, fc: 'line0', lc: 'line0', mc: 'cellmenu1' });
+					flushLogBuf();
+				}
+				if (d.url) { setTimeout(function () { startParserStream(d.url); }, 0); }
+			});
+			es.addEventListener('parser_error', function (ev) {
+				var d = JSON.parse(ev.data);
+				flushLogBuf();
+				if (es) { try { es.close(); } catch (e4) {} es = null; }
+				if (statusEl) { statusEl.textContent = d.message || 'Error'; }
+			});
+			es.addEventListener('cancelled', function (ev) {
+				try {
+					var d = JSON.parse(ev.data);
+					flushLogBuf();
+					streamEndedCancelled = true;
+					if (statusEl) {
+						statusEl.style.display = 'block';
+						statusEl.textContent = d.message || wrap.getAttribute('data-msg-cancelled') || 'Cancelled.';
+					}
+				} catch (e5) { }
+			});
+			es.addEventListener('runtotals_next', function (ev) {
+				pendingRunTotals = JSON.parse(ev.data);
+			});
+			es.addEventListener('error', function (ev) {
+				if (es && es.readyState === EventSource.CLOSED) { return; }
+			});
+			es.addEventListener('done', function (ev) {
+				flushLogBuf();
+				if (es) { try { es.close(); } catch (e3) {} es = null; }
+				if (cancelBtn) { cancelBtn.style.display = 'none'; }
+				if (statusEl) { statusEl.textContent = streamEndedCancelled ? (statusEl.textContent) : 'Done.'; }
+				if (pendingRunTotals && pendingRunTotals.url) {
+					var del = Math.max(0, parseInt(pendingRunTotals.delayMs, 10) || 0);
+					var u = pendingRunTotals.url;
+					var p = pendingRunTotals;
+					pendingRunTotals = null;
+					if (p.label && statusEl) { statusEl.textContent = p.label + ' in ' + (del / 1000) + 's…'; }
+					setTimeout(function () { startParserStream(u); }, del);
+				}
+			});
+		}
+
+		if (op) {
+			startParserStream('parser-sse.php?op=' + encodeURIComponent(op) + (sid ? '&id=' + encodeURIComponent(sid) : ''));
+		}
 	})();
 	</script>
-	</center>
+	</div>
 
 <!-- ENDIF RUNPARSER="true" -->
 

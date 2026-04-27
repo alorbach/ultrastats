@@ -4,7 +4,7 @@ Guidance for humans and AI agents working in this repository.
 
 ## What this project is
 
-**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.14** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
+**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.20** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
 
 **Repository overview for humans:** [README.md](README.md) at the root (the plain [README](README) file is a one-screen pointer to that file).
 
@@ -52,6 +52,20 @@ Guidance for humans and AI agents working in this repository.
 - **Internal schema version** is tracked in `functions_db.php` as `$content['database_internalversion']` and in table `…config` key `database_installedversion`.
 - **Upgrades** run from `src/contrib/db_update_vN.txt` via `src/admin/upgrade.php`. A file with **one** SQL statement is valid (the upgrader must not require more than one chunk).
 - **Version 9:** `stats_aliases.AliasChecksum` is **`INT UNSIGNED`** so PHP `sprintf('%u', crc32(...))` values (0–4294967295) fit; legacy signed `INT` caused MySQL **1264** on insert for many aliases.
+- **Version 10:** non-unique index **`idx_aliases_server_player_alias` (`SERVERID`, `PLAYERID`, `Alias`)** on `stats_aliases` to speed the parser’s lookup-by-natural-key path (see `EXPLAIN` on that query if tuning).
+
+**Performance / profiling (gamelog and SQL):**
+
+- Use **`EXPLAIN`** on hot queries (e.g. `stats_aliases` by server/player/alias) after schema changes; enable MySQL **`slow_query_log`** for a representative parse and review wall time vs PHP.
+- **`INSERT ... ON DUPLICATE KEY UPDATE`** for aliases would need a **UNIQUE** key on the business natural key (not only the v10 secondary index); that is a larger migration—evaluate against duplicate risk and offline testing.
+- **`MYSQL_BULK_MODE`** (see `ProcessUpdateStatement` / `ProcessQueuedUpdateStatement` in `functions_parser-helpers.php`) can batch updates via the mysql CLI when enabled in config; requires a working `$content['MYSQLPATH']` and is optional on restricted hosts.
+
+## Embedded parser (SSE)
+
+- **Admin log stream:** [`src/admin/parser-sse.php`](src/admin/parser-sse.php) serves **`text/event-stream`** (Server-Sent Events) for the same operations as [`parser-core.php`](src/admin/parser-core.php). The template [`src/templates/admin/parser.html`](src/templates/admin/parser.html) uses **`EventSource`** to append lines without iframe reloads; `need_resume` / `runtotals_next` / `done` events handle timeout resume and post-parse totals.
+- **Reverse proxies:** disable response buffering for SSE (e.g. **nginx:** `proxy_buffering off` and/or `X-Accel-Buffering: no` on the location; **Apache:** avoid mod_deflate on the stream). PHP sets `X-Accel-Buffering: no` for compatibility.
+- **Limitation:** operations that emit **HTML forms** (e.g. FTP password, delete confirmation) are still designed for `parser-core.php` in a full page; use the classic parser page or CLI for those paths if the stream is unusable.
+- **Cancel:** [`src/admin/parser-cancel.php`](src/admin/parser-cancel.php) sets a flag under `tmp/parser_cancel_<serverId>.flag`; `RunParserNow` cooperatively stops after the current round (or during line-count / skip-old-lines phases). The UI button targets only the `updatestats` SSE stream.
 
 ## How to run locally (Docker)
 
@@ -81,7 +95,7 @@ docker compose -f docker/docker-compose.yml up --build
 
 - **DB API:** `src/include/functions_db.php` (single place to adjust connection, query helpers, **mysqli**).
 - **Session / login:** `src/include/functions_users.php`, `StartPHPSession()` in `functions_common.php`.
-- **Parser pipeline:** `src/admin/parser.php`, `src/admin/parser-core.php`, `src/include/functions_parser.php`.
+- **Parser pipeline:** `src/admin/parser.php`, `src/admin/parser-core.php`, `src/admin/parser-sse.php`, `src/admin/parser-core-operations.php`, `src/include/functions_parser.php`.
 
 **Alias / top-alias data after the `DB_GetAllRows` + `isset()` fix:** Older parses may have **missing** rows in `stats_aliases`, `stats_players_static`, or derived top-alias data because empty result sets were mis-handled. After upgrading, use **reset last log line** and **re-parse**, or **delete server stats** and parse again, or run **Run total update** / **Create top aliases** once the underlying tables are populated.
 

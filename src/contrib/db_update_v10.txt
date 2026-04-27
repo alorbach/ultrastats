@@ -1,0 +1,4 @@
+-- --------------------------------------------------------
+-- Database internal version 10: index for alias lookups by server + player + alias (parser hot path).
+-- PK leads with AUTO_INCREMENT ID; this KEY matches WHERE SERVERID / PLAYERID / Alias.
+ALTER TABLE `stats_aliases` ADD INDEX `idx_aliases_server_player_alias` (`SERVERID`, `PLAYERID`, `Alias`);

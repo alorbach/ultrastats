@@ -695,7 +695,12 @@ function RunParserNow()
 
 	// StartDbg
 	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Starting Parser...");
-	
+
+	// Remove stale cancel flag from earlier; this run may set a new one.
+	if ( $RUNMODE == RUNMODE_WEBSERVER ) {
+		UltraStats_ParserCancelClear( $myserver['ID'] );
+	}
+
 	// Get Stored LastLogline Value
 	$db_lastlogline = GetLastLogLine( $myserver['ID'] );
 	// --- TIME CALC FIX!
@@ -725,6 +730,12 @@ function RunParserNow()
 		{
 			$gl_linebuffer = fgets($myhandle, 1024);
 			$gl_newlastline++;
+
+			if ( $RUNMODE == RUNMODE_WEBSERVER && ( $gl_newlastline % 4000 ) === 0 && UltraStats_ParserCancelPending( $myserver['ID'] ) ) {
+				fclose( $myhandle );
+				UltraStats_ParserNotifyUserCancelled( $myserver['ID'], 'Parse cancelled during line count (before processing rounds).' );
+				return;
+			}
 			
 			// We parse new logs only and we ignore empty lines and lines with less chars then 5!
 			if ( $gl_newlastline > $db_lastlogline && strlen($gl_linebuffer) > 5 )
@@ -789,12 +800,27 @@ function RunParserNow()
 			// Reset LastLogline now!
 			ResetLastLine();
 			
-			// Draw Javascript reload!
+			// Draw Javascript reload (HTML) or SSE reconnect (embedded parser log).
 			define('RELOADPARSER', true);
-			print ('<br><center><B>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</B><br>
-					Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
+			$resumeQs = isset( $_SERVER['QUERY_STRING'] ) ? (string) $_SERVER['QUERY_STRING'] : '';
+			$resumeUrl = ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE )
+				? ( 'parser-sse.php' . ( $resumeQs !== '' ? '?' . $resumeQs : '' ) )
+				: ( $_SERVER['PHP_SELF'] . ( $resumeQs !== '' ? '?' . $resumeQs : '' ) );
+			if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+				UltraStats_ParserSseEmitEvent(
+					'need_resume',
+					array(
+						'url'     => $resumeUrl,
+						'reason'  => 'lastline_reset',
+						'message' => 'Last log line was reset; reconnecting to continue parsing…',
+					)
+				);
+			} else {
+				print ( '<br><center><B>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</B><br>
+					Please click <B><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</A></B> to resume the update process.
 					This site will automatically reload in 5 seconds.<br></center>
-					<script>function usParserReloadSame() { location.replace("' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"); } setTimeout(usParserReloadSame, 5000);</script>');
+					<script>function usParserReloadSame() { location.replace("' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '"); } setTimeout(usParserReloadSame, 5000);</script>' );
+			}
 
 			// Return from the function
 			return;
@@ -847,6 +873,11 @@ function RunParserNow()
 			{
 				// Repeat until new file position is reached
 				$currentline++;
+				if ( $RUNMODE == RUNMODE_WEBSERVER && ( $currentline % 8000 ) === 0 && UltraStats_ParserCancelPending( $myserver['ID'] ) ) {
+					fclose( $myhandle );
+					UltraStats_ParserNotifyUserCancelled( $myserver['ID'], 'Parse cancelled while skipping already-parsed lines.' );
+					return;
+				}
 			}
 			else
 			{
@@ -1015,10 +1046,25 @@ function RunParserNow()
 									if ( ( microtime_float() - $ParserStart) > $MaxExecutionTime)
 									{
 										define('RELOADPARSER', true);
-										print ('<br><center><B>Timelimit hit (' . $MaxExecutionTime . ' seconds).</B><br>
-												Please click <B><a href="' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '">here</A></B> to resume the update process.
+										$resumeQs = isset( $_SERVER['QUERY_STRING'] ) ? (string) $_SERVER['QUERY_STRING'] : '';
+										$resumeUrl = ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE )
+											? ( 'parser-sse.php' . ( $resumeQs !== '' ? '?' . $resumeQs : '' ) )
+											: ( $_SERVER['PHP_SELF'] . ( $resumeQs !== '' ? '?' . $resumeQs : '' ) );
+										if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+											UltraStats_ParserSseEmitEvent(
+												'need_resume',
+												array(
+													'url'     => $resumeUrl,
+													'reason'  => 'timelimit',
+													'message' => 'Time limit hit (' . $MaxExecutionTime . ' seconds). Reconnecting…',
+												)
+											);
+										} else {
+											print ( '<br><center><B>Timelimit hit (' . $MaxExecutionTime . ' seconds).</B><br>
+												Please click <B><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</A></B> to resume the update process.
 												This site will automatically reload in 5 seconds.<br></center>
-												<script>function usParserReloadSame() { location.replace("' . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . '"); } setTimeout(usParserReloadSame, 5000);</script>');
+												<script>function usParserReloadSame() { location.replace("' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '"); } setTimeout(usParserReloadSame, 5000);</script>' );
+										}
 
 										// Run an update of the LastUpdate Time
 										SetLastUpdateTime( $myserver['ID'] );
@@ -1028,6 +1074,12 @@ function RunParserNow()
 									}
 								}
 								// --- 
+
+								if ( $RUNMODE == RUNMODE_WEBSERVER && UltraStats_ParserCancelPending( $myserver['ID'] ) ) {
+									fclose( $myhandle );
+									UltraStats_ParserNotifyUserCancelled( $myserver['ID'], 'Parse cancelled by user after the last completed round.' );
+									return;
+								}
 
 								// Debug Break
 		//						return;

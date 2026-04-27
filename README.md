@@ -2,7 +2,7 @@
 
 UltraStats is a log parser and web front-end for **Call of Duty** game server logs. It reads match logs, stores statistics in MySQL, and serves rankings, player pages, round history, and an admin area (parser, config, users).
 
-**Version:** 0.3.14 (see `src/include/functions_common.php`).
+**Version:** 0.3.20 (see `src/include/functions_common.php`).
 
 **License:** See [LICENSE](LICENSE) and [COPYING](COPYING) (GPL-3.0+).
 

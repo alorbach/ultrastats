@@ -52,7 +52,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.14";
+$content['BUILDNUMBER'] = "0.3.20";
 $content['UPDATEURL'] = "http://www.ultrastats.org/codww/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;
@@ -362,6 +362,7 @@ function InitPostDbConfigRuntime()
 			strpos( $httpAcceptEncoding, 'gzip' ) !== false && 
 			GetConfigSetting("gen_gzipcompression", "yes", CFGLEVEL_USER) == "yes" &&
 			!defined('IS_PARSERPAGE') /* Do not GZIP in this case!*/
+			&& ! defined( 'IS_PARSER_SSE' ) /* SSE stream must not be gzip-buffered */
 		) 
 	{
 		// This starts gzip compression!
@@ -762,6 +763,13 @@ function DieWithErrorMsg( $szerrmsg )
 	}
 	else if	( $RUNMODE == RUNMODE_WEBSERVER )
 	{
+		if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+			UltraStats_ParserSseEmitEvent(
+				'parser_error',
+				array( 'message' => $szerrmsg )
+			);
+			exit;
+		}
 		echo 
 			"<html><title>UltraStats :: Critical Error occured</title><head>" . 
 			"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/codww/main.css\" type=\"text/css\"></head><body><br><br>" .
@@ -1682,6 +1690,58 @@ function GetCustomServerWhereQuery( $customtable, $withwhere = true, $alsoreturn
 	else
 		return "";
 	// --- 
+}
+
+/**
+ * Start an SSE (Server-Sent Events) response for the admin parser stream (`parser-sse.php`).
+ * Call only after auth; disables output buffering for flush to the client.
+ */
+function UltraStats_ParserSseSendHeaders() {
+	if ( ! defined( 'IS_PARSER_SSE' ) || ! IS_PARSER_SSE || headers_sent() ) {
+		return;
+	}
+	header( 'Content-Type: text/event-stream; charset=utf-8' );
+	header( 'Cache-Control: no-cache, no-store' );
+	header( 'Connection: keep-alive' );
+	header( 'X-Accel-Buffering: no' );
+	while ( ob_get_level() > 0 ) {
+		ob_end_flush();
+	}
+	echo ": ultra-stats-parser\n\n";
+	if ( function_exists( 'session_status' ) && session_status() === PHP_SESSION_ACTIVE ) {
+		@session_write_close();
+	}
+	UltraStats_FlushSse();
+}
+
+function UltraStats_FlushSse() {
+	@flush();
+	if ( function_exists( 'ob_flush' ) ) {
+		@ob_flush();
+	}
+}
+
+/**
+ * Emit one SSE event (JSON payload on a single data line). Used by parser HTML output and errors.
+ *
+ * @param string          $eventName Event name (empty = default "message").
+ * @param string|array    $data      JSON-encodable array or raw string.
+ */
+function UltraStats_ParserSseEmitEvent( $eventName, $data ) {
+	if ( ! defined( 'IS_PARSER_SSE' ) || ! IS_PARSER_SSE ) {
+		return;
+	}
+	if ( is_array( $data ) ) {
+		$payload = json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+	} else {
+		$payload = (string) $data;
+	}
+	$eventName = (string) $eventName;
+	if ( $eventName !== '' ) {
+		echo 'event: ' . preg_replace( '/[\r\n]/', '', $eventName ) . "\n";
+	}
+	echo 'data: ' . str_replace( "\n", "\ndata: ", $payload ) . "\n\n";
+	UltraStats_FlushSse();
 }
 
 

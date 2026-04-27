@@ -84,6 +84,7 @@ if ( isset($_GET['id']) )
 		{
 			// Enable Stats
 			$content['roundsenabled'] = "true";
+			$AllPlayers = array();
 
 			// Copy round Variables
 			$content['ServerCvars'] = $roundvars['ServerCvars'];
@@ -233,7 +234,7 @@ if ( isset($_GET['id']) )
 									" ORDER BY " . STATS_GAMEACTIONS . ".NAME, Count DESC ";
 				$result = DB_Query($sqlquery);
 				$gameactions = DB_GetAllRows($result, true);
-				if ( isset($gameactions) )
+				if ( !empty($gameactions) )
 				{
 					// Enable!
 					$content['gameactions_enabled'] = "true";
@@ -303,45 +304,48 @@ if ( isset($_GET['id']) )
 
 
 			// --- Now creat awards
-			foreach( $AllPlayers as $myplayer )
+			if ( count($AllPlayers) > 0 )
 			{
-				if ( !isset($content['Awards'][0]) )
-					$content['Awards'][0] = $myplayer;
-				else
+				foreach( $AllPlayers as $myplayer )
 				{
-					// Higher = New runner ;)!
-					if ( $content['Awards'][0]['TotalKills'] < $myplayer['TotalKills'] )
+					if ( !isset($content['Awards'][0]) )
 						$content['Awards'][0] = $myplayer;
-				}
+					else
+					{
+						// Higher = New runner ;)!
+						if ( $content['Awards'][0]['TotalKills'] < $myplayer['TotalKills'] )
+							$content['Awards'][0] = $myplayer;
+					}
 
-				if ( !isset($content['Awards'][1]) )
-					$content['Awards'][1] = $myplayer;
-				else
-				{
-					// Higher = New runner ;)!
-					if ( $content['Awards'][1]['TotalKilled'] < $myplayer['TotalKilled'] )
+					if ( !isset($content['Awards'][1]) )
 						$content['Awards'][1] = $myplayer;
+					else
+					{
+						// Higher = New runner ;)!
+						if ( $content['Awards'][1]['TotalKilled'] < $myplayer['TotalKilled'] )
+							$content['Awards'][1] = $myplayer;
+					}
+
 				}
+				$content['Awards'][0]['DisplayName'] = "Most Kills";
+				$content['Awards'][0]['MedalImage'] = "images/medals/thumbs/medal_pro_killer.png"; // Medal_Kills.png";
+				$content['Awards'][0]['ValueTitel'] = $content['LN_TOPPLAY_KILLS'];
+				$content['Awards'][0]['Value'] = $content['Awards'][0]['TotalKills'];
 
-			}
-			$content['Awards'][0]['DisplayName'] = "Most Kills";
-			$content['Awards'][0]['MedalImage'] = "images/medals/thumbs/medal_pro_killer.png"; // Medal_Kills.png";
-			$content['Awards'][0]['ValueTitel'] = $content['LN_TOPPLAY_KILLS'];
-			$content['Awards'][0]['Value'] = $content['Awards'][0]['TotalKills'];
+				$content['Awards'][1]['DisplayName'] = "Most Deaths";
+				$content['Awards'][1]['MedalImage'] = "images/medals/thumbs/medal_anti_no1target.png"; // Medal_Deaths.png";
+				$content['Awards'][1]['ValueTitel'] = $content['LN_TOPPLAY_Deaths'];
+				$content['Awards'][1]['Value'] = $content['Awards'][1]['TotalKilled'];
 
-			$content['Awards'][1]['DisplayName'] = "Most Deaths";
-			$content['Awards'][1]['MedalImage'] = "images/medals/thumbs/medal_anti_no1target.png"; // Medal_Deaths.png";
-			$content['Awards'][1]['ValueTitel'] = $content['LN_TOPPLAY_Deaths'];
-			$content['Awards'][1]['Value'] = $content['Awards'][1]['TotalKilled'];
-
-			for($i = 0; $i < count($content['Awards']); $i++)
-			{
-				// --- Set CSS Class
-				if ( $i % 2 == 0 )
-					$content['Awards'][$i]['cssclass'] = "line0";
-				else
-					$content['Awards'][$i]['cssclass'] = "line1";
-				// --- 
+				for($i = 0; $i < count($content['Awards']); $i++)
+				{
+					// --- Set CSS Class
+					if ( $i % 2 == 0 )
+						$content['Awards'][$i]['cssclass'] = "line0";
+					else
+						$content['Awards'][$i]['cssclass'] = "line1";
+					// --- 
+				}
 			}
 			// --- 
 
@@ -407,11 +411,14 @@ function GetRoundPlayerDetails( $excludemyguids )
 						" ORDER BY TotalKills DESC ";
 	$result = DB_Query($sqlquery);
 	$myarray = DB_GetAllRows($result, true);
+	if ( ! is_array( $myarray ) ) {
+		$myarray = array();
+	}
 
 	// Init excludeKillerGuids variable
 	$excludeKillerGuids = "";
 
-	if ( isset($myarray) )
+	if ( count($myarray) > 0 )
 	{
 		$iArrCount = count($myarray);
 		for($i = 0; $i < $iArrCount; $i++)

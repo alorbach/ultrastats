@@ -38,6 +38,14 @@ function CreateHTMLHeader()
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
 		return;
 
+	// SSE stream: no HTML document wrapper (see PrintHTMLDebugInfo / CreateHTMLFooter).
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+		global $currentclass, $currentmenuclass;
+		$currentclass     = 'line0';
+		$currentmenuclass = 'cellmenu1';
+		return;
+	}
+
 	global $currentclass, $currentmenuclass;
 	$currentclass = "line0";
 	$currentmenuclass = "cellmenu1";
@@ -76,7 +84,15 @@ function PrintDebugInfoHeader()
 
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
 		print ( "Num.\tFacility . \tDebug Message\n" );
-	else if ( $RUNMODE == RUNMODE_WEBSERVER )
+	else if ( $RUNMODE == RUNMODE_WEBSERVER && defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+		UltraStats_ParserSseEmitEvent(
+			'table_header',
+			array(
+				't'   => 'header',
+				'cols' => array( 'Number', 'DebugLevel', 'Facility', 'DebugMessage' ),
+			)
+		);
+	} else if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
 	print('	<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" bgcolor="#777777">
 			<tr> 
@@ -160,6 +176,31 @@ function PrintHTMLDebugInfo( $facility, $fromwhere, $szDbgInfo )
 
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
 		print ( $gldbgcounter . ". \t" . GetFacilityAsString($facility) . ". \t" . $fromwhere . ". \t" . $szDbgInfo . "\n" );
+	else if ( $RUNMODE == RUNMODE_WEBSERVER && defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE )
+	{
+		$line = array(
+			't'     => 'log',
+			'n'     => (int) $gldbgcounter,
+			'lvl'   => GetFacilityAsString( $facility ),
+			'fac'   => $fromwhere,
+			'msg'   => $szDbgInfo,
+			'fc'    => GetDebugClassFacilityAsString( $facility ),
+			'lc'    => $currentclass,
+			'mc'    => $currentmenuclass,
+		);
+		UltraStats_ParserSseEmitEvent( 'message', $line );
+
+		if ( $currentclass == 'line0' ) {
+			$currentclass = 'line1';
+		} else {
+			$currentclass = 'line0';
+		}
+		if ( $currentmenuclass == 'cellmenu1' ) {
+			$currentmenuclass = 'cellmenu2';
+		} else {
+			$currentmenuclass = 'cellmenu1';
+		}
+	}
 	else if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
 		print ('<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" bgcolor="#777777">
@@ -186,8 +227,12 @@ function PrintHTMLDebugInfo( $facility, $fromwhere, $szDbgInfo )
 	FlushParserOutput();
 
 	// If DEBUG_ERROR_WTF and $content['gen_phpdebug'] is set, abort!
-	if ( $content['gen_phpdebug'] == 1 && $facility == DEBUG_ERROR_WTF ) 
+	if ( $content['gen_phpdebug'] == 1 && $facility == DEBUG_ERROR_WTF ) {
+		if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+			UltraStats_ParserSseEmitEvent( 'parser_error', array( 'message' => $szDbgInfo ) );
+		}
 		die ( $szDbgInfo );
+	}
 }
 
 function FlushParserOutput()
@@ -199,6 +244,10 @@ function FlushParserOutput()
 		return;
 
 	//Flush php output
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE && function_exists( 'UltraStats_FlushSse' ) ) {
+		UltraStats_FlushSse();
+		return;
+	}
 	@flush();
 	@ob_flush();
 }
@@ -255,6 +304,18 @@ function CreateHTMLFooter()
 	// not needed in console mode
 	if ( $RUNMODE == RUNMODE_COMMANDLINE )
 		return;
+
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
+		UltraStats_ParserSseEmitEvent(
+			'done',
+			array(
+				't'            => 'done',
+				'seconds'      => $RenderTime,
+				'parserStart'  => isset( $ParserStart ) ? $ParserStart : 0,
+			)
+		);
+		return;
+	}
 
 	print ('<br><center><h3>Finished</h3>
 			Total running time was ' . $RenderTime . ' seconds
@@ -894,6 +955,76 @@ function GetCustomServerStartTime($mybuffer)
 	}
 	else
 		return "";
+}
+
+// --- Cooperative "cancel" for embedded web parse (file flag; avoids session lock on parallel request)
+function UltraStats_ParserCancelFlagPath( $serverId ) {
+	global $content;
+	$base = isset( $content['BASEPATH'] ) ? $content['BASEPATH'] : '';
+	if ( $base === '' ) {
+		return '';
+	}
+	return rtrim( $base, "/\\" ) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'parser_cancel_' . (int) $serverId . '.flag';
+}
+
+function UltraStats_ParserCancelEnsureTmp() {
+	global $content;
+	$base = isset( $content['BASEPATH'] ) ? $content['BASEPATH'] : '';
+	if ( $base === '' ) {
+		return false;
+	}
+	$d = rtrim( $base, "/\\" ) . DIRECTORY_SEPARATOR . 'tmp';
+	if ( is_dir( $d ) ) {
+		return true;
+	}
+	return @mkdir( $d, 0775, true );
+}
+
+function UltraStats_ParserCancelClear( $serverId ) {
+	$p = UltraStats_ParserCancelFlagPath( $serverId );
+	if ( $p !== '' && is_file( $p ) ) {
+		@unlink( $p );
+	}
+}
+
+function UltraStats_ParserCancelRequest( $serverId ) {
+	if ( ! UltraStats_ParserCancelEnsureTmp() ) {
+		return false;
+	}
+	$p = UltraStats_ParserCancelFlagPath( $serverId );
+	if ( $p === '' ) {
+		return false;
+	}
+	return @file_put_contents( $p, (string) time() ) !== false;
+}
+
+function UltraStats_ParserCancelPending( $serverId ) {
+	$p = UltraStats_ParserCancelFlagPath( $serverId );
+	return ( $p !== '' && is_file( $p ) );
+}
+
+function UltraStats_ParserCancelConsume( $serverId ) {
+	$p = UltraStats_ParserCancelFlagPath( $serverId );
+	if ( $p !== '' && is_file( $p ) ) {
+		@unlink( $p );
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Aborts the web parse at a safe point; clears the cancel flag, sets RELOADPARSER, log + SSE, updates server time.
+ */
+function UltraStats_ParserNotifyUserCancelled( $serverId, $message ) {
+	UltraStats_ParserCancelConsume( $serverId );
+	if ( ! defined( 'RELOADPARSER' ) ) {
+		define( 'RELOADPARSER', true );
+	}
+	PrintHTMLDebugInfo( DEBUG_WARN, 'Gamelog', $message );
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE && function_exists( 'UltraStats_ParserSseEmitEvent' ) ) {
+		UltraStats_ParserSseEmitEvent( 'cancelled', array( 'message' => $message ) );
+	}
+	SetLastUpdateTime( $serverId );
 }
 
 

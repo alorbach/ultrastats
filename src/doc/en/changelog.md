@@ -4,6 +4,13 @@ Release history. Plain-text: [../../ChangeLog](../../ChangeLog).
 
 ---
 
+## Version 0.3.20, 2026-04-27
+
+### Changes and bugfixes
+
+- **rounds-detail.php:** fixed PHP 8 fatal when a round has no round-action rows (empty `gameactions` still passed `isset()` but never populated `$content['gameactions']`).
+- **rounds-detail.php:** initialize `$AllPlayers` and skip medal/awards when there are no players; harden `GetRoundPlayerDetails` when the kills query returns no mysqli result.
+
 ## Version 0.3.14, 2026-04-26
 
 ### New features
