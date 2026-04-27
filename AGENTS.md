@@ -26,6 +26,7 @@ Guidance for humans and AI agents working in this repository.
 | `src/contrib/` | **SQL:** `db_template.txt` (base schema), `db_update_v*.txt` (incremental upgrades), `config.sample.php`, helper scripts. |
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
+| `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |
 | `docker/` | `Dockerfile` and `docker-compose.yml` for local dev (see below). |
 | `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) publishes a **GitHub Release** and `ultrastats-X.Y.Z.tar.gz` when you push tag `vX.Y.Z`. |
 
@@ -98,6 +99,13 @@ docker compose -f docker/docker-compose.yml up --build
 - **Parser pipeline:** `src/admin/parser.php`, `src/admin/parser-core.php`, `src/admin/parser-sse.php`, `src/admin/parser-core-operations.php`, `src/include/functions_parser.php`.
 
 **Alias / top-alias data after the `DB_GetAllRows` + `isset()` fix:** Older parses may have **missing** rows in `stats_aliases`, `stats_players_static`, or derived top-alias data because empty result sets were mis-handled. After upgrading, use **reset last log line** and **re-parse**, or **delete server stats** and parse again, or run **Run total update** / **Create top aliases** once the underlying tables are populated.
+
+## Changelog and documentation maintenance
+
+- **Keep the changelog dual-format in sync:** update the root [ChangeLog](ChangeLog) (plain text) and [src/doc/en/changelog.md](src/doc/en/changelog.md) (Markdown) together for the same version or new bullets. Match wording and substance; in `changelog.md`, use correct relative links from `src/doc/en/` (often `../../../` to the repo root or `docs/`).
+- **When to update:** user-visible fixes/features (parser, admin, install/upgrade, Docker dev defaults), bumps to **`database_internalversion`** / new `db_update_v*.txt`, security-relevant behavior, or anything operators need to know. Prefer short, accurate bullets over pasting raw commit subjects.
+- **Releases:** pushing tag `v*` triggers [.github/workflows/release-on-tag.yml](.github/workflows/release-on-tag.yml), which builds release notes from **ChangeLog** (via [.github/scripts/build_release_body.py](.github/scripts/build_release_body.py)). A stale ChangeLog means a misleading GitHub Release.
+- **Other bundled docs:** if behavior changes, update the relevant Markdown under `src/doc/en/` (e.g. install/upgrade) and any pointers in [README.md](README.md), [SECURITY.md](SECURITY.md), or [docs/](docs/) so operators and future agents see one consistent story.
 
 ## Modernisation backlog
 
