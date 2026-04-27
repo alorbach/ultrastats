@@ -6,6 +6,8 @@ Guidance for humans and AI agents working in this repository.
 
 **UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.13** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
 
+**Repository overview for humans:** [README.md](README.md) at the root (the plain [README](README) file is a one-screen pointer to that file).
+
 **Runtime baseline (modernisation):** **PHP 7.4+**; **MySQL 5.7+ / 8+** or compatible MariaDB. **Docker** in this repo targets **PHP 8.2** for local development.
 
 ## License
@@ -82,3 +84,7 @@ docker compose -f docker/docker-compose.yml up --build
 ## Modernisation backlog
 
 - Broader plan (if present in the repo) may live in `.cursor/plans/` or your issue tracker: mysqli migration, security review, UI compatibility report, inline PHPDoc on critical includes.
+
+## Agent skills (this repo)
+
+- **Squashed commit / handoff summaries** — if you need a **SUMMARIZE**-style, paste-ready **commit message** or short PR blurb, follow [.cursor/skills/summarize-handoff/SKILL.md](.cursor/skills/summarize-handoff/SKILL.md) (includes the `git status` / `git diff --stat` commands to run first).

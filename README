@@ -1,41 +1,9 @@
- README
- ----------------------------------
+README
+----------------------------------
 
- Welcome to UltraStats, a powerfull logparser for gamelogs 
- created for Call of Duty gameservers. 
+ UltraStats
 
- 
- AUTHORS
- ----------------------------------
- Andre Lorbach (alias deltaray)
+ The maintained project overview is README.md in this directory: requirements,
+ installation, Docker, security, and repository layout.
 
-
- Support Games
- ----------------------------------
- - Call of Duty
- - Call of Duty: United Offense
- - Call of Duty 2
- - Call of Duty 4: Modern Warfare
- - Call of Duty: World at War
-
- 
- ChangeLog
- ----------------------------------
- The Version History can be found in the ChangeLog document. 
-
- 
- INSTALL
- ----------------------------------
- For Installation help, please read the INSTALL document. 
-
-
- COPYING
- --------------------------------
- The UltraStats license can be found in the COPYING document. 
-
- 
- BUGS / DOCS
- --------------------------------
- See README.md in the repository root for current requirements and development
- setup. Historical community sites may no longer exist; use the project issue
- tracker for this fork.
+ See also: INSTALL, COPYING / LICENSE, and ChangeLog in the same directory.

@@ -39,14 +39,18 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 - **UI (legacy) compatibility:** [docs/ui-compatibility-review.md](docs/ui-compatibility-review.md) — static review only; no UI changes in that pass.
 - Report issues through your project’s issue tracker (historical public forums may no longer exist).
 
+## Changelog
+
+- Packaged and repository history: [ChangeLog](ChangeLog) in the repository root (also mirrored in [src/doc/en/changelog.htm](src/doc/en/changelog.htm) as legacy HTML).
+
 ## Historical documentation
 
-Static HTML in `src/doc/en/` (readme, install, changelog) is preserved for reference. Prefer this README and `AGENTS.md` for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were.
+Static HTML in `src/doc/en/` (readme, install, changelog) is preserved for reference. Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were.
 
 ## Sample gamelogs
 
 Example logs ship under `src/gamelogs/`. You can add more logs locally and point the parser at that directory (or bind-mount a host folder in Docker).
 
-## Repository note
+## Plain-text `README` in the root
 
-`README` (plain text) in the repository root is the legacy one-liner; this file is the maintained overview.
+A minimal [README](README) file (no extension) is kept for tools and archives that expect that filename; it only points here and to INSTALL / COPYING. **All maintained content is in this `README.md`.**

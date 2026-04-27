@@ -16,3 +16,4 @@ desktop.ini
 .env
 .env.local
 *.log
+_tmp/
