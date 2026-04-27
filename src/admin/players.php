@@ -69,22 +69,23 @@ if ( isset($_GET['playerop']) )
 			$newval = intval($_GET['newval']);
 			if ( $newval == 0 || $newval == 1) 
 			{
+				$pguid = (int) $playerid;
 				// Check for Clanmember
 				if ( $_GET['playerop'] == "setclanmember" ) 
 				{
-					// Edit the Player now!
-					$result = DB_Query("UPDATE " . STATS_PLAYERS_STATIC . " SET 
-										ISCLANMEMBER = " . $newval . " 
-										WHERE GUID = " . $playerid );
-					DB_FreeQuery($result);
+					DB_ExecBound(
+						"UPDATE " . STATS_PLAYERS_STATIC . " SET ISCLANMEMBER = ? WHERE GUID = ?",
+						'ii',
+						array( $newval, $pguid )
+					);
 				}
 				else if ( $_GET['playerop'] == "setban" ) 
 				{
-					// Edit the Player now!
-					$result = DB_Query("UPDATE " . STATS_PLAYERS_STATIC . " SET 
-										ISBANNED = " . $newval . " 
-										WHERE GUID = " . $playerid );
-					DB_FreeQuery($result);
+					DB_ExecBound(
+						"UPDATE " . STATS_PLAYERS_STATIC . " SET ISBANNED = ? WHERE GUID = ?",
+						'ii',
+						array( $newval, $pguid )
+					);
 				}
 			}
 		}
@@ -262,9 +263,10 @@ if ( isset($_GET['op']) )
 		{	
 			if ( $_POST['op'] == "edit" )
 			{
-				$result = DB_Query("SELECT GUID FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = " . $content['GUID']);
+				$guid = (int) $content['GUID'];
+				$result = DB_QueryBound( "SELECT GUID FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = ?", 'i', array( $guid ) );
 				$myrow = DB_GetSingleRow($result, true);
-				if ( !isset($myrow[GUID]) )
+				if ( ! is_array( $myrow ) || ! isset( $myrow['GUID'] ) )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_NOTFOUND'], $content['GUID'] ); 
@@ -272,13 +274,17 @@ if ( isset($_GET['op']) )
 				else
 				{
 					// Edit the Player now!
-					$result = DB_Query("UPDATE " . STATS_PLAYERS_STATIC . " SET 
-						PBGUID = '" . $content['PBGUID'] . "', 
-						ISCLANMEMBER = " . $content['ISCLANMEMBER'] . ", 
-						ISBANNED = " . $content['ISBANNED'] . ", 
-						BanReason = '" . $content['BanReason'] . "' 
-						WHERE GUID = " . $content['GUID']);
-					DB_FreeQuery($result);
+					DB_ExecBound(
+						"UPDATE " . STATS_PLAYERS_STATIC . " SET PBGUID = ?, ISCLANMEMBER = ?, ISBANNED = ?, BanReason = ? WHERE GUID = ?",
+						'siisi',
+						array(
+							$content['PBGUID'],
+							(int) $content['ISCLANMEMBER'],
+							(int) $content['ISBANNED'],
+							$content['BanReason'],
+							$guid,
+						)
+					);
 
 					// Redirect - may with PAGER later!
 					if ( strlen( $content['received_referer'] ) > 0 )

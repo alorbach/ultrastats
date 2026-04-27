@@ -11,12 +11,13 @@ This document describes hardening applied during the modernisation pass and safe
 - **Chat search SQL** — `find-chat.php` uses **bound parameters** (`DB_QueryBound`) for the `LIKE` pattern, with `UltraStats_SqlLikeContainsPattern()` so `%` / `_` / `\\` in the search text are treated as literals inside the match.
 - **Player search** — `find-players.php` uses prepared statements for PLAYERID equality and alias / PBGUID `LIKE` searches.
 - **Admin users** — `src/admin/users.php` uses `DB_QueryBound` / `DB_ExecBound` for username and password values and numeric user id on selects/updates/deletes.
+- **Admin login** — `CheckUserLogin()` uses a bound `SELECT` by username; verifies **legacy MD5** or **`password_hash()`**; on successful MD5 login, rehashes to `password_hash()` after database upgrade **v8** widens `stats_users.password`. Run **Database Upgrade** (`admin/upgrade.php`) so internal version matches the app (including v8).
 - **Parser** — `parser-core.php`, `parser.php`, and `parser-shell.php` load server rows with `WHERE ID = ?`.
 - **Database API** — legacy `mysql_*` calls were removed; the app uses **mysqli** only (PHP 7+ compatible). Prepared helpers require **mysqlnd** (see [docs/prepared-statements-surface.md](docs/prepared-statements-surface.md)).
 
 ## What you should still do
 
-- **Password hashing** — admin passwords are still **MD5** in the `stats_users` table (original design). For production, plan a migration to `password_hash()` / `password_verify()` and a one-time re-hash or password-reset flow.
+- **Password hashing** — new and changed passwords use **`password_hash()`**. Legacy **MD5** values still work until the user logs in successfully (then the row is rehashed). Apply database upgrade to **v8** so the `password` column is wide enough for bcrypt. If rehash fails (e.g. column still `VARCHAR(32)`), run `admin/upgrade.php` first.
 - **HTTPS** — deploy behind TLS in production; restrict admin to HTTPS if possible.
 - **Database credentials** — do not commit `config.php` with real secrets. Use `contrib/config.sample.php` as a template; keep `config.php` out of VCS in production.
 - **Display errors** — keep `display_errors=Off` in production `php.ini`.
@@ -59,6 +60,10 @@ Apache (`VirtualHost` or relevant scope; enable `mod_headers`):
 ```
 
 These examples are **illustrative**; directives must match your real asset URLs (themes, CDNs) and be validated for both the **front** and **admin** areas. Start with **Report-Only** and refine.
+
+### In-application CSP (not implemented)
+
+UltraStats does **not** set `Content-Security-Policy` (or related headers) in PHP. Operators should continue to configure CSP at the **web server** or **reverse proxy** as in this section; an optional future UI pass could add headers or nonces in code.
 
 ## Reporting issues
 

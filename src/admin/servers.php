@@ -85,14 +85,15 @@ if ( isset($_GET['op']) )
 		{
 			//PreInit these values 
 			$content['SERVERID'] = DB_RemoveBadChars($_GET['id']);
+			$sid   = (int) $content['SERVERID'];
 
-			$sqlquery = "SELECT * " . 
-						" FROM " . STATS_SERVERS . 
-						" WHERE ID = " . $content['SERVERID'];
-
-			$result = DB_Query($sqlquery);
+			$result = DB_QueryBound(
+				"SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?",
+				'i',
+				array( $sid )
+			);
 			$rows = DB_GetAllRows($result, true);
-			if ( isset($rows ) )
+			if ( ! empty( $rows ) )
 			{
 				$content['SERVERID'] = $rows[0]['ID'];
 				$content['SERVERNAME'] = $rows[0]['Name'];
@@ -130,13 +131,11 @@ if ( isset($_GET['op']) )
 		{
 			//PreInit these values 
 			$content['SERVERID'] = DB_RemoveBadChars($_GET['id']);
+			$sid   = (int) $content['SERVERID'];
 
-			$sqlquery = "SELECT * " . 
-						" FROM " . STATS_SERVERS . 
-						" WHERE ID = " . $content['SERVERID'];
-			$result = DB_Query($sqlquery);
-			$rows = DB_GetAllRows($result, true);
-			if ( isset($rows ) )
+			$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $sid ) );
+			$rows   = DB_GetAllRows( $result, true );
+			if ( ! empty( $rows ) )
 			{
 				$content['SERVERID'] = $rows[0]['ID'];
 				$content['SERVERNAME'] = $rows[0]['Name'];
@@ -154,7 +153,7 @@ if ( isset($_GET['op']) )
 		}
 
 		// --- Create some DB Stats
-		$wherequry = " WHERE SERVERID=" . $content['SERVERID'];
+		$wherequry = " WHERE SERVERID=" . (int) $content['SERVERID'];
 		$content['STATSALIASES']	= GetSingleDBEntryOnly( "SELECT count(SERVERID) as counter FROM " . STATS_ALIASES . $wherequry );
 		$content['STATSCHATLINES']	= GetSingleDBEntryOnly( "SELECT count(SERVERID) as counter FROM " . STATS_CHAT . $wherequry );
 		$content['STATSPLAYERS']	= GetSingleDBEntryOnly( "SELECT count(SERVERID) as counter FROM " . STATS_PLAYERS . $wherequry );
@@ -222,72 +221,86 @@ if ( isset($_GET['op']) )
 			// Everything was alright, so we go to the next step!
 			if ( $_POST['op'] == "addnewserver" )
 			{
-				$result = DB_Query("SELECT Name FROM " . STATS_SERVERS . " WHERE 
-					IP = '" . $content['SERVERIP'] . "' AND
-					Port = " . $content['PORT']);
+				$result = DB_QueryBound(
+					"SELECT Name FROM " . STATS_SERVERS . " WHERE IP = ? AND Port = ?",
+					'si',
+					array( $content['SERVERIP'], (int) $content['PORT'] )
+				);
 				$rows = DB_GetAllRows($result, true);
-				if ( isset($rows) )
+				if ( ! empty( $rows ) )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = $content['LN_SERVER_ERROR_INDBALREADY'];
 				}
 				else
 				{
-					// Add new Server now!
-					$result = DB_Query("INSERT INTO " . STATS_SERVERS . " (Name, IP, Port, Description, ModName, AdminName, AdminEmail, ClanName,  GameLogLocation, ftppath, ServerLogo, ServerEnabled, ParsingEnabled, FTPPassiveMode ) 
-					VALUES ('" . $content['SERVERNAME'] . "', 
-							'" . $content['SERVERIP'] . "',
-							 " . $content['PORT'] . ",
-							'" . $content['DESCRIPTION'] . "',
-							'" . $content['MODNAME'] . "',
-							'" . $content['ADMINNAME'] . "',
-							'" . $content['ADMINEMAIL'] . "',
-							'" . $content['CLANNAME'] . "',
-							'" . $content['GAMELOGLOCATION'] . "', 
-							'" . $content['REMOTEGAMELOGLOCATION'] . "', 
-							'" . $content['SERVERLOGO'] . "', 
-							 " . $content['SERVERENABLED'] . ",
-							 " . $content['PARSINGENABLED'] . ", 
-							 " . $content['FTPPASSIVEENABLED'] . "
-							)");
-					DB_FreeQuery($result);
-					
-					// Redirect!
-					RedirectResult( GetAndReplaceLangStr( $content['LN_SERVER_SUCCADDED'], $content['SERVERNAME'] ) , "servers.php" );
+					$ok = DB_ExecBound(
+						"INSERT INTO " . STATS_SERVERS . " (Name, IP, Port, Description, ModName, AdminName, AdminEmail, ClanName, GameLogLocation, ftppath, ServerLogo, ServerEnabled, ParsingEnabled, FTPPassiveMode) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+						'ssisssssssiii',
+						array(
+							$content['SERVERNAME'],
+							$content['SERVERIP'],
+							(int) $content['PORT'],
+							$content['DESCRIPTION'],
+							$content['MODNAME'],
+							$content['ADMINNAME'],
+							$content['ADMINEMAIL'],
+							$content['CLANNAME'],
+							$content['GAMELOGLOCATION'],
+							$content['REMOTEGAMELOGLOCATION'],
+							$content['SERVERLOGO'],
+							(int) (bool) $content['SERVERENABLED'],
+							(int) (bool) $content['PARSINGENABLED'],
+							(int) (bool) $content['FTPPASSIVEENABLED'],
+						)
+					);
+					if ( ! $ok ) {
+						$content['ISERROR'] = "true";
+						$content['ERROR_MSG'] = $content['LN_SERVER_ERROR_INDBALREADY'];
+					} else {
+						RedirectResult( GetAndReplaceLangStr( $content['LN_SERVER_SUCCADDED'], $content['SERVERNAME'] ) , "servers.php" );
+					}
 				}
 			}
 			else if ( $_POST['op'] == "editserver" )
 			{
-				$result = DB_Query("SELECT ID FROM " . STATS_SERVERS . " WHERE ID = " . $content['SERVERID']);
-				$rows = DB_GetAllRows($result, true);
-				if ( !isset($rows) )
+				$eid = (int) $content['SERVERID'];
+				$result = DB_QueryBound( "SELECT ID FROM " . STATS_SERVERS . " WHERE ID = ?", 'i', array( $eid ) );
+				$rows   = DB_GetAllRows( $result, true );
+				if ( empty( $rows ) )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_SERVER_ERROR_NOTFOUND'], $content['SERVERID'] ); 
 				}
 				else
 				{
-					// Edit the Server now!
-					$result = DB_Query("UPDATE " . STATS_SERVERS . " SET 
-						Name = '" . $content['SERVERNAME'] . "', 
-						IP = '" . $content['SERVERIP'] . "', 
-						Port = " . $content['PORT'] . ", 
-						Description = '" . $content['DESCRIPTION'] . "', 
-						ModName = '" . $content['MODNAME'] . "', 
-						AdminName = '" . $content['ADMINNAME'] . "', 
-						AdminEmail = '" . $content['ADMINEMAIL'] . "', 
-						ClanName = '" . $content['CLANNAME'] . "', 
-						GameLogLocation = '" . $content['GAMELOGLOCATION'] . "',
-						ftppath = '" . $content['REMOTEGAMELOGLOCATION'] . "',
-						ServerLogo = '" . $content['SERVERLOGO'] . "',
-						ServerEnabled = " . $content['SERVERENABLED'] . ",
-						ParsingEnabled = " . $content['PARSINGENABLED'] . ", 
-						FTPPassiveMode = " . $content['FTPPASSIVEENABLED'] . "
-						WHERE ID = " . $content['SERVERID']);
-					DB_FreeQuery($result);
-
-					// Redirect!
-					RedirectResult( GetAndReplaceLangStr( $content['LN_SERVER_SUCCEDIT'], $content['SERVERNAME'] ) , "servers.php" );
+					$ok = DB_ExecBound(
+						"UPDATE " . STATS_SERVERS . " SET Name = ?, IP = ?, Port = ?, Description = ?, ModName = ?, AdminName = ?, AdminEmail = ?, ClanName = ?, GameLogLocation = ?, ftppath = ?, ServerLogo = ?, ServerEnabled = ?, ParsingEnabled = ?, FTPPassiveMode = ? WHERE ID = ?",
+						'ssisssssssiiiii',
+						array(
+							$content['SERVERNAME'],
+							$content['SERVERIP'],
+							(int) $content['PORT'],
+							$content['DESCRIPTION'],
+							$content['MODNAME'],
+							$content['ADMINNAME'],
+							$content['ADMINEMAIL'],
+							$content['CLANNAME'],
+							$content['GAMELOGLOCATION'],
+							$content['REMOTEGAMELOGLOCATION'],
+							$content['SERVERLOGO'],
+							(int) (bool) $content['SERVERENABLED'],
+							(int) (bool) $content['PARSINGENABLED'],
+							(int) (bool) $content['FTPPASSIVEENABLED'],
+							$eid,
+						)
+					);
+					if ( ! $ok ) {
+						$content['ISERROR'] = "true";
+						$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_SERVER_ERROR_NOTFOUND'], $content['SERVERID'] );
+					} else {
+						RedirectResult( GetAndReplaceLangStr( $content['LN_SERVER_SUCCEDIT'], $content['SERVERNAME'] ) , "servers.php" );
+					}
 				}
 			}
 		}

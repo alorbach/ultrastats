@@ -22,7 +22,7 @@ if ( $nuke === false || $nuke === '' ) {
 	$nuke = '1';
 }
 
-$internalDbVer = '7';
+$internalDbVer = '8';
 $genGameVer    = 4; // CODWW, same as install default in step 3
 
 /**

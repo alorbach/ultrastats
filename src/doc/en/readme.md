@@ -6,7 +6,7 @@ Welcome to **UltraStats**, a log parser for **Call of Duty** dedicated server lo
 
 ## Authors
 
-- Andre Lorbach (alias [deltaray](http://www.eifelzocker.de))
+- Andre Lorbach ([alorbach](https://github.com/alorbach/ultrastats) on GitHub)
 
 ## Supported games (original scope)
 

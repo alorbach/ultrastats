@@ -206,54 +206,68 @@ if ( isset($_GET['op']) )
 		{	
 			if ( $_POST['op'] == "add" )
 			{
-				$result = DB_Query("SELECT Name FROM " . STATS_LANGUAGE_STRINGS . " WHERE 
-					STRINGID = '" . $content['STRINGID'] . "' AND
-					LANG = '" . $content['LANG'] . "'");
-				$rows = DB_GetAllRows($result, true);
-				if ( isset($rows) )
+				$result = DB_QueryBound(
+					"SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = ? AND LANG = ?",
+					'ss',
+					array( $content['STRINGID'], $content['LANG'] )
+				);
+				$rows = DB_GetAllRows( $result, true );
+				if ( ! empty( $rows ) )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = $content['LN_STRING_ERROR_ALREADYEXISTS'];
 				}
 				else
 				{
-					// Add new Server now!
-					$result = DB_Query("INSERT INTO " . STATS_LANGUAGE_STRINGS . " (STRINGID, LANG, TEXT) 
-					VALUES ('" . $content['STRINGID'] . "', 
-							'" . $content['LANG'] . "',
-							'" . $content['TEXT'] . "' 
-							)");
-					DB_FreeQuery($result);
-					
-					// Redirect!
-					RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCADDED'], $content['STRINGID'] ) , "stringeditor.php" );
+					$ok = DB_ExecBound(
+						"INSERT INTO " . STATS_LANGUAGE_STRINGS . " (STRINGID, LANG, TEXT) VALUES (?,?,?)",
+						'sss',
+						array( $content['STRINGID'], $content['LANG'], $content['TEXT'] )
+					);
+					if ( ! $ok ) {
+						$content['ISERROR'] = "true";
+						$content['ERROR_MSG'] = $content['LN_STRING_ERROR_ALREADYEXISTS'];
+					} else {
+						RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCADDED'], $content['STRINGID'] ) , "stringeditor.php" );
+					}
 				}
 			}
 			else if ( $_POST['op'] == "edit" )
 			{
-				$result = DB_Query("SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['OLDLANG'] . "' ");
-				$myrow = DB_GetSingleRow($result, true);
-				if ( !isset($myrow['STRINGID']) )
+				$result = DB_QueryBound(
+					"SELECT STRINGID FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = ? AND LANG = ?",
+					'ss',
+					array( $content['OLDSTRINGID'], $content['OLDLANG'] )
+				);
+				$myrow = DB_GetSingleRow( $result, true );
+				if ( ! is_array( $myrow ) || ! isset( $myrow['STRINGID'] ) )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] ); 
 				}
 				else
 				{
-					// Edit the String now!
-					$sqlquery ="UPDATE " . STATS_LANGUAGE_STRINGS . " SET 
-								STRINGID = '" . $content['STRINGID'] . "', 
-								LANG = '" . $content['LANG'] . "', 
-								TEXT = '" . $content['TEXT'] . "' 
-								WHERE STRINGID = '" . $content['OLDSTRINGID'] . "' AND LANG = '" . $content['OLDLANG'] . "'";
-					$result = DB_Query( $sqlquery );
-					DB_FreeQuery($result);
-
-					// Redirect - may with PAGER later!
-					if ( strlen( $content['received_referer'] ) > 0 )
-						RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , $content['received_referer'] );
-					else
-						RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , "stringeditor.php" );
+					$ok = DB_ExecBound(
+						"UPDATE " . STATS_LANGUAGE_STRINGS . " SET STRINGID = ?, LANG = ?, TEXT = ? WHERE STRINGID = ? AND LANG = ?",
+						'sssss',
+						array(
+							$content['STRINGID'],
+							$content['LANG'],
+							$content['TEXT'],
+							$content['OLDSTRINGID'],
+							$content['OLDLANG'],
+						)
+					);
+					if ( ! $ok ) {
+						$content['ISERROR'] = "true";
+						$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] );
+					} else {
+						if ( strlen( $content['received_referer'] ) > 0 ) {
+							RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , $content['received_referer'] );
+						} else {
+							RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_SUCCEDIT'], $content['STRINGID'] ) , "stringeditor.php" );
+						}
+					}
 				}
 			}
 		}

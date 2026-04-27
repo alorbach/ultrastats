@@ -28,7 +28,33 @@ if ( !defined('IN_ULTRASTATS') )
 }
 // --- 
 
-// --- BEGIN Usermanagement Function --- 
+// --- BEGIN Usermanagement Function ---
+
+/**
+ * Legacy installs store MD5 hex (32 chars). New hashes use password_hash() and are longer.
+ */
+function UltraStats_IsLegacyPasswordMd5( $stored ) {
+	$s = (string) $stored;
+	return strlen( $s ) === 32 && ctype_xdigit( $s );
+}
+
+/**
+ * Verify plain password against stored value (MD5 or modern hash).
+ */
+function UltraStats_VerifyUserPassword( $plain, $stored ) {
+	if ( UltraStats_IsLegacyPasswordMd5( $stored ) ) {
+		return hash_equals( $stored, md5( (string) $plain ) );
+	}
+	return password_verify( (string) $plain, (string) $stored );
+}
+
+/**
+ * Store this for new users or when changing passwords (PHP password_hash / PASSWORD_DEFAULT).
+ */
+function UltraStats_HashUserPassword( $plain ) {
+	return password_hash( (string) $plain, PASSWORD_DEFAULT );
+}
+
 function CheckForUserLogin( $isloginpage, $isUpgradePage = false )
 {
 	global $content; 
@@ -71,25 +97,19 @@ function CheckForUserLogin( $isloginpage, $isUpgradePage = false )
 
 function CreateUserName( $username, $password, $access_level )
 {
-	$md5pass = md5($password);
-	$result = DB_Query("SELECT username FROM " . STATS_USERS . " WHERE username = '" . $username . "'");
-	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
-	{
+	$result = DB_QueryBound( "SELECT username FROM " . STATS_USERS . " WHERE username = ?", 's', array( $username ) );
+	$rows   = DB_GetAllRows( $result, true );
+	if ( ! empty( $rows ) ) {
 		DieWithFriendlyErrorMsg( "User $username already exists!" );
-
-		// User not created!
 		return false;
 	}
-	else
-	{
-		// Create User
-		$result = DB_Query("INSERT INTO " . STATS_USERS . " (username, password, access_level) VALUES ('$username', '$md5pass', $access_level)");
-		DB_FreeQuery($result);
-
-		// Success
-		return true;
-	}
+	$hash = UltraStats_HashUserPassword( $password );
+	$ok   = DB_ExecBound(
+		"INSERT INTO " . STATS_USERS . " (username, password, access_level) VALUES (?, ?, ?)",
+		'ssi',
+		array( $username, $hash, (int) $access_level )
+	);
+	return (bool) $ok;
 }
 
 // Helper function to compare versions
@@ -118,60 +138,66 @@ function CheckUserLogin( $username, $password )
 {
 	global $content, $CFG;
 
-	// TODO: SessionTime and AccessLevel check
-	$md5pass = md5($password);
-	$sqlselect = "SELECT access_level FROM " . STATS_USERS . " WHERE username = '" . $username . "' and password = '" . $md5pass . "'";
-	$result = DB_Query($sqlselect);
-	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows) )
-	{
-		if ( function_exists( 'session_regenerate_id' ) ) {
-			@session_regenerate_id( true );
+	$result = DB_QueryBound(
+		"SELECT ID, password, access_level FROM " . STATS_USERS . " WHERE username = ?",
+		's',
+		array( (string) $username )
+	);
+	$rows = DB_GetAllRows( $result, true );
+	if ( ! is_array( $rows ) || count( $rows ) !== 1 ) {
+		if ( (int) $CFG['ShowDebugMsg'] === 1 ) {
+			DieWithFriendlyErrorMsg( "Debug Error: Could not login user '" . $username . "' <br><br><B>Sessionarray</B> <pre>" . var_export( $_SESSION, true ) . '</pre>' );
 		}
-		$_SESSION['SESSION_LOGGEDIN'] = true;
-		$_SESSION['SESSION_USERNAME'] = $username;
-		$_SESSION['SESSION_ACCESSLEVEL'] = $rows[0]['access_level'];
-		
-		$content['SESSION_LOGGEDIN'] = "true";
-		$content['SESSION_USERNAME'] = $username;
-
-		// --- Now we check for an UltraStats Update
-		$myHandle = @fopen($content['UPDATEURL'], "r");
-		
-		if( $myHandle ) 
-		{
-			$myBuffer = "";
-			while (!feof ($myHandle))
-				$myBuffer .= fgets($myHandle, 4096);
-			fclose($myHandle);
-
-			$myLines = explode("\n", $myBuffer);
-
-			// Compare Version numbers!
-			if ( CompareVersionNumbers($content['BUILDNUMBER'], $myLines[0]) )
-			{	
-				// True means new version available!
-				$_SESSION['UPDATEAVAILABLE'] = true;
-				$_SESSION['UPDATEVERSION'] = $myLines[0];
-				if ( isset($myLines[1]) ) 
-					$_SESSION['UPDATELINK'] = $myLines[1];
-				else
-					$_SESSION['UPDATELINK'] = "http://www.ultrastats.org";
-			}
-		}
-		// --- 
-
-		// Success !
-		return true;
-	}
-	else
-	{
-		if ( $CFG['ShowDebugMsg'] == 1 )
-			DieWithFriendlyErrorMsg( "Debug Error: Could not login user '" . $username . "' <br><br><B>Sessionarray</B> <pre>" . var_export($_SESSION, true) . "</pre><br><B>SQL Statement</B>: " . $sqlselect );
-		
-		// Default return false
 		return false;
 	}
+	$row = $rows[0];
+	if ( ! UltraStats_VerifyUserPassword( $password, $row['password'] ) ) {
+		if ( (int) $CFG['ShowDebugMsg'] === 1 ) {
+			DieWithFriendlyErrorMsg( "Debug Error: password mismatch for user '" . $username . "'" );
+		}
+		return false;
+	}
+	// Rehash legacy MD5 to password_hash on successful login.
+	if ( UltraStats_IsLegacyPasswordMd5( $row['password'] ) ) {
+		$newHash = UltraStats_HashUserPassword( $password );
+		DB_ExecBound( "UPDATE " . STATS_USERS . " SET password = ? WHERE ID = ?", 'si', array( $newHash, (int) $row['ID'] ) );
+	}
+
+	if ( function_exists( 'session_regenerate_id' ) ) {
+		@session_regenerate_id( true );
+	}
+	$_SESSION['SESSION_LOGGEDIN']   = true;
+	$_SESSION['SESSION_USERNAME']   = $username;
+	$_SESSION['SESSION_ACCESSLEVEL'] = $row['access_level'];
+
+	$content['SESSION_LOGGEDIN']   = "true";
+	$content['SESSION_USERNAME']   = $username;
+
+	// --- Now we check for an UltraStats Update
+	$myHandle = @fopen( $content['UPDATEURL'], "r" );
+
+	if ( $myHandle ) {
+		$myBuffer = "";
+		while ( ! feof( $myHandle ) ) {
+			$myBuffer .= fgets( $myHandle, 4096 );
+		}
+		fclose( $myHandle );
+
+		$myLines = explode( "\n", $myBuffer );
+
+		if ( isset( $myLines[0] ) && CompareVersionNumbers( $content['BUILDNUMBER'], $myLines[0] ) ) {
+			$_SESSION['UPDATEAVAILABLE'] = true;
+			$_SESSION['UPDATEVERSION']   = $myLines[0];
+			if ( isset( $myLines[1] ) ) {
+				$_SESSION['UPDATELINK'] = $myLines[1];
+			} else {
+				$_SESSION['UPDATELINK'] = "http://www.ultrastats.org";
+			}
+		}
+	}
+	// ---
+
+	return true;
 }
 
 function DoLogOff()

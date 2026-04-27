@@ -645,7 +645,7 @@ function GetAndSetGlobalInfo()
 						" ORDER BY " . STATS_CONSOLIDATED . ".SortID";
 	$result = DB_Query($sqlquery);
 
-	$content['globals'] = DB_GetAllRows($result, true, true); // Critical!
+	$content['globals'] = DB_GetAllRows( $result, true );
 	if ( isset($content['globals']) )
 	{
 		for($i = 0; $i < count($content['globals']); $i++)

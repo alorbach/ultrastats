@@ -1,18 +1,4 @@
 -- --------------------------------------------------------
-
--- --------------------------------------------------------
--- New Database Structure Updates
--- ALTER TABLE `stats_damagetypes` ADD UNIQUE ( `DAMAGETYPE` );
-
--- --------------------------------------------------------
--- Replace existing data, this automatically INSERTS or UPDATES!
-
--- Weapon Fixes
--- REPLACE INTO `stats_weapons` (`INGAMENAME`, `BULLETNAME`, `WeaponType`, `DisplayName`, `Description_id`, `ExternalInfoUrl`, `Damage`, `Accuracy`, `Ammotype`) VALUES('gewehr43_aperture_mp', '', 11, 'Gewehr 43 + Aperture', 'weapon_gewehr43_mp', 'http://en.wikipedia.org/wiki/Gewehr_43', 0, 0, ''); -- Codww only%$&1337&%&;
-
--- Map Fixes
--- REPLACE INTO `stats_maps` (`MAPNAME`, `DisplayName`, `Description_id`, `Gametypes`) VALUES('mp_roundhouse', 'Roundhouse', 'mp_roundhouse_description', ''); -- Codww only%$&1337&%&;
-
--- New Insert stuff
--- Updated data records stuff
-UPDATE `stats_maps` SET `MAPNAME` = 'mp_asylum' WHERE `stats_maps`.`MAPNAME` LIKE '%mp_asylum%'; -- Codww only%$&1337&%&;
+-- Database internal version 8: widen admin password column for password_hash() (bcrypt / argon2).
+-- Backward compatible: existing MD5 hex strings remain valid until rehashed on login.
+ALTER TABLE `stats_users` MODIFY `password` VARCHAR(255) NOT NULL DEFAULT '';

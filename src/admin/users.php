@@ -191,8 +191,8 @@ if ( isset($_GET['op']) )
 
 					if ( !isset($content['ISERROR']) ) 
 					{	
-						// Create passwordhash now :)!
-						$content['PASSWORDHASH'] = md5( $content['PASSWORD1'] );
+						// Create password hash (password_hash; legacy MD5 no longer used for new users).
+						$content['PASSWORDHASH'] = UltraStats_HashUserPassword( $content['PASSWORD1'] );
 
 						// Add new User now!
 						DB_ExecBound(
@@ -230,8 +230,7 @@ if ( isset($_GET['op']) )
 
 						if ( !isset($content['ISERROR']) ) 
 						{
-							// Create passwordhash now :)!
-							$content['PASSWORDHASH'] = md5( $content['PASSWORD1'] );
+							$content['PASSWORDHASH'] = UltraStats_HashUserPassword( $content['PASSWORD1'] );
 
 							// Edit the User now!
 							DB_ExecBound(

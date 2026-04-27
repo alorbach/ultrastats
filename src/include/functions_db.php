@@ -26,7 +26,7 @@ $querycount = 0;
 $errdesc = "";
 $errno = 0;
 
-$content['database_internalversion'] = "7";
+$content['database_internalversion'] = "8";
 $content['database_installedversion'] = "0";
 
 /**
@@ -99,7 +99,13 @@ function DB_Query( $query_string, $bProcessError = true, $bCritical = false )
 {
 	global $link_id, $querycount;
 
-	$query_id = mysqli_query( $link_id, $query_string );
+	$query_id = false;
+	try {
+		$query_id = mysqli_query( $link_id, $query_string );
+	} catch ( mysqli_sql_exception $e ) {
+		// PHP 8.1+ mysqli default: SQL errors throw instead of returning false; match legacy behavior.
+		$query_id = false;
+	}
 	if ( ! $query_id && $bProcessError ) {
 		DB_PrintError( "Invalid SQL: " . $query_string, $bCritical );
 	}
@@ -259,15 +265,15 @@ function WriteConfigValue( $szValue )
 {
 	global $content;
 
-	$sqlquery = "SELECT name FROM " . STATS_CONFIG . " WHERE name = '" . $szValue . "'";
-	$result   = DB_Query( $sqlquery );
-	$rows     = DB_GetAllRows( $result, true );
-	if ( ! isset( $rows ) ) {
-		$sqlquery = "INSERT INTO  " . STATS_CONFIG . " (name, value) VALUES ( '" . $szValue . "', '" . $content[ $szValue ] . "')";
-		$result   = DB_Query( $sqlquery );
+	$name  = DB_EscapeString( (string) $szValue );
+	$value = isset( $content[ $szValue ] ) ? DB_EscapeString( (string) $content[ $szValue ] ) : '';
+	$result = DB_Query( "SELECT name FROM " . STATS_CONFIG . " WHERE name = '" . $name . "'" );
+	$rows   = DB_GetAllRows( $result, true );
+	if ( $rows === null || ( is_array( $rows ) && count( $rows ) === 0 ) ) {
+		$result = DB_Query( "INSERT INTO " . STATS_CONFIG . " (name, value) VALUES ( '" . $name . "', '" . $value . "')" );
 		DB_FreeQuery( $result );
 	} else {
-		$result = DB_Query( "UPDATE " . STATS_CONFIG . " SET value = '" . $content[ $szValue ] . "' WHERE name = '" . $szValue . "'" );
+		$result = DB_Query( "UPDATE " . STATS_CONFIG . " SET value = '" . $value . "' WHERE name = '" . $name . "'" );
 		DB_FreeQuery( $result );
 	}
 }

@@ -504,7 +504,7 @@ function InitConfigurationValues()
 	global $content, $gl_root_path, $LANG;
 
 	$result = DB_Query("SELECT * FROM " . STATS_CONFIG);
-	$rows = DB_GetAllRows($result, true, true);
+	$rows = DB_GetAllRows( $result, true );
 
 	if ( isset($rows ) )
 	{
