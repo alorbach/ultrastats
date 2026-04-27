@@ -17,3 +17,8 @@ desktop.ini
 .env.local
 *.log
 _tmp/
+
+# MkDocs: generated from src/doc/en (run python doc-site/prepare_docs.py before mkdocs)
+doc-site/docs/install.md
+doc-site/docs/changelog.md
+doc-site/_site/

@@ -1,0 +1,65 @@
+# UltraStats public handbook; build with: python doc-site/prepare_docs.py && mkdocs build -f doc-site/mkdocs.yml
+site_name: UltraStats Handbook
+site_description: Install, upgrade, and operate UltraStats (Call of Duty log parser)
+site_url: https://alorbach.github.io/ultrastats/
+site_author: Andre Lorbach
+repo_url: https://github.com/alorbach/ultrastats
+repo_name: alorbach/ultrastats
+edit_uri: edit/main/doc-site/docs/
+
+use_directory_urls: true
+strict: false
+
+# Footer: HTML (not Markdown) — Material's default template escapes copyright as text.
+# doc-site/overrides/partials/copyright.html uses | safe so links render.
+copyright: |
+  <p>Copyright &copy; 2008&ndash;2026 <a href="https://github.com/alorbach" rel="noopener">Andre Lorbach</a>.
+  Documentation for <a href="https://github.com/alorbach/ultrastats">UltraStats</a> (Call of Duty log parser)
+  &mdash; free software under <a href="https://github.com/alorbach/ultrastats/blob/main/LICENSE">GPL-3.0+</a>.</p>
+  <p><a href="https://github.com/alorbach/ultrastats">Source</a> &middot;
+  <a href="https://github.com/alorbach/ultrastats/blob/main/LICENSE">License</a> &middot;
+  <a href="https://github.com/alorbach/ultrastats/issues">Issues</a> &middot;
+  <a href="https://github.com/alorbach/ultrastats/releases">Releases</a></p>
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/alorbach/ultrastats
+      name: UltraStats on GitHub
+    - icon: fontawesome/brands/github
+      link: https://github.com/alorbach
+      name: Andre Lorbach on GitHub
+
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Install & first run: install.md
+  - Upgrading: upgrading.md
+  - Docker (local dev): docker.md
+  - Admin & parser: admin-parser.md
+  - Theme & navigation: customization.md
+  - Whiner & anti medals: whiner-medal.md
+  - Changelog: changelog.md
+  - Historical site snapshots: historical-reference.md
+
+docs_dir: docs
+
+site_dir: _site

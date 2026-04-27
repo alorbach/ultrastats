@@ -41,13 +41,17 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 - **UI (legacy) compatibility:** [docs/ui-compatibility-review.md](docs/ui-compatibility-review.md) — static review only; no UI changes in that pass.
 - Report issues through your project’s issue tracker (historical public forums may no longer exist).
 
+## Documentation website
+
+- **Handbook (GitHub Pages):** [https://alorbach.github.io/ultrastats/](https://alorbach.github.io/ultrastats/) — install, upgrade, Docker, admin/parser, theming, historical snapshot links, and a generated copy of the bundled **install** and **changelog** from `src/doc/en/`. The site is built with **MkDocs (Material)** from [`doc-site/`](doc-site/); on each push to **`main`**, [.github/workflows/github-pages.yml](.github/workflows/github-pages.yml) runs `doc-site/prepare_docs.py` (rewrites in-tree links) and deploys. **Local preview:** `python doc-site/prepare_docs.py` then `python -m mkdocs serve -f doc-site/mkdocs.yml` from the repository root. **First-time GitHub setup:** enable **Settings → Pages → Build and deployment → Source: GitHub Actions** for this repository.
+
 ## Changelog
 
 - Packaged and repository history: [ChangeLog](ChangeLog) in the repository root (also mirrored as Markdown in [src/doc/en/changelog.md](src/doc/en/changelog.md)).
 
 ## Historical documentation
 
-Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/en/readme.md), [install](src/doc/en/install.md), [changelog](src/doc/en/changelog.md), [copyright](src/doc/en/copyright.md)); see [src/doc/README.md](src/doc/README.md). Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were.
+Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/en/readme.md), [install](src/doc/en/install.md), [changelog](src/doc/en/changelog.md), [copyright](src/doc/en/copyright.md)); see [src/doc/README.md](src/doc/README.md). Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were. The [documentation website](#documentation-website) includes **read-only** Wayback / mirror links for context.
 
 ## Sample gamelogs
 
