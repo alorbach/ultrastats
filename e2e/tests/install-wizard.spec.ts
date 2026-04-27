@@ -6,8 +6,13 @@ import {
 } from '../lib/install-screenshots';
 
 /** Prefer progress-bar Next; step text may embed an extra submit in the same form. */
-function clickInstallerNext(page: Page) {
-  return page.locator('#mainform input[type="submit"][value="Next"]').last().click();
+async function clickInstallerNext(page: Page) {
+  const next = page.locator('#mainform input[type="submit"][value="Next"]').last();
+  await expect(
+    next,
+    'Install Next missing — step 2 may have failed file/dir checks (need world-writable bits on gamelogs + images/* per install.php)',
+  ).toBeVisible({ timeout: 20_000 });
+  await next.click();
 }
 
 test.describe.serial('install.php wizard', () => {

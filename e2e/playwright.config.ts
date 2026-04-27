@@ -8,6 +8,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
+  // Install wizard + MySQL can exceed 30s on busy CI runners.
+  timeout: 120_000,
+  expect: { timeout: 15_000 },
   reporter: [
     ['list'],
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
@@ -16,6 +19,7 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
+    actionTimeout: 60_000,
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });

@@ -38,4 +38,11 @@ if [ "$i" -ge 60 ]; then
   exit 1
 fi
 
+# install.php step 2 uses fileperms() "other" read+write bits only for dirs — typical 755 bind mounts fail and hide the Next button.
+# Match the installer's own chmod hint (777 on these paths) so E2E/CI can pass step 2.
+for d in gamelogs images/maps images/serverlogos images/weapons; do
+  mkdir -p "$d"
+  chmod 777 "$d"
+done
+
 exec php -S 0.0.0.0:8091 -t /var/www/html
