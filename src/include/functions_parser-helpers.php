@@ -29,6 +29,20 @@ if ( !defined('IN_ULTRASTATS') )
 }
 // --- 
 
+/**
+ * Reset in-memory lookup caches for a full gamelog parse (GetActionIDByName, GetWeaponIDByName, etc.).
+ */
+function Parser_ResetLookupCaches() {
+	global $parser_lookup_cache;
+	$parser_lookup_cache = array(
+		'gameaction'       => array(),
+		'weapon'           => array(),
+		'weapon_perserver' => array(),
+		'damagetype'       => array(),
+		'hitloc'           => array(),
+	);
+}
+
 function CreateHTMLHeader()
 {
 	global $RUNMODE, $content, $gl_root_path;
@@ -109,6 +123,21 @@ function PrintSecureUserCheckLegacy( $warningtext, $yesmsg, $nomsg, $operation )
 {
 	global $content, $myserver;
 
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE && function_exists( 'UltraStats_ParserSseEmitEvent' ) ) {
+		$GLOBALS['ultrastats_parser_sse_awaiting_confirm'] = true;
+		$opEsc = rawurlencode( (string) $operation );
+		$sid   = (int) $myserver['ID'];
+		$GLOBALS['ultrastats_parser_sse_confirm_payload'] = array(
+			't'             => 'confirm',
+			'warning'       => $warningtext,
+			'confirmUrl'    => 'parser-sse.php?op=' . $opEsc . '&id=' . $sid . '&verify=yes',
+			'confirmLabel'  => $yesmsg,
+			'cancelLabel'   => $nomsg,
+		);
+		UltraStats_ParserSseEmitEvent( 'confirm_action', $GLOBALS['ultrastats_parser_sse_confirm_payload'] );
+		return;
+	}
+
 	// Show Accept FORM!
 	print('<br><br>
 			<table width="700" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
@@ -138,6 +167,21 @@ function PrintSecureUserCheckLegacy( $warningtext, $yesmsg, $nomsg, $operation )
 function PrintPasswordRequest()
 {
 	global $content, $myserver;
+
+	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE && function_exists( 'UltraStats_ParserSseEmitEvent' ) ) {
+		$GLOBALS['ultrastats_parser_sse_awaiting_password'] = true;
+		$sid = (int) $myserver['ID'];
+		$GLOBALS['ultrastats_parser_sse_password_payload'] = array(
+			't'           => 'ftp_password',
+			'message'     => isset( $content['LN_FTPLOGINFAILED'] ) ? $content['LN_FTPLOGINFAILED'] : 'FTP login failed.',
+			'hint'        => 'The embedded parser cannot submit a password form. Open the classic parser page to enter your FTP password.',
+			'linkLabel'   => isset( $content['LN_ADMINGETNEWLOG'] ) ? $content['LN_ADMINGETNEWLOG'] : 'Get New Logfile',
+			'serverId'    => $sid,
+			'classicUrl'  => 'parser-core.php?op=getnewlogfile&id=' . $sid,
+		);
+		UltraStats_ParserSseEmitEvent( 'password_prompt', $GLOBALS['ultrastats_parser_sse_password_payload'] );
+		return;
+	}
 
 	// Show Accept FORM!
 	print('<br><br>
@@ -306,14 +350,25 @@ function CreateHTMLFooter()
 		return;
 
 	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ) {
-		UltraStats_ParserSseEmitEvent(
-			'done',
-			array(
-				't'            => 'done',
-				'seconds'      => $RenderTime,
-				'parserStart'  => isset( $ParserStart ) ? $ParserStart : 0,
-			)
+		$donePayload = array(
+			't'            => 'done',
+			'seconds'      => $RenderTime,
+			'parserStart'  => isset( $ParserStart ) ? $ParserStart : 0,
 		);
+		if ( ! empty( $GLOBALS['ultrastats_parser_sse_awaiting_confirm'] ) ) {
+			$donePayload['awaitingConfirm'] = true;
+			if ( ! empty( $GLOBALS['ultrastats_parser_sse_confirm_payload'] ) && is_array( $GLOBALS['ultrastats_parser_sse_confirm_payload'] ) ) {
+				$donePayload['confirm'] = $GLOBALS['ultrastats_parser_sse_confirm_payload'];
+			}
+			unset( $GLOBALS['ultrastats_parser_sse_awaiting_confirm'], $GLOBALS['ultrastats_parser_sse_confirm_payload'] );
+		} elseif ( ! empty( $GLOBALS['ultrastats_parser_sse_awaiting_password'] ) ) {
+			$donePayload['awaitingPassword'] = true;
+			if ( ! empty( $GLOBALS['ultrastats_parser_sse_password_payload'] ) && is_array( $GLOBALS['ultrastats_parser_sse_password_payload'] ) ) {
+				$donePayload['passwordForm'] = $GLOBALS['ultrastats_parser_sse_password_payload'];
+			}
+			unset( $GLOBALS['ultrastats_parser_sse_awaiting_password'], $GLOBALS['ultrastats_parser_sse_password_payload'] );
+		}
+		UltraStats_ParserSseEmitEvent( 'done', $donePayload );
 		return;
 	}
 
@@ -422,21 +477,32 @@ function GetGameTypeByName( $gametype )
 
 function GetDamageTypeIDByName( $damagetype )
 {
+	global $parser_lookup_cache;
+	if ( ! isset( $parser_lookup_cache ) ) {
+		Parser_ResetLookupCaches();
+	}
+	if ( isset( $parser_lookup_cache['damagetype'][ $damagetype ] ) ) {
+		return $parser_lookup_cache['damagetype'][ $damagetype ];
+	}
 	$result = DB_Query("SELECT ID FROM " . STATS_DAMAGETYPES . " WHERE DAMAGETYPE = '$damagetype'");
 	$myrow = DB_GetSingleRow($result, true);
-	if ( isset($myrow['ID']) )
-		return $myrow['ID'];
-	else
-	{
-		PrintHTMLDebugInfo( DEBUG_ERROR_WTF, "GetDamageTypeIDByName", "Unknown DamageType detected: '" . $damagetype . "'");
-		return ProcessInsertStatement( "INSERT INTO " . STATS_DAMAGETYPES . " (DAMAGETYPE, DisplayName) VALUES ('" . $damagetype . "', '" . $damagetype . "')");
+	if ( isset($myrow['ID']) ) {
+		$parser_lookup_cache['damagetype'][ $damagetype ] = (int) $myrow['ID'];
+		return $parser_lookup_cache['damagetype'][ $damagetype ];
 	}
+	PrintHTMLDebugInfo( DEBUG_ERROR_WTF, "GetDamageTypeIDByName", "Unknown DamageType detected: '" . $damagetype . "'");
+	$id = ProcessInsertStatement( "INSERT INTO " . STATS_DAMAGETYPES . " (DAMAGETYPE, DisplayName) VALUES ('" . $damagetype . "', '" . $damagetype . "')");
+	$parser_lookup_cache['damagetype'][ $damagetype ] = (int) $id;
+	return (int) $id;
 }
 
 function GetWeaponIDByName( $weaponname )
 {
-	global $myserver;
-	
+	global $myserver, $parser_lookup_cache;
+	if ( ! isset( $parser_lookup_cache ) ) {
+		Parser_ResetLookupCaches();
+	}
+
 	// Move GL at the right position, to avoid duplicated weapon ID's!
 	$pos = strpos($weaponname, "gl_");
 	if ( $pos !== false && $pos == 0) 
@@ -468,34 +534,51 @@ function GetWeaponIDByName( $weaponname )
 	$weaponname = str_replace($search, $replace, $weaponname);
 	*/
 
-	// --- First get and check the weapon id ;)!
-	$result = DB_Query("SELECT ID FROM " . STATS_WEAPONS . " WHERE INGAMENAME = '$weaponname'");
-	$myrow = DB_GetSingleRow($result, true);
-	if ( isset($myrow['ID']) )
-		$weaponid = $myrow['ID'];
-	else
-		$weaponid = ProcessInsertStatement( "INSERT INTO " . STATS_WEAPONS . " (INGAMENAME, Description_id) VALUES ('$weaponname', 'weapon_" . $weaponname . "')");
-	// --- 
+	$key = $weaponname;
+	if ( isset( $parser_lookup_cache['weapon'][ $key ] ) ) {
+		$weaponid = $parser_lookup_cache['weapon'][ $key ];
+	} else {
+		$result = DB_Query("SELECT ID FROM " . STATS_WEAPONS . " WHERE INGAMENAME = '$weaponname'");
+		$myrow = DB_GetSingleRow($result, true);
+		if ( isset($myrow['ID']) ) {
+			$weaponid = (int) $myrow['ID'];
+		} else {
+			$weaponid = (int) ProcessInsertStatement( "INSERT INTO " . STATS_WEAPONS . " (INGAMENAME, Description_id) VALUES ('$weaponname', 'weapon_" . $weaponname . "')");
+		}
+		$parser_lookup_cache['weapon'][ $key ] = $weaponid;
+	}
 
-	// --- Now we check if the weapon is enabled for the server
-	$result = DB_Query("SELECT SERVERID FROM " . STATS_WEAPONS_PERSERVER . " WHERE WEAPONID = " . $weaponid . " AND SERVERID = " . $myserver['ID']);
-	$myrow = DB_GetSingleRow($result, true);
-	if ( !isset($myrow['SERVERID']) )
-		ProcessInsertStatement( "INSERT INTO " . STATS_WEAPONS_PERSERVER . " (WEAPONID, SERVERID, ENABLED) VALUES (" . $weaponid . ", " . $myserver['ID'] . ", 1)");
-	// --- 
-	
-	// Return the weapon id
-	return $weaponid; 
+	$psKey = (int) $myserver['ID'] . ':' . $weaponid;
+	if ( empty( $parser_lookup_cache['weapon_perserver'][ $psKey ] ) ) {
+		$result = DB_Query("SELECT SERVERID FROM " . STATS_WEAPONS_PERSERVER . " WHERE WEAPONID = " . $weaponid . " AND SERVERID = " . $myserver['ID']);
+		$myrow = DB_GetSingleRow($result, true);
+		if ( ! isset( $myrow['SERVERID'] ) ) {
+			ProcessInsertStatement( "INSERT INTO " . STATS_WEAPONS_PERSERVER . " (WEAPONID, SERVERID, ENABLED) VALUES (" . $weaponid . ", " . $myserver['ID'] . ", 1)");
+		}
+		$parser_lookup_cache['weapon_perserver'][ $psKey ] = 1;
+	}
+
+	return $weaponid;
 }
 
 function GetActionIDByName( $actionname )
 {
+	global $parser_lookup_cache;
+	if ( ! isset( $parser_lookup_cache ) ) {
+		Parser_ResetLookupCaches();
+	}
+	if ( isset( $parser_lookup_cache['gameaction'][ $actionname ] ) ) {
+		return $parser_lookup_cache['gameaction'][ $actionname ];
+	}
 	$result = DB_Query("SELECT ID FROM " . STATS_GAMEACTIONS . " WHERE NAME = '$actionname'");
 	$myrow = DB_GetSingleRow($result, true);
-	if ( isset($myrow['ID']) )
-		return $myrow['ID'];
-	else
-		return ProcessInsertStatement( "INSERT INTO " . STATS_GAMEACTIONS . " (NAME) VALUES ('$actionname')");
+	if ( isset($myrow['ID']) ) {
+		$parser_lookup_cache['gameaction'][ $actionname ] = (int) $myrow['ID'];
+		return $parser_lookup_cache['gameaction'][ $actionname ];
+	}
+	$id = ProcessInsertStatement( "INSERT INTO " . STATS_GAMEACTIONS . " (NAME) VALUES ('$actionname')");
+	$parser_lookup_cache['gameaction'][ $actionname ] = (int) $id;
+	return (int) $id;
 }
 
 function GetGametypeFromInitGame($mybuffer)
@@ -516,15 +599,23 @@ function GetGametypeFromInitGame($mybuffer)
 
 function GetHitLocationTypeIDByName( $hitloaction )
 {
+	global $parser_lookup_cache;
+	if ( ! isset( $parser_lookup_cache ) ) {
+		Parser_ResetLookupCaches();
+	}
+	if ( isset( $parser_lookup_cache['hitloc'][ $hitloaction ] ) ) {
+		return $parser_lookup_cache['hitloc'][ $hitloaction ];
+	}
 	$result = DB_Query("SELECT ID FROM " . STATS_HITLOCATIONS . " WHERE BODYPART = '$hitloaction'");
 	$rows = DB_GetAllRows($result, true);
-	if ( ! empty( $rows ) )
-		return $rows[0]['ID'];
-	else
-	{
-		PrintHTMLDebugInfo( DEBUG_ERROR_WTF, "GetHitLocationTypeIDByName", "Unknown HitLocation detected: '" . $hitloaction . "'");
-		return ProcessInsertStatement( "INSERT INTO " . STATS_HITLOCATIONS . " (BODYPART, DisplayName) VALUES ('" . $hitloaction . "', '" . $hitloaction . "')");
+	if ( ! empty( $rows ) ) {
+		$parser_lookup_cache['hitloc'][ $hitloaction ] = (int) $rows[0]['ID'];
+		return $parser_lookup_cache['hitloc'][ $hitloaction ];
 	}
+	PrintHTMLDebugInfo( DEBUG_ERROR_WTF, "GetHitLocationTypeIDByName", "Unknown HitLocation detected: '" . $hitloaction . "'");
+	$id = ProcessInsertStatement( "INSERT INTO " . STATS_HITLOCATIONS . " (BODYPART, DisplayName) VALUES ('" . $hitloaction . "', '" . $hitloaction . "')");
+	$parser_lookup_cache['hitloc'][ $hitloaction ] = (int) $id;
+	return (int) $id;
 }
 
 function ProcessSelectStatement( $sqlStatement )
@@ -636,41 +727,96 @@ function ProcessUpdateStatement( $sqlStatement, $execDirect = false )
 	}
 }
 
-// TODO!!!!!
+/**
+ * Flush batched UPDATE strings using mysqli_multi_query when possible; fall back to mysql CLI.
+ *
+ * @return bool True when mysqli_multi_query handled the full queue; false when CLI was used or empty.
+ */
 function ProcessQueuedUpdateStatement()
 {
-	// Now run bulk updates :)!
-	global $content, $CFG, $SQL_UDPATE_Direct_Count, $SQL_UDPATE_Batch_Count, $sqlupdatestatements;
-	
-	// Nothing to do!
+	global $content, $CFG, $link_id, $sqlupdatestatements;
+
 	if ( ! isset( $sqlupdatestatements ) || strlen( (string) $sqlupdatestatements ) === 0 ) {
-		return;
+		return true;
 	}
-	
-	// Dump into file now
-	$myhandle = @fopen( $content['sqltmpfile'], "w" );
-	if ($myhandle)
-		fwrite($myhandle, (string) $sqlupdatestatements . "\r\n");
-	
-	// Create command for the pipe
+
+	$raw = trim( (string) $sqlupdatestatements );
+	$bits     = preg_split( '/;\s*\R+/u', $raw );
+	$stmts    = array();
+	foreach ( $bits as $b ) {
+		$b = trim( $b );
+		if ( $b !== '' ) {
+			$stmts[] = $b . ';';
+		}
+	}
+
+	if ( empty( $stmts ) ) {
+		$sqlupdatestatements = '';
+		return true;
+	}
+
+	$joined    = implode( '', $stmts );
+	$maxMulti  = 16777216;
+
+	if ( strlen( $joined ) <= $maxMulti && function_exists( 'mysqli_multi_query' ) && $link_id instanceof mysqli ) {
+		if ( UltraStats_FlushMultiQueryBatch( $joined ) ) {
+			$sqlupdatestatements = '';
+			PrintHTMLDebugInfo( DEBUG_DEBUG, 'QueuedUpdates', 'Flushed ' . count( $stmts ) . ' queued UPDATE(s) via mysqli_multi_query.' );
+			return true;
+		}
+		PrintHTMLDebugInfo( DEBUG_WARN, 'QueuedUpdates', 'mysqli_multi_query failed; falling back to mysql CLI.' );
+	} elseif ( strlen( $joined ) > $maxMulti ) {
+		PrintHTMLDebugInfo( DEBUG_DEBUG, 'QueuedUpdates', 'Queued UPDATE batch exceeds mysqli size limit; using mysql CLI.' );
+	}
+
+	$dump = implode( "\r\n", $stmts );
+	$myhandle = @fopen( $content['sqltmpfile'], 'w' );
+	if ( $myhandle ) {
+		fwrite( $myhandle, $dump . "\r\n" );
+		fclose( $myhandle );
+	}
+
 	$hasPass = isset( $CFG['Pass'] ) && strlen( (string) $CFG['Pass'] ) > 0;
 	if ( $hasPass ) {
-		$myCommand = $content['MYSQLPATH'] . " -u " . $CFG['User'] . " -p" . $CFG['Pass'] . " " . $CFG['DBName'] . " < " . $content['sqltmpfile'];
+		$myCommand = $content['MYSQLPATH'] . ' -u ' . $CFG['User'] . ' -p' . $CFG['Pass'] . ' ' . $CFG['DBName'] . ' < ' . $content['sqltmpfile'];
 	} else {
-		$myCommand = $content['MYSQLPATH'] . " -u " . $CFG['User'] . " " . $CFG['DBName'] . " < " . $content['sqltmpfile'];
+		$myCommand = $content['MYSQLPATH'] . ' -u ' . $CFG['User'] . ' ' . $CFG['DBName'] . ' < ' . $content['sqltmpfile'];
 	}
 
 	$myOutput = shell_exec( $myCommand );
 	if ( is_string( $myOutput ) && strlen( $myOutput ) > 0 ) {
-		PrintHTMLDebugInfo( DEBUG_WARN, "QueuedUpdates", "MySQL Pipe Output: " . $myOutput );
+		PrintHTMLDebugInfo( DEBUG_WARN, 'QueuedUpdates', 'MySQL Pipe Output: ' . $myOutput );
 	} else {
-		PrintHTMLDebugInfo( DEBUG_DEBUG, "QueuedUpdates", "MySQL Command: " . $myCommand . " Error Output: " . ( is_string( $myOutput ) ? $myOutput : '' ) );
+		PrintHTMLDebugInfo( DEBUG_DEBUG, 'QueuedUpdates', 'MySQL CLI: ' . $myCommand );
 	}
 
 	$sqlupdatestatements = '';
+	return false;
+}
 
-	// TODO Check for PHP5 and use
-	// mysqli_multi_query
+/**
+ * @param string $sql One or more semicolon-terminated statements.
+ */
+function UltraStats_FlushMultiQueryBatch( $sql ) {
+	global $link_id;
+	if ( ! $link_id instanceof mysqli || $sql === '' ) {
+		return false;
+	}
+	try {
+		if ( ! mysqli_multi_query( $link_id, $sql ) ) {
+			return false;
+		}
+		do {
+			$res = mysqli_store_result( $link_id );
+			if ( $res instanceof mysqli_result ) {
+				mysqli_free_result( $res );
+			}
+		} while ( mysqli_more_results( $link_id ) && mysqli_next_result( $link_id ) );
+
+		return mysqli_errno( $link_id ) === 0;
+	} catch ( Throwable $e ) {
+		return false;
+	}
 }
 
 function GetPlayerWithMostKills()
@@ -772,83 +918,82 @@ function CreateTopAliases( $serverid )
 {
 	global $content;
 
-	// --- Now we calc 
-	if ( $serverid != -1 )
-	{
-		PrintHTMLDebugInfo( DEBUG_INFO, "CreateTopAliases", "Starting TopAliases Calculation ...");
-		$wheresinglesql1 = " WHERE " . STATS_PLAYERS . ".SERVERID = " . $serverid;
-		$wheresinglesql2 = " AND " . STATS_ALIASES . ".SERVERID = " . $serverid;
-		$groupbysql = " GROUP BY SERVERID ";
+	if ( $serverid != -1 ) {
+		PrintHTMLDebugInfo( DEBUG_INFO, "CreateTopAliases", "Starting TopAliases Calculation ..." );
+		$sid = (int) $serverid;
+		ProcessDeleteStatement( "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE SERVERID = " . $sid );
+		$sql = "INSERT INTO " . STATS_PLAYERS_TOPALIASES . " (GUID, SERVERID, ALIASID) " .
+			"WITH alias_sums AS ( " .
+			"  SELECT PLAYERID, SERVERID, `Alias`, SUM(`Count`) AS MyCount, MAX(ID) AS AliasRowId " .
+			"  FROM " . STATS_ALIASES . " WHERE SERVERID = " . $sid . " " .
+			"  GROUP BY PLAYERID, SERVERID, `Alias` " .
+			"), ranked AS ( " .
+			"  SELECT PLAYERID AS GUID, SERVERID, AliasRowId AS ALIASID, " .
+			"    ROW_NUMBER() OVER (PARTITION BY PLAYERID, SERVERID ORDER BY MyCount DESC, AliasRowId DESC) AS rn " .
+			"  FROM alias_sums " .
+			") " .
+			"SELECT r.GUID, r.SERVERID, r.ALIASID " .
+			"FROM ranked r " .
+			"INNER JOIN ( SELECT GUID FROM " . STATS_PLAYERS . " WHERE SERVERID = " . $sid . " GROUP BY GUID ) p ON p.GUID = r.GUID " .
+			"WHERE r.rn = 1";
+		$res = DB_Query( $sql );
+		if ( $res === false ) {
+			PrintHTMLDebugInfo( DEBUG_ERROR, "CreateTopAliases", "Bulk top-alias insert failed for SERVERID " . $sid );
+		} else {
+			DB_FreeQuery( $res );
+		}
+		return;
 	}
-	else
-	{
-		PrintHTMLDebugInfo( DEBUG_INFO, "CreateTopAliases", "Starting Total TopAliases Calculation ...");
-		$wheresinglesql1 = "";
-		$wheresinglesql2 = "";
-		$groupbysql = "";
-	}
+
+	PrintHTMLDebugInfo( DEBUG_INFO, "CreateTopAliases", "Starting Total TopAliases Calculation ..." );
+	$wheresinglesql1 = "";
+	$wheresinglesql2 = "";
 	$whereaddupdatesql = " AND SERVERID = " . $serverid;
 
-
-/*	$sqlquery = "SELECT " .
-						STATS_PLAYERS . ".GUID, " . 
-						STATS_ALIASES . ".ID, " . 
-						"sum( " . STATS_ALIASES . ".Count) as Count " . 
-						" FROM " . STATS_PLAYERS . 
-						" INNER JOIN (" . STATS_ALIASES . 
-						") ON (" . 
-						STATS_PLAYERS . ".GUID=" . STATS_ALIASES . ".PLAYERID) " . 
-						$wheresinglesql . 
-						" GROUP BY " . STATS_ALIASES . ".Alias " . 
-//						" GROUP BY " . STATS_ALIASES . ".Alias AND " . STATS_ALIASES . ".PLAYERID " . 
-						" ORDER BY " . STATS_ALIASES . ".Count DESC ";
-						*/
 	$sqlquery = "SELECT " .
-						STATS_PLAYERS . ".GUID " . 
-						" FROM " . STATS_PLAYERS . 
-						$wheresinglesql1 . 
-						" GROUP BY " . STATS_PLAYERS . ".GUID ";
-	$result = DB_Query( $sqlquery );
-	$allplayers = DB_GetAllRows($result, true);
-	if ( ! empty( $allplayers ) )
-	{
-		for($i = 0; $i < count($allplayers); $i++)
-		{
+		STATS_PLAYERS . ".GUID " .
+		" FROM " . STATS_PLAYERS .
+		$wheresinglesql1 .
+		" GROUP BY " . STATS_PLAYERS . ".GUID ";
+	$result   = DB_Query( $sqlquery );
+	$allplayers = DB_GetAllRows( $result, true );
+	if ( ! empty( $allplayers ) ) {
+		for ( $i = 0; $i < count( $allplayers ); $i++ ) {
 			$sqlquery = "SELECT " .
-						STATS_ALIASES . ".ID, " . 
-						STATS_ALIASES . ".Alias, " . 
-						"sum( " .STATS_ALIASES . ".Count) as MyCount " . 
-						" FROM " . STATS_ALIASES . 
-						" WHERE PLAYERID = " . $allplayers[$i]['GUID'] . " " . 
-						$wheresinglesql2 . 
-						" GROUP BY " . STATS_ALIASES . ".Alias " . 
-						" ORDER BY MyCount DESC LIMIT 1";
-			$result = DB_Query( $sqlquery );
-			$mytmparray = DB_GetSingleRow($result, true);
-			if ( isset($mytmparray['ID']) )
-			{
-				$sqlquery = " SELECT " . 
-							STATS_PLAYERS_TOPALIASES . ".GUID " .
-							" FROM " . STATS_PLAYERS_TOPALIASES . 
-							" WHERE " . STATS_PLAYERS_TOPALIASES . ".GUID = " . $allplayers[$i]['GUID'] . 
-							$whereaddupdatesql;
-				$result = DB_Query( $sqlquery );
-				$tmpvars = DB_GetSingleRow($result, true);
+				STATS_ALIASES . ".ID, " .
+				STATS_ALIASES . ".Alias, " .
+				"sum( " . STATS_ALIASES . ".Count) as MyCount " .
+				" FROM " . STATS_ALIASES .
+				" WHERE PLAYERID = " . $allplayers[ $i ]['GUID'] . " " .
+				$wheresinglesql2 .
+				" GROUP BY " . STATS_ALIASES . ".Alias " .
+				" ORDER BY MyCount DESC LIMIT 1";
+			$result     = DB_Query( $sqlquery );
+			$mytmparray = DB_GetSingleRow( $result, true );
+			if ( isset( $mytmparray['ID'] ) ) {
+				$sqlquery = " SELECT " .
+					STATS_PLAYERS_TOPALIASES . ".GUID " .
+					" FROM " . STATS_PLAYERS_TOPALIASES .
+					" WHERE " . STATS_PLAYERS_TOPALIASES . ".GUID = " . $allplayers[ $i ]['GUID'] .
+					$whereaddupdatesql;
+				$result  = DB_Query( $sqlquery );
+				$tmpvars = DB_GetSingleRow( $result, true );
 
-				if ( isset($tmpvars['GUID']) )
-					ProcessUpdateStatement(	" UPDATE " . STATS_PLAYERS_TOPALIASES . " SET " . 
-											" ALIASID = " . $mytmparray['ID'] . 
-											" WHERE GUID = " . $allplayers[$i]['GUID'] . 
-											$whereaddupdatesql ); 
-				else	// NOT DIRECTLY, TODO LATER!
-					ProcessInsertStatement(	" INSERT INTO " . STATS_PLAYERS_TOPALIASES . " (GUID, SERVERID, ALIASID) " . 
-											" VALUES ( " 
-											. $allplayers[$i]['GUID'] . ", " 
-											. $serverid . ", " 
-											. $mytmparray['ID'] . " )", false );
+				if ( isset( $tmpvars['GUID'] ) ) {
+					ProcessUpdateStatement( " UPDATE " . STATS_PLAYERS_TOPALIASES . " SET " .
+						" ALIASID = " . $mytmparray['ID'] .
+						" WHERE GUID = " . $allplayers[ $i ]['GUID'] .
+						$whereaddupdatesql );
+				} else {
+					ProcessInsertStatement( " INSERT INTO " . STATS_PLAYERS_TOPALIASES . " (GUID, SERVERID, ALIASID) " .
+						" VALUES ( "
+						. $allplayers[ $i ]['GUID'] . ", "
+						. $serverid . ", "
+						. $mytmparray['ID'] . " )", false );
+				}
+			} else {
+				PrintHTMLDebugInfo( DEBUG_ERROR, "CreateTopAliases", "No AliasName found for GUID " . $allplayers[ $i ]['GUID'] . "! This may caused by a parsing bug or logfile corruption" );
 			}
-			else
-				PrintHTMLDebugInfo( DEBUG_ERROR, "CreateTopAliases", "No AliasName found for GUID " . $allplayers[$i]['GUID'] . "! This may caused by a parsing bug or logfile corruption" );
 		}
 	}
 }

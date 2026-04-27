@@ -1,0 +1,4 @@
+-- --------------------------------------------------------
+-- Database internal version 11: secondary indexes for parser deletes and round/time listings.
+ALTER TABLE `stats_player_kills` ADD INDEX `idx_player_kills_server_round` (`SERVERID`, `ROUNDID`);
+ALTER TABLE `stats_rounds` ADD INDEX `idx_rounds_server_timeadded` (`SERVERID`, `TIMEADDED`);

@@ -696,6 +696,8 @@ function RunParserNow()
 	// StartDbg
 	PrintHTMLDebugInfo( DEBUG_INFO, "Gamelog", "Starting Parser...");
 
+	Parser_ResetLookupCaches();
+
 	// Remove stale cancel flag from earlier; this run may set a new one.
 	if ( $RUNMODE == RUNMODE_WEBSERVER ) {
 		UltraStats_ParserCancelClear( $myserver['ID'] );
@@ -1412,11 +1414,13 @@ function Parser_FinalizeRound( $roundlastedtime )
 	{
 		$strInsert = "INSERT INTO " . STATS_PLAYER_KILLS . " (SERVERID, ROUNDID, PLAYERID, ENEMYID, WEAPONID, DAMAGETYPEID, HITLOCATIONID, Kills) VALUES ";
 		
-		// Loop through all KillEntries
-		$iKillCount = count($myKills);
 		$iTmp = 0;
-		foreach ($myKills as $myKillEntry )
-		{
+		$first = true;
+		foreach ( $myKills as $myKillEntry ) {
+			if ( ! $first ) {
+				$strInsert .= ", ";
+			}
+			$first = false;
 			$strInsert .= "( " .  
 							$myserver['ID'] . ", " . 
 							$myRound[ROUND_DBID] . ", " . 
@@ -1425,16 +1429,8 @@ function Parser_FinalizeRound( $roundlastedtime )
 							$myKillEntry[DBKILLS_WEAPONID] . ", " . 
 							$myKillEntry[DBKILLS_DAMAGETYPE] . ", " . 
 							$myKillEntry[DBKILLS_HITLOCATION] . ", " . 
-							$myKillEntry[DBKILLS_COUNT] . ") "; 
-			
-			// Unset Entry!
-			unset( $myKills[ $iTmp ] );
-
-			// Append ", " unless its the last entry
+							$myKillEntry[DBKILLS_COUNT] . ")"; 
 			$iTmp++;
-			if ( $iKillCount > $iTmp )
-				$strInsert .= ", ";
-
 		}
 		
 		// Append last ";"!
@@ -1445,6 +1441,7 @@ function Parser_FinalizeRound( $roundlastedtime )
 
 		// Process the statement now!
 		ProcessExtendedInsertStatement( $strInsert, $iTmp );
+		$myKills = array();
 	}
 	// --- 
 
@@ -1790,11 +1787,12 @@ function Parser_AddRoundAction( $myArray )
 
 	// --- Making ActionEntry
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "Parser_AddRoundAction", "Adding Action '" . $szAction . "' for PlayerID '" . $myArray[PARSER_GUID] . "'");
+	$actionId = GetActionIDByName( $szAction );
 	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
 					ROUNDID = " . $myRound[ROUND_DBID] . " AND 
 					PLAYERID = " . $myArray[PARSER_GUID] . " AND 
 					Team = '" . $szClientTeam . "' AND 
-					ACTIONID = " . GetActionIDByName( $szAction );
+					ACTIONID = " . $actionId;
 
 	$result = DB_Query("SELECT * FROM " . STATS_ROUNDACTIONS . " " . $wherequery );
 	$rows = DB_GetAllRows($result, true);
@@ -1812,7 +1810,7 @@ function Parser_AddRoundAction( $myArray )
 			 " . $myRound[ROUND_DBID] . ", 
 			 " . $myArray[PARSER_GUID] . ", 
 			 '" . $szClientTeam . "', 
-			 " . GetActionIDByName( $szAction ) . ", 
+			 " . $actionId . ", 
 			 " . "1" . ")");
 	}
 	// --- 
@@ -2035,46 +2033,22 @@ function Parser_AddKillAndDeath( $myArray )
 	{
 		// --- NEW CODE to Count Kill & Deaths - INSERTS will be done with ONE big EXTENDED INSERT later. This should speed up SQL processing!
 		
-		// Helper variables
-		$bFoundKillEntry = false;
-		$nArrayId = 0;
-		
 		// Create KillEntry
 		$newKillEntry[DBKILLS_ATTACKERGUID] = $myArray[KILL_ATTACKER_GUID];
 		$newKillEntry[DBKILLS_OPFERGUID] = $myArray[KILL_OPFER_GUID];
 		$newKillEntry[DBKILLS_WEAPONID] = GetWeaponIDByName( $myArray[KILL_ATTACKER_WEAPON] );
 		$newKillEntry[DBKILLS_DAMAGETYPE] = GetDamageTypeIDByName( $myArray[KILL_DAMAGE_TYPE] );
 		$newKillEntry[DBKILLS_HITLOCATION] = GetHitLocationTypeIDByName( $myArray[KILL_DAMAGE_LOCATION]);
-		
-		// Searcjh for existing occurence in KillsArray
-		if ( isset($myKills) )
-		{
-			// Assign Count to ArrayID
-			$nArrayId = count($myKills);
-			
-			//Loop through through array
-//			foreach ($myKills as &$myKillEntry ) | Only supported by PHP5 and higher
-//			foreach ($myKills as $myKillEntry ) | OLD BUG!
-			for ($ix = 0; $ix < $nArrayId; $ix++)
-			{
-				if (	$myKills[$ix][DBKILLS_ATTACKERGUID] == $newKillEntry[DBKILLS_ATTACKERGUID] && 
-						$myKills[$ix][DBKILLS_OPFERGUID] == $newKillEntry[DBKILLS_OPFERGUID] && 
-						$myKills[$ix][DBKILLS_WEAPONID] == $newKillEntry[DBKILLS_WEAPONID] && 
-						$myKills[$ix][DBKILLS_DAMAGETYPE] == $newKillEntry[DBKILLS_DAMAGETYPE] && 
-						$myKills[$ix][DBKILLS_HITLOCATION] == $newKillEntry[DBKILLS_HITLOCATION] )
-				{
-					// Increment KillCount
-					$myKills[$ix][DBKILLS_COUNT]++;
-					$bFoundKillEntry = true;
-					break;
-				}
-			}
-		}
+		$killKey = $newKillEntry[DBKILLS_ATTACKERGUID] . "\x1e" . $newKillEntry[DBKILLS_OPFERGUID] . "\x1e" . $newKillEntry[DBKILLS_WEAPONID] . "\x1e" . $newKillEntry[DBKILLS_DAMAGETYPE] . "\x1e" . $newKillEntry[DBKILLS_HITLOCATION];
 
-		if ( !$bFoundKillEntry )
-		{	// If new KillEntry add to array
-			$newKillEntry[DBKILLS_COUNT]= 1;
-			$myKills[$nArrayId] = $newKillEntry;
+		if ( ! isset( $myKills ) ) {
+			$myKills = array();
+		}
+		if ( isset( $myKills[ $killKey ] ) ) {
+			$myKills[ $killKey ][ DBKILLS_COUNT ]++;
+		} else {
+			$newKillEntry[ DBKILLS_COUNT ] = 1;
+			$myKills[ $killKey ] = $newKillEntry;
 		}
 		// --- 
 
@@ -2290,83 +2264,45 @@ function Parser_PlayerAnalyzeAndSave( $myPlayer, $timeplayed )
 	// DebugInfo
 	PrintHTMLDebugInfo( DEBUG_DEBUG, "PlayerAnalyzeAndSave", "Finish Stats for Player '" . $myPlayer[PLAYER_GUID] . "'");
 
-	// --- Update the Player record
-	$wherequery =  "WHERE GUID = " . $myPlayer[PLAYER_GUID] . " AND 
-					SERVERID = " . $myserver['ID'] . " AND 
-					Time_Year = " . $myRound[ROUND_TIMEYEAR] . " AND 
-					Time_Month = " . $myRound[ROUND_TIMEMONTH];
-
-	$result = DB_Query("SELECT * FROM " . STATS_PLAYERS . " " . $wherequery );
-	$myrow = DB_GetSingleRow($result, true);
-	if ( isset($myrow['GUID']) )
-	{
-		// Calc Total Values
-		$totalkills = $myrow['Kills'] + $myPlayer[PLAYER_KILLS];
-		$totaldeaths = $myrow['Deaths'] + $myPlayer[PLAYER_DEATHS];
-		$totaltks = $myrow['Teamkills'] + $myPlayer[PLAYER_TKS];
-		$totalsuicides = $myrow['Suicides'] + $myPlayer[PLAYER_SUICIDES];
-		if ( $totaldeaths > 0 )
-			$killratio = $totalkills / $totaldeaths;
-		else
-			$killratio = $totalkills;
-
-		// We go for the update
-		ProcessUpdateStatement("UPDATE " . STATS_PLAYERS . " SET 
-			Kills = $totalkills, 
-			Deaths = $totaldeaths,
-			Teamkills = $totaltks, 
-			Suicides = $totalsuicides, 
-			KillRatio = $killratio " . $wherequery );
+	// --- Player record: single upsert (MySQL 8+ row alias) replaces SELECT + UPDATE/INSERT
+	$g  = (int) $myPlayer[PLAYER_GUID];
+	$sid = (int) $myserver['ID'];
+	$y  = (int) $myRound[ROUND_TIMEYEAR];
+	$mo = (int) $myRound[ROUND_TIMEMONTH];
+	$k  = (int) $myPlayer[PLAYER_KILLS];
+	$d  = (int) $myPlayer[PLAYER_DEATHS];
+	$tk = (int) $myPlayer[PLAYER_TKS];
+	$su = (int) $myPlayer[PLAYER_SUICIDES];
+	if ( $d > 0 ) {
+		$kr = $k / $d;
+	} else {
+		$kr = (float) $k;
 	}
-	else
-	{
-		// Calc Total Values
-		if ( $myPlayer[PLAYER_DEATHS] > 0 )
-			$killratio = $myPlayer[PLAYER_KILLS] / $myPlayer[PLAYER_DEATHS];
-		else
-			$killratio = $myPlayer[PLAYER_KILLS];
-
-		// We add a NEW entry
-		$myPlayer[PLAYER_DBID] = ProcessInsertStatement("INSERT INTO " . STATS_PLAYERS . " (GUID, SERVERID, Time_Year, Time_Month, Kills, Deaths, Teamkills, Suicides, KillRatio) 
-		VALUES (
-			 " . $myPlayer[PLAYER_GUID] . ", 
-			 " . $myserver['ID'] . ", 
-			 " . $myRound[ROUND_TIMEYEAR] . ", 
-			 " . $myRound[ROUND_TIMEMONTH] . ", 
-			 " . $myPlayer[PLAYER_KILLS] . ", 
-			 " . $myPlayer[PLAYER_DEATHS] . ", 
-			 " . $myPlayer[PLAYER_TKS] . ", 
-			 " . $myPlayer[PLAYER_SUICIDES] . ", 
-			 " .$killratio . "
-			)");
+	$tprefPlayers = STATS_PLAYERS;
+	$sqlPlayers   = "INSERT INTO " . $tprefPlayers . " (GUID, SERVERID, Time_Year, Time_Month, Kills, Deaths, Teamkills, Suicides, KillRatio) VALUES (" .
+		"{$g}, {$sid}, {$y}, {$mo}, {$k}, {$d}, {$tk}, {$su}, {$kr}) AS newrow ON DUPLICATE KEY UPDATE " .
+		"{$tprefPlayers}.Kills = {$tprefPlayers}.Kills + newrow.Kills, {$tprefPlayers}.Deaths = {$tprefPlayers}.Deaths + newrow.Deaths, " .
+		"{$tprefPlayers}.Teamkills = {$tprefPlayers}.Teamkills + newrow.Teamkills, {$tprefPlayers}.Suicides = {$tprefPlayers}.Suicides + newrow.Suicides, " .
+		"{$tprefPlayers}.KillRatio = IF({$tprefPlayers}.Deaths + newrow.Deaths > 0, ({$tprefPlayers}.Kills + newrow.Kills) / ({$tprefPlayers}.Deaths + newrow.Deaths), {$tprefPlayers}.Kills + newrow.Kills)";
+	$resP = DB_Query( $sqlPlayers );
+	if ( $resP === false ) {
+		PrintHTMLDebugInfo( DEBUG_ERROR, "PlayerAnalyzeAndSave", "Upsert " . STATS_PLAYERS . " failed for GUID {$g}" );
+	} else {
+		DB_FreeQuery( $resP );
 	}
 	// ---
 
-	// --- Set the TimeRecord for the Player
-	$wherequery =  "WHERE SERVERID = " . $myserver['ID'] . " AND 
-					Time_Year = " . $myRound[ROUND_TIMEYEAR] . " AND 
-					Time_Month = " . $myRound[ROUND_TIMEMONTH] . " AND 
-					ROUNDID = " . $myRound[ROUND_DBID] . " AND 
-					PLAYERID = " . $myPlayer[PLAYER_GUID];
-	$result = DB_Query("SELECT TIMEPLAYED FROM " . STATS_TIME . " " . $wherequery );
-	$myrow = DB_GetSingleRow($result, true);
-	if ( isset($myrow['TIMEPLAYED']) )
-	{
-		// We go for the update
-		ProcessUpdateStatement("UPDATE " . STATS_TIME . " SET TIMEPLAYED = TIMEPLAYED + $timeplayed " . $wherequery);
-	}
-	else
-	{
-		// We add a NEW entry
-		ProcessInsertStatement("INSERT INTO " . STATS_TIME . " (SERVERID, Time_Year, Time_Month, ROUNDID, PLAYERID, TIMEPLAYED) 
-		VALUES (
-			 " . $myserver['ID'] . ", 
-			 " . $myRound[ROUND_TIMEYEAR] . ", 
-			 " . $myRound[ROUND_TIMEMONTH] . ", 
-			 " . $myRound[ROUND_DBID] . ", 
-			 " . $myPlayer[PLAYER_GUID] . ", 
-			 " . $timeplayed . "
-			)");
+	// --- Time record: upsert
+	$rid = (int) $myRound[ROUND_DBID];
+	$tp  = (int) $timeplayed;
+	$tprefTime = STATS_TIME;
+	$sqlTime   = "INSERT INTO " . $tprefTime . " (SERVERID, Time_Year, Time_Month, ROUNDID, PLAYERID, TIMEPLAYED) VALUES (" .
+		"{$sid}, {$y}, {$mo}, {$rid}, {$g}, {$tp}) AS newt ON DUPLICATE KEY UPDATE {$tprefTime}.TIMEPLAYED = {$tprefTime}.TIMEPLAYED + newt.TIMEPLAYED";
+	$resT = DB_Query( $sqlTime );
+	if ( $resT === false ) {
+		PrintHTMLDebugInfo( DEBUG_ERROR, "PlayerAnalyzeAndSave", "Upsert " . STATS_TIME . " failed for GUID {$g}" );
+	} else {
+		DB_FreeQuery( $resT );
 	}
 	// ---
 	

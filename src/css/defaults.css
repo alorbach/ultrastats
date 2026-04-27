@@ -155,7 +155,7 @@
 */
 }
 
-/* Admin parser.php: embedded EventSource log — fills viewport with sensible min size */
+/* Admin parser.php: embedded EventSource log — compact panel; scroll inside for long runs */
 .parser-embed-section
 {
 	box-sizing: border-box;
@@ -170,14 +170,14 @@
 	box-sizing: border-box;
 	width: 100%;
 	min-width: 260px;
-	min-height: 220px;
+	min-height: 200px;
 	overflow: auto;
 	background-color: #1a1a1a;
 	border: 1px solid #444444;
 	text-align: left;
-	/* Responsive height: grow/shrink with viewport, floor + cap */
-	max-height: calc(100vh - 8.5rem);
-	height: clamp( 220px, calc(100vh - 10.5rem), min( 88vh, 1200px ) );
+	/* Cap height so the rest of the admin page stays visible; inner scroll for log */
+	max-height: min( 52vh, 600px );
+	height: clamp( 200px, 45vh, 600px );
 }
 
 /* Embedded parser SSE: monospace text log (batched pre text, not one table row per line) */
@@ -221,7 +221,7 @@
 {
 	#parser-log-wrap
 	{
-		max-height: calc(100dvh - 8.5rem);
-		height: clamp( 220px, calc(100dvh - 10.5rem), min( 88dvh, 1200px ) );
+		max-height: min( 52dvh, 600px );
+		height: clamp( 200px, 45dvh, 600px );
 	}
 }
