@@ -188,6 +188,38 @@ function GetFileLength($szFileName)
 }
 
 /**
+ * Resolve a gamelog path stored in the database relative to the app root (BASEPATH / gl_root_path).
+ * Paths like "gamelogs/foo.log" would otherwise be resolved from the current working directory; under
+ * admin/ with the PHP built-in server that points at admin/gamelogs/ (wrong). ".." and "./" prefixes are left unchanged.
+ *
+ * @param string $location Value from stats_servers.GameLogLocation
+ * @param array  $content  Must include BASEPATH (same as $gl_root_path, e.g. "./" or "./../")
+ * @return string
+ */
+function UltraStats_ResolveGamelogLocation( $location, $content ) {
+	$l = (string) $location;
+	if ( $l === '' ) {
+		return $l;
+	}
+	if ( $l[0] === '/' ) {
+		return $l;
+	}
+	if ( strlen( $l ) > 2 && ctype_alpha( $l[0] ) && $l[1] === ':' && ( $l[2] === '\\' || $l[2] === '/' ) ) {
+		return $l;
+	}
+	if ( strncmp( $l, '\\\\', 2 ) === 0 ) {
+		return $l;
+	}
+	if ( strncmp( $l, '../', 3 ) === 0 || strncmp( $l, './', 2 ) === 0 ) {
+		return $l;
+	}
+	if ( ! isset( $content['BASEPATH'] ) ) {
+		return $l;
+	}
+	return $content['BASEPATH'] . $l;
+}
+
+/**
  * Main application bootstrap: session, config, DB, runtime options, theme/lang lists, banned-player filter, DB version.
  * Every public script that serves HTML should call this (after defining IN_ULTRASTATS and setting $gl_root_path) unless
  * a minimal path is required (e.g. install uses InitBasicUltraStats() only in early steps).

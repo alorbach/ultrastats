@@ -61,8 +61,8 @@ docker compose -f docker/docker-compose.yml up --build
 ```
 
 - App (PHP built-in server) and MySQL 8 are wired in `docker/docker-compose.yml` — web UI: **http://localhost:8091/** (host port `8091`).
-- **Schema:** the web container runs `docker/seed-database.php` (same logic as `install.php` step 5: `db_template.txt` + `db_template_codwwonly.txt`, `TYPE`→`ENGINE`, then `stats_` config rows). It repairs **partial** DBs (drops `stats_*` and re-imports). MySQL’s `01-import.sh` also runs on first volume init (CRLF-safe). If you get stuck, `docker compose -f docker/docker-compose.yml down -v` resets the DB volume.
-- Gamelogs: mount `src/gamelogs` or add files under that directory.
+- **Schema:** the web container runs `docker/seed-database.php` (same logic as `install.php` step 5: `db_template.txt` + `db_template_cod4only.txt`, `TYPE`→`ENGINE`, `gen_gameversion` = COD4, then two sample `stats_servers` rows pointing at `gamelogs/cod4_normal.log` and `gamelogs/cod4_hq_new.log`, and a default **`stats_users` row: username `admin`, password `pass`** for local dev only — **change or remove this in any shared or production deployment**). If MySQL init (`01-import.sh`) already created tables without `gen_gameversion`, the seed **replaces** the schema when `ULTRASTATS_NUKE_PARTIAL` is enabled (default). If you get stuck, `docker compose -f docker/docker-compose.yml down -v` resets the DB volume.
+- Gamelogs: bundled CoD4 samples live under `src/gamelogs/`; the bind mount `../src:/var/www/html` serves them to the container. **WaW** (`cod5_*`) is not used for the default Docker seed.
 
 **Do not** hardcode host-specific paths in committed files. Copy sample logs from your own backup location into `src/gamelogs/` or a bind mount.
 

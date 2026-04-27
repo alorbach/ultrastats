@@ -218,9 +218,10 @@ function RunServerConsolidation( $serverid )
 				" GROUP BY " . STATS_PLAYERS . ".GUID ";
 	$result = DB_Query($sqlquery);
 	$tmpplayers = DB_GetAllRows($result, true);
-	if ( isset($tmpplayers) )
+	if ( is_array( $tmpplayers ) && count( $tmpplayers ) > 0 )
 	{
 		PrintHTMLDebugInfo( DEBUG_ULTRADEBUG, "Consolidation", "server_total_ratio: " . $sqlquery );
+		$bestration = array( 'GUID' => '', 'KillRatio' => -1.0 );
 		for($i = 0; $i < count($tmpplayers); $i++)
 		{
 			// Calc current ration
@@ -230,7 +231,7 @@ function RunServerConsolidation( $serverid )
 				$tmpplayers[$i]['KillRatio'] = $tmpplayers[$i]['Kills'];
 			// ---
 
-			if ( !isset($bestration['KillRatio']) || $tmpplayers[$i]['KillRatio'] > $bestration['KillRatio'] )
+			if ( $bestration['KillRatio'] < 0 || $tmpplayers[$i]['KillRatio'] > $bestration['KillRatio'] )
 			{
 				// Set new best player
 				$bestration['GUID'] = $tmpplayers[$i]['GUID'];

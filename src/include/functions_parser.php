@@ -79,6 +79,8 @@ function GetLastLogFile( $overwritepasswd = "" )
 		PrintHTMLDebugInfo( DEBUG_ERROR, "FTP", "Error, invalid Server or logfile location specified!" );
 		return;
 	}
+
+	$myserver['GameLogLocation'] = UltraStats_ResolveGamelogLocation( $myserver['GameLogLocation'], $content );
 	
 	// check if local file is writeable
 	if ( !is_writeable($myserver['GameLogLocation']) )
@@ -659,7 +661,7 @@ function OptimizeAllTables()
 */
 function RunParserNow()
 {
-	global $gl_newlastline, $gl_linebuffer, $ParserStart, $myserver;
+	global $gl_newlastline, $gl_linebuffer, $ParserStart, $myserver, $content;
 	global $SQL_UDPATE_Batch_Count, $SQL_UDPATE_Direct_Count, $SQL_INSERT_Count, $SQL_SELECT_Count;
 	global $RUNMODE, $MaxExecutionTime;
 
@@ -678,6 +680,11 @@ function RunParserNow()
 		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser", "Error, invalid Server specified!" );
 		return;
 	}
+	if ( ! isset( $myserver['GameLogLocation'] ) || strlen( $myserver['GameLogLocation'] ) <= 0 ) {
+		PrintHTMLDebugInfo( DEBUG_ERROR, "Parser", "Error, no gamelog path configured for this server!" );
+		return;
+	}
+	$myserver['GameLogLocation'] = UltraStats_ResolveGamelogLocation( $myserver['GameLogLocation'], $content );
 
 	// Some defaults
 	$gl_newlastline = 0;

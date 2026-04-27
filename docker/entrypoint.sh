@@ -51,7 +51,7 @@ export ULTRASTATS_DB_NAME="$DB_NAME"
 export ULTRASTATS_DB_PORT="$DB_PORT"
 export ULTRASTATS_TBPREF="$TBPREF"
 
-# Same SQL as install.php step 5: db_template + codwwonly, ENGINE=, statement split, config rows.
+# Same SQL as install.php step 5: db_template + cod4only (CoD4 dev), ENGINE=, statement split, config + sample servers.
 # Fixes partial/empty DB and Windows CRLF issues from mysql-only init.
 echo "Applying dev database schema (php seed)..."
 if ! php /usr/local/share/ultrastats/seed-database.php; then
