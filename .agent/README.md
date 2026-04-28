@@ -7,6 +7,7 @@ Plain Markdown playbooks for **humans, GitHub Copilot, OpenAI Codex, and other a
 | Skill | File |
 |--------|------|
 | SUMMARIZE / squashed commit / PR handoff | [skills/summarize-handoff.md](skills/summarize-handoff.md) |
+| Release git tag (`v*` → GitHub Release) | [skills/release-tag.md](skills/release-tag.md) |
 | Local Docker, port, gamelogs | [skills/local-development.md](skills/local-development.md) |
 | Secrets, admin, SQL hygiene | [skills/security-hygiene.md](skills/security-hygiene.md) |
 | Where code lives (short map) | [skills/repository-map.md](skills/repository-map.md) |
