@@ -137,5 +137,4 @@ docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-co
 
 Playbooks in **[`.agent/README.md`](.agent/README.md)** and **[`.agent/skills/`](.agent/skills/summarize-handoff.md)** — **SUMMARIZE** / squashed commits, **release tag** (`v*` → GitHub Release; [`.agent/skills/release-tag.md`](.agent/skills/release-tag.md)), local Docker, security hygiene, repository map. **SUMMARIZE** workflow: [`.agent/skills/summarize-handoff.md`](.agent/skills/summarize-handoff.md) (run `git status -sb` and `git diff --stat` from the repo root first).
 
-- [docs/summarize-handoff.md](docs/summarize-handoff.md) is a short redirect to `.agent/`.
 - GitHub **Copilot** also reads [.github/copilot-instructions.md](.github/copilot-instructions.md) (points at AGENTS and summarize skill).

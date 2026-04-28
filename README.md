@@ -57,6 +57,11 @@ UltraStats dates to the **mid-2000s** community development around **Call of Dut
 
 Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/en/readme.md), [install](src/doc/en/install.md), [changelog](src/doc/en/changelog.md), [copyright](src/doc/en/copyright.md)); see [src/doc/README.md](src/doc/README.md). Prefer **this file** and [AGENTS.md](AGENTS.md) for current setup; the old UltraStats wiki is **not** available anymore and must not be linked as if it were. The [documentation website](#documentation-website) includes **read-only** Wayback / mirror links for context.
 
+## Credits
+
+- Core project author and maintainer: Andre Lorbach.
+- Release testing support: David Sanetti.
+
 ## Sample gamelogs
 
 Example logs ship under `src/gamelogs/`. You can add more logs locally and point the parser at that directory (or bind-mount a host folder in Docker).

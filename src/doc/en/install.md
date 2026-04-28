@@ -42,6 +42,36 @@ set sv_log_damage "1"   // enables damage logging
 - **Step 5 — SQL results** — confirms statements ran.  
 - **Step 6 — First admin user** — create the initial admin account.  
 - **Step 7 — Done** — installation complete.  
+
+### Installer walkthrough (screenshots from testbench run)
+
+The latest local testbench capture is in:
+
+- `_tmp/install-e2e-reports/install-e2e-report/index.html`
+
+Step images used below are from:
+
+- `_tmp/install-e2e-reports/install-e2e-report/screenshots/step-01.png` to `step-14.png`
+
+#### Wizard pages (1–7)
+
+![Step 1 - Welcome](images/install-e2e/step-01.png)
+![Step 2 - File permissions](images/install-e2e/step-02.png)
+![Step 3 - Database settings](images/install-e2e/step-03.png)
+![Step 4 - Create tables warning](images/install-e2e/step-04.png)
+![Step 5 - SQL results](images/install-e2e/step-05.png)
+![Step 6 - Create admin user](images/install-e2e/step-06.png)
+![Step 7 - Install complete](images/install-e2e/step-07.png)
+
+#### First admin actions after install
+
+![Step 8 - Open admin login](images/install-e2e/step-08.png)
+![Step 9 - Login](images/install-e2e/step-09.png)
+![Step 10 - Admin dashboard](images/install-e2e/step-10.png)
+![Step 11 - Open add server](images/install-e2e/step-11.png)
+![Step 12 - Add server form](images/install-e2e/step-12.png)
+![Step 13 - Save server](images/install-e2e/step-13.png)
+![Step 14 - Server shown in list](images/install-e2e/step-14.png)
 4. If successful, the front page may show **“No servers installed”** until you add a server. Open **Admin Center**, sign in, and add a server.  
 5. In **Server admin**, use **Add server**. The important field is **gamelog location**—a path the **web server** can read (e.g. default `../gamelogs/server_1.log` if logs live under `gamelogs` next to the app). If the game server and web server are the same machine, you can set the full filesystem path.  
 6. If you **do not** need remote download, you can ignore FTP. Otherwise, open **Edit** on the server; use the helper for **Remote FTP gamelog location**, e.g. `ftp://username@127.0.0.1/.callofdutyww/main/Server1_mp.log`. Use the download control in the admin UI when ready; the parser **appends** to existing log files.  

@@ -47,3 +47,20 @@ Do **not** invent a tag version from git history alone if it disagrees with `BUI
 
 - Agent did **not** claim a successful push without running `git push`.
 - Prefer confirming Shell exit success for `tag` / `push` commands.
+
+## Required output (at the end)
+
+When this skill is used, the assistant's final response must include a **copy/paste command block** for the operator to run a final release tag manually.
+
+Use this exact structure (with computed version substituted):
+
+```bash
+# from repo root
+git status -sb
+git tag -l "v*"
+git ls-remote --tags origin "vX.Y.Z"
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+If blockers exist, print a command block that only includes safe inspection commands and clearly omit `git tag` / `git push`.

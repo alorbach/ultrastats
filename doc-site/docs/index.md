@@ -25,3 +25,8 @@
 **Supported games (original scope):** Call of Duty, United Offensive, CoD 2, CoD 4: Modern Warfare, CoD: World at War.
 
 **Requirements (current baseline):** PHP **7.4+** with `mysqli`, MySQL **5.7+** / **8+** or MariaDB **10+**, and a web server (or the PHP dev server; see [Docker](docker.md)).
+
+## Credits
+
+- Core project author and maintainer: Andre Lorbach.
+- Release testing support: David Sanetti.
