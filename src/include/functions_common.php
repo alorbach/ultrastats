@@ -52,7 +52,7 @@ $LANG_EN = "en";	// Used for fallback
 $LANG = "en";		// Default language
 
 // Default Template vars
-$content['BUILDNUMBER'] = "0.3.20";
+$content['BUILDNUMBER'] = "0.3.21";
 $content['UPDATEURL'] = "https://alorbach.github.io/ultrastats/version.txt";
 $content['TITLE'] = "Ultrastats :: Release " . $content['BUILDNUMBER'];	// Default title
 $content['BASEPATH'] = $gl_root_path;

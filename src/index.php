@@ -492,11 +492,8 @@ if ( isset($content['medals_pro']) )
 		$content['medals_pro'][$i]['Number'] = $i+1;
 		// ---
 
-		// --- Set TR break | 6 Medals per row! -> !Only if more then 6Medals exist!
-		if ( ($i+1) % 6 == 0 && $i > 6 )
-			$content['medals_pro'][$i]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
-		else
-			$content['medals_pro'][$i]['rowend'] = "";
+		// Keep medals in one centered row (no forced wrap)
+		$content['medals_pro'][$i]['rowend'] = "";
 		// ---
 	}
 }
@@ -530,11 +527,8 @@ if ( ! empty( $content['medals_custom'] ) && is_array( $content['medals_custom']
 		$content['medals_custom'][ $i ]['Description']     = GetTextFromDescriptionID( $content['medals_custom'][ $i ]['DescriptionID'], $content['LN_NODESCRIPTION'] );
 		$content['medals_custom'][ $i ]['MEDAL_DETAILTXT']   = GetAndReplaceLangStr( $content['LN_MEDAL_DETAILS'], $content['medals_custom'][ $i ]['DisplayName'] );
 		$content['medals_custom'][ $i ]['Number']          = $i + 1;
-		if ( ( $i + 1 ) % 6 == 0 && $i > 6 ) {
-			$content['medals_custom'][ $i ]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
-		} else {
-			$content['medals_custom'][ $i ]['rowend'] = "";
-		}
+		// Keep medals in one centered row (no forced wrap)
+		$content['medals_custom'][ $i ]['rowend'] = "";
 	}
 }
 else {
@@ -568,11 +562,8 @@ if ( ! empty( $content['medals_anti'] ) && is_array( $content['medals_anti'] ) &
 		$content['medals_anti'][ $i ]['Description']   = GetTextFromDescriptionID( $content['medals_anti'][ $i ]['DescriptionID'], $content['LN_NODESCRIPTION'] );
 		$content['medals_anti'][ $i ]['MEDAL_DETAILTXT'] = GetAndReplaceLangStr($content['LN_MEDAL_DETAILS'], $content['medals_anti'][ $i ]['DisplayName'] );
 		$content['medals_anti'][ $i ]['Number']        = $i + 1;
-		if ( ( $i + 1 ) % 6 == 0 && $i > 6 ) {
-			$content['medals_anti'][ $i ]['rowend'] = "<td width=\"50%\">&nbsp;</td></tr><tr><td width=\"50%\">&nbsp;</td>";
-		} else {
-			$content['medals_anti'][ $i ]['rowend'] = "";
-		}
+		// Keep medals in one centered row (no forced wrap)
+		$content['medals_anti'][ $i ]['rowend'] = "";
 	}
 }
 else {

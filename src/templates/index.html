@@ -98,10 +98,9 @@
 			<!-- BEGIN server_totals -->
 			<tr>
 				<td class="cellmenu2" align="left" nowrap><B>{DisplayName}</B></td>
-				<td class="{cssclass}" width="100%" align="center">{VALUE_INT}</A></td>
+				<td class="{cssclass}" width="100%" align="center">{VALUE_INT}</td>
 			</tr>
 			<!-- END server_totals -->
-			</tr>
 			</table>
 			
 			</td>
@@ -139,7 +138,7 @@
 				</table>
 			</td>
 			<td class="line1" align="center" nowrap>
-				<B><A HREF="info-maps.php?id={server_top_map}{additional_url}"><img class="imageborder" width="100" src="{server_top_map_picture}" ></A></B>&nbsp;</td>
+				<B><A HREF="info-maps.php?id={server_top_map}{additional_url}"><img class="imageborder" width="100" src="{server_top_map_picture}" ></A></B>&nbsp;
 			</td>
 
 			<td class="line1" align="center" nowrap width="50%" valign="top"><br>
@@ -151,7 +150,7 @@
 				</table>
 			</td>
 			<td class="line1" align="center" nowrap>
-				<B><A HREF="info-gametypes.php?id={server_top_gametype}{additional_url}"><img class="imageborder" width="100" src="{server_top_gametype_picture}" ></A></B>&nbsp;</td>
+				<B><A HREF="info-gametypes.php?id={server_top_gametype}{additional_url}"><img class="imageborder" width="100" src="{server_top_gametype_picture}" ></A></B>&nbsp;
 			</td>
 		</tr>
 		</table>
@@ -269,7 +268,7 @@
 					<td class="{cssclass}" align="center" nowrap><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left"><B>{TimePlayed}</B></td>
 					<td class="cellmenu2" align="right" width="70" nowrap><B>{LN_LROUNDS_GAMETYPE}:</B></td>
 					<td width="100%" class="{cssclass}" align="left" nowrap><A HREF="info-gametypes.php?id={GameTypeName}{additional_url}"><!--<img src="{GametypeImage}" width="16">-->{FinalGameTypeDisplayName}</A></td>
-					<td rowspan="2" class="{cssclass}" align="left" nowrap><A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="32" alt="{FinalMapDisplayName}"></A>&nbsp</td>
+					<td rowspan="2" class="{cssclass}" align="left" nowrap><A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="32" alt="{FinalMapDisplayName}"></A>&nbsp;</td>
 					<td class="{cssclass}" align="left" width="60" nowrap>{LN_COUNT}: <B>{PlayerCount}</B></td>
 			<!-- IF GameTypeName!="dm" -->
 					<td rowspan="2" class="{cssclass}" align="center"><font class="{AlliesTeamClass}"><img src="{BASEPATH}images/main/{gen_gameversion_picpath}/flag-allies-small.png" width="24" alt="Allies"></font></td>
@@ -284,7 +283,7 @@
 						<B>Unknown</B></font>
 				<!-- ENDIF WinnerPlayerID="-1" -->
 				<!-- IF WinnerPlayerID!="-1" -->
-						<A HREF="players-detail.php?id={WinnerPlayerID}{additional_url}"><B>{WinnerPlayerHtmlName}</B></font>
+						<A HREF="players-detail.php?id={WinnerPlayerID}{additional_url}"><B>{WinnerPlayerHtmlName}</B></A></font>
 				<!-- ENDIF WinnerPlayerID!="-1" -->
 				&nbsp;</td>
 			<!-- ENDIF GameTypeName="dm" -->
@@ -375,9 +374,9 @@
 			<td align="center" valign="top">
 
 			<table width="140" border="0" cellspacing="1" cellpadding="0" align="center" class="with_border">
-			<tr><td align="center" class="cellmenu1"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
+			<tr><td align="center" class="cellmenu1" style="text-indent:0;"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
 			<tr> 
-				<td width="140" class="line1" nowrap valign="top" align="center">
+				<td width="140" class="line1" valign="top" align="center">
 				<B>{VALUE_TXT}: &nbsp;{VALUE_INT}&nbsp;</B>
 				<BR><a href="players-detail.php?id={PLAYER_ID}{additional_url}" title="{Alias}">{AliasAsHtml}</a>
 
@@ -426,9 +425,9 @@
 			<td align="center" valign="top">
 
 			<table width="140" border="0" cellspacing="1" cellpadding="0" align="center" class="with_border">
-			<tr><td align="center" class="cellmenu1"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
+			<tr><td align="center" class="cellmenu1" style="text-indent:0;"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
 			<tr> 
-				<td width="140" class="line1" nowrap valign="top" align="center">
+				<td width="140" class="line1" valign="top" align="center">
 				<B>{VALUE_TXT}: &nbsp;{VALUE_INT}&nbsp;</B>
 				<BR><a href="players-detail.php?id={PLAYER_ID}{additional_url}" title="{Alias}">{AliasAsHtml}</a>
 
@@ -475,9 +474,9 @@
 			<td align="center" valign="top">
 
 			<table width="140" border="0" cellspacing="1" cellpadding="0" align="center" class="with_border">
-			<tr><td align="center" class="cellmenu1"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
+			<tr><td align="center" class="cellmenu1" style="text-indent:0;"><a href="medals.php?id={NAME}" title="{MEDAL_DETAILTXT}" name="{DisplayName}" class="cellmenu1_link"><B>{DisplayName} {LN_Medals}</B></a></td></tr>
 			<tr> 
-				<td width="140" class="line1" nowrap valign="top" align="center">
+				<td width="140" class="line1" valign="top" align="center">
 				<B>{VALUE_TXT}: &nbsp;{VALUE_INT}&nbsp;</B>
 				<BR><a href="players-detail.php?id={PLAYER_ID}{additional_url}" title="{Alias}">{AliasAsHtml}</a>
 

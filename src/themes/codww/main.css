@@ -87,8 +87,8 @@ TD
 }
 
 /* Link Classes */
-.playerlink { color:#006699;  cursor:hand; }
-.playerlink:hover { color:#FF0A0C; text-decoration: none; cursor:hand; }
+.playerlink { color:#006699; cursor:pointer; }
+.playerlink:hover { color:#FF0A0C; text-decoration: none; cursor:pointer; }
 
 /* Default Link Classes */
 a:link,a:active,a:visited,a.postlink
@@ -209,7 +209,7 @@ font
 	border-color: #88966C #353B28 #353B28 #88966C; 
 
 	text-indent:5px;
-	font-family: 10px Arial, Verdana, Helvetica, sans-serif;
+	font: 10px Arial, Verdana, Helvetica, sans-serif;
 	color: #E5CE7C;
 
 	background-color: #6A7753;

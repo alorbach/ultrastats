@@ -4,6 +4,14 @@ Release history. The same content is mirrored as **plain text** in `ChangeLog` a
 
 ---
 
+## Version 0.3.21, 2026-04-28
+
+### Changes and bugfixes
+
+- **Homepage medals:** fixed row rendering and spacing in homepage medal sections (pro/anti/custom) so cards are centered consistently and no longer forced into brittle 6-item wraps.
+- **Homepage template:** corrected malformed HTML in [src/templates/index.html](../../templates/index.html) (stray closing tags/entities and link closure) that could destabilize table layout.
+- **Theme CSS (codww):** replaced legacy `cursor:hand` usage and corrected an invalid font declaration in [src/themes/codww/main.css](../../themes/codww/main.css) for better browser compatibility without changing overall style.
+
 ## Version 0.3.20, 2026-04-27
 
 ### New features

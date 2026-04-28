@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+Version 0.3.21, 2026-04-28
+Changes and bugfixes:
+- Homepage medals: fixed row rendering and spacing in index medal sections (pro/anti/custom) so cards are centered consistently and no longer forced into brittle 6-item wraps.
+- Homepage template: fixed malformed HTML issues in index template (stray closing tags/entities and link closure) that could break table layout in legacy browsers.
+- Theme CSS (codww): replaced legacy cursor:hand usage and corrected invalid font declaration to improve modern browser compatibility without visual redesign.
+---------------------------------------------------------------------------
 Version 0.3.20, 2026-04-27
 New features:
 - CI: GitHub Actions workflow publishes a release tarball (git archive) on v* tag pushes; release body from ChangeLog plus generated notes (.github/scripts/build_release_body.py); README/AGENTS document Releases.
