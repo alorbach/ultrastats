@@ -3,7 +3,7 @@
 	<td class="topmenu1begin" align="center" width="16" nowrap ><img align="left" src="{BASEPATH}images/icons/gamever_{gen_gameversion}.gif" width="13" height="13" vspace="0" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_CONFIGUREDGAME} {CONFIGUREDGAME_TITLE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></td>
 	<td class="topmenu1" nowrap align="center" width="75"><a class="topmenu1_link" href="{BASEPATH}index.php?{additional_url}" target="_top"><img align="left" src="{MENU_HOMEPAGE}" width="16" height="16" vspace="0">{LN_MENU_HOME}</a></td>
 	<td class="topmenu1" nowrap align="left" width="75">
-		<div id="menu"><ul>
+		<div class="menu"><ul>
 		  <li class="topmenu1_link">
 
 			<img align="left" src="{MENU_SEARCH}" width="16" height="16" title="{LN_MENU_SEARCH}" OnClick="ToggleDisplayTypeById('menu_find');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_SEARCH}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
@@ -21,7 +21,7 @@
 
 	</td>
 	<td class="topmenu1" nowrap align="left" width="100">
-		<div id="menu">
+		<div class="menu">
 		<ul>
 			<li class="topmenu1_link">
 
@@ -54,7 +54,7 @@
 		</div>
 	</td>
 	<td class="topmenu1" nowrap align="left" width="100">
-		<div id="menu"><ul>
+		<div class="menu"><ul>
 		  <li class="topmenu1_link">
 
 			<img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_MENU_PLAYERSTATS}" OnClick="ToggleDisplayTypeById('menu_playerstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_PLAYERSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
@@ -74,11 +74,11 @@
 		</ul></div>
 	</td>
 	<td class="topmenu1" nowrap align="left" width="110">
-		<div id="menu"><ul>
+		<div class="menu"><ul>
 		  <li class="topmenu1_link">
 
 			<img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_MENU_WEAPONSTATS}" OnClick="ToggleDisplayTypeById('menu_weaponstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_WEAPONSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
-			<a class="topmenu2_link" href=" weapons.php?{additional_url}" target="_top">
+			<a class="topmenu2_link" href="weapons.php?{additional_url}" target="_top">
 			{LN_MENU_WEAPONSTATS}
 			</a>
 
@@ -102,11 +102,11 @@
 		</ul></div>
 	</td>
 	<td class="topmenu1" nowrap align="left" width="135">
-		<div id="menu"><ul>
+		<div class="menu"><ul>
 		  <li class="topmenu1_link">
 
 			<img align="left" src="{MENU_FOLDER_OPEN}" width="16" height="16" title="{LN_MENU_DAMAGESTATS}" OnClick="ToggleDisplayTypeById('menu_damagestats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_DAMAGESTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
-			<a class="topmenu2_link" href=" damagetypes.php?{additional_url}" target="_top">
+			<a class="topmenu2_link" href="damagetypes.php?{additional_url}" target="_top">
 			{LN_MENU_DAMAGESTATS}
 			</a>
 
@@ -122,7 +122,7 @@
 		</ul></div>
 	</td>
 	<td class="topmenu1" nowrap align="left" width="100">
-		<div id="menu"><ul>
+		<div class="menu"><ul>
 		  <li class="topmenu1_link">
 
 			<img align="left" src="{MENU_ADMINUSERS}" width="16" height="16" title="{LN_MENU_SERVERSTATS}" OnClick="ToggleDisplayTypeById('menu_serverstats');" OnMouseOver="HoverPopupMenuHelp(event, this, '{LN_MENU_SERVERSTATS}', '{LN_MENU_CLICKTOEXPANDMENU}');" OnMouseOut="FinishPopupWindow();">
@@ -142,7 +142,7 @@
 	</td>
 
 	<td class="topmenu1" nowrap align="center" width="100"><a class="topmenu1_link" href="{BASEPATH}admin/index.php" target="_top"><img align="left" src="{MENU_PREFERENCES}" width="16" height="16" vspace="0">{LN_MENU_ADMINCENTER}</a></td>
-	<td class="topmenu1end" nowrap align="right" width="max"><a class="topmenu1_link" href="{BASEPATH}about.php?{additional_url}" target="_top"><img align="right" src="{MENU_BULLET_GREEN}" width="16" height="16" vspace="0">{LN_MENU_ABOUT}</a></td>
+	<td class="topmenu1end" nowrap align="right" width="100%"><a class="topmenu1_link" href="{BASEPATH}about.php?{additional_url}" target="_top"><img align="right" src="{MENU_BULLET_GREEN}" width="16" height="16" vspace="0">{LN_MENU_ABOUT}</a></td>
 	<td class="topmenu1end" nowrap align="right" width="10">&nbsp;</td>
 </tr>
 </table>
