@@ -25,7 +25,7 @@ if ( $nuke === false || $nuke === '' ) {
 	$nuke = '1';
 }
 
-$internalDbVer = '11';
+$internalDbVer = $content['database_internalversion'];
 $genGameVer    = 3; // COD4 — see functions_constants.php (COD4)
 
 /**

@@ -28,7 +28,7 @@ Guidance for humans and AI agents working in this repository.
 | `src/gamelogs/` | Place server log files here (or mount another path) for the parser. |
 | `src/doc/` | Bundled **Markdown** docs (`en/*.md` — readme, install, changelog, license pointer). **Do not** link to **wiki.ultrastats.org** — it is defunct. |
 | `ChangeLog` (repo root) | **Plain-text release history** (`Version …` blocks). The GitHub release workflow excerpts this file when you push tag `v*` — keep it accurate. |
-| `docker/` | `Dockerfile`, `docker-compose.yml` (dev seed), and `docker-compose.install-e2e.yml` (clean install + Playwright). |
+| `docker/` | `Dockerfile`, `docker-compose.yml` (dev seed), `docker-compose.install-e2e.yml` (clean install + Playwright), and `testbench-install.bat` (Windows: run full install e2e against Docker). |
 | `e2e/` | Playwright tests: install wizard plus post-install admin smoke (e.g. add server) — `npm ci` / run via install-e2e compose. |
 | `doc-site/` | **MkDocs** public handbook (deployed to GitHub Pages from `main`). Includes [project-history.md](doc-site/docs/project-history.md) (2000s origins, dormancy, 2026 revival with AI-assisted maintenance). |
 | `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`), [install-e2e.yml](.github/workflows/install-e2e.yml) (install wizard browser test). |

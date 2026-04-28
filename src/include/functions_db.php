@@ -26,7 +26,7 @@ $querycount = 0;
 $errdesc = "";
 $errno = 0;
 
-$content['database_internalversion'] = "13";
+$content['database_internalversion'] = "14";
 $content['database_installedversion'] = "0";
 
 /**

@@ -1,6 +1,7 @@
 # Local configuration (copy from src/contrib/config.sample.php)
 src/config.php
 src/config.php.ultrastats-e2e-stash
+src/contrib/config.custommedals.php
 
 # OS / editor
 Thumbs.db
