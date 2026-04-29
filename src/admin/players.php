@@ -174,7 +174,7 @@ if ( isset($_GET['op']) )
 			$content['GUID'] = DB_RemoveBadChars($_GET['id']);
 			$content['AliasName'] = GetPlayerHtmlNameFromID( $content['GUID'] );
 
-			if ( isset($_GET['verify']) || $_GET['verify'] == "yes" )
+			if ( isset($_GET['verify']) && $_GET['verify'] == "yes" )
 			{
 				// Disable Verify few
 				$content['ISVERIFY'] = "false";

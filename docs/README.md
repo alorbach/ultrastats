@@ -8,6 +8,10 @@ Operational and deep-dive documentation that supplements [README.md](../README.m
 - [csp-staging.md](csp-staging.md) — staged Content-Security-Policy rollout at the proxy/web-server layer.
 - [prepared-statements-surface.md](prepared-statements-surface.md) — SQL surface inventory used to prioritize hardening.
 - [ui-compatibility-review.md](ui-compatibility-review.md) — static UI audit record for a future frontend refresh.
+- [frontend-admin-compatibility-contract.md](frontend-admin-compatibility-contract.md) — stable URL/form/query/parser-event contracts for safe UI modernization.
+- [frontend-admin-security-slice.md](frontend-admin-security-slice.md) — first CSRF and mutating-action hardening slice with compatibility fallback.
+- [frontend-admin-template-priority.md](frontend-admin-template-priority.md) — risk-based template modernization order.
+- [frontend-admin-first-pr-scope.md](frontend-admin-first-pr-scope.md) — concrete first PR scope and acceptance criteria.
 
 ## Agent playbooks
 
