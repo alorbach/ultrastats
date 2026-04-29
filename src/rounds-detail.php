@@ -172,18 +172,18 @@ if ( isset($_GET['id']) )
 				// ---
 
 				// --- Now we get players who played but did not finish the round
-				if ( isset($AllPlayers) )
+				$allplayedguids = "";
+				if ( isset($AllPlayers) && count( $AllPlayers ) > 0 )
 				{
-					for($i = 0; $i < count($AllPlayers); $i++)
+					for ( $i = 0; $i < count( $AllPlayers ); $i++ )
 					{
-						if ( isset($allplayedguids) )
-							$allplayedguids .= ", " . $AllPlayers[$i]['PLAYERID'];
-						else
-							$allplayedguids = $AllPlayers[$i]['PLAYERID'];
+						if ( $allplayedguids !== '' ) {
+							$allplayedguids .= ", " . $AllPlayers[ $i ]['PLAYERID'];
+						} else {
+							$allplayedguids = (string) $AllPlayers[ $i ]['PLAYERID'];
+						}
 					}
 				}
-				else
-					$allplayedguids = "";
 
 				// Get players who did not finish the job ;)!
 				$content['unfinishedplayers'] = GetRoundPlayerDetails( $allplayedguids );

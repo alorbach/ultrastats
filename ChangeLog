@@ -1,5 +1,13 @@
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
+Version 0.3.23, 2026-04-29
+Changes and bugfixes:
+- Admin database upgrade: database_installedversion is written only when every upgrade SQL statement succeeds; on failure the version is left unchanged and the UI tells the operator to fix errors and retry.
+- CI/tests: GitHub Actions PHP CI (php -l on src, PHPUnit for DB helpers and gamelog fixture); Composer dev dependencies for PHPUnit (composer.json; vendor/ gitignored).
+Changes (maintainability / SQL):
+- Parser shell: server list SELECT uses DB_QueryBound (no placeholders).
+- info-maps.php / info-gametypes.php: bound parameters for map/gametype keys from ?id= in detail and last-rounds queries.
+---------------------------------------------------------------------------
 Version 0.3.22, 2026-04-29
 Changes and bugfixes:
 - userchange.php: fixed HTTP redirect after language/style/time-filter dropdowns when UltraStats is installed under a URL subfolder (relative Location no longer doubles the path segment, which caused 404; same-host referer matching now tolerates a port in HTTP_REFERER vs HTTP_HOST).

@@ -69,6 +69,11 @@
 				<p>&nbsp;</p>
 			<!-- ENDIF sql_failed!="0" -->
 
+			<!-- IF UPGRADE_VERSION_BUMPED="0" -->
+				<p><font color="red"><strong>{LN_DBUPGRADE_VERSION_NOT_BUMPED}</strong></font></p>
+				<p>&nbsp;</p>
+			<!-- ENDIF UPGRADE_VERSION_BUMPED="0" -->
+
 
 			{LN_DBUPGRADE_CURRENTINSTALLED}: <B>{database_installedversion}</B><br>
 			{LN_DBUPGRADE_TOBEINSTALLED}: <B>{database_internalversion}</B><br>

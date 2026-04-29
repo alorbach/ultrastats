@@ -43,9 +43,9 @@ $content['TITLE'] .= " :: Mapdetails ";
 // --- Get/Set Playersorting
 if ( isset($_GET['id']) )
 {
-	// get and check
-	$content['mapid'] = DB_RemoveBadChars($_GET['id']);
-	
+	// get and check (MAPNAME bound; do not concatenate into SQL)
+	$content['mapid'] = (string) $_GET['id'];
+
 	// --- BEGIN LastRounds Code for front stats
 	$sqlquery = "SELECT " .
 						STATS_MAPS . ".MAPNAME, " . 
@@ -56,9 +56,9 @@ if ( isset($_GET['id']) )
 /*						" LEFT OUTER JOIN (" . STATS_LANGUAGE_STRINGS . 
 						") ON (" . 
 						STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_MAPS . ".Description_id) " . */
-						" WHERE " . STATS_MAPS . ".MAPNAME  = '" . $content['mapid'] . "' " . 
+						" WHERE " . STATS_MAPS . ".MAPNAME  = ? " . 
 						" LIMIT 1 ";
-	$result = DB_Query($sqlquery);
+	$result = DB_QueryBound( $sqlquery, 's', array( $content['mapid'] ) );
 	$mapvars = DB_GetSingleRow($result, true);
 	if ( isset($mapvars['MAPNAME']) )
 	{
@@ -105,11 +105,11 @@ if ( isset($_GET['id']) )
 							STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " . 
 							STATS_MAPS . ".ID=" . STATS_ROUNDS . ".MAPID AND " . 
 							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID)" . 
-							" WHERE " . STATS_MAPS . ".MAPNAME = '" . $content['mapid'] . "'" . 
+							" WHERE " . STATS_MAPS . ".MAPNAME = ?" . 
 							GetCustomServerWhereQuery( STATS_ROUNDS, false) . 
 							" GROUP BY " . STATS_ROUNDS . ".ID" . 
 							" ORDER BY TIMEADDED DESC LIMIT 20";
-		$result = DB_Query($sqlquery);
+		$result = DB_QueryBound( $sqlquery, 's', array( $content['mapid'] ) );
 
 		$content['lastrounds'] = DB_GetAllRows($result, true);
 		if ( isset($content['lastrounds']) )

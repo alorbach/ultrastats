@@ -43,9 +43,9 @@ $content['TITLE'] .= " :: Gametypedetails ";
 // --- Get/Set Playersorting
 if ( isset($_GET['id']) )
 {
-	// get and check
-	$content['gametypeid'] = DB_RemoveBadChars($_GET['id']);
-	
+	// get and check (gametype NAME bound)
+	$content['gametypeid'] = (string) $_GET['id'];
+
 	// --- BEGIN LastRounds Code for front stats
 	$sqlquery = "SELECT " .
 						STATS_GAMETYPES . ".NAME, " . 
@@ -55,9 +55,9 @@ if ( isset($_GET['id']) )
 						" LEFT OUTER JOIN (" . STATS_LANGUAGE_STRINGS . 
 						") ON (" . 
 						STATS_LANGUAGE_STRINGS . ".STRINGID =" . STATS_GAMETYPES . ".Description_id) " . 
-						" WHERE " . STATS_GAMETYPES . ".NAME  = '" . $content['gametypeid'] . "' " . 
+						" WHERE " . STATS_GAMETYPES . ".NAME  = ? " . 
 						" LIMIT 1 ";
-	$result = DB_Query($sqlquery);
+	$result = DB_QueryBound( $sqlquery, 's', array( $content['gametypeid'] ) );
 	$gametypevars = DB_GetSingleRow($result, true);
 	if ( isset($gametypevars['NAME']) )
 	{	
@@ -107,11 +107,11 @@ if ( isset($_GET['id']) )
 							STATS_GAMETYPES . ".ID=" . STATS_ROUNDS . ".GAMETYPE AND " . 
 							STATS_MAPS . ".ID=" . STATS_ROUNDS . ".MAPID AND " . 
 							STATS_PLAYER_KILLS . ".ROUNDID=" . STATS_ROUNDS . ".ID)" . 
-							" WHERE " . STATS_GAMETYPES . ".NAME = '" . $content['gametypeid'] . "'" . 
+							" WHERE " . STATS_GAMETYPES . ".NAME = ?" . 
 							GetCustomServerWhereQuery( STATS_ROUNDS, false) . 
 							" GROUP BY " . STATS_ROUNDS . ".ID" . 
 							" ORDER BY TIMEADDED DESC LIMIT 20";
-		$result = DB_Query($sqlquery);
+		$result = DB_QueryBound( $sqlquery, 's', array( $content['gametypeid'] ) );
 
 		$content['lastrounds'] = DB_GetAllRows($result, true);
 		if ( isset($content['lastrounds']) )

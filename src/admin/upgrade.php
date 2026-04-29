@@ -154,9 +154,14 @@ if ( isset($content['database_forcedatabaseupdate']) && $content['database_force
 					}
 					// --- 
 
-					// --- Upgrade Database Version in Config Table
-					$content['database_installedversion'] = $content['database_internalversion'];
-					WriteConfigValue( "database_installedversion" );
+					// --- Upgrade Database Version in Config Table (only if every statement succeeded)
+					if ( (int) $content['sql_failed'] === 0 ) {
+						$content['database_installedversion'] = $content['database_internalversion'];
+						WriteConfigValue( "database_installedversion" );
+						$content['UPGRADE_VERSION_BUMPED'] = "1";
+					} else {
+						$content['UPGRADE_VERSION_BUMPED'] = "0";
+					}
 					// --- 
 				}
 			}

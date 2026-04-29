@@ -4,6 +4,18 @@ Release history. The same content is mirrored as **plain text** in `ChangeLog` a
 
 ---
 
+## Version 0.3.23, 2026-04-29
+
+### Changes and bugfixes
+
+- **Admin database upgrade:** `database_installedversion` is updated only when **every** SQL statement succeeds. If anything fails, the version stays unchanged and the upgrade page explains that you must fix errors and run upgrade again (avoids a half-applied schema with a “fully upgraded” version).
+- **CI / tests:** GitHub Actions **PHP CI** workflow (`php -l` on all `src/**/*.php`, **PHPUnit** for DB string helpers and the bundled CoD4 gamelog fixture); optional dev install via **Composer** (`composer.json`, `vendor/` gitignored).
+
+### Changes (maintainability / SQL)
+
+- **Parser shell:** server list `SELECT` uses `DB_QueryBound` (no placeholders).
+- **info-maps.php / info-gametypes.php:** map name and gametype name from `?id=` use bound parameters for detail and “last rounds” queries.
+
 ## Version 0.3.22, 2026-04-29
 
 ### Changes and bugfixes

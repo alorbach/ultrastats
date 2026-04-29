@@ -21,6 +21,8 @@ Static audit of where request data or untrusted text reaches SQL, used to priori
 | Frontend helpers (partial) | `functions_frontendhelpers.php` | `GetAndSetCurrentServer`, `FillPlayerWithAlias`, `FillPlayerWithTime`, `GetTextFromDescriptionID`, `FindAndFillTopAliases`, `FindAndFillWithTime` (bound `IN` for bulk player time) use bound params where shown in code; other queries in the same file may still use `DB_Query` (see below) |
 | Rounds list (partial) | `src/rounds.php` | `?id=` gametype `NAME = ?` bound; paged `LIMIT ? , ?` bound; `DB_GetRowCountBound` for filtered count; other fragments (server/time) unchanged |
 | Home index (partial) | `src/index.php` | Top-players list: `web_minkills` / `web_mainpageplayers` as `(int)` in SQL; remaining blocks still `DB_Query` (consolidated / medals / server) |
+| Map / gametype info pages | `src/info-maps.php`, `src/info-gametypes.php` | `?id=` map `MAPNAME` / gametype `NAME` bound in detail `SELECT` and last-rounds `SELECT` |
+| CLI parser (server list) | `src/admin/parser-shell.php` | `SELECT * FROM … ORDER BY ID` via `DB_QueryBound` with empty types/params |
 | Server scoping in SQL | `functions_common.php` `GetCustomServerWhereQuery()` | `SERVERID` in `AND` / `WHERE` uses `(int) $content['serverid']` or int `customserverid` |
 
 *Note:* A file can appear in **Migrated** and still have unmigrated `DB_Query` calls elsewhere in the file—the **Still using** section tracks remaining patterns, not a second count of the same line items.

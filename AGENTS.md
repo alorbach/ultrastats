@@ -4,7 +4,7 @@ Guidance for humans and AI agents working in this repository.
 
 ## What this project is
 
-**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). Core version is **0.3.20** (`$content['BUILDNUMBER']` in `src/include/functions_common.php`).
+**UltraStats** is a **PHP** application that parses **Call of Duty** dedicated server log files, stores data in **MySQL**, and exposes a **front-end** (player/round/weapon stats) plus an **admin** area (parser, configuration, users). **Released version** = **`$content['BUILDNUMBER']`** in [`src/include/functions_common.php`](src/include/functions_common.php); bump the first line of [`doc-site/docs/version.txt`](doc-site/docs/version.txt) when you ship so the admin “new version” check stays accurate.
 
 **Repository overview for humans:** [README.md](README.md) at the root (the plain [README](README) file is a one-screen pointer to that file).
 
@@ -31,7 +31,7 @@ Guidance for humans and AI agents working in this repository.
 | `docker/` | `Dockerfile`, `docker-compose.yml` (dev seed), `docker-compose.install-e2e.yml` (clean install + Playwright), and `testbench-install.bat` (Windows: run full install e2e against Docker). |
 | `e2e/` | Playwright tests: install wizard plus post-install admin smoke (e.g. add server) — `npm ci` / run via install-e2e compose. |
 | `doc-site/` | **MkDocs** public handbook (deployed to GitHub Pages from `main`). Includes [project-history.md](doc-site/docs/project-history.md) (2000s origins, dormancy, 2026 revival with AI-assisted maintenance). |
-| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`), [install-e2e.yml](.github/workflows/install-e2e.yml) (install wizard browser test). |
+| `.github/workflows/` | CI: [release-on-tag.yml](.github/workflows/release-on-tag.yml) (releases on `v*`), [github-pages.yml](.github/workflows/github-pages.yml) (handbook on push to `main`), [install-e2e.yml](.github/workflows/install-e2e.yml) (install wizard browser test), [php-ci.yml](.github/workflows/php-ci.yml) (`php -l` on `src/`, PHPUnit for helpers + gamelog fixture). |
 
 ## Entry points (HTTP)
 
@@ -128,6 +128,11 @@ docker compose -f docker/docker-compose.install-e2e.yml up --build --abort-on-co
 - **When to update:** user-visible fixes/features (parser, admin, install/upgrade, Docker dev defaults), bumps to **`database_internalversion`** / new `db_update_v*.txt`, security-relevant behavior, or anything operators need to know. Prefer short, accurate bullets over pasting raw commit subjects.
 - **Releases:** pushing tag `v*` triggers [.github/workflows/release-on-tag.yml](.github/workflows/release-on-tag.yml), which builds release notes from **ChangeLog** (via [.github/scripts/build_release_body.py](.github/scripts/build_release_body.py)). A stale ChangeLog means a misleading GitHub Release.
 - **Other bundled docs:** if behavior changes, update the relevant Markdown under `src/doc/en/` (e.g. install/upgrade) and any pointers in [README.md](README.md), [SECURITY.md](SECURITY.md), or [docs/](docs/) so operators and future agents see one consistent story.
+
+## PHPUnit (optional dev install)
+
+- Root [`composer.json`](composer.json) carries **dev-only** dependencies (`phpunit/phpunit`). **`vendor/`** is gitignored; CI runs `composer install` then `vendor/bin/phpunit`.
+- The lock file targets **PHP 8.2** (`config.platform.php`); the app runtime remains **PHP 7.4+**, but running PHPUnit locally needs **PHP 8.1+** (dependency constraint).
 
 ## Modernisation backlog
 

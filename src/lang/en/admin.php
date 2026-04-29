@@ -260,6 +260,7 @@ $content['LN_DBUPGRADE_SUCCESSEXEC'] = "Successfully executed statements";
 $content['LN_DBUPGRADE_FAILEDEXEC'] = "Failed statements";
 $content['LN_DBUPGRADE_ONESTATEMENTFAILED'] = "At least one statement failed, see error reasons below";
 $content['LN_DBUPGRADE_ERRMSG'] = "Error Message";
+$content['LN_DBUPGRADE_VERSION_NOT_BUMPED'] = "The recorded database version was not advanced because one or more statements failed. Fix the errors above (or restore from backup), then run Upgrade again. Until then, UltraStats will keep offering this upgrade.";
 $content['LN_DBUPGRADE_ULTRASTATSDBVERSION'] = "UltraStats Database Version";
 
 // String Editor

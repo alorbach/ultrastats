@@ -75,7 +75,7 @@ if ( $RUNMODE == RUNMODE_COMMANDLINE )
 	else
 	{
 		// Get all Servers!
-		$result = DB_Query("SELECT * FROM " . STATS_SERVERS . " ORDER BY ID"); 
+		$result = DB_QueryBound( "SELECT * FROM " . STATS_SERVERS . " ORDER BY ID", '', array() );
 		$serverdetails = DB_GetAllRows($result, true);
 		if ( !isset($serverdetails[0]['ID']) ) 
 			DieWithErrorMsg( "There are now Servers in the database!" );

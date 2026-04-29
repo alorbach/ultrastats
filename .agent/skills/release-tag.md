@@ -10,8 +10,8 @@ Guidance for assistants when the user asks to **create/push a release tag**, **t
 
 ## Source of truth for the version string
 
-1. **`src/include/functions_common.php`** — `$content['BUILDNUMBER']` (e.g. `0.3.20`).
-2. Tag form: **`v` + BUILDNUMBER** → e.g. `v0.3.20` (workflow matches `v*` only).
+1. **`src/include/functions_common.php`** — `$content['BUILDNUMBER']` (e.g. `0.3.23`).
+2. Tag form: **`v` + BUILDNUMBER** → e.g. `v0.3.23` (workflow matches `v*` only).
 3. **Align before tagging** (operator expectation per [AGENTS.md](../../AGENTS.md)):
    - Root [ChangeLog](../../ChangeLog) has a **`Version X.Y.Z, …`** block for that release.
    - [doc-site/docs/version.txt](../../doc-site/docs/version.txt) **first line** equals BUILDNUMBER so admin “new version” check stays coherent after deploy.
@@ -21,7 +21,7 @@ Do **not** invent a tag version from git history alone if it disagrees with `BUI
 ## Workflow (agent)
 
 1. Read `BUILDNUMBER` from `functions_common.php` (and optionally confirm `version.txt` / ChangeLog head).
-2. Compute tag: `v{BUILDNUMBER}` (e.g. `v0.3.20`).
+2. Compute tag: `v{BUILDNUMBER}` (e.g. `v0.3.23`).
 3. From repo root, gather ground truth:
    - `git status -sb` — worktree should be clean **or** user explicitly accepts tagging with known uncommitted work (otherwise stop and list blockers).
    - `git tag -l "v*"` — ensure the new tag does **not** already exist locally.

@@ -224,6 +224,8 @@ if ( isset($_GET['id']) )
 											" ORDER BY mapcount DESC";
 					$result = DB_Query( $sqlquery );
 					$maparray = DB_GetAllRows($result, true);
+					if ( ! empty( $maparray ) && is_array( $maparray ) && isset( $maparray[0]['MAPNAME'] ) )
+					{
 					$content['PLAYER_MAPNAME'] = $maparray[0]['MAPNAME'];
 					$content['PLAYER_MAPCOUNT'] = $maparray[0]['mapcount'];
 
@@ -234,7 +236,7 @@ if ( isset($_GET['id']) )
 					// --- 
 
 					// --- Set DisplayName
-					if ( isset($maparray['DisplayName']) )
+					if ( isset($maparray[0]['DisplayName']) && strlen( (string) $maparray[0]['DisplayName'] ) > 0 )
 						$content['PLAYER_FinalMapDisplayName'] = $maparray[0]['DisplayName'];
 					else
 						$content['PLAYER_FinalMapDisplayName'] = $content['PLAYER_MAPNAME'];
@@ -242,6 +244,7 @@ if ( isset($_GET['id']) )
 					
 					// Set True
 					$content['isfavmap'] = "true";
+					}
 				}
 				// --- 
 
@@ -265,7 +268,7 @@ if ( isset($_GET['id']) )
 				// Get Player Weapons, for later use
 				$content['playerweapons'] = DB_GetAllRows($result, true);
 
-				if ( isset($content['playerweapons']) )
+				if ( ! empty( $content['playerweapons'] ) && is_array( $content['playerweapons'] ) )
 				{
 					$content['PLAYER_WEAPONID'] = $content['playerweapons'][0]['INGAMENAME'];
 					$content['PLAYER_WEAPONCOUNT'] = $content['playerweapons'][0]['TotalKills'];
@@ -306,7 +309,7 @@ if ( isset($_GET['id']) )
 										" ORDER BY TotalKills DESC";
 				$result = DB_Query( $sqlquery );
 				$content['weaponstats'] = DB_GetAllRows($result, true);
-				if ( isset($content['weaponstats']) )
+				if ( ! empty( $content['weaponstats'] ) && is_array( $content['weaponstats'] ) )
 				{
 					$content['isweaponstats'] = "true";
 					
@@ -368,7 +371,7 @@ if ( isset($_GET['id']) )
 					$result = DB_Query( $sqlquery );
 					$content['mapstats'] = DB_GetAllRows($result, true);
 
-					if ( isset($content['mapstats']) )
+					if ( ! empty( $content['mapstats'] ) && is_array( $content['mapstats'] ) )
 					{
 						$content['ismapstats'] = "true";
 
@@ -427,7 +430,7 @@ if ( isset($_GET['id']) )
 										" ORDER BY TotalKills DESC LIMIT 15";
 				$result = DB_Query( $sqlquery );
 				$content['victimstats'] = DB_GetAllRows($result, true);
-				if ( isset($content['victimstats']) )
+				if ( ! empty( $content['victimstats'] ) && is_array( $content['victimstats'] ) )
 				{
 					$content['isvictimstats'] = "true";
 
@@ -472,7 +475,7 @@ if ( isset($_GET['id']) )
 										" ORDER BY TotalKills DESC LIMIT 15";
 				$result = DB_Query( $sqlquery );
 				$content['killedstats'] = DB_GetAllRows($result, true);
-				if ( isset($content['killedstats']) )
+				if ( ! empty( $content['killedstats'] ) && is_array( $content['killedstats'] ) )
 				{
 					$content['iskilledbystats'] = "true";
 

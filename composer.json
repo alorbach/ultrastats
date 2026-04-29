@@ -1,0 +1,15 @@
+{
+	"name": "alorbach/ultrastats",
+	"description": "UltraStats — dev tooling (PHPUnit); application has no Composer runtime deps",
+	"license": "GPL-3.0-or-later",
+	"require": {},
+	"require-dev": {
+		"phpunit/phpunit": "^9.6"
+	},
+	"config": {
+		"sort-packages": true,
+		"platform": {
+			"php": "8.2.0"
+		}
+	}
+}

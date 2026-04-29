@@ -2,7 +2,7 @@
 
 UltraStats is a log parser and web front-end for **Call of Duty** game server logs. It reads match logs, stores statistics in MySQL, and serves rankings, player pages, round history, and an admin area (parser, config, users).
 
-**Version:** 0.3.20 (see `src/include/functions_common.php`).
+**Version:** see **`$content['BUILDNUMBER']`** in [`src/include/functions_common.php`](src/include/functions_common.php) (also the first line of [`doc-site/docs/version.txt`](doc-site/docs/version.txt) for the admin update check).
 
 **License:** See [LICENSE](LICENSE) and [COPYING](COPYING) (GPL-3.0+).
 
@@ -38,6 +38,7 @@ UltraStats dates to the **mid-2000s** community development around **Call of Dut
 
 ## Development
 
+- **CI:** [`.github/workflows/php-ci.yml`](.github/workflows/php-ci.yml) runs **`php -l`** on all `src/**/*.php` and **PHPUnit** (DB helper tests + bundled gamelog fixture). Local: `composer install` then `vendor/bin/phpunit` (see [AGENTS.md](AGENTS.md) — PHP 8.1+ for dev deps).
 - **Releases:** Push a SemVer tag `vX.Y.Z` (e.g. `v0.3.15`). [GitHub Actions](.github/workflows/release-on-tag.yml) builds a source archive `ultrastats-X.Y.Z.tar.gz` (`git archive` with top folder `ultrastats-X.Y.Z/`) and creates a **GitHub Release** whose notes combine the matching block from [src/doc/en/changelog.md](src/doc/en/changelog.md) (mirrored to root `ChangeLog` for tooling) with GitHub’s auto-generated compare text. There is no separate packaging script in the repository.
 - **AGENTS and Docker:** [AGENTS.md](AGENTS.md) describes structure, conventions, and how to run the stack with Docker (web on **port 8091** by default: `http://localhost:8091/`).
 - **Agent skills (assistants & handoff):** [`.agent/README.md`](.agent/README.md) and [`.agent/skills/`](.agent/skills/summarize-handoff.md) — playbooks in plain Markdown for Copilot, Codex, and similar.

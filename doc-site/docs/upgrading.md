@@ -7,6 +7,8 @@
 3. Log in to the **Admin Center** in a browser.
 4. If the application prompts for a **database upgrade**, run it and confirm success. This applies statements from [`src/contrib/db_update_v*.txt`](https://github.com/alorbach/ultrastats/tree/main/src/contrib) as needed; the internal schema version is tracked in the `config` table and in code (`functions_db.php`).
 
+If **any** statement fails, the upgrade page lists errors and **does not** advance the stored `database_installedversion` until **all** statements succeed—fix the underlying issue (or restore from backup) and run **Upgrade** again.
+
 That covers most upgrades, as long as you keep backups and test after deploy.
 
 ## What runs the database upgrade
