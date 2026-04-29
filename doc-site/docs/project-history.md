@@ -12,7 +12,7 @@ After the late-2000s activity, there was a **long gap without official tagged re
 
 ## Revival (from 2026)
 
-**Andre Lorbach** (original author) brought the tree back to **current PHP and MySQL** (e.g. **mysqli**, PHP 8–friendly behavior, `utf8mb4`, security hardening, Docker for local work, CI releases). A lot of that work was done with the help of **AI-assisted coding**—interactive refactors, reviews, and documentation so changes stay consistent across a **large, legacy PHP** codebase.
+**[Andre Lorbach](https://github.com/alorbach)** (original author) brought the tree back to **current PHP and MySQL** (e.g. **mysqli**, PHP 8–friendly behavior, `utf8mb4`, security hardening, Docker for local work, CI releases). A lot of that work was done with the help of **AI-assisted coding**—interactive refactors, reviews, and documentation so changes stay consistent across a **large, legacy PHP** codebase.
 
 The goal is practical: keep UltraStats **usable and honest** for the **small “old school” community** that still runs CoD1/UO/2/4/WaW (or similar) servers and wants **stats that match the era** without maintaining a from-scratch stack.
 

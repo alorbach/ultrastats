@@ -15,4 +15,4 @@ Assistant skills moved to the repository root under [`.agent/`](../.agent/README
 
 ## Credits
 
-- Release testing support: David Sanetti.
+- Release testing support: [David Sanetti](https://github.com/davemx85).

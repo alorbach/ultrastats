@@ -1,5 +1,9 @@
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
+Version 0.3.22, 2026-04-29
+Changes and bugfixes:
+- userchange.php: fixed HTTP redirect after language/style/time-filter dropdowns when UltraStats is installed under a URL subfolder (relative Location no longer doubles the path segment, which caused 404; same-host referer matching now tolerates a port in HTTP_REFERER vs HTTP_HOST).
+---------------------------------------------------------------------------
 Version 0.3.21, 2026-04-28
 Changes and bugfixes:
 - Homepage medals: fixed row rendering and spacing in index medal sections (pro/anti/custom) so cards are centered consistently and no longer forced into brittle 6-item wraps.

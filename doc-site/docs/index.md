@@ -28,5 +28,5 @@
 
 ## Credits
 
-- Core project author and maintainer: Andre Lorbach.
-- Release testing support: David Sanetti.
+- Core project author and maintainer: [Andre Lorbach](https://github.com/alorbach).
+- Release testing support: [David Sanetti](https://github.com/davemx85).

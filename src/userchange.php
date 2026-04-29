@@ -37,8 +37,28 @@ if ( isset( $_SERVER['HTTP_REFERER'] ) && $_SERVER['HTTP_REFERER'] !== "" ) {
 	$ref  = $_SERVER['HTTP_REFERER'];
 	$p    = @parse_url( $ref );
 	$ourH = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
-	if ( is_array( $p ) && isset( $p['host'] ) && $ourH !== "" && strcasecmp( $p['host'], $ourH ) === 0 ) {
-		$path = isset( $p['path'] ) ? ltrim( $p['path'], '/' ) : "";
+	// Same-host check: HTTP_HOST may include :port; parse_url(referer) host does not.
+	$reqHostParsed = ( $ourH !== '' ) ? @parse_url( 'http://' . $ourH ) : false;
+	$reqHost       = ( is_array( $reqHostParsed ) && isset( $reqHostParsed['host'] ) ) ? strtolower( $reqHostParsed['host'] ) : '';
+	$reqPort       = ( is_array( $reqHostParsed ) && isset( $reqHostParsed['port'] ) ) ? (int) $reqHostParsed['port'] : null;
+	$refHost       = ( is_array( $p ) && isset( $p['host'] ) ) ? strtolower( $p['host'] ) : '';
+	$refPort       = ( is_array( $p ) && isset( $p['port'] ) ) ? (int) $p['port'] : null;
+	$portsOk       = true;
+	if ( $refPort !== null && $reqPort !== null && $refPort !== $reqPort ) {
+		$portsOk = false;
+	}
+	if ( is_array( $p ) && $refHost !== '' && $reqHost !== '' && $refHost === $reqHost && $portsOk ) {
+		$refPath = isset( $p['path'] ) ? str_replace( '\\', '/', $p['path'] ) : '';
+		$scriptDir = str_replace( '\\', '/', dirname( isset( $_SERVER['SCRIPT_NAME'] ) ? $_SERVER['SCRIPT_NAME'] : '' ) );
+		$scriptDir = rtrim( $scriptDir, '/' );
+		// Relative Location is resolved against the directory of userchange.php. Strip the URL
+		// directory prefix so /app/players.php becomes players.php, not app/players.php (which
+		// would wrongly resolve to /app/app/players.php when the app lives under /app/).
+		if ( $scriptDir !== '' && $scriptDir !== '/' && $refPath !== '' && strpos( $refPath, $scriptDir . '/' ) === 0 ) {
+			$path = substr( $refPath, strlen( $scriptDir ) + 1 );
+		} else {
+			$path = ltrim( $refPath, '/' );
+		}
 		if ( $path === "" ) {
 			$path = "index.php";
 		}

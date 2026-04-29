@@ -6,7 +6,7 @@ UltraStats is a log parser and web front-end for **Call of Duty** game server lo
 
 **License:** See [LICENSE](LICENSE) and [COPYING](COPYING) (GPL-3.0+).
 
-**Author:** Andre Lorbach — [github.com/alorbach/ultrastats](https://github.com/alorbach/ultrastats); see original headers in `src/`.
+**Author:** [Andre Lorbach](https://github.com/alorbach) — [github.com/alorbach/ultrastats](https://github.com/alorbach/ultrastats); see original headers in `src/`.
 
 ## History
 
@@ -59,8 +59,8 @@ Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/e
 
 ## Credits
 
-- Core project author and maintainer: Andre Lorbach.
-- Release testing support: David Sanetti.
+- Core project author and maintainer: [Andre Lorbach](https://github.com/alorbach).
+- Release testing support: [David Sanetti](https://github.com/davemx85).
 
 ## Sample gamelogs
 

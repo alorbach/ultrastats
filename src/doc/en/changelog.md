@@ -4,6 +4,12 @@ Release history. The same content is mirrored as **plain text** in `ChangeLog` a
 
 ---
 
+## Version 0.3.22, 2026-04-29
+
+### Changes and bugfixes
+
+- **userchange.php:** fixed the redirect after using the language, style, or time-filter dropdowns when the site is installed under a **URL subfolder** (the `Location` target is now a single script name under that folder, so the browser no longer resolves a doubled path like `/app/app/players.php` and returns 404). **Same-host** detection for the referer now compares the host part correctly when `HTTP_HOST` includes a **port**.
+
 ## Version 0.3.21, 2026-04-28
 
 ### Changes and bugfixes
