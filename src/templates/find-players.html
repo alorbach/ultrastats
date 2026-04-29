@@ -15,14 +15,14 @@
 		</table>
 		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 		<tr>
-			<td class="cellmenu1"><B>{LN_SEARCH_STRING}</B></td>
-			<td class="line1"><input type="text" name="search" value="{searchfor}" size="40" maxlength="32"></td>
+			<td class="cellmenu1"><label for="search-query"><B>{LN_SEARCH_STRING}</B></label></td>
+			<td class="line1"><input type="text" id="search-query" name="search" value="{searchfor}" size="40" maxlength="32"></td>
 			<td class="line0" rowspan="3" valign="middle" width="100" align="center"><input type="submit" value="Search"></td>
 		</tr>
 		<tr>
-			<td class="cellmenu1"><B>{LN_SEARCH_BY}</B>:</td>
+			<td class="cellmenu1"><label for="search-type"><B>{LN_SEARCH_BY}</B>:</label></td>
 			<td class="line1">
-				<select name="searchtype">
+				<select id="search-type" name="searchtype">
 					<option value="1" {searchtype_selected_1}>{LN_SEARCH_PLAYERID}</option>
 					<option value="3" {searchtype_selected_3}>{LN_SEARCH_PLAYERPBGUID}</option>
 					<option value="2" {searchtype_selected_2}>{LN_SEARCH_PLAYERALIAS}</option>
@@ -30,8 +30,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="cellmenu1"><B>{LN_SEARCH_IGNORECOLORCODES}</B></td>
-			<td align="left" class="line0"><input type="checkbox" name="ignorecolorcodes" value="yes" {IGNORECOLORCODES_CHECKED}></td>
+			<td class="cellmenu1"><label for="ignore-color-codes"><B>{LN_SEARCH_IGNORECOLORCODES}</B></label></td>
+			<td align="left" class="line0"><input type="checkbox" id="ignore-color-codes" name="ignorecolorcodes" value="yes" {IGNORECOLORCODES_CHECKED}></td>
 		</tr>
 		</table>
 		</form>
@@ -43,7 +43,7 @@
 	<td width="100%" valign="top" align="center">
 	<!-- IF playersfound="false" -->
 	<center>
-		<div class="table_with_border_second ErrorMsg" style="width:600px">
+		<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 			<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 			<p>{LN_SEARCH_NOPLAYERFOUND}</p>
 			</div>

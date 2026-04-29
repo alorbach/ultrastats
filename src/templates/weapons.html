@@ -3,7 +3,7 @@
 <!-- IF iserror="true" -->
 <br><br>
 <center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{ERROR_DETAILS}</p>
 		</div>
@@ -49,7 +49,7 @@
 				<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 				<tr>
 					<td bgcolor="#007700" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{KillCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
-					<img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9">
+					<img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9" alt="" aria-hidden="true">
 					</td>
 				</tr>
 				</table>
@@ -59,13 +59,13 @@
 				<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 				<tr>
 					<td bgcolor="#005577" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{PlayerCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
-					<img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9">
+					<img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9" alt="" aria-hidden="true">
 					</td>
 				</tr>
 				</table>
 				<td class="{cssclass}" align="center">
 				<!-- IF IsExternalInfoUrl="true" -->
-				<a href="{ExternalInfoUrl}" target="_blank">{ExternalInfoUrlDisplay}</a>
+				<a href="{ExternalInfoUrl}" target="_blank" rel="noopener noreferrer">{ExternalInfoUrlDisplay}</a>
 				<!-- ENDIF IsExternalInfoUrl="true" -->
 				</td>
 			</tr>
@@ -135,7 +135,7 @@
 					<td nowrap valign="top" align="left" class="line1">{INGAMENAME}</td>
 					<td class="tablebackground" align="center">
 					<!-- IF IsExternalInfoUrl="true" -->
-						<a href="{ExternalInfoUrl}" target="_blank">{ExternalInfoUrlDisplay}</a>
+						<a href="{ExternalInfoUrl}" target="_blank" rel="noopener noreferrer">{ExternalInfoUrlDisplay}</a>
 					<!-- ENDIF IsExternalInfoUrl="true" -->
 					&nbsp;
 					</td>
@@ -178,7 +178,7 @@
 					<td align="right" class="{cssclass}"><B>{Number}</B></td>
 					<td class="{cssclass}"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</B></td>
 					<td align="right" class="{cssclass}"><B>{AllKills}</B>&nbsp;</td>
-					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="{KillBarPercent}"><img src="{BarImageRight}" width="" height="9">&nbsp;</td>
+					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 
 				</tr>
 				<!-- END mostkills -->
@@ -228,7 +228,7 @@
 					<td align="right" class="{cssclass}"><B>{Number}</B></td>
 					<td class="{cssclass}"><A HREF="players-detail.php?id={ENEMYID}{additional_url}" title="{Enemy}">{EnemyAsHtml}</B></td>
 					<td align="right" class="{cssclass}"><B>{AllKills}</B>&nbsp;</td>
-					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="{KillBarPercent}"><img src="{BarImageRight}" width="" height="9">&nbsp;</td>
+					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 
 				</tr>
 				<!-- END mostkilledby -->

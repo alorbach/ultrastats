@@ -10,11 +10,11 @@
 		<!-- IF ISERROR="true" -->
 		<table width="100%" cellpadding="5" cellspacing="1" border="0" align="center" class="with_border_alternate">
 		<tr>
-			<td class="line1">
+			<td class="line1 ErrorMsg" role="alert" aria-live="assertive">
 				<h3><font color="red">Error Occured:<br> {ERROR_MSG}</font>
 				<br><br>
 				<center>
-					Click <a href="javascript:history.back();">here</a> to get back
+					Click <a href="javascript:history.back();" aria-label="Go back">here</a> to get back
 				</center>
 				</h3>
 			</td>
@@ -33,7 +33,7 @@
 			{LN_DBUPGRADE_TOBEINSTALLED}: <B>{database_internalversion}</B><br></p>
 
 			<br><br>
-			<center>Click on <a href="?op=upgrade"><B>Upgrade</B></a> to start!</center>
+			<center>Click on <a href="?op=upgrade" aria-label="Start upgrade"><B>Upgrade</B></a> to start!</center>
 			<p>&nbsp;</p>
 
 			</td>
@@ -79,7 +79,7 @@
 			{LN_DBUPGRADE_TOBEINSTALLED}: <B>{database_internalversion}</B><br>
 
 			<br><br>
-			<center>Click on <a href="index.php"><B>here</B></a> to return to the <B>Admin Center</B></center>
+			<center>Click on <a href="index.php" aria-label="Return to admin center"><B>here</B></a> to return to the <B>Admin Center</B></center>
 			<p>&nbsp;</p>
 
 			</td>
@@ -98,7 +98,7 @@
 			{LN_DBUPGRADE_ULTRASTATSDBVERSION}: <B>{database_internalversion}</B><br></p>
 			
 			<br><br>
-			<center>Click on <a href="index.php"><B>here</B></a> to return to the <B>Admin Center</B></center>
+			<center>Click on <a href="index.php" aria-label="Return to admin center"><B>here</B></a> to return to the <B>Admin Center</B></center>
 			<p>&nbsp;</p>
 
 			</td>

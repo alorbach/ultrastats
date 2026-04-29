@@ -17,11 +17,11 @@
 
 		<table width="100%" border="0" cellspacing="1" cellpadding="0" class="with_border" align="center">
 		<tr> 
-			<td class="cellmenu1" nowrap><B>&nbsp;{LN_PLAYER_FILTER}&nbsp;</B></td>
+			<td class="cellmenu1" nowrap><label for="admin-player-filter"><B>&nbsp;{LN_PLAYER_FILTER}&nbsp;</B></label></td>
 			<td class="line0" align="center" nowrap>
 				<form action="" method="get">
 				<input type="hidden" name="start" value="{current_pagebegin}">
-				<input type="textbox" size="40" name="playerfilter" value="{playerfilter}">
+				<input type="textbox" id="admin-player-filter" size="40" name="playerfilter" value="{playerfilter}">
 				<input type="submit" value="{LN_PLAYER_DOFILTER}">
 			</td>
 			<td class="line1" width="100%" align="center"><I>{players_count_text}</I></td>
@@ -56,11 +56,11 @@
 			<td align="center" class="{cssclass}"><b>{Number}</b></td>
 			<td align="center" class="{cssclass}"><b>{GUID}</b></td>
 			<td align="center" class="{cssclass}"><A HREF="players.php?op=edit&id={GUID}" title="{Alias}">{AliasAsHtml}</a></td>
-			<td align="center" class="{cssclass}"><a href="?playerfilter={playerfilter}&start={current_pagebegin}&playerguid={GUID}&playerop=setclanmember&newval={set_clanmember}"><img src="{is_clanmember_string}" width="16"></a></td>
-			<td align="center" class="{cssclass}"><a href="?playerfilter={playerfilter}&start={current_pagebegin}&playerguid={GUID}&playerop=setban&newval={set_banned}"><img src="{is_banned_string}" width="16"></a></td>
+			<td align="center" class="{cssclass}"><a href="?playerfilter={playerfilter}&start={current_pagebegin}&playerguid={GUID}&playerop=setclanmember&newval={set_clanmember}" aria-label="{LN_PLAYER_CLANMEMBER}"><img src="{is_clanmember_string}" width="16" alt="" aria-hidden="true"></a></td>
+			<td align="center" class="{cssclass}"><a href="?playerfilter={playerfilter}&start={current_pagebegin}&playerguid={GUID}&playerop=setban&newval={set_banned}" aria-label="{LN_PLAYER_BANNED}"><img src="{is_banned_string}" width="16" alt="" aria-hidden="true"></a></td>
 			<td align="center" class="{cssclass}">
-				&nbsp;<a href="players.php?op=edit&id={GUID}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}"></a>
-				&nbsp;<a href="players.php?playerfilter={playerfilter}&start={current_pagebegin}&op=delete&id={GUID}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}"></a>
+				&nbsp;<a href="players.php?op=edit&id={GUID}" aria-label="{LN_ADMINEDIT}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}" alt="" aria-hidden="true"></a>
+				&nbsp;<a href="players.php?playerfilter={playerfilter}&start={current_pagebegin}&op=delete&id={GUID}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
 			</td>
 		</tr>
 		<!-- END PLAYERS -->
@@ -84,16 +84,16 @@
 			</tr>
 
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_PLAYER_CLANMEMBER}</b></td>
-				<td align="right" class="line1"><input type="checkbox" name="isclanmember" value="yes" {CHECKED_ISCLANMEMBED}></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-player-isclanmember"><b>{LN_PLAYER_CLANMEMBER}</b></label></td>
+				<td align="right" class="line1"><input type="checkbox" id="admin-player-isclanmember" name="isclanmember" value="yes" {CHECKED_ISCLANMEMBED}></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_PLAYER_BANNED}</b></td>
-				<td align="right" class="line0"><input type="checkbox" name="isbanned" value="yes" {CHECKED_ISBANNED}></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-player-isbanned"><b>{LN_PLAYER_BANNED}</b></label></td>
+				<td align="right" class="line0"><input type="checkbox" id="admin-player-isbanned" name="isbanned" value="yes" {CHECKED_ISBANNED}></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_PLAYER_BANREASON}</b></td>
-				<td align="right" class="line1"><textarea name="banreason" cols="39" rows="5">{BanReason}</textarea></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-player-banreason"><b>{LN_PLAYER_BANREASON}</b></label></td>
+				<td align="right" class="line1"><textarea id="admin-player-banreason" name="banreason" cols="39" rows="5">{BanReason}</textarea></td>
 			</tr>
 
 			<tr>
@@ -119,14 +119,14 @@
 			<tr>
 				<td align="center" class="line0" width="50%">
 					<br>
-					<A HREF="players.php?playerfilter={playerfilter}&start={current_pagebegin}&op=delete&id={GUID}&verify=yes">
-					<img src="{BASEPATH}images/icons/check.png" width="16"><br>
+					<A HREF="players.php?playerfilter={playerfilter}&start={current_pagebegin}&op=delete&id={GUID}&verify=yes" aria-label="{LN_ADMINDELETE}">
+					<img src="{BASEPATH}images/icons/check.png" width="16" alt="" aria-hidden="true"><br>
 					Yes, delete player '{AliasName}' with guid '{GUID}'</A>
 				</td>
 				<td align="center" class="line1" width="50%">
-					<A HREF="javascript:history.back;">
+					<A HREF="javascript:history.back;" aria-label="{LN_PLAYER_BACKPLAYERLIST}">
 					<br>
-					<img src="{BASEPATH}images/icons/redo.png" width="16"><br>
+					<img src="{BASEPATH}images/icons/redo.png" width="16" alt="" aria-hidden="true"><br>
 					No, go back</A>
 				</td>
 			</tr>

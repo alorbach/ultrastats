@@ -3,7 +3,7 @@
 <!-- IF playersenabled!="true" -->
 <br><br>
 <center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{LN_ERROR_NOSTATSDATAFOUND}</p>
 		</div>
@@ -62,17 +62,17 @@
 			<td align="right" class="{cssclass}" width="175">
 				<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 				<tr>
-					<td bgcolor="#770000" width="50%"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+					<td bgcolor="#770000" width="50%"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}" alt="" aria-hidden="true"></td>
 					<td bgcolor="#007700" width="50%">
 					<!-- IF KillRatioWidthPlusText!="" -->
-					<img align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+					<img align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}" alt="" aria-hidden="true">
 					<!-- ENDIF KillRatioWidthPlusText!="" -->
 					</td>
 				</tr>
 				</table>
 			</td>
 			<td align="right" class="{cssclass}" nowrap><B>{TimePlayedString}</B></td>
-			<td align="left" class="{cssclass}" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9"><img src="{BarImageMiddle}" width="{KillBarWidth}" height="9" alt="{KillBarPercent}"><img src="{BarImageRight}" width="" height="9">&nbsp; </td>
+			<td align="left" class="{cssclass}" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp; </td>
 		</tr>
 
 		<!-- END players -->

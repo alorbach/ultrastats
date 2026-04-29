@@ -3,7 +3,7 @@
 <!-- IF roundsenabled!="true" -->
 <br><br>
 <center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{LN_ERROR_NOSTATSDATAFOUND}</p>
 		</div>
@@ -55,8 +55,8 @@
 		</tr>
 			<!-- BEGIN myrounds -->
 			<tr>
-				<td class="{cssclass}" align="center"><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left"><B>{TimePlayed}</B></td>
-				<td width="100%" class="{cssclass}" align="left"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" align="left"><A HREF="rounds-detail.php?id={ID}{additional_url}">{LN_LROUNDS_DETAILS}</A></td>
+				<td class="{cssclass}" align="center"><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left" alt="" aria-hidden="true"><B>{TimePlayed}</B></td>
+				<td width="100%" class="{cssclass}" align="left"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" align="left" alt="" aria-hidden="true"><A HREF="rounds-detail.php?id={ID}{additional_url}">{LN_LROUNDS_DETAILS}</A></td>
 				<!-- IF ShowServer="true" -->
 				<td class="cellmenu2" align="left" width="70" nowrap>{LN_LROUNDS_SERVER}: </td>
 				<td class="{cssclass}" align="left" nowrap><A HREF="rounds.php?serverid={ServerID}{additional_url}">{ServerName}</A></td>

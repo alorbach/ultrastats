@@ -2,7 +2,7 @@
 
 <!-- IF ISERROR="true" -->
 <center>
-<h3><font color="red">{ERROR_MSG}</font></h3>
+<h3 class="ErrorMsg" role="alert" aria-live="assertive"><font color="red">{ERROR_MSG}</font></h3>
 </center>
 <!-- ENDIF ISERROR="true" -->
 
@@ -17,23 +17,23 @@
 	<form action="" method="post">
 		<table border="0" cellpadding="2" cellspacing="1">
 		<tr>
-			<td align="center"><b>{LN_USERNAME}</b></td>
+			<td align="center"><label for="admin-login-uname"><b>{LN_USERNAME}</b></label></td>
 		</tr>
 		<tr>
 			<td align="center">
-			<input type="text" name="uname" size="14" maxlength="25" value="{uname}"></td>
+			<input type="text" id="admin-login-uname" name="uname" size="14" maxlength="25" value="{uname}"></td>
 		</tr>
 		<tr>
-			<td align="center"><b>{LN_PASSWORD}</b></td>
+			<td align="center"><label for="admin-login-pass"><b>{LN_PASSWORD}</b></label></td>
 		</tr>
 		<tr>
 			<td align="center">
-			<input type="password" name="pass" size="14" maxlength="20" value="{pass}"></td>
+			<input type="password" id="admin-login-pass" name="pass" size="14" maxlength="20" value="{pass}"></td>
 		</tr>
 <!-- IF CANSAVECOOKIE="true" -->
 		<tr>
 			<td align="center">
-			<input type="checkbox" disabled value="1" name="rememberme" />{LN_SAVEASCOOKIE}</td>
+			<input type="checkbox" id="admin-login-rememberme" disabled value="1" name="rememberme" /><label for="admin-login-rememberme">{LN_SAVEASCOOKIE}</label></td>
 		</tr>
 <!-- ENDIF CANSAVECOOKIE="true" -->
 		<tr>

@@ -3,7 +3,7 @@
 <!-- IF roundsenabled!="true" -->
 <br><br>
 <center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{LN_ROUNDS_ROUNDNOTFOUND}</p>
 		</div>
@@ -31,7 +31,7 @@
 			<td width="50%" class="cellmenu1" align="center" nowrap><B>{LN_ROUNDS_AXIS}</B></td>
 			<td width="50" class="cellmenu2" align="center" nowrap><B>{LN_ROUNDS_POINTS}</B></td>
 			<td width="30" class="line1" align="center" nowrap><p class="{AxisTeamClass}"><B>{AxisRoundWins}</B></p></td>
-			<td width="36" class="cellmenu1" align="left" nowrap><img src="{BASEPATH}images/main/{gen_gameversion_picpath}/flag-allies-small.png" width="24" alt="Axis"></td>
+			<td width="36" class="cellmenu1" align="left" nowrap><img src="{BASEPATH}images/main/{gen_gameversion_picpath}/flag-allies-small.png" width="24" alt="Allies"></td>
 			<td width="50%" class="cellmenu1" align="center" nowrap><B>{LN_ROUNDS_ALLIES}</B></td>
 			<td width="50" class="cellmenu2" align="center" nowrap><B>{LN_ROUNDS_POINTS}</B></td>
 			<td width="30" class="line1" align="center" nowrap><p class="{AlliesTeamClass}"><B>{AlliesRoundWins}</B></p></td>
@@ -54,10 +54,10 @@
 					<td align="center" class="{cssclass}" nowrap>
 						<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 						<tr>
-							<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+							<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}" alt="" aria-hidden="true"></td>
 							<td bgcolor="#007700" width="50%">
 							<!-- IF KillRatioWidthPlusText!="" -->
-							<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+							<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}" alt="" aria-hidden="true">
 							<!-- ENDIF KillRatioWidthPlusText!="" -->
 							</td>
 						</tr>
@@ -84,10 +84,10 @@
 					<td align="center" class="{cssclass}" nowrap>
 						<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 						<tr>
-							<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+							<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}" alt="" aria-hidden="true"></td>
 							<td bgcolor="#007700" width="50%">
 							<!-- IF KillRatioWidthPlusText!="" -->
-							<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+							<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}" alt="" aria-hidden="true">
 							<!-- ENDIF KillRatioWidthPlusText!="" -->
 							</td>
 						</tr>
@@ -119,10 +119,10 @@
 			<td align="center" class="{cssclass}" nowrap>
 				<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 				<tr>
-					<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+					<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}" alt="" aria-hidden="true"></td>
 					<td bgcolor="#007700" width="50%">
 					<!-- IF KillRatioWidthPlusText!="" -->
-					<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+					<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}" alt="" aria-hidden="true">
 					<!-- ENDIF KillRatioWidthPlusText!="" -->
 					</td>
 				</tr>
@@ -157,10 +157,10 @@
 			<td align="center" class="{cssclass}" nowrap>
 				<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 				<tr>
-					<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}"></td>
+					<td bgcolor="#770000" width="50%"><img vspace="0" hspace="0" align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" title="{KillRatioWidthMinusText}" alt="" aria-hidden="true"></td>
 					<td bgcolor="#007700" width="50%">
 					<!-- IF KillRatioWidthPlusText!="" -->
-					<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}">
+					<img vspace="0" hspace="0" align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" title="{KillRatioWidthPlusText}" alt="" aria-hidden="true">
 					<!-- ENDIF KillRatioWidthPlusText!="" -->
 					</td>
 				</tr>
@@ -279,7 +279,7 @@
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center">
 		<tr>
 			<td>
-			<iframe id="container" src="rounds-chatlog.php?id={roundid}{additional_url}" width="100%" height="200" class="with_border">
+			<iframe id="container" src="rounds-chatlog.php?id={roundid}{additional_url}" width="100%" height="200" class="with_border" title="{LN_ROUNDS_CHATLOG}">
 				<p>{NO_INFRAME_POSSIBLE}</p>
 			</iframe>
 			</td>

@@ -15,8 +15,8 @@
 		</table>
 		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 		<tr>
-			<td class="cellmenu1" nowrap><B>{LN_SEARCH_CHATSTRING}</B></td>
-			<td class="line1"><input type="text" name="search" value="{searchfor}" size="40" maxlength="32"></td>
+			<td class="cellmenu1" nowrap><label for="chat-search-query"><B>{LN_SEARCH_CHATSTRING}</B></label></td>
+			<td class="line1"><input type="text" id="chat-search-query" name="search" value="{searchfor}" size="40" maxlength="32"></td>
 			<td class="line0" rowspan="3" valign="middle" width="100" align="center"><input type="submit" value="Search"></td>
 		</tr>
 		</table>
@@ -29,7 +29,7 @@
 	<td width="100%" valign="top" align="center">
 	<!-- IF chatsfound="false" -->
 	<center>
-		<div class="table_with_border_second ErrorMsg" style="width:600px">
+		<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
 			<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 			<p>{chatserror}</p>
 			</div>

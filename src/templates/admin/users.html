@@ -28,13 +28,13 @@
 			<td align="center" class="{cssclass}"><b>{ID}</b></td>
 			<td align="center" class="{cssclass}"><a href="users.php?op=edit&id={ID}">{username}</a></td>
 			<td align="center" class="{cssclass}">
-				&nbsp;<a href="users.php?op=edit&id={ID}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}"></a>
-				&nbsp;<a href="users.php?op=delete&id={ID}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}"></a>
+				&nbsp;<a href="users.php?op=edit&id={ID}" aria-label="{LN_ADMINEDIT}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}" alt="" aria-hidden="true"></a>
+				&nbsp;<a href="users.php?op=delete&id={ID}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
 			</td>
 		</tr>
 		<!-- END USERS -->
 		<tr>
-			<td align="center" colspan="3" class="tableBackground"><a href="users.php?op=add"><img src="{BASEPATH}images/icons/add.png" title="{LN_ADMINADD} {LN_SERVER}">&nbsp;{LN_USER_ADD}</a></td>
+			<td align="center" colspan="3" class="tableBackground"><a href="users.php?op=add" aria-label="{LN_USER_ADD}"><img src="{BASEPATH}images/icons/add.png" title="{LN_ADMINADD} {LN_SERVER}" alt="" aria-hidden="true">&nbsp;{LN_USER_ADD}</a></td>
 		</tr>
 		</table>
 <!-- ENDIF LISTUSERS="true" -->

@@ -17,7 +17,7 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mainheader">
 <tr> 
-	<td rowspan="4" width="400" align="left"><a href="{BASEPATH}index.php"><img src="{EXTRA_ULTRASTATS_LOGO}" width="400" height="100" name="HeaderLogo"></a></td>
+	<td rowspan="4" width="400" align="left"><a href="{BASEPATH}index.php"><img src="{EXTRA_ULTRASTATS_LOGO}" width="400" height="100" name="HeaderLogo" alt="{LN_MAINTITLE}"></a></td>
 	<td width="100%" align="center" valign="top" height="20">
 
 	<!-- IF IS_LOGINPAGE!="true" -->
@@ -98,7 +98,7 @@
 	<tr> 
 		<td class="cellmenu1" nowrap width="150"><B>&nbsp;{LN_GEN_SKINMADEBY}&nbsp;</B></td>
 		<td align="right" class="cellmenu2">
-		<a href="{theme_madebylink}" target="_blank" class="cellmenu2_link">{theme_madeby}</a>
+		<a href="{theme_madebylink}" target="_blank" rel="noopener noreferrer" class="cellmenu2_link">{theme_madeby}</a>
 		</td>
 	</tr>
 	</table>
@@ -131,6 +131,8 @@
 
 	<!-- IF error_installfilereminder="true" -->
 		<center>
+		<div class="table_with_border_second ErrorMsg" style="max-width:600px" role="alert" aria-live="assertive">
 		<h3><br><br><font color="red">{LN_ERROR_INSTALLFILEREMINDER}</font></h3>
+		</div>
 		</center>
 	<!-- ENDIF error_installfilereminder="true" -->

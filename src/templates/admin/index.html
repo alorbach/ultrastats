@@ -40,9 +40,9 @@
 	</table>
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_LANGUAGE}</b></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-gen-lang"><b>{LN_GEN_LANGUAGE}</b></label></td>
 		<td align="right" class="line1" width="100%">
-			<select name="gen_lang" size="1" STYLE="width: 250px">
+			<select id="admin-gen-lang" name="gen_lang" size="1" STYLE="width: 250px">
 				<!-- BEGIN LANGUAGES -->
 				<option {selected}>{langcode}</option>
 				<!-- END LANGUAGES -->
@@ -50,9 +50,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_GAMEVERSION}</b></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-gen-gameversion"><b>{LN_GEN_GAMEVERSION}</b></label></td>
 		<td align="right" class="line2" width="100%">
-			<select name="gen_gameversion" size="1" STYLE="width: 250px">
+			<select id="admin-gen-gameversion" name="gen_gameversion" size="1" STYLE="width: 250px">
 				<!-- BEGIN GAMEVERSIONS -->
 				<option {selected} value="{gamever}">{gamevertitle}</option>
 				<!-- END GAMEVERSIONS -->
@@ -60,9 +60,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PARSEBYTYPE}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-parseby"><b>{LN_GEN_PARSEBYTYPE}</b></label></td>
 		<td align="right" class="line1">
-			<select name="gen_parseby" size="1" STYLE="width: 250px">
+			<select id="admin-gen-parseby" name="gen_parseby" size="1" STYLE="width: 250px">
 				<!-- BEGIN PARSEBYTYPES -->
 				<option {selected} value="{parsebytype}">{parsebytypetitle}</option>
 				<!-- END PARSEBYTYPES -->
@@ -70,20 +70,20 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PHPDEBUG}</b></td>
-		<td align="right" class="line2"><input type="checkbox" name="gen_phpdebug" value="yes" {gen_phpdebug_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-phpdebug"><b>{LN_GEN_PHPDEBUG}</b></label></td>
+		<td align="right" class="line2"><input type="checkbox" id="admin-gen-phpdebug" name="gen_phpdebug" value="yes" {gen_phpdebug_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_GZIP}</b></td>
-		<td align="right" class="line1"><input type="checkbox" name="gen_gzipcompression" value="yes" {gen_gzipcompression_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-gzipcompression"><b>{LN_GEN_WEB_GZIP}</b></label></td>
+		<td align="right" class="line1"><input type="checkbox" id="admin-gen-gzipcompression" name="gen_gzipcompression" value="yes" {gen_gzipcompression_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_BIGSELECTS}</b></td>
-		<td align="right" class="line1"><input type="checkbox" name="gen_bigselects" value="yes" {gen_bigselects_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-bigselects"><b>{LN_GEN_WEB_BIGSELECTS}</b></label></td>
+		<td align="right" class="line1"><input type="checkbox" id="admin-gen-bigselects" name="gen_bigselects" value="yes" {gen_bigselects_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXTIMEOUT}</b></td>
-		<td align="right" class="line2"><input type="text" name="gen_maxexecutiontime" size="40" maxlength="16" value="{gen_maxexecutiontime}">
+		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-maxexecutiontime"><b>{LN_GEN_WEB_MAXTIMEOUT}</b></label></td>
+		<td align="right" class="line2"><input type="text" id="admin-gen-maxexecutiontime" name="gen_maxexecutiontime" size="40" maxlength="16" value="{gen_maxexecutiontime}">
 	</tr>
 	</table>
 
@@ -97,9 +97,9 @@
 	</table>
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_WEB_STYLE}</b></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-web-theme"><b>{LN_GEN_WEB_STYLE}</b></label></td>
 		<td align="right" class="line1" width="100%">
-			<select name="web_theme" size="1" STYLE="width: 250px">
+			<select id="admin-web-theme" name="web_theme" size="1" STYLE="width: 250px">
 				<!-- BEGIN STYLES -->
 				<option {selected}>{StyleName}</option>
 				<!-- END STYLES -->
@@ -107,9 +107,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAINTPPLAYERS}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-mainpageplayers"><b>{LN_GEN_WEB_MAINTPPLAYERS}</b></label></td>
 		<td align="right" class="line2" >
-			<select name="web_mainpageplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-mainpageplayers" name="web_mainpageplayers" size="1" STYLE="width: 250px">
 				<!-- BEGIN MAINPAGEPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END MAINPAGEPLAYERS -->
@@ -117,9 +117,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_TOPPLAYERS}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-topplayers"><b>{LN_GEN_WEB_TOPPLAYERS}</b></label></td>
 		<td align="right" class="line2" >
-			<select name="web_topplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-topplayers" name="web_topplayers" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPPLAYERS -->
@@ -127,9 +127,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_DETAILLISTTOPPLAYERS}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-detaillistsplayers"><b>{LN_GEN_WEB_DETAILLISTTOPPLAYERS}</b></label></td>
 		<td align="right" class="line1" >
-			<select name="web_detaillistsplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-detaillistsplayers" name="web_detaillistsplayers" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPLISTPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPLISTPLAYERS -->
@@ -137,9 +137,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_TOPROUNDS}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-toprounds"><b>{LN_GEN_WEB_TOPROUNDS}</b></label></td>
 		<td align="right" class="line2" >
-			<select name="web_toprounds" size="1" STYLE="width: 250px">
+			<select id="admin-web-toprounds" name="web_toprounds" size="1" STYLE="width: 250px">
 				<!-- BEGIN TOPROUNDS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPROUNDS -->
@@ -148,9 +148,9 @@
 	</tr>
 
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXPAGES}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-maxpages"><b>{LN_GEN_WEB_MAXPAGES}</b></label></td>
 		<td align="right" class="line1" >
-			<select name="web_maxpages" size="1" STYLE="width: 250px">
+			<select id="admin-web-maxpages" name="web_maxpages" size="1" STYLE="width: 250px">
 				<!-- BEGIN WEBMAXPAGES -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXPAGES -->
@@ -158,9 +158,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MAXMAPSPERPAGE}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-maxmapsperpage"><b>{LN_GEN_WEB_MAXMAPSPERPAGE}</b></label></td>
 		<td align="right" class="line2" >
-			<select name="web_maxmapsperpage" size="1" STYLE="width: 250px">
+			<select id="admin-web-maxmapsperpage" name="web_maxmapsperpage" size="1" STYLE="width: 250px">
 				<!-- BEGIN WEBMAXMAPSPERPAGE -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXMAPSPERPAGE -->
@@ -169,28 +169,28 @@
 	</tr>
 	
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MINKILLS}</b></td>
-		<td align="right" class="line1" ><input type="text" name="web_minkills" size="40" maxlength="255" value="{web_minkills}"></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-minkills"><b>{LN_GEN_WEB_MINKILLS}</b></label></td>
+		<td align="right" class="line1" ><input type="text" id="admin-web-minkills" name="web_minkills" size="40" maxlength="255" value="{web_minkills}"></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_MINTIME}</b></td>
-		<td align="right" class="line2" ><input type="text" name="web_mintime" size="40" maxlength="16" value="{web_mintime}"></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-mintime"><b>{LN_GEN_WEB_MINTIME}</b></label></td>
+		<td align="right" class="line2" ><input type="text" id="admin-web-mintime" name="web_mintime" size="40" maxlength="16" value="{web_mintime}"></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_SHOWMEDALS}</b></td>
-		<td align="right" class="line1" ><input type="checkbox" name="web_medals" value="yes" {web_medals_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-medals"><b>{LN_GEN_WEB_SHOWMEDALS}</b></label></td>
+		<td align="right" class="line1" ><input type="checkbox" id="admin-web-medals" name="web_medals" value="yes" {web_medals_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_WEB_SHOWANTIMEDALS}</b></td>
-		<td align="right" class="line2" ><input type="checkbox" name="web_medals_anti" value="yes" {web_medals_anti_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-medals-anti"><b>{LN_GEN_WEB_SHOWANTIMEDALS}</b></label></td>
+		<td align="right" class="line2" ><input type="checkbox" id="admin-web-medals-anti" name="web_medals_anti" value="yes" {web_medals_anti_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PREPENDTITLE}</b></td>
-		<td align="right" class="line1" ><input type="text" name="PrependTitle" size="50" maxlength="255" value="{PrependTitle}"></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-prepend-title"><b>{LN_GEN_PREPENDTITLE}</b></label></td>
+		<td align="right" class="line1" ><input type="text" id="admin-prepend-title" name="PrependTitle" size="50" maxlength="255" value="{PrependTitle}"></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2_naked"><b>{LN_ADMIN_ULTRASTATS_LOGOURL}</b></td>
-		<td align="right" class="line1"><input type="text" name="UltrastatsLogoUrl" size="50" maxlength="255" value="{UltrastatsLogoUrl}"></td>
+		<td align="left" class="cellmenu2_naked"><label for="admin-ultrastats-logo-url"><b>{LN_ADMIN_ULTRASTATS_LOGOURL}</b></label></td>
+		<td align="right" class="line1"><input type="text" id="admin-ultrastats-logo-url" name="UltrastatsLogoUrl" size="50" maxlength="255" value="{UltrastatsLogoUrl}"></td>
 	</tr>
 <!-- TODO
 	<tr>
@@ -218,9 +218,9 @@
 	</table>
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_GEN_PD_KILLERMODEL}</b></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-web-playermodel-killer"><b>{LN_GEN_PD_KILLERMODEL}</b></label></td>
 		<td align="right" class="line1" >
-			<select name="web_playermodel_killer" size="1" STYLE="width: 250px">
+			<select id="admin-web-playermodel-killer" name="web_playermodel_killer" size="1" STYLE="width: 250px">
 				<!-- BEGIN PLAYERMODELKILLER -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLER -->
@@ -228,9 +228,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_GEN_PD_KILLEDBYMODEL}</b></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-web-playermodel-killedby"><b>{LN_GEN_PD_KILLEDBYMODEL}</b></label></td>
 		<td align="right" class="line2" >
-			<select name="web_playermodel_killedby" size="1" STYLE="width: 250px">
+			<select id="admin-web-playermodel-killedby" name="web_playermodel_killedby" size="1" STYLE="width: 250px">
 				<!-- BEGIN PLAYERMODELKILLEDBY -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLEDBY -->
@@ -251,9 +251,9 @@
 	</table>
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_PARSER_DEBUGMODE}</b></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-parser-debugmode"><b>{LN_PARSER_DEBUGMODE}</b></label></td>
 		<td align="right" class="line2" width="100%">
-			<select name="parser_debugmode" size="1" STYLE="width: 250px">
+			<select id="admin-parser-debugmode" name="parser_debugmode" size="1" STYLE="width: 250px">
 				<!-- BEGIN DBGMODES -->
 				<option {selected}>{DisplayName}</option>
 				<!-- END DBGMODES -->
@@ -261,12 +261,12 @@
 		</td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{LN_PARSER_DISABLELASTLOGLINE}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" name="parser_disablelastline" value="yes" {parser_disablelastline_checked}></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-parser-disablelastline"><b>{LN_PARSER_DISABLELASTLOGLINE}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-parser-disablelastline" name="parser_disablelastline" value="yes" {parser_disablelastline_checked}></td>
 	</tr>
 	<tr>
-		<td align="left" class="cellmenu2" nowrap><b>{LN_PARSER_ENABLECHATLOGGING}</b></td>
-		<td align="right" class="line2" ><input type="checkbox" name="parser_chatlogging" value="yes" {parser_chatlogging_checked}></td>
+		<td align="left" class="cellmenu2" nowrap><label for="admin-parser-chatlogging"><b>{LN_PARSER_ENABLECHATLOGGING}</b></label></td>
+		<td align="right" class="line2" ><input type="checkbox" id="admin-parser-chatlogging" name="parser_chatlogging" value="yes" {parser_chatlogging_checked}></td>
 	</tr>
 	</table>
 
@@ -281,38 +281,38 @@
 	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
 	<!-- IF medalsadmingrouppro="true" -->
 	<tr>
-		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_PRO}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="pro" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+		<td align="left" class="line2" width="350" nowrap><label for="admin-medal-group-pro"><b>{LN_ADMINMEDALSGROUP_PRO}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-group-pro" class="us-medal-group-toggle" data-us-medal-group="pro" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
 	</tr>
 	<!-- ENDIF medalsadmingrouppro="true" -->
 	<!-- BEGIN medals_admin_pro -->
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="pro"></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-medal-cb-{medalid}"><b>{AdminDisplayName}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-cb-{medalid}" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="pro"></td>
 	</tr>
 	<!-- END medals_admin_pro -->
 	<!-- IF medalsadmingroupanti="true" -->
 	<tr>
-		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_ANTI}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="anti" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+		<td align="left" class="line2" width="350" nowrap><label for="admin-medal-group-anti"><b>{LN_ADMINMEDALSGROUP_ANTI}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-group-anti" class="us-medal-group-toggle" data-us-medal-group="anti" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
 	</tr>
 	<!-- ENDIF medalsadmingroupanti="true" -->
 	<!-- BEGIN medals_admin_anti -->
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="anti"></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-medal-cb-{medalid}"><b>{AdminDisplayName}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-cb-{medalid}" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="anti"></td>
 	</tr>
 	<!-- END medals_admin_anti -->
 	<!-- IF medalsadmingroupcustom="true" -->
 	<tr>
-		<td align="left" class="line2" width="350" nowrap><b>{LN_ADMINMEDALSGROUP_CUSTOM}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-group-toggle" data-us-medal-group="custom" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
+		<td align="left" class="line2" width="350" nowrap><label for="admin-medal-group-custom"><b>{LN_ADMINMEDALSGROUP_CUSTOM}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-group-custom" class="us-medal-group-toggle" data-us-medal-group="custom" value="1" title="{LN_ADMINMEDALSGROUP_ENABLEALL}"></td>
 	</tr>
 	<!-- ENDIF medalsadmingroupcustom="true" -->
 	<!-- BEGIN medals_admin_custom -->
 	<tr>
-		<td align="left" class="cellmenu2" width="350" nowrap><b>{AdminDisplayName}</b></td>
-		<td align="right" class="line1" width="100%"><input type="checkbox" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="custom"></td>
+		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-medal-cb-{medalid}"><b>{AdminDisplayName}</b></label></td>
+		<td align="right" class="line1" width="100%"><input type="checkbox" id="admin-medal-cb-{medalid}" class="us-medal-cb" name="{medalid}" value="yes" {MedalChecked} data-us-medal-group="custom"></td>
 	</tr>
 	<!-- END medals_admin_custom -->
 
