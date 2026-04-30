@@ -180,6 +180,7 @@ if ( isset($_GET['op']) )
 		if ( isset ($_POST['serverenabled']) ) { $content['SERVERENABLED'] = true; } else {$content['SERVERENABLED'] = 0; }
 		if ( isset ($_POST['parsingenabled']) ) { $content['PARSINGENABLED'] = true; } else {$content['PARSINGENABLED'] = 0; }
 		if ( isset ($_POST['ftppassiveenabled']) ) { $content['FTPPASSIVEENABLED'] = true; } else {$content['FTPPASSIVEENABLED'] = 0; }
+		$resolvedGameLogLocation = UltraStats_ResolveGamelogLocation( $content['GAMELOGLOCATION'], $content );
 
 		// Check mandotary values
 		if ( $content['SERVERNAME'] == "" )
@@ -202,14 +203,17 @@ if ( isset($_GET['op']) )
 			$content['ISERROR'] = "true";
 			$content['ERROR_MSG'] = $content['LN_SERVER_ERROR_INVPORT'];
 		}
-		else if ( file_exists($content['GAMELOGLOCATION']) == false )
+		else if ( file_exists( $resolvedGameLogLocation ) == false )
 		{
 			// Try to create an empty file
-			$handle = @fopen( $content['GAMELOGLOCATION'] , "x");
-			fclose($handle);
+			$handle = @fopen( $resolvedGameLogLocation , "x");
+			if ( is_resource( $handle ) )
+			{
+				fclose($handle);
+			}
 
 			// Try again
-			if ( file_exists($content['GAMELOGLOCATION']) == false )
+			if ( file_exists( $resolvedGameLogLocation ) == false )
 			{
 				$content['ISERROR'] = "true";
 				$content['ERROR_MSG'] = $content['LN_SERVER_ERROR_GAMEFILENOTEXISTS'];
@@ -343,6 +347,9 @@ if ( isset($content['FTPPASSIVEENABLED']) && $content['FTPPASSIVEENABLED'] )
 	$content['FTPPASSIVEENABLED_CHECKED'] = "checked";
 else
 	$content['FTPPASSIVEENABLED_CHECKED'] = "";
+
+if ( isset($content['ISERROR']) && isset($content['ERROR_MSG']) )
+	$content['ERROR_MSG'] = UltraStats_h($content['ERROR_MSG']);
 // --- END Custom Code
 
 // --- Parsen and Output

@@ -2,44 +2,44 @@
 
 <!-- IF iserror="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF iserror="true" -->
 
 <!-- IF damagelist="true" -->
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-public-responsive-panel">
 <tr>
 	<td width="10" valign="top" nowrap>&nbsp;</td>
 	<td width="100%" valign="top">
 
-		<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate">
+		<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate us-public-responsive-panel">
 		<tr>
 			<td class="title" nowrap>{LN_DAMAGETYPE_LIST}</td>
 		</tr>
 		</table>
 
-		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-scroll-strip">
 		<tr>
 			<td class="cellmenu1" align="center" nowrap>&nbsp;</td>
-			<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_DAMAGETYPE_NAME}</B></td>
-			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_DAMAGETYPE_KILLCOUNT}</B></td>
-			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><B>{LN_DAMAGETYPE_PLAYERCOUNT}</B></td>
+			<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_DAMAGETYPE_NAME}</b></td>
+			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><b>{LN_DAMAGETYPE_KILLCOUNT}</b></td>
+			<td width="250" class="cellmenu1" align="center" nowrap colspan="2"><b>{LN_DAMAGETYPE_PLAYERCOUNT}</b></td>
 		</tr>
 		<!-- BEGIN damagetypeslist -->
 		<tr>
-			<td class="{cssclass}" align="center"><a HREF="damagetypes.php?id={DAMAGETYPE}{additional_url}"><img src="{DamageImage}" height="18" align="center" alt="" aria-hidden="true"></a></td>
-			<td class="{cssclass}" align="left"><a HREF="damagetypes.php?id={DAMAGETYPE}{additional_url}">{DamageTypeDisplayName}</a></td>
+			<td class="{cssclass}" align="center"><a href="damagetypes.php?id={DAMAGETYPE}{additional_url}"><img src="{DamageImage}" height="18" align="center" alt="" aria-hidden="true"></a></td>
+			<td class="{cssclass}" align="left"><a href="damagetypes.php?id={DAMAGETYPE}{additional_url}">{DamageTypeDisplayName}</a></td>
 			<td class="{cssclass}" align="right" width="50"><b>{DamageKills}</b></td>
-			<td class="{cssclass}" align="left" width="125" bgcolor="#007700">
+			<td class="{cssclass} us-stat-bar-positive" align="left" width="125">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td bgcolor="#007700" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{KillCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
+				<td class="us-stat-bar-positive us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{KillCountText}">
 				<img align="left" src="{BarImageKillCount}" width="{KillRatioWidth}%" height="9" alt="" aria-hidden="true">
 				</td>
 			</tr>
@@ -49,11 +49,12 @@
 			<td class="{cssclass}" align="left" width="125">
 			<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td bgcolor="#005577" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{PlayerCountText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
+				<td class="us-stat-bar-neutral us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{PlayerCountText}">
 				<img align="left" src="{BarImagePlayerCount}" width="{PlayerCountWidth}%" height="9" alt="" aria-hidden="true">
 				</td>
 			</tr>
 			</table>
+			</td>
 		</tr>
 		<!-- END damagetypeslist -->
 		</table>
@@ -85,7 +86,7 @@
 					</td>
 					<td width="100%" nowrap valign="top" class="tableBackground" rowspan="4">
 						<table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" >
-						<tr><td width="100%" class="cellmenu1" align="center"><B>{LN_DAMAGETYPE_DESCRIPTION}</B></td></tr>
+						<tr><td width="100%" class="cellmenu1" align="center"><b>{LN_DAMAGETYPE_DESCRIPTION}</b></td></tr>
 						</table>
 						<table width="100%" cellpadding="5" cellspacing="0" border="0" align="center" >
 						<tr>
@@ -95,7 +96,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td nowrap align="center" class="cellmenu2"><B>{LN_DAMAGETYPE_INGAMENAME}:</B></td>
+					<td nowrap align="center" class="cellmenu2"><b>{LN_DAMAGETYPE_INGAMENAME}:</b></td>
 					<td nowrap valign="top" align="left" class="line1">{DAMAGETYPE}</td>
 				</tr>
 				</table>
@@ -113,30 +114,30 @@
 				<!-- IF mostkills_pagerenabled="true" -->
 				<table width="95%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
 				<tr>
-					<td class="cellmenu2" nowrap><B>Pages: &nbsp; </B>
+					<td class="cellmenu2" nowrap><b>Pages: &nbsp; </b>
 				<!-- BEGIN MOSTKILLSPAGES -->
 					&nbsp;<a href="?id={DAMAGETYPE}&mostkills_start={mypagebegin}&killedby_start={current_killedby_pagebegin}{additional_url}" target="_top">{mypagenumber}</a>
 				<!-- END MOSTKILLSPAGES -->
 					</td>
-					<td nowrap width="100%"class="line2"><I>&nbsp;{MOSTKILLS_MOREPAGES}</I></td>
-<!--					<td nowrap align="right" class="line2"><I>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <B>{web_mintime}</B> {LN_PLAYERS_SECANDMINKILLS}: <B>{web_minkills}</B>)</I></td>-->
+					<td nowrap width="100%" class="line2"><i>&nbsp;{MOSTKILLS_MOREPAGES}</i></td>
+<!--					<td nowrap align="right" class="line2"><i>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <b>{web_mintime}</b> {LN_PLAYERS_SECANDMINKILLS}: <b>{web_minkills}</b>)</i></td>-->
 				</tr>
 				</table>
 				<!-- ENDIF mostkills_pagerenabled="true" -->
 
 				<table width="95%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
 				<tr>
-					<td width="20" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-					<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
-					<td width="40" class="cellmenu1" align="center" nowrap><A HREF="players.php?sorting=Kills{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_KILLS}</A></td>
-					<td width="200" class="cellmenu1" align="center" nowrap><A HREF="players.php?sorting=Deaths{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_Deaths}</A></td>
+					<td width="20" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+					<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
+					<td width="40" class="cellmenu1" align="center" nowrap><a href="players.php?sorting=Kills{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_KILLS}</a></td>
+					<td width="200" class="cellmenu1" align="center" nowrap><a href="players.php?sorting=Deaths{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_Deaths}</a></td>
 				</tr>
 
 				<!-- BEGIN mostkills -->
 				<tr>
-					<td align="right" class="{cssclass}"><B>{Number}</B></td>
-					<td class="{cssclass}"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</B></td>
-					<td align="right" class="{cssclass}"><B>{AllKills}</B>&nbsp;</td>
+					<td align="right" class="{cssclass}"><b>{Number}</b></td>
+					<td class="{cssclass}"><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</b></td>
+					<td align="right" class="{cssclass}"><b>{AllKills}</b>&nbsp;</td>
 					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 
 				</tr>
@@ -162,30 +163,30 @@
 				<!-- IF killedby_pagerenabled="true" -->
 				<table width="95%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
 				<tr>
-					<td class="cellmenu2" nowrap><B>Pages: &nbsp; </B>
+					<td class="cellmenu2" nowrap><b>Pages: &nbsp; </b>
 				<!-- BEGIN KILLEDBYPAGES -->
 					&nbsp;<a href="?id={DAMAGETYPE}&killedby_start={mypagebegin}&mostkills_start={current_mostkills_pagebegin}{additional_url}" target="_top">{mypagenumber}</a>
 				<!-- END KILLEDBYPAGES -->
 					</td>
-					<td nowrap width="100%"class="line2"><I>&nbsp;{KILLEDBY_MOREPAGES}</I></td>
-<!--					<td nowrap align="right" class="line2"><I>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <B>{web_mintime}</B> {LN_PLAYERS_SECANDMINKILLS}: <B>{web_minkills}</B>)</I></td>-->
+					<td nowrap width="100%" class="line2"><i>&nbsp;{KILLEDBY_MOREPAGES}</i></td>
+<!--					<td nowrap align="right" class="line2"><i>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <b>{web_mintime}</b> {LN_PLAYERS_SECANDMINKILLS}: <b>{web_minkills}</b>)</i></td>-->
 				</tr>
 				</table>
 				<!-- ENDIF killedby_pagerenabled="true" -->
 
 				<table width="95%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
 				<tr>
-					<td width="20" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-					<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
-					<td width="40" class="cellmenu1" align="center" nowrap><A HREF="players.php?sorting=Kills{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_KILLS}</A></td>
-					<td width="200" class="cellmenu1" align="center" nowrap><A HREF="players.php?sorting=Deaths{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_Deaths}</A></td>
+					<td width="20" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+					<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
+					<td width="40" class="cellmenu1" align="center" nowrap><a href="players.php?sorting=Kills{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_KILLS}</a></td>
+					<td width="200" class="cellmenu1" align="center" nowrap><a href="players.php?sorting=Deaths{additional_url}" class="cellmenu1_link" >{LN_TOPPLAY_Deaths}</a></td>
 				</tr>
 
 				<!-- BEGIN mostkilledby -->
 				<tr>
-					<td align="right" class="{cssclass}"><B>{Number}</B></td>
-					<td class="{cssclass}"><A HREF="players-detail.php?id={ENEMYID}{additional_url}" title="{Enemy}">{EnemyAsHtml}</B></td>
-					<td align="right" class="{cssclass}"><B>{AllKills}</B>&nbsp;</td>
+					<td align="right" class="{cssclass}"><b>{Number}</b></td>
+					<td class="{cssclass}"><a href="players-detail.php?id={ENEMYID}{additional_url}" title="{Enemy}">{EnemyAsHtml}</b></td>
+					<td align="right" class="{cssclass}"><b>{AllKills}</b>&nbsp;</td>
 					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 
 				</tr>

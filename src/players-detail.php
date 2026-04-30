@@ -564,7 +564,7 @@ if ( isset($_GET['id']) )
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] ] = $hitlocations[$i]['BODYPART'];
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_display" ] = $hitlocations[$i]['DisplayName'];
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_level" ] = 0;
-						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><B>" . $hitlocations[$i]['DisplayName'] . "</B><br><br>Damage<br><font color=#FFFF55><B>0%</B></font>";
+						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $hitlocations[$i]['DisplayName'] . "</b><br><br>Damage<br><span class='us-damage-pct us-damage-pct-zero'><b>0%</b></span>";
 						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_image" ] = $content['BASEPATH'] . "images/player/" . $content['KILLEDDETAILS'][0]['modelname'] . "/hover/" . $hitlocations[$i]['BODYPART'] . ".png";
 					}
 				}
@@ -629,8 +629,7 @@ if ( isset($_GET['id']) )
 						// ---
 
 						// --- Set Popup Content
-						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
-//						$content['KILLEDDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
+						$content['KILLEDDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br>" . UltraStats_PlayerDetailHoverDamagePctHtml( $tmpval );
 						// ---
 					}
 				}
@@ -655,7 +654,7 @@ if ( isset($_GET['id']) )
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] ] = $hitlocations[$i]['BODYPART'];
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_display" ] = $hitlocations[$i]['DisplayName'];
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_level" ] = 0;
-						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><B>" . $hitlocations[$i]['DisplayName'] . "</B><br><br>Damage<br><font color=#FFFF55><B>0%</B></font>";
+						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $hitlocations[$i]['DisplayName'] . "</b><br><br>Damage<br><span class='us-damage-pct us-damage-pct-zero'><b>0%</b></span>";
 						$content['KILLEDBYDETAILS'][0][ $hitlocations[$i]['BODYPART'] . "_image" ] = $content['BASEPATH'] . "images/player/" . $content['KILLEDBYDETAILS'][0]['modelname'] . "/hover/" . $hitlocations[$i]['BODYPART'] . ".png";
 					}
 				}
@@ -720,7 +719,7 @@ if ( isset($_GET['id']) )
 						// ---
 
 						// --- Set Popup Content
-						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br><font color=" . GetPopupContentColor($tmpval) . "><B>" . $tmpval . "%</B></font>";
+						$content['KILLEDBYDETAILS'][0][ $myHitLocation['BODYPART'] . "_hovertxt" ] = "Hitlocation<br><b>" . $myHitLocation['DisplayName'] . "</b><br><br>Damage<br>" . UltraStats_PlayerDetailHoverDamagePctHtml( $tmpval );
 						// ---
 					}
 				}
@@ -837,6 +836,26 @@ else
 // --- 
 
 // --- Helper functions
+/**
+ * Validates #RRGGBB for inline CSS color in hover markup (gradient from GetPopupContentColor).
+ */
+function UltraStats_PlayerDetailCssHexColor( $hex ) {
+	if ( is_string( $hex ) && preg_match( '/^#[0-9A-Fa-f]{6}$/', $hex ) ) {
+		return $hex;
+	}
+	return '#CC0000';
+}
+
+/**
+ * HTML fragment for damage percentage in hit-location hover (replaces legacy &lt;font color&gt;).
+ */
+function UltraStats_PlayerDetailHoverDamagePctHtml( $pctInt ) {
+	$pctInt = (int) $pctInt;
+	$hex    = UltraStats_PlayerDetailCssHexColor( GetPopupContentColor( $pctInt ) );
+	// Single-quoted attributes keep this fragment safe inside template data attributes.
+	return '<span class=\'us-damage-pct\' style=\'color:' . htmlspecialchars( $hex, ENT_QUOTES, 'UTF-8' ) . '\'><b>' . $pctInt . '%</b></span>';
+}
+
 function GetPopupContentColor( $nValue ) 
 {
 	if		( $nValue < 10 )

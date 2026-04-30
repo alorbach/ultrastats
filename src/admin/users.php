@@ -41,6 +41,44 @@ $content['TITLE'] .= " :: User Admin";
 
 
 // --- BEGIN Custom Code
+
+// Confirmed delete (POST + CSRF): PRG via RedirectResult below.
+if ( ( isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : '' ) === 'POST'
+	&& isset( $_POST['op'], $_POST['id'], $_POST['admin_confirm_delete'] )
+	&& $_POST['op'] === 'delete'
+	&& $_POST['admin_confirm_delete'] === '1' ) {
+
+	if ( ! UltraStats_AdminCsrfPostedTokenMatches() ) {
+		DieWithFriendlyErrorMsg( 'Invalid session security token — please reopen the confirmation page from the users list.' );
+	}
+	UltraStats_AdminCsrfEnsureToken( true );
+
+	if ( ! isset( $_SESSION['SESSION_USERNAME'] ) ) {
+		DieWithFriendlyErrorMsg( $content['LN_USER_ERROR_WTFOMFGGG'] );
+	}
+
+	$content['USERID'] = DB_RemoveBadChars( $_POST['id'] );
+	$uid               = (int) $content['USERID'];
+
+	$result = DB_QueryBound( 'SELECT username FROM ' . STATS_USERS . ' WHERE ID = ?', 'i', array( $uid ) );
+	$myrow  = DB_GetSingleRow( $result, true );
+	if ( ! isset( $myrow['username'] ) ) {
+		$content['ISERROR'] = 'true';
+		$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_IDNOTFOUND'], $content['USERID'] );
+	} elseif ( $_SESSION['SESSION_USERNAME'] === $myrow['username'] ) {
+		$content['ISERROR'] = 'true';
+		$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_DONOTDELURSLF'], $content['USERID'] );
+	} else {
+		$ok = DB_ExecBound( 'DELETE FROM ' . STATS_USERS . ' WHERE ID = ?', 'i', array( $uid ) );
+		if ( ! $ok ) {
+			$content['ISERROR'] = 'true';
+			$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_DELUSER'], $content['USERID'] );
+		} else {
+			RedirectResult( GetAndReplaceLangStr( $content['LN_USER_ERROR_HASBEENDEL'], $myrow['username'] ), 'users.php' );
+		}
+	}
+}
+
 if ( isset($_GET['op']) )
 {
 	if ($_GET['op'] == "add") 
@@ -114,31 +152,15 @@ if ( isset($_GET['op']) )
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_IDNOTFOUND'], $content['USERID'] ); 
 				}
-
-				// --- Ask for deletion first!
-				if ( (!isset($_GET['verify']) || $_GET['verify'] != "yes") )
-				{
-					// This will print an additional secure check which the user needs to confirm and exit the script execution.
-					PrintSecureUserCheck( GetAndReplaceLangStr( $content['LN_USER_WARNDELETEUSER'], $myrow['username'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'] );
-				}
-				// ---
-
-				if ( $_SESSION['SESSION_USERNAME'] == $myrow['username'] ) 
+				else if ( $_SESSION['SESSION_USERNAME'] == $myrow['username'] )
 				{
 					$content['ISERROR'] = "true";
 					$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_DONOTDELURSLF'], $content['USERID'] ); 
 				}
 				else
 				{
-					// do the delete!
-					$ok = DB_ExecBound( "DELETE FROM " . STATS_USERS . " WHERE ID = ?", 'i', array( $uid ) );
-					if ( ! $ok ) {
-						$content['ISERROR'] = "true";
-						$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_USER_ERROR_DELUSER'], $content['USERID'] ); 
-					}
-
-					// Do the final redirect
-					RedirectResult( GetAndReplaceLangStr( $content['LN_USER_ERROR_HASBEENDEL'], $myrow['username'] ) , "users.php" );
+					UltraStats_AdminCsrfEnsureToken();
+					PrintSecureUserCheck( GetAndReplaceLangStr( $content['LN_USER_WARNDELETEUSER'], $myrow['username'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'] );
 				}
 			}
 		}
@@ -149,7 +171,7 @@ if ( isset($_GET['op']) )
 		}
 	}
 
-	if ( isset($_POST['op']) )
+	if ( isset($_POST['op']) && $_POST['op'] !== 'delete' )
 	{
 		if ( isset ($_POST['id']) ) { $content['USERID'] = DB_RemoveBadChars($_POST['id']); } else {$content['USERID'] = ""; }
 		if ( isset ($_POST['username']) ) { $content['USERNAME'] = DB_RemoveBadChars($_POST['username']); } else {$content['USERNAME'] = ""; }
@@ -284,6 +306,10 @@ else
 }
 
 // --- END Custom Code
+
+if ( isset( $content['ISERROR'] ) && $content['ISERROR'] === 'true' && isset( $content['ERROR_MSG'] ) ) {
+	$content['ERROR_MSG'] = UltraStats_h( $content['ERROR_MSG'] );
+}
 
 // --- Parsen and Output
 InitTemplateParser();

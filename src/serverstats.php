@@ -238,7 +238,7 @@ if ( isset($content['serverid']) )
 				$content['PLAYERPAGES'][$i]['mypagebegin'] = ($i * $content['web_maxmapsperpage']);
 
 				if ($content['current_pagebegin'] == $content['PLAYERPAGES'][$i]['mypagebegin'])
-					$content['PLAYERPAGES'][$i]['mypagenumber'] = "<B>-> ".($i+1)." <-</B>";
+					$content['PLAYERPAGES'][$i]['mypagenumber'] = "<b>-> ".($i+1)." <-</b>";
 				else
 					$content['PLAYERPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -253,7 +253,10 @@ if ( isset($content['serverid']) )
 
 	}
 	else
+	{
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_NOSERVERMAPS'];
+	}
 }
 else
 {

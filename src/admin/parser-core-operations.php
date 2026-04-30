@@ -31,10 +31,9 @@ function ParserCore_MaybePrintRunTotalsPrompt() {
 		}
 		return;
 	}
-	print( '<br><center><a href="parser-core.php?op=runtotals"><img src="' . $content['BASEPATH'] . 'images/icons/gears_run.png">&nbsp; ' . $content['LN_RUNTOTALUPDATE'] . '</a></center>' );
+	print( '<br><div class="us-center"><a href="parser-core.php?op=runtotals"><img src="' . $content['BASEPATH'] . 'images/icons/gears_run.png">&nbsp; ' . $content['LN_RUNTOTALUPDATE'] . '</a></div>' );
 	print(
-		'<center><B>Automatically running ' . $content['LN_RUNTOTALUPDATE'] . ' in 10 seconds.</B><br>
-			<script>function usParserReloadToTotals() { location.replace("parser-core.php?op=runtotals"); } setTimeout(usParserReloadToTotals, 10000);</script>'
+		'<div class="us-center us-auto-reload" data-reload-url="parser-core.php?op=runtotals" data-reload-delay="10000"><b>Automatically running ' . $content['LN_RUNTOTALUPDATE'] . ' in 10 seconds.</b><br></div>'
 	);
 }
 

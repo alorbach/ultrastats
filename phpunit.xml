@@ -9,6 +9,7 @@
 		<testsuite name="unit">
 			<file>tests/FunctionsDbHelpersTest.php</file>
 			<file>tests/GamelogFixtureTest.php</file>
+			<file>tests/RedirectSanitizeTest.php</file>
 		</testsuite>
 	</testsuites>
 </phpunit>

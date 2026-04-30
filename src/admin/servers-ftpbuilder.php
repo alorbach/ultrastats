@@ -45,15 +45,15 @@ $content['TITLE'] .= " :: FTP Builder ";
 if ( isset($_GET['id']) || isset($_POST['id']) )
 {
 	//PreInit these values 
-	$content['SERVERID'] = DB_RemoveBadChars($_GET['id']);
+	if ( isset($_POST['id']) ) { $content['SERVERID'] = DB_RemoveBadChars($_POST['id']); } else { $content['SERVERID'] = DB_RemoveBadChars($_GET['id']); }
 
-	$sqlquery = "SELECT ID, ftppath, FTPPassiveMode " . 
-				" FROM " . STATS_SERVERS . 
-				" WHERE ID = " . $content['SERVERID'];
-
-	$result = DB_Query($sqlquery);
+	$result = DB_QueryBound(
+		"SELECT ID, ftppath, FTPPassiveMode FROM " . STATS_SERVERS . " WHERE ID = ?",
+		'i',
+		array( (int) $content['SERVERID'] )
+	);
 	$rows = DB_GetAllRows($result, true);
-	if ( isset($rows ) )
+	if ( ! empty( $rows ) )
 	{
 		// --- only then we continue
 
@@ -104,18 +104,18 @@ if ( isset($_GET['id']) || isset($_POST['id']) )
 							// Get remote filesize
 							$remotefilesize = ftp_size( $connid, $content['GAMELOGFILENAME'] );
 							if ( $remotefilesize == -1 )
-								$content['verifyresults'] .= "<li><font color=\"red\"><B>ERROR</B></font> Remotelogfile " . $content['GAMELOGFILENAME'] . " does not exists!!<br>";
+								$content['verifyresults'] .= '<li><span class="us-error-text"><b>ERROR</b></span> Remotelogfile ' . htmlspecialchars( (string) $content['GAMELOGFILENAME'], ENT_QUOTES, 'UTF-8' ) . " does not exists!!<br>";
 							else
 								$content['verifyresults'] .= "<li>Awesome, Remotelogfile " . $content['GAMELOGFILENAME'] . " does exists!<br><br><b>You did everything right dude ;)</b><br>";
 						}
 						else
-							$content['verifyresults'] .= "<li><font color=\"red\"><B>ERROR</B></font> Couldn't change to the path  " . $content['PATHTOGAMELOG'] . "!<br>";
+							$content['verifyresults'] .= '<li><span class="us-error-text"><b>ERROR</b></span> Couldn\'t change to the path  ' . htmlspecialchars( (string) $content['PATHTOGAMELOG'], ENT_QUOTES, 'UTF-8' ) . "!<br>";
 					}
 					else
-						$content['verifyresults'] .= "<li><font color=\"red\"><B>ERROR</B></font> Couldn't login with user " . $content['USERNAME'] . "!<br>";
+						$content['verifyresults'] .= '<li><span class="us-error-text"><b>ERROR</b></span> Couldn\'t login with user ' . htmlspecialchars( (string) $content['USERNAME'], ENT_QUOTES, 'UTF-8' ) . "!<br>";
 				}
 				else
-					$content['verifyresults'] .= "<li><font color=\"red\"><B>ERROR</B></font> Couldn't connect to server " . $content['SERVERIP'] . " on Port " . $content['SERVERPORT'] . " !<br>";
+					$content['verifyresults'] .= '<li><span class="us-error-text"><b>ERROR</b></span> Couldn\'t connect to server ' . htmlspecialchars( (string) $content['SERVERIP'], ENT_QUOTES, 'UTF-8' ) . ' on Port ' . htmlspecialchars( (string) $content['SERVERPORT'], ENT_QUOTES, 'UTF-8' ) . " !<br>";
 			}
 			if ( isset($_POST['save']) )
 			{
@@ -204,6 +204,9 @@ if ( isset($content['FTPPASSIVEENABLED']) && $content['FTPPASSIVEENABLED'] )
 	$content['FTPPASSIVEENABLED_CHECKED'] = "checked";
 else
 	$content['FTPPASSIVEENABLED_CHECKED'] = "";
+
+if ( isset($content['ISERROR']) && isset($content['ERROR_MSG']) )
+	$content['ERROR_MSG'] = UltraStats_h($content['ERROR_MSG']);
 // --- END Custom Code
 
 // --- Parsen and Output

@@ -20,6 +20,70 @@ async function expectNoPhpRuntimeErrors(page: Page) {
   await expect(page.locator('text=/Parse error:/i')).toHaveCount(0);
 }
 
+async function expectNoPageHorizontalOverflow(page: Page) {
+  const metrics = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    docScroll: document.documentElement.scrollWidth,
+    bodyScroll: document.body.scrollWidth,
+  }));
+  expect(metrics.docScroll, 'document should not force page-level horizontal scroll').toBeLessThanOrEqual(
+    metrics.viewport + 1,
+  );
+  expect(metrics.bodyScroll, 'body should not force page-level horizontal scroll').toBeLessThanOrEqual(
+    metrics.viewport + 1,
+  );
+}
+
+async function expectAdminChromeResponsive(page: Page, route: string) {
+  const chromeMetrics = await page.locator('table.us-chrome-body').evaluate((el) => ({
+    clientWidth: (el as HTMLElement).clientWidth,
+    scrollWidth: (el as HTMLElement).scrollWidth,
+  }));
+  expect(chromeMetrics.scrollWidth, `admin body chrome should not force horizontal scroll on ${route}`).toBeLessThanOrEqual(
+    chromeMetrics.clientWidth + 1,
+  );
+
+  const stripMetrics = await page.locator('table.us-admin-scroll-strip').evaluateAll((els) =>
+    els.map((el) => ({
+      clientWidth: (el as HTMLElement).clientWidth,
+      scrollWidth: (el as HTMLElement).scrollWidth,
+    })),
+  );
+  for (const [index, metrics] of stripMetrics.entries()) {
+    expect(metrics.clientWidth, `admin scroll strip ${index} should fit body chrome on ${route}`).toBeLessThanOrEqual(
+      chromeMetrics.clientWidth,
+    );
+    expect(metrics.scrollWidth, `admin scroll strip ${index} should retain its content on ${route}`).toBeGreaterThanOrEqual(
+      metrics.clientWidth,
+    );
+  }
+}
+
+async function expectPublicChromeResponsive(page: Page, route: string) {
+  const chromeMetrics = await page.locator('table.us-chrome-body').evaluate((el) => ({
+    clientWidth: (el as HTMLElement).clientWidth,
+    scrollWidth: (el as HTMLElement).scrollWidth,
+  }));
+  expect(chromeMetrics.scrollWidth, `public body chrome should not force horizontal scroll on ${route}`).toBeLessThanOrEqual(
+    chromeMetrics.clientWidth + 1,
+  );
+
+  const stripMetrics = await page.locator('table.us-public-scroll-strip').evaluateAll((els) =>
+    els.map((el) => ({
+      clientWidth: (el as HTMLElement).clientWidth,
+      scrollWidth: (el as HTMLElement).scrollWidth,
+    })),
+  );
+  for (const [index, metrics] of stripMetrics.entries()) {
+    expect(metrics.clientWidth, `public scroll strip ${index} should fit body chrome on ${route}`).toBeLessThanOrEqual(
+      chromeMetrics.clientWidth,
+    );
+    expect(metrics.scrollWidth, `public scroll strip ${index} should retain its content on ${route}`).toBeGreaterThanOrEqual(
+      metrics.clientWidth,
+    );
+  }
+}
+
 test.describe.serial('public frontend compatibility smoke', () => {
   test('core public routes render without server errors', async ({ page }) => {
     const routes = [
@@ -41,7 +105,319 @@ test.describe.serial('public frontend compatibility smoke', () => {
       expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
       await expect(page.locator('body')).toBeVisible();
       await expectNoPhpRuntimeErrors(page);
+      await expect(page.locator('table.us-chrome-top')).toHaveCount(1);
+      await expect(page.locator('table.us-chrome-body')).toHaveCount(1);
+      await expect(page.locator('table.us-chrome-footer')).toHaveCount(1);
+
+      const routeSelectors: Record<string, string[]> = {
+        '/index.php': ['#us-header-serverid', 'table.us-top-menu', 'table.us-chrome-pager'],
+        '/players.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/rounds.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/weapons.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/serverstats.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/medals.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/damagetypes.php': ['#us-header-serverid', 'table.us-top-menu a.topmenu1_link'],
+        '/find-players.php': ['form input#search-query[name="search"]', 'form select#search-type[name="searchtype"]'],
+        '/find-chat.php': ['form input#chat-search-query[name="search"]'],
+        '/about.php': ['#us-header-serverid', 'a[target="_blank"]'],
+      };
+
+      for (const selector of routeSelectors[route] ?? []) {
+        await expect(page.locator(selector).first(), `missing selector ${selector} on ${route}`).toBeVisible();
+      }
     }
+  });
+
+  test('representative public pages use HTML5 doctype and utf-8 charset meta', async ({ page }) => {
+    const routes = ['/index.php', '/about.php'];
+    for (const route of routes) {
+      const response = await page.goto(route);
+      expect(response, `no response for ${route}`).not.toBeNull();
+      expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
+      const docName = await page.evaluate(() => document.doctype?.name ?? '');
+      expect(docName, `document.doctype.name for ${route}`).toBe('html');
+      await expect(page.locator('meta[charset="utf-8"]')).toHaveCount(1);
+      await expect(page.locator('meta[name="viewport"][content="width=device-width, initial-scale=1"]')).toHaveCount(
+        1,
+      );
+      await expectNoPhpRuntimeErrors(page);
+
+      if (route === '/index.php') {
+        await expect(page.locator('label[for="us-header-serverid"]')).toHaveCount(1);
+        await expect(page.locator('label[for="us-header-langcode"]')).toHaveCount(1);
+        await expect(page.locator('label[for="us-header-stylename"]')).toHaveCount(1);
+        const topMenuCells = page.locator('table.us-top-menu td.topmenu1');
+        expect(await topMenuCells.count()).toBeGreaterThanOrEqual(6);
+        await expect(page.locator('table.us-chrome-top')).toHaveCount(1);
+        await expect(page.locator('table.us-chrome-body')).toHaveCount(1);
+        await expect(page.locator('table.us-chrome-footer')).toHaveCount(1);
+      }
+    }
+  });
+
+  test('narrow viewport keeps shared header and menu overflow contained', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const routes = [
+      '/index.php',
+      '/players.php',
+      '/rounds.php',
+      '/weapons.php',
+      '/damagetypes.php',
+      '/serverstats.php',
+      '/medals.php',
+      '/info-maps.php',
+      '/info-gametypes.php',
+      '/find-players.php',
+      '/find-chat.php',
+      '/about.php',
+      '/admin/login.php',
+    ];
+
+    for (const route of routes) {
+      const response = await page.goto(route);
+      expect(response, `no response for ${route}`).not.toBeNull();
+      expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+      await expect(page.locator('table.us-chrome-top')).toHaveCount(1);
+      await expectNoPageHorizontalOverflow(page);
+      await expectPublicChromeResponsive(page, route);
+
+      const logoBox = await page.locator('img[name="HeaderLogo"]').boundingBox();
+      expect(logoBox, `header logo should be measurable on ${route}`).not.toBeNull();
+      expect(logoBox!.width, `header logo should fit viewport on ${route}`).toBeLessThanOrEqual(390);
+
+      const menu = page.locator('table.us-top-menu');
+      if ((await menu.count()) > 0) {
+        const menuMetrics = await menu.evaluate((el) => ({
+          clientWidth: (el as HTMLElement).clientWidth,
+          scrollWidth: (el as HTMLElement).scrollWidth,
+        }));
+        expect(menuMetrics.clientWidth, `top menu viewport width on ${route}`).toBeLessThanOrEqual(390);
+        expect(menuMetrics.scrollWidth, `top menu should keep full menu content scrollable on ${route}`).toBeGreaterThan(
+          menuMetrics.clientWidth,
+        );
+      }
+
+      const pager = page.locator('table.us-chrome-pager');
+      if ((await pager.count()) > 0) {
+        const pagerMetrics = await pager.evaluate((el) => ({
+          clientWidth: (el as HTMLElement).clientWidth,
+          scrollWidth: (el as HTMLElement).scrollWidth,
+        }));
+        expect(pagerMetrics.clientWidth, `pager viewport width on ${route}`).toBeLessThanOrEqual(390);
+      }
+    }
+
+    const detailHrefs: string[] = [];
+    await page.goto('/players.php');
+    if ((await page.locator('a[href^="players-detail.php?id="]').count()) > 0) {
+      const playerDetailHref = await page.locator('a[href^="players-detail.php?id="]').first().getAttribute('href');
+      if (playerDetailHref) {
+        detailHrefs.push(playerDetailHref);
+      }
+    }
+    await page.goto('/rounds.php');
+    if ((await page.locator('a[href^="rounds-detail.php?id="]').count()) > 0) {
+      const roundDetailHref = await page.locator('a[href^="rounds-detail.php?id="]').first().getAttribute('href');
+      if (roundDetailHref) {
+        detailHrefs.push(roundDetailHref);
+      }
+    }
+    for (const href of detailHrefs) {
+      const response = await page.goto(href);
+      expect(response, `no response for ${href}`).not.toBeNull();
+      expect(response!.status(), `unexpected status for ${href}`).toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+      await expectNoPageHorizontalOverflow(page);
+      await expectPublicChromeResponsive(page, href);
+    }
+
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page.locator('input[name="uname"]').first().isVisible().catch(() => false);
+    test.skip(!loginInputVisible, 'Admin narrow viewport smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    for (const route of [
+      '/admin/index.php',
+      '/admin/parser.php',
+      '/admin/players.php',
+      '/admin/servers.php',
+      '/admin/users.php',
+      '/admin/stringeditor.php',
+      '/admin/upgrade.php',
+    ]) {
+      const response = await page.goto(route);
+      expect(response, `no response for ${route}`).not.toBeNull();
+      expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+      await expectNoPageHorizontalOverflow(page);
+      await expectAdminChromeResponsive(page, route);
+
+      const adminMenu = page.locator('table.us-admin-menu-chrome');
+      await expect(adminMenu).toHaveCount(1);
+      const adminMenuMetrics = await adminMenu.evaluate((el) => ({
+        clientWidth: (el as HTMLElement).clientWidth,
+        scrollWidth: (el as HTMLElement).scrollWidth,
+      }));
+      expect(adminMenuMetrics.clientWidth, `admin menu viewport width on ${route}`).toBeLessThanOrEqual(390);
+      expect(adminMenuMetrics.scrollWidth, `admin menu should keep full menu content scrollable on ${route}`).toBeGreaterThan(
+        adminMenuMetrics.clientWidth,
+      );
+    }
+  });
+
+  test('players list page exposes section title cell when player ranking is enabled', async ({ page }) => {
+    const response = await page.goto('/players.php');
+    expect(response, 'no response for /players.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /players.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (players disabled or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('rounds list page exposes section title cell when round list is enabled', async ({ page }) => {
+    const response = await page.goto('/rounds.php');
+    expect(response, 'no response for /rounds.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /rounds.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (rounds disabled or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('weapons list page exposes section title cell when weapon list is enabled', async ({ page }) => {
+    const response = await page.goto('/weapons.php');
+    expect(response, 'no response for /weapons.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /weapons.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (weapons list off, error state, or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('damage types list page exposes section title cell when list is enabled', async ({ page }) => {
+    const response = await page.goto('/damagetypes.php');
+    expect(response, 'no response for /damagetypes.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /damagetypes.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (damage list off, error state, or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('server stats page exposes section title cell when server list is enabled', async ({ page }) => {
+    const response = await page.goto('/serverstats.php');
+    expect(response, 'no response for /serverstats.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /serverstats.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (server list off, error state, or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('medals page exposes section title cell when medals UI is enabled', async ({ page }) => {
+    const response = await page.goto('/medals.php');
+    expect(response, 'no response for /medals.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /medals.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    if ((await page.locator('td.title').count()) === 0) {
+      test.skip(true, 'td.title absent (medals disabled, error state, or empty install)');
+    }
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('about page exposes section title cell', async ({ page }) => {
+    const response = await page.goto('/about.php');
+    expect(response, 'no response for /about.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /about.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('td.title').first()).toBeVisible();
+  });
+
+  test('alternate shipped themes render index after header style change (dark / codww)', async ({ page }) => {
+    const response = await page.goto('/index.php');
+    expect(response, 'no response for /index.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /index.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const styleSelect = page.locator('#us-header-stylename');
+    await expect(styleSelect).toBeVisible();
+
+    const available: string[] = [];
+    for (const themeName of ['dark', 'codww']) {
+      if ((await styleSelect.locator(`option[value="${themeName}"]`).count()) > 0) {
+        available.push(themeName);
+      }
+    }
+    test.skip(
+      available.length === 0,
+      'Neither dark nor codww theme is listed in the style dropdown (themes/ layout differs).',
+    );
+
+    for (const themeName of available) {
+      await Promise.all([
+        page.waitForURL(/index\.php/i, { timeout: 15000 }),
+        styleSelect.selectOption(themeName),
+      ]);
+      await expectNoPhpRuntimeErrors(page);
+      await expect(page.locator('body')).toBeVisible();
+      await expect(page.locator('table.us-top-menu')).toHaveCount(1);
+    }
+  });
+
+  test('public menu toggles use delegated handlers without inline JavaScript', async ({ page }) => {
+    const response = await page.goto('/index.php');
+    expect(response, 'no response for /index.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /index.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const menu = page.locator('table.us-top-menu');
+    await expect(menu).toHaveCount(1);
+    await expect(menu.locator('[onclick], [onmousemove], [onmouseover], [onmouseout]')).toHaveCount(0);
+
+    const searchToggle = menu.locator('img.us-toggle-display[data-toggle-target="menu_find"]');
+    await expect(searchToggle).toHaveCount(1);
+    await expect(page.locator('#menu_find[data-enhance-timeout="menu_find"]')).toHaveCount(1);
+
+    await searchToggle.click();
+    expect(await page.locator('#menu_find').getAttribute('style')).toContain('display: block');
+
+    await searchToggle.click();
+    expect(await page.locator('#menu_find').getAttribute('style')).toContain('display: none');
+  });
+
+  test('public stat bar popups use delegated handlers without inline JavaScript', async ({ page }) => {
+    let verifiedRoutes = 0;
+
+    for (const route of ['/weapons.php', '/damagetypes.php']) {
+      const response = await page.goto(route);
+      expect(response, `no response for ${route}`).not.toBeNull();
+      expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+
+      await expect(page.locator('[onmouseover], [onmousemove], [onmouseout], [onclick]')).toHaveCount(0);
+
+      const statBar = page.locator('td.us-popup-help[data-popup-content]').first();
+      const statBarCount = await statBar.count();
+      if (statBarCount === 0) {
+        continue;
+      }
+
+      verifiedRoutes += 1;
+      await expect(page.locator('#popupdetails.us-popup-panel')).toHaveCount(1);
+      await statBar.hover();
+      await expect(page.locator('#popupdetails')).toHaveClass(/popupdetails_popup/);
+      await expect(page.locator('#popupcontent')).toContainText(/\S+/);
+    }
+
+    test.skip(verifiedRoutes === 0, 'No delegated stat bar popup targets rendered in current dataset.');
   });
 
   test('install route stays reachable and install error block exposes alert semantics when shown', async ({
@@ -65,6 +441,9 @@ test.describe.serial('public frontend compatibility smoke', () => {
     const findPlayersResponse = await page.goto('/find-players.php');
     expect(findPlayersResponse, 'no response for /find-players.php').not.toBeNull();
     expect(findPlayersResponse!.status(), 'unexpected status for /find-players.php').toBeLessThan(500);
+    await expect(page.locator('body')).toBeVisible();
+    await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('td.title').first()).toBeVisible();
 
     const playersForm = page.locator('form:has(input[name="search"])').first();
     await expect(playersForm.locator('input[name="search"]')).toBeVisible();
@@ -79,6 +458,9 @@ test.describe.serial('public frontend compatibility smoke', () => {
     const findChatResponse = await page.goto('/find-chat.php');
     expect(findChatResponse, 'no response for /find-chat.php').not.toBeNull();
     expect(findChatResponse!.status(), 'unexpected status for /find-chat.php').toBeLessThan(500);
+    await expect(page.locator('body')).toBeVisible();
+    await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('td.title').first()).toBeVisible();
 
     const chatForm = page.locator('form:has(input[name="search"])').first();
     await expect(chatForm.locator('input[name="search"]')).toBeVisible();
@@ -699,6 +1081,78 @@ test.describe.serial('public frontend compatibility smoke', () => {
       }
     }
   });
+
+  test('players-detail time filter year/month selects use us-autosubmit-select when enabled', async ({ page }) => {
+    const listResponse = await page.goto('/players.php');
+    expect(listResponse, 'no response for /players.php').not.toBeNull();
+    expect(listResponse!.status(), 'unexpected status for /players.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const detailLinks = page.locator('a[href*="players-detail.php?id="]');
+    const linkCount = await detailLinks.count();
+    test.skip(linkCount === 0, 'No players detail links in current dataset.');
+
+    const detailHref = await detailLinks.first().getAttribute('href');
+    expect(detailHref, 'players-detail href should be present').toBeTruthy();
+
+    const detailResponse = await page.goto(detailHref!);
+    expect(detailResponse, 'no response for first players-detail route').not.toBeNull();
+    expect(detailResponse!.status(), 'unexpected status for first players-detail route').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const yearSelect = page.locator('form[name="yearidform"] select[name="newyear"]');
+    const yearCount = await yearSelect.count();
+    test.skip(
+      yearCount === 0,
+      'Time filter not rendered (no stats_time data / ENABLETIMEFILTER off) — skip pager autosubmit assertion.',
+    );
+
+    await expect(yearSelect).toHaveClass(/us-autosubmit-select/);
+    expect(
+      await yearSelect.getAttribute('onchange'),
+      'year select should not use inline onchange (Phase 5.2 delegated handler)',
+    ).toBeNull();
+
+    const monthSelect = page.locator('form[name="monthidform"] select[name="newmonth"]');
+    const monthCount = await monthSelect.count();
+    if (monthCount > 0) {
+      await expect(monthSelect).toHaveClass(/us-autosubmit-select/);
+      expect(await monthSelect.getAttribute('onchange')).toBeNull();
+    }
+  });
+
+  test('players-detail hit location map uses delegated hover handlers', async ({ page }) => {
+    const listResponse = await page.goto('/players.php');
+    expect(listResponse, 'no response for /players.php').not.toBeNull();
+    expect(listResponse!.status(), 'unexpected status for /players.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const detailLinks = page.locator('a[href*="players-detail.php?id="]');
+    const linkCount = await detailLinks.count();
+    test.skip(linkCount === 0, 'No players detail links in current dataset.');
+
+    const detailHref = await detailLinks.first().getAttribute('href');
+    expect(detailHref, 'players-detail href should be present').toBeTruthy();
+
+    const detailResponse = await page.goto(detailHref!);
+    expect(detailResponse, 'no response for first players-detail route').not.toBeNull();
+    expect(detailResponse!.status(), 'unexpected status for first players-detail route').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const hitlocPanel = page.locator('.us-hitloc-panel').first();
+    const hitlocCount = await hitlocPanel.count();
+    test.skip(hitlocCount === 0, 'Hit location panel not rendered for selected player.');
+
+    await expect(hitlocPanel.locator('[onmouseover], [onmousemove], [onmouseout]')).toHaveCount(0);
+
+    const hoverPart = hitlocPanel.locator('img.us-player-popup-part[data-popup-content][data-popup-image]').first();
+    const hoverPartCount = await hoverPart.count();
+    test.skip(hoverPartCount === 0, 'Hit location hover parts not rendered for selected player.');
+
+    await hoverPart.hover();
+    await expect(page.locator('#popupdetails')).toHaveClass(/popupdetails_popup/);
+    await expect(page.locator('#popupcontent')).toContainText(/\S+/);
+  });
 });
 
 test.describe.serial('admin compatibility smoke', () => {
@@ -730,6 +1184,15 @@ test.describe.serial('admin compatibility smoke', () => {
       expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
       await expect(page.locator('body')).toBeVisible();
       await expectNoPhpRuntimeErrors(page);
+      await expect(page.locator('table.us-chrome-top')).toHaveCount(1);
+      await expect(page.locator('table.us-chrome-body')).toHaveCount(1);
+      await expect(page.locator('table.us-chrome-footer')).toHaveCount(1);
+      await expect(page.locator('table.us-admin-menu-chrome')).toHaveCount(1);
+
+      if (route === '/admin/index.php') {
+        expect(await page.locator('table.us-admin-config-table').count()).toBeGreaterThan(0);
+        expect(await page.locator('table.us-admin-summary-table').count()).toBeGreaterThan(0);
+      }
     }
 
     const configResponse = await page.goto('/admin/index.php');
@@ -740,6 +1203,114 @@ test.describe.serial('admin compatibility smoke', () => {
     const loginResponse = await page.goto('/admin/login.php?op=logoff');
     expect(loginResponse).not.toBeNull();
     await expect(page.locator('input[name="uname"]')).toBeVisible();
+  });
+
+  test('admin index uses HTML5 doctype and utf-8 charset meta', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+    const response = await page.goto('/admin/index.php');
+    expect(response, 'no response for /admin/index.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /admin/index.php').toBeLessThan(500);
+    const docName = await page.evaluate(() => document.doctype?.name ?? '');
+    expect(docName).toBe('html');
+    await expect(page.locator('meta[charset="utf-8"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="viewport"][content="width=device-width, initial-scale=1"]')).toHaveCount(
+      1,
+    );
+    await expect(page.locator('table.us-chrome-top')).toHaveCount(1);
+    await expect(page.locator('table.us-chrome-body')).toHaveCount(1);
+    await expect(page.locator('table.us-chrome-footer')).toHaveCount(1);
+    await expectNoPhpRuntimeErrors(page);
+  });
+
+  test('admin servers tooltips use delegated handlers without inline JavaScript', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+    const response = await page.goto('/admin/servers.php');
+    expect(response, 'no response for /admin/servers.php').not.toBeNull();
+    expect(response!.status(), 'unexpected status for /admin/servers.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    await expect(page.locator('[onmouseover], [onmousemove], [onmouseout], [onclick]')).toHaveCount(0);
+    await expect(page.locator('#popupdetails.us-popup-panel')).toHaveCount(1);
+
+    const tooltipTarget = page.locator('.us-popup-help[data-popup-content]').first();
+    const tooltipCount = await tooltipTarget.count();
+    test.skip(tooltipCount === 0, 'No delegated admin server tooltip target rendered.');
+
+    await tooltipTarget.hover();
+    await expect(page.locator('#popupdetails')).toHaveClass(/popupdetails_popup/);
+    await expect(page.locator('#popupcontent')).toContainText(/\S+/);
+  });
+
+  test('admin result.php sanitizes meta refresh URL and HTML-escapes message', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const safeMsg = 'Saved ok';
+    const okResponse = await page.goto(
+      `/admin/result.php?redir=${encodeURIComponent('servers.php')}&msg=${encodeURIComponent(safeMsg)}`,
+    );
+    expect(okResponse, 'no response for result.php').not.toBeNull();
+    expect(okResponse!.status(), 'unexpected status for result.php').toBeLessThan(500);
+    const okHtml = await okResponse!.text();
+    expect(okHtml, 'result.php should render the escaped flash message before meta refresh').toContain(safeMsg);
+    expect(okHtml, 'result.php should not contain PHP runtime errors').not.toMatch(/Fatal error|Warning:|Parse error|Notice:/i);
+    expect(okHtml, 'meta refresh should point at sanitized relative target').toMatch(
+      /url=servers\.php/i,
+    );
+
+    const extResponse = await page.goto(
+      `/admin/result.php?redir=${encodeURIComponent('https://evil.example/phish')}&msg=${encodeURIComponent('x')}`,
+    );
+    expect(extResponse!.status()).toBeLessThan(500);
+    const extHtml = await extResponse!.text();
+    expect(extHtml).toMatch(/url=index\.php/i);
+
+    const jsResponse = await page.goto(
+      `/admin/result.php?redir=${encodeURIComponent('javascript:alert(1)')}&msg=${encodeURIComponent('x')}`,
+    );
+    expect(jsResponse!.status()).toBeLessThan(500);
+    const jsHtml = await jsResponse!.text();
+    expect(jsHtml).toMatch(/url=index\.php/i);
+
+    const xssResponse = await page.goto(
+      `/admin/result.php?redir=${encodeURIComponent('servers.php')}&msg=${encodeURIComponent(
+        '<script>document.body.setAttribute("data-us-xss","1")</script>',
+      )}`,
+    );
+    expect(xssResponse!.status()).toBeLessThan(500);
+    const xssHtml = await xssResponse!.text();
+    expect(xssHtml).not.toContain('<script>document.body.setAttribute("data-us-xss","1")</script>');
+
+    const noRedirResponse = await page.goto(
+      `/admin/result.php?msg=${encodeURIComponent('hello-only')}`,
+    );
+    expect(noRedirResponse!.status()).toBeLessThan(500);
+    const noRedirHtml = await noRedirResponse!.text();
+    expect(noRedirHtml).not.toMatch(/http-equiv=["']refresh["']/i);
+    expect(noRedirHtml).toContain('hello-only');
   });
 
   test('admin shell header logo and footer external links keep safe blank-target rel', async ({ page }) => {
@@ -798,6 +1369,7 @@ test.describe.serial('admin compatibility smoke', () => {
     await expect(page.locator('input[name="playerfilter"]')).toHaveCount(1);
     await expect(page.locator('input#admin-player-filter[name="playerfilter"]')).toHaveCount(1);
     await expect(page.locator('label[for="admin-player-filter"]')).toHaveCount(1);
+    await expect(page.locator('.us-admin-player-filter-bar')).toHaveCount(1);
     await expect(page.locator('input[name="start"]')).toHaveCount(1);
 
     const clanActionCount = await page.locator('a[href*="playerop=setclanmember"]').count();
@@ -810,6 +1382,7 @@ test.describe.serial('admin compatibility smoke', () => {
     await expect(page.locator('a[href*="playerop=setban"]').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href*="players.php?op=edit&id="]:has(img[src*="images/icons/edit.png"])').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href*="op=delete&id="]:has(img[src*="images/icons/delete.png"])').first()).toHaveAttribute('aria-label', /\S+/);
+    await expect(page.locator('a[href*="op=delete&id="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
     await expect(page.locator('a[href*="playerop=setclanmember"] img[aria-hidden="true"][alt=""]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="playerop=setban"] img[aria-hidden="true"][alt=""]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="players.php?op=edit&id="]').first()).toBeVisible();
@@ -883,15 +1456,133 @@ test.describe.serial('admin compatibility smoke', () => {
     expect(verifyResponse!.status(), 'unexpected status for players delete verify view').toBeLessThan(500);
     await expectNoPhpRuntimeErrors(page);
 
-    const confirmDeleteLink = page.locator('a[href*="op=delete&id="][href*="verify=yes"]').first();
-    await expect(confirmDeleteLink).toHaveAttribute('aria-label', /\S+/);
-    await expect(confirmDeleteLink.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('alt', '');
-    await expect(confirmDeleteLink.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('aria-hidden', 'true');
+    const confirmForm = page.locator('form[action="players.php"][method="post"]').first();
+    await expect(confirmForm.locator('input[name="op"][value="delete"]')).toHaveCount(1);
+    await expect(confirmForm.locator('input[name="admin_confirm_player_delete"][value="1"]')).toHaveCount(1);
+    await expect(confirmForm.locator('input[name="ultrastats_csrf"]')).toHaveCount(1);
+    await expect(page.locator('a[href*="verify=yes"]')).toHaveCount(0);
+    const confirmSubmit = confirmForm.locator('button[type="submit"][aria-label]').first();
+    await expect(confirmSubmit).toHaveAttribute('aria-label', /\S+/);
+    await expect(confirmSubmit.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('alt', '');
+    await expect(confirmSubmit.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('aria-hidden', 'true');
 
-    const backLink = page.locator('a[href="javascript:history.back;"]').first();
+    const backLink = page.locator('a.us-history-back[href*="players.php"]').first();
     await expect(backLink).toHaveAttribute('aria-label', /\S+/);
     await expect(backLink.locator('img[src*="images/icons/redo.png"]')).toHaveAttribute('alt', '');
     await expect(backLink.locator('img[src*="images/icons/redo.png"]')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  test('admin players rejects POST delete without valid CSRF token', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const resp = await page.request.post('/admin/players.php', {
+      form: {
+        op: 'delete',
+        id: '99999',
+        admin_confirm_player_delete: '1',
+        playerfilter: '',
+        start: '0',
+        ultrastats_csrf: '__invalid_csrf_token__',
+      },
+    });
+    expect(resp.status(), 'CSRF rejection should return HTTP 200 HTML error page').toBeLessThan(500);
+    const body = await resp.text();
+    expect(body).toMatch(/invalid session security token/i);
+    expect(body.toLowerCase()).not.toContain('fatal error');
+  });
+
+  test('admin stringeditor rejects POST delete without valid CSRF token', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const resp = await page.request.post('/admin/stringeditor.php', {
+      form: {
+        op: 'delete',
+        id: '__no_such_string__',
+        lang: 'en',
+        admin_confirm_string_delete: '1',
+        strfilter: '',
+        start: '0',
+        ultrastats_csrf: '__invalid_csrf_token__',
+      },
+    });
+    expect(resp.status(), 'CSRF rejection should return HTTP 200 HTML error page').toBeLessThan(500);
+    const body = await resp.text();
+    expect(body).toMatch(/invalid session security token/i);
+    expect(body.toLowerCase()).not.toContain('fatal error');
+  });
+
+  test('admin users rejects POST delete without valid CSRF token', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    await page.goto('/admin/users.php');
+    const resp = await page.request.post('/admin/users.php', {
+      form: {
+        op: 'delete',
+        id: '99999',
+        admin_confirm_delete: '1',
+        ultrastats_csrf: '__invalid_csrf_token__',
+      },
+    });
+    expect(resp.status(), 'CSRF rejection should return HTTP 200 HTML error page').toBeLessThan(500);
+    const body = await resp.text();
+    expect(body).toMatch(/invalid session security token/i);
+    expect(body.toLowerCase()).not.toContain('fatal error');
+  });
+
+  test('admin users delete confirm uses POST CSRF-backed form when a second row exists', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const usersRows = await page.locator('a[href*="users.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])').count();
+    test.skip(usersRows < 2, 'Need at least two user rows to confirm delete without locking out the only admin by mistake.');
+
+    const secondDelete = page.locator('a[href*="users.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])').nth(1);
+    await secondDelete.click();
+    await expectNoPhpRuntimeErrors(page);
+
+    const confirmForm = page.locator('form[name="confirmform"][method="post"]');
+    await expect(confirmForm).toHaveCount(1);
+    await expect(confirmForm).toHaveAttribute('action', /users\.php$/i);
+
+    await expect(page.locator('input[name="ultrastats_csrf"]').first()).toHaveAttribute('name', 'ultrastats_csrf');
+    const csrfLen = await page.locator('input[name="ultrastats_csrf"]').first().getAttribute('value');
+    expect(csrfLen && csrfLen.length).toBeGreaterThan(16);
+
+    await expect(page.locator('input[name="admin_confirm_delete"][value="1"]')).toHaveCount(1);
+    await expect(page.locator('input[name="op"][value="delete"]')).toHaveCount(1);
+    await expect(page.locator('a[href*="verify=yes"]')).toHaveCount(0);
+    await expect(page.locator('a.us-history-back[href="users.php"][aria-label]').first()).toHaveCount(1);
   });
 
   test('admin users list keeps non-destructive action label contract', async ({ page }) => {
@@ -913,11 +1604,47 @@ test.describe.serial('admin compatibility smoke', () => {
 
     await expect(page.locator('a[href*="users.php?op=edit&id="]:has(img[src*="images/icons/edit.png"])').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href*="users.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])').first()).toHaveAttribute('aria-label', /\S+/);
+    await expect(page.locator('a[href*="users.php?op=delete&id="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
     await expect(page.locator('a[href="users.php?op=add"]').first()).toHaveAttribute('aria-label', /\S+/);
 
     await expect(page.locator('a[href*="users.php?op=edit&id="] img[src*="images/icons/edit.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="users.php?op=delete&id="] img[src*="images/icons/delete.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href="users.php?op=add"] img[src*="images/icons/add.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
+
+    const addResponse = await page.goto('/admin/users.php?op=add');
+    expect(addResponse, 'no response for /admin/users.php add view').not.toBeNull();
+    expect(addResponse!.status(), 'unexpected status for /admin/users.php add view').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const userFormFields = [
+      ['admin-user-username', 'username'],
+      ['admin-user-password1', 'password1'],
+      ['admin-user-password2', 'password2'],
+    ] as const;
+    for (const [id, name] of userFormFields) {
+      await expect(page.locator(`#${id}[name="${name}"]`), `${name} should keep its field name and stable id`).toHaveCount(1);
+      await expect(page.locator(`label[for="${id}"]`), `${name} should have an associated label`).toHaveCount(1);
+    }
+    await expect(page.locator('#admin-user-username')).toHaveAttribute('required', '');
+    await expect(page.locator('#admin-user-username')).toHaveAttribute('autocomplete', 'username');
+    await expect(page.locator('#admin-user-password1')).toHaveAttribute('autocomplete', 'new-password');
+    await expect(page.locator('#admin-user-password2')).toHaveAttribute('autocomplete', 'new-password');
+    await expect(page.locator('#admin-user-password1[required]')).toHaveCount(0);
+    await expect(page.locator('#admin-user-password2[required]')).toHaveCount(0);
+
+    await page.goto('/admin/users.php');
+    const firstEditHref = await page.locator('a[href*="users.php?op=edit&id="]').first().getAttribute('href');
+    if (firstEditHref) {
+      const editResponse = await page.goto(`/admin/${firstEditHref}`);
+      expect(editResponse, 'no response for /admin/users.php edit view').not.toBeNull();
+      expect(editResponse!.status(), 'unexpected status for /admin/users.php edit view').toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+      for (const [id, name] of userFormFields) {
+        await expect(page.locator(`#${id}[name="${name}"]`), `${name} should keep its field name on edit`).toHaveCount(1);
+      }
+      await expect(page.locator('#admin-user-password1[required]')).toHaveCount(0);
+      await expect(page.locator('#admin-user-password2[required]')).toHaveCount(0);
+    }
   });
 
   test('admin servers list keeps non-destructive action label contract', async ({ page }) => {
@@ -939,6 +1666,9 @@ test.describe.serial('admin compatibility smoke', () => {
 
     await expect(page.locator('a[href*="servers.php?op=edit&id="]:has(img[src*="images/icons/edit.png"])').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href*="parser.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])').first()).toHaveAttribute('aria-label', /\S+/);
+    await expect(page.locator('a[href*="parser.php?op=delete&id="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
+    await expect(page.locator('a[href*="parser.php?op=resetlastlogline&id="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
+    await expect(page.locator('a[href*="parser.php?op=deletestats&id="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
     await expect(page.locator('a[href*="parser.php?op=updatestats&id="]:has(img[src*="images/icons/gears_run.png"])').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href="servers.php?op=add"]').first()).toHaveAttribute('aria-label', /\S+/);
 
@@ -946,6 +1676,138 @@ test.describe.serial('admin compatibility smoke', () => {
     await expect(page.locator('a[href*="parser.php?op=delete&id="] img[src*="images/icons/delete.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="parser.php?op=updatestats&id="] img[src*="images/icons/gears_run.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href="servers.php?op=add"] img[src*="images/icons/add.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
+
+    const addResponse = await page.goto('/admin/servers.php?op=add');
+    expect(addResponse, 'no response for /admin/servers.php add view').not.toBeNull();
+    expect(addResponse!.status(), 'unexpected status for /admin/servers.php add view').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const serverFormFields = [
+      ['admin-server-name', 'servername'],
+      ['admin-server-ip', 'serverip'],
+      ['admin-server-port', 'port'],
+      ['admin-server-description', 'description'],
+      ['admin-server-modname', 'modname'],
+      ['admin-server-adminname', 'adminname'],
+      ['admin-server-clanname', 'clanname'],
+      ['admin-server-adminemail', 'adminemail'],
+      ['admin-server-gameloglocation', 'gameloglocation'],
+      ['admin-server-remotegameloglocation', 'remotegameloglocation'],
+      ['admin-server-ftppassiveenabled', 'ftppassiveenabled'],
+      ['admin-server-logo', 'serverlogo'],
+      ['admin-server-enabled', 'serverenabled'],
+      ['admin-server-parsingenabled', 'parsingenabled'],
+    ] as const;
+    for (const [id, name] of serverFormFields) {
+      await expect(page.locator(`#${id}[name="${name}"]`), `${name} should keep its field name and stable id`).toHaveCount(1);
+      await expect(page.locator(`label[for="${id}"]`), `${name} should have an associated label`).toHaveCount(1);
+    }
+    await expect(page.locator('#admin-server-name')).toHaveAttribute('required', '');
+    await expect(page.locator('#admin-server-ip')).toHaveAttribute('required', '');
+    await expect(page.locator('#admin-server-ip')).toHaveAttribute('maxlength', '16');
+    await expect(page.locator('#admin-server-port')).toHaveAttribute('type', 'number');
+    await expect(page.locator('#admin-server-port')).toHaveAttribute('min', '0');
+    await expect(page.locator('#admin-server-port')).toHaveAttribute('max', '65534');
+    await expect(page.locator('#admin-server-port')).toHaveAttribute('required', '');
+    await expect(page.locator('#admin-server-gameloglocation')).toHaveAttribute('required', '');
+
+    await page.goto('/admin/servers.php');
+    const firstEditHref = await page.locator('a[href*="servers.php?op=edit&id="]').first().getAttribute('href');
+    if (firstEditHref) {
+      const editResponse = await page.goto(`/admin/${firstEditHref}`);
+      expect(editResponse, 'no response for /admin/servers.php edit view').not.toBeNull();
+      expect(editResponse!.status(), 'unexpected status for /admin/servers.php edit view').toBeLessThan(500);
+      for (const [id, name] of serverFormFields) {
+        await expect(page.locator(`#${id}[name="${name}"]`), `${name} should keep its field name on edit`).toHaveCount(1);
+      }
+      await expect(page.locator('input.us-open-popup[data-popup-url*="servers-ftpbuilder.php?id="]').first()).toHaveCount(1);
+
+      const currentGameLogLocation = await page.locator('#admin-server-gameloglocation').inputValue();
+      await page.locator('form input[type="submit"]').click();
+      await expectNoPhpRuntimeErrors(page);
+      await expect(page).toHaveURL(/\/admin\/result\.php\?/);
+      await expect(page.locator('.ErrorMsg .PriorityError')).toHaveCount(0);
+
+      await page.goto(`/admin/${firstEditHref}`);
+      await page.locator('#admin-server-gameloglocation').fill(currentGameLogLocation);
+      await expect(page.locator('#admin-server-gameloglocation')).toHaveValue(currentGameLogLocation);
+
+      await page.locator('#admin-server-gameloglocation').fill('/definitely-not-writable/ultrastats/server.log');
+      await page.locator('form input[type="submit"]').click();
+      await expectNoPhpRuntimeErrors(page);
+      await expect(page.locator('.ErrorMsg[role="alert"][aria-live="assertive"] .PriorityError')).toBeVisible();
+    }
+  });
+
+  test('admin FTP builder preview uses delegated input handler', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const serversResponse = await page.goto('/admin/servers.php');
+    expect(serversResponse, 'no response for /admin/servers.php').not.toBeNull();
+    expect(serversResponse!.status(), 'unexpected status for /admin/servers.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const firstEditHref = await page.locator('a[href*="servers.php?op=edit&id="]').first().getAttribute('href');
+    test.skip(!firstEditHref, 'No editable server row available for FTP builder smoke.');
+
+    const editResponse = await page.goto(`/admin/${firstEditHref!}`);
+    expect(editResponse, 'no response for /admin/servers.php edit view').not.toBeNull();
+    expect(editResponse!.status(), 'unexpected status for /admin/servers.php edit view').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const builderButton = page.locator('input.us-open-popup[data-popup-url*="servers-ftpbuilder.php?id="]').first();
+    await expect(builderButton).toHaveCount(1);
+    const builderUrl = await builderButton.getAttribute('data-popup-url');
+    expect(builderUrl, 'FTP builder popup URL should be present').toBeTruthy();
+
+    const builderResponse = await page.goto(`/admin/${builderUrl!}`);
+    expect(builderResponse, 'no response for /admin/servers-ftpbuilder.php').not.toBeNull();
+    expect(builderResponse!.status(), 'unexpected status for /admin/servers-ftpbuilder.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    await expect(page.locator('script:not([src])')).toHaveCount(0);
+    await expect(page.locator('.us-admin-ftpbuilder-position[data-popup-center-width="500"][data-popup-center-height="500"]')).toHaveCount(1);
+    const ftpForm = page.locator('form[name="ftpcheck"].us-ftp-builder-form');
+    await expect(ftpForm).toHaveCount(1);
+    await expect(page.locator('input.us-admin-ftpbuilder-close')).toHaveCount(0);
+    expect(await page.evaluate(() => typeof (window as any).UltraStatsUI?.UltraStatsAdminCloseFtpBuilderPopup)).toBe(
+      'function',
+    );
+
+    const ftpFields = ['serverip', 'serverport', 'username', 'password', 'pathtogamelog', 'gamelogfilename'];
+    for (const fieldName of ftpFields) {
+      const field = ftpForm.locator(`input[name="${fieldName}"]`);
+      await expect(field).toHaveCount(1);
+      expect(await field.getAttribute('onkeyup'), `${fieldName} should not use inline onkeyup`).toBeNull();
+    }
+
+    await ftpForm.locator('input[name="serverip"]').fill('192.0.2.55');
+    await ftpForm.locator('input[name="serverport"]').fill('2121');
+    await ftpForm.locator('input[name="username"]').fill('demo');
+    await ftpForm.locator('input[name="password"]').fill('secret');
+    await ftpForm.locator('input[name="pathtogamelog"]').fill('/logs/');
+    await ftpForm.locator('input[name="gamelogfilename"]').fill('server.log');
+
+    await expect(page.locator('#preview')).toHaveText('ftp://demo:secret@192.0.2.55:2121/logs/server.log');
+    expect(
+      await page.evaluate(() => document.getElementById('preview')?.innerHTML),
+      'FTP preview should be plain text, not interpreted HTML',
+    ).toBe('ftp://demo:secret@192.0.2.55:2121/logs/server.log');
+    expect(await page.evaluate(() => typeof (window as any).UltraStatsUI?.updateftpurl)).toBe('function');
+
+    const invalidBuilderResponse = await page.goto('/admin/servers-ftpbuilder.php?id=999999');
+    expect(invalidBuilderResponse, 'no response for invalid FTP builder server id').not.toBeNull();
+    expect(invalidBuilderResponse!.status(), 'unexpected status for invalid FTP builder server id').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('.ErrorMsg[role="alert"][aria-live="assertive"] .PriorityError')).toBeVisible();
   });
 
   test('admin stringeditor keeps non-destructive label and action icon contract', async ({ page }) => {
@@ -966,14 +1828,18 @@ test.describe.serial('admin compatibility smoke', () => {
     await expectNoPhpRuntimeErrors(page);
 
     await expect(page.locator('input#admin-string-filter[name="strfilter"]')).toHaveCount(1);
+    await expect(page.locator('input#admin-string-filter[name="strfilter"]')).toHaveAttribute('type', 'text');
     await expect(page.locator('label[for="admin-string-filter"]')).toHaveCount(1);
     await expect(page.locator('a[href="stringeditor.php?op=add"]').first()).toHaveAttribute('aria-label', /\S+/);
     await expect(page.locator('a[href="stringeditor.php?op=add"] img[src*="images/icons/add.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
 
     const editActionLink = page.locator('a[href*="stringeditor.php?op=edit&id="]:has(img[src*="images/icons/edit.png"])').first();
     await expect(editActionLink).toHaveAttribute('aria-label', /\S+/);
+    const editHref = await editActionLink.getAttribute('href');
+    expect(editHref, 'string editor edit href should be present').toBeTruthy();
     const deleteActionLink = page.locator('a[href*="stringeditor.php"][href*="op=delete"][href*="lang="]:has(img[src*="images/icons/delete.png"])').first();
     await expect(deleteActionLink).toHaveAttribute('aria-label', /\S+/);
+    await expect(page.locator('a[href*="stringeditor.php"][href*="op=delete"][href*="lang="].us-confirm-nav').first()).toHaveAttribute('data-confirm-message', /\S+/);
 
     const addFormResponse = await page.goto('/admin/stringeditor.php?op=add');
     expect(addFormResponse, 'no response for /admin/stringeditor.php?op=add').not.toBeNull();
@@ -981,11 +1847,22 @@ test.describe.serial('admin compatibility smoke', () => {
     await expectNoPhpRuntimeErrors(page);
 
     await expect(page.locator('input#admin-string-id[name="id"]')).toHaveCount(1);
+    await expect(page.locator('input#admin-string-id[name="id"]')).toHaveAttribute('type', 'text');
+    await expect(page.locator('input#admin-string-id[name="id"]')).toHaveAttribute('required', '');
+    await expect(page.locator('input#admin-string-id[name="id"]')).toHaveAttribute('autocomplete', 'off');
     await expect(page.locator('label[for="admin-string-id"]')).toHaveCount(1);
     await expect(page.locator('select#admin-string-langcode[name="langcode"]')).toHaveCount(1);
     await expect(page.locator('label[for="admin-string-langcode"]')).toHaveCount(1);
     await expect(page.locator('textarea#admin-string-text[name="text"]')).toHaveCount(1);
     await expect(page.locator('label[for="admin-string-text"]')).toHaveCount(1);
+
+    const editFormResponse = await page.goto(`/admin/${editHref!}`);
+    expect(editFormResponse, 'no response for /admin/stringeditor.php edit view').not.toBeNull();
+    expect(editFormResponse!.status(), 'unexpected status for /admin/stringeditor.php edit view').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('input#admin-string-id[name="id"]')).toHaveAttribute('required', '');
+    await expect(page.locator('select#admin-string-langcode[name="langcode"]')).toHaveCount(1);
+    await expect(page.locator('textarea#admin-string-text[name="text"]')).toHaveCount(1);
   });
 
   test('admin index keeps non-destructive general config label contract', async ({ page }) => {
@@ -1130,6 +2007,8 @@ test.describe.serial('admin compatibility smoke', () => {
     expect(indexResponse!.status(), 'unexpected status for /admin/index.php').toBeLessThan(500);
     await expect(page.locator('body')).toBeVisible();
     await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('script:not([src])')).toHaveCount(0);
+    await expect(page.locator('#medal-autorecalc-status')).toHaveAttribute('data-recalc-url', 'parser-sse.php?op=calcmedalsonly');
 
     const proToggle = page.locator('input#admin-medal-group-pro.us-medal-group-toggle[data-us-medal-group="pro"]');
     const antiToggle = page.locator('input#admin-medal-group-anti.us-medal-group-toggle[data-us-medal-group="anti"]');
@@ -1221,7 +2100,7 @@ test.describe.serial('admin compatibility smoke', () => {
       await expect(errorAlertBoxes.first()).toContainText(/\S+/);
       await expect(errorAlertBoxes.first()).toContainText(ADMIN_ERROR_PATTERN_CORE);
       await expect(errorAlertBoxes.first()).toContainText(ADMIN_UPGRADE_ERROR_PATTERN);
-      await expect(page.locator('a[href="javascript:history.back();"][aria-label]').first()).toHaveCount(1);
+      await expect(page.locator('a.us-history-back[href="index.php"][aria-label]').first()).toHaveCount(1);
     }
   });
 
@@ -1252,6 +2131,204 @@ test.describe.serial('admin compatibility smoke', () => {
     await expect(page.locator('a[href*="servers.php?op=edit&id="] img[src*="images/icons/edit.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="parser.php?op=delete&id="] img[src*="images/icons/delete.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
     await expect(page.locator('a[href*="parser.php?op=updatestats&id="] img[src*="images/icons/gears_run.png"][alt=""][aria-hidden="true"]').first()).toHaveCount(1);
+  });
+
+  test('classic parser destructive confirmations use nonce-backed links', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const serversResponse = await page.goto('/admin/servers.php');
+    expect(serversResponse, 'no response for /admin/servers.php').not.toBeNull();
+    expect(serversResponse!.status(), 'unexpected status for /admin/servers.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const deleteHref = await page
+      .locator('a[href*="parser.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])')
+      .first()
+      .getAttribute('href');
+    test.skip(!deleteHref, 'No parser delete link rendered for current server list.');
+
+    const serverId = deleteHref!.match(/[?&]id=(\d+)/)?.[1];
+    test.skip(!serverId, 'Could not extract a server id from parser delete link.');
+
+    for (const operation of ['delete', 'deletestats', 'resetlastlogline'] as const) {
+      const response = await page.goto(`/admin/parser-core.php?op=${operation}&id=${serverId}`);
+      expect(response, `no response for parser-core ${operation} confirmation`).not.toBeNull();
+      expect(response!.status(), `unexpected status for parser-core ${operation} confirmation`).toBeLessThan(500);
+      await expectNoPhpRuntimeErrors(page);
+
+      await expect(page.locator('a[href*="verify=yes"]'), `${operation} should not expose legacy verify=yes links`).toHaveCount(0);
+      const confirmLink = page.locator(`a[href*="parser-core.php?op=${operation}"][href*="id=${serverId}"][href*="parser_confirm_nonce="]`).first();
+      await expect(confirmLink, `${operation} confirmation should expose a nonce-backed Yes link`).toHaveCount(1);
+      const confirmHref = await confirmLink.getAttribute('href');
+      expect(confirmHref, `${operation} confirmation href should be present`).toBeTruthy();
+      expect(confirmHref!, `${operation} confirmation should include exactly one parser nonce`).toMatch(
+        /^parser-core\.php\?op=[a-z]+&id=\d+&parser_confirm_nonce=[A-Fa-f0-9]{32}$/,
+      );
+
+      await expect(page.locator('a.us-history-back[href="parser.php"][aria-label]').first()).toHaveCount(1);
+    }
+  });
+
+  test('parser SSE destructive confirmations emit nonce-backed payloads', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const serversResponse = await page.goto('/admin/servers.php');
+    expect(serversResponse, 'no response for /admin/servers.php').not.toBeNull();
+    expect(serversResponse!.status(), 'unexpected status for /admin/servers.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const deleteHref = await page
+      .locator('a[href*="parser.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])')
+      .first()
+      .getAttribute('href');
+    test.skip(!deleteHref, 'No parser delete link rendered for current server list.');
+
+    const serverId = deleteHref!.match(/[?&]id=(\d+)/)?.[1];
+    test.skip(!serverId, 'Could not extract a server id from parser delete link.');
+
+    for (const operation of ['delete', 'deletestats', 'resetlastlogline'] as const) {
+      const response = await page.request.get(`/admin/parser-sse.php?op=${operation}&id=${serverId}`);
+      expect(response.status(), `unexpected status for parser-sse ${operation} confirmation`).toBeLessThan(500);
+      expect(response.headers()['content-type'] ?? '', `${operation} should be served as SSE`).toContain(
+        'text/event-stream',
+      );
+      const body = await response.text();
+      expect(body, `${operation} SSE should not expose legacy verify=yes links`).not.toContain('verify=yes');
+      expect(body, `${operation} SSE should emit confirm_action`).toContain('event: confirm_action');
+      expect(body, `${operation} SSE should include a nonce-backed confirmUrl`).toMatch(
+        new RegExp(
+          `"confirmUrl":"parser-sse\\.php\\?op=${operation}&id=${serverId}&parser_confirm_nonce=[A-Fa-f0-9]{32}"`,
+        ),
+      );
+    }
+  });
+
+  test('embedded parser confirm panel resumes with nonce-backed EventSource URL', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const serversResponse = await page.goto('/admin/servers.php');
+    expect(serversResponse, 'no response for /admin/servers.php').not.toBeNull();
+    expect(serversResponse!.status(), 'unexpected status for /admin/servers.php').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const deleteHref = await page
+      .locator('a[href*="parser.php?op=delete&id="]:has(img[src*="images/icons/delete.png"])')
+      .first()
+      .getAttribute('href');
+    test.skip(!deleteHref, 'No parser delete link rendered for current server list.');
+
+    const serverId = deleteHref!.match(/[?&]id=(\d+)/)?.[1];
+    test.skip(!serverId, 'Could not extract a server id from parser delete link.');
+
+    await page.addInitScript(() => {
+      const win = window as unknown as {
+        __usEventSourceUrls?: string[];
+        __usEventSourceInstances?: Array<{
+          url: string;
+          readyState: number;
+          listeners: Record<string, Array<(ev: { data: string }) => void>>;
+          addEventListener: (type: string, cb: (ev: { data: string }) => void) => void;
+          close: () => void;
+          emit: (type: string, payload: unknown) => void;
+        }>;
+        EventSource: typeof EventSource;
+      };
+      win.__usEventSourceUrls = [];
+      win.__usEventSourceInstances = [];
+      class MockEventSource {
+        static CONNECTING = 0;
+        static OPEN = 1;
+        static CLOSED = 2;
+        url: string;
+        readyState = MockEventSource.OPEN;
+        listeners: Record<string, Array<(ev: { data: string }) => void>> = {};
+        constructor(url: string) {
+          this.url = String(url);
+          win.__usEventSourceUrls!.push(this.url);
+          win.__usEventSourceInstances!.push(this);
+        }
+        addEventListener(type: string, cb: (ev: { data: string }) => void) {
+          (this.listeners[type] ||= []).push(cb);
+        }
+        close() {
+          this.readyState = MockEventSource.CLOSED;
+        }
+        emit(type: string, payload: unknown) {
+          const ev = { data: JSON.stringify(payload) };
+          for (const cb of this.listeners[type] || []) {
+            cb(ev);
+          }
+        }
+      }
+      win.EventSource = MockEventSource as unknown as typeof EventSource;
+    });
+
+    const parserResponse = await page.goto(`/admin/parser.php?op=delete&id=${serverId}`);
+    expect(parserResponse, 'no response for mocked embedded parser delete view').not.toBeNull();
+    expect(parserResponse!.status(), 'unexpected status for mocked embedded parser delete view').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    await page.waitForFunction(() => {
+      const win = window as unknown as { __usEventSourceInstances?: unknown[] };
+      return (win.__usEventSourceInstances || []).length > 0;
+    });
+
+    const confirmUrl = `parser-sse.php?op=delete&id=${serverId}&parser_confirm_nonce=1234567890abcdef1234567890abcdef`;
+    await page.evaluate((url) => {
+      const win = window as unknown as {
+        __usEventSourceInstances: Array<{ emit: (type: string, payload: unknown) => void }>;
+      };
+      win.__usEventSourceInstances[0].emit('confirm_action', {
+        t: 'confirm',
+        warning: 'Confirm mocked delete',
+        confirmUrl: url,
+        confirmLabel: 'Yes',
+        cancelLabel: 'No',
+      });
+    }, confirmUrl);
+
+    const confirmBox = page.locator('#parser-confirm-box.us-parser-confirm-banner');
+    await expect(confirmBox).toBeVisible();
+    await expect(confirmBox).toHaveAttribute('role', 'alert');
+    await expect(confirmBox.locator('button.us-parser-confirm-yes')).toHaveAttribute('aria-label', 'Yes');
+    await expect(confirmBox.locator('button.us-parser-confirm-no')).toHaveAttribute('aria-label', 'No');
+
+    await confirmBox.locator('button.us-parser-confirm-yes').click();
+    await page.waitForFunction((url) => {
+      const win = window as unknown as { __usEventSourceUrls?: string[] };
+      return (win.__usEventSourceUrls || []).includes(url as string);
+    }, confirmUrl);
+
+    const eventSourceUrls = await page.evaluate(() => {
+      const win = window as unknown as { __usEventSourceUrls?: string[] };
+      return win.__usEventSourceUrls || [];
+    });
+    expect(eventSourceUrls[0]).toBe(`parser-sse.php?op=delete&id=${serverId}`);
+    expect(eventSourceUrls).toContain(confirmUrl);
   });
 
   test('admin login keeps non-destructive label and error alert contract', async ({ page }) => {
@@ -1312,12 +2389,17 @@ test.describe.serial('admin compatibility smoke', () => {
     expect(verifyResponse!.status(), 'unexpected status for stringeditor delete verify view').toBeLessThan(500);
     await expectNoPhpRuntimeErrors(page);
 
-    const confirmDeleteLink = page.locator('a[href*="stringeditor.php"][href*="op=delete"][href*="verify=yes"]').first();
-    await expect(confirmDeleteLink).toHaveAttribute('aria-label', /\S+/);
-    await expect(confirmDeleteLink.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('alt', '');
-    await expect(confirmDeleteLink.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('aria-hidden', 'true');
+    const confirmForm = page.locator('form[action="stringeditor.php"][method="post"]').first();
+    await expect(confirmForm.locator('input[name="op"][value="delete"]')).toHaveCount(1);
+    await expect(confirmForm.locator('input[name="admin_confirm_string_delete"][value="1"]')).toHaveCount(1);
+    await expect(confirmForm.locator('input[name="ultrastats_csrf"]')).toHaveCount(1);
+    await expect(page.locator('a[href*="verify=yes"]')).toHaveCount(0);
+    const confirmSubmit = confirmForm.locator('button[type="submit"][aria-label]').first();
+    await expect(confirmSubmit).toHaveAttribute('aria-label', /\S+/);
+    await expect(confirmSubmit.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('alt', '');
+    await expect(confirmSubmit.locator('img[src*="images/icons/check.png"]')).toHaveAttribute('aria-hidden', 'true');
 
-    const backLink = page.locator('a[href="javascript:history.back();"]').first();
+    const backLink = page.locator('a.us-history-back[href*="stringeditor.php"]').first();
     await expect(backLink).toHaveAttribute('aria-label', /\S+/);
     await expect(backLink.locator('img[src*="images/icons/redo.png"]')).toHaveAttribute('alt', '');
     await expect(backLink.locator('img[src*="images/icons/redo.png"]')).toHaveAttribute('aria-hidden', 'true');
@@ -1339,15 +2421,17 @@ test.describe.serial('admin compatibility smoke', () => {
     expect(parserResponse!.status(), 'unexpected status for /admin/parser.php?op=runtotals').toBeLessThan(500);
     await expect(page.locator('body')).toBeVisible();
     await expectNoPhpRuntimeErrors(page);
+    await expect(page.locator('script:not([src])')).toHaveCount(0);
 
-    const streamStatus = page.locator('#parser-stream-status');
+    await expect(page.locator('.us-parser-embed-toolbar')).toHaveCount(1);
+    const streamStatus = page.locator('#parser-stream-status.us-parser-stream-status');
     const statusCount = await streamStatus.count();
     test.skip(statusCount === 0, 'Parser embed toolbar is not rendered for current parser route state.');
 
     await expect(streamStatus).toHaveAttribute('role', 'status');
     await expect(streamStatus).toHaveAttribute('aria-live', 'polite');
 
-    const cancelButton = page.locator('#parser-cancel-btn');
+    const cancelButton = page.locator('#parser-cancel-btn.us-parser-cancel-btn');
     await expect(cancelButton).toHaveAttribute('aria-label', /\S+/);
     await expect(cancelButton).toHaveAttribute('aria-controls', 'parser-log-wrap');
   });
@@ -1444,6 +2528,36 @@ test.describe.serial('admin compatibility smoke', () => {
     await expect(errorBox).toContainText(/\S+/);
     await expect(errorBox).toContainText(ADMIN_ERROR_PATTERN_CORE);
     await expect(errorBox).toContainText(ADMIN_PARSER_ERROR_PATTERN);
+
+    const missingServerResponse = await page.goto('/admin/parser.php?op=updatestats&id=999999');
+    expect(missingServerResponse, 'no response for /admin/parser.php missing server id').not.toBeNull();
+    expect(missingServerResponse!.status(), 'unexpected status for /admin/parser.php missing server id').toBeLessThan(500);
+    await expectNoPhpRuntimeErrors(page);
+
+    const missingServerErrorBox = page.locator('.ErrorMsg[role="alert"][aria-live="assertive"]').first();
+    await expect(missingServerErrorBox).toHaveCount(1);
+    await expect(missingServerErrorBox).toBeVisible();
+    await expect(missingServerErrorBox).toContainText('999999');
+    await expect(missingServerErrorBox).toContainText(/server|id|not found/i);
+  });
+
+  test('classic parser shell uses shared JS for autoscroll without inline script', async ({ page }) => {
+    await page.goto('/admin/login.php');
+    const loginInputVisible = await page
+      .locator('input[name="uname"]')
+      .first()
+      .isVisible()
+      .catch(() => false);
+    test.skip(!loginInputVisible, 'Admin smoke requires an installed app and reachable login form.');
+
+    await loginAsAdmin(page);
+
+    const parserResponse = await page.goto('/admin/parser-core.php?op=foo&id=1');
+    expect(parserResponse, 'no response for /admin/parser-core.php?op=foo&id=1').not.toBeNull();
+    expect(parserResponse!.status(), 'unexpected status for /admin/parser-core.php?op=foo&id=1').toBeLessThan(500);
+    await expect(page.locator('body[data-parser-autoscroll="true"]')).toHaveCount(1);
+    await expect(page.locator('script[src$="/js/common.js"], script[src="../js/common.js"]')).toHaveCount(1);
+    await expect(page.locator('script:not([src])')).toHaveCount(0);
+    await expectNoPhpRuntimeErrors(page);
   });
 });
-

@@ -2,20 +2,20 @@
 
 <br>
 
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-public-responsive-panel">
 <tr>
 	<td rowspan="2" width="10" valign="top" nowrap>&nbsp;</td>
 	<td width="100%" valign="top" align="center">
 
 		<form action="" method="GET">
-		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-responsive-panel">
 		<tr>
 			<td colspan="3" class="title" width="400" nowrap>{LN_SEARCH_CHATTITLE}</td>
 		</tr>
 		</table>
-		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
+		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border us-public-search-table">
 		<tr>
-			<td class="cellmenu1" nowrap><label for="chat-search-query"><B>{LN_SEARCH_CHATSTRING}</B></label></td>
+			<td class="cellmenu1" nowrap><label for="chat-search-query"><b>{LN_SEARCH_CHATSTRING}</b></label></td>
 			<td class="line1"><input type="text" id="chat-search-query" name="search" value="{searchfor}" size="40" maxlength="32"></td>
 			<td class="line0" rowspan="3" valign="middle" width="100" align="center"><input type="submit" value="Search"></td>
 		</tr>
@@ -28,31 +28,32 @@
 <tr>
 	<td width="100%" valign="top" align="center">
 	<!-- IF chatsfound="false" -->
-	<center>
-		<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
-			<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-			<p>{chatserror}</p>
-			</div>
-		<br><br>
-	</center>
 	<br><br>
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
+		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
+		<p>{ERROR_DETAILS}</p>
+		</div>
+	<br><br>
+</div>
+<br><br>
 	<!-- ENDIF chatsfound="false" -->
 
 	<!-- IF chatsfound="true" -->
-		<table width="600" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<table width="600" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-scroll-strip">
 		<tr>
 			<td colspan="4" class="title" width="400" nowrap>{LN_SEARCH_FOUND} '{searchfor}'</td>
 		</tr>
 		<tr>
-			<td width="20" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-			<td width="100" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
-			<td width="100%" colspan="2" class="cellmenu1" align="center"><B>{LN_ROUNDS_CHATENTRY}</B></td>
+			<td width="20" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+			<td width="100" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
+			<td width="100%" colspan="2" class="cellmenu1" align="center"><b>{LN_ROUNDS_CHATENTRY}</b></td>
 		</tr>
 
 		<!-- BEGIN ChatLog -->
 		<tr>
-			<td align="right" class="{cssclass}" valign="top"><A HREF="rounds-detail.php?id={ID}{additional_url}">{ID}</A></td>
-			<td class="{cssclass}" valign="top"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</A></td>
+			<td align="right" class="{cssclass}" valign="top"><a href="rounds-detail.php?id={ID}{additional_url}">{ID}</a></td>
+			<td class="{cssclass}" valign="top"><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</a></td>
 			<td class="{cssclass}" valign="top">{LN_ROUNDS_SAID}</td>
 			<td class="{cssclass}"><b>{TextSaidAsHtml}</b></td>
 		</tr>

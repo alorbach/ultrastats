@@ -1,14 +1,14 @@
-<!-- INCLUDE include_header.html --> 
+<!-- INCLUDE include_header.html -->
 
 <!-- IF iserror="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-		<p>{LN_ERROR_INVALIDMEDAL}</p>
+		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF iserror="true" -->
 
@@ -30,13 +30,12 @@
 				<tr>
 					<td colspan="2" width="128" nowrap valign="top" class="line1">
 
-					<img src="{BASEPATH}images/medals/normal/{medalid}.png" style="filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{BASEPATH}images/medals/normal/{medalid}.png', sizingMethod='scale')" width="128" height="256" name="{medalid}">
-					<script>CheckAlphaPNGImage('{medalid}', '{BASEPATH}images/main/space.gif');</script>
+					<img src="{BASEPATH}images/medals/normal/{medalid}.png" width="128" height="256" name="{medalid}" alt="">
 
 					</td>
 					<td width="100%" nowrap valign="top" class="tableBackground" rowspan="4">
 						<table width="100%" cellpadding="2" cellspacing="0" border="0" align="center">
-						<tr><td width="100%" class="cellmenu1" align="center"><B>{LN_MEDAL_DESCRIPTION}</B></td></tr>
+						<tr><td width="100%" class="cellmenu1" align="center"><b>{LN_MEDAL_DESCRIPTION}</b></td></tr>
 						</table>
 						<table width="100%" cellpadding="5" cellspacing="0" border="0" align="center">
 						<tr>
@@ -60,13 +59,13 @@
 				<!-- IF mostkills_pagerenabled="true" -->
 				<table width="95%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
 				<tr>
-					<td class="cellmenu2" nowrap><B>Pages: &nbsp; </B>
+					<td class="cellmenu2" nowrap><b>Pages: &nbsp; </b>
 				<!-- BEGIN MOSTKILLSPAGES -->
 					&nbsp;<a href="?id={medalid}&mostkills_start={mypagebegin}&killedby_start={current_killedby_pagebegin}{additional_url}" target="_top">{mypagenumber}</a>
 				<!-- END MOSTKILLSPAGES -->
 					</td>
-					<td nowrap width="100%"class="line2"><I>&nbsp;{MOSTKILLS_MOREPAGES}</I></td>
-<!--					<td nowrap align="right" class="line2"><I>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <B>{web_mintime}</B> {LN_PLAYERS_SECANDMINKILLS}: <B>{web_minkills}</B>)</I></td>-->
+					<td nowrap width="100%" class="line2"><i>&nbsp;{MOSTKILLS_MOREPAGES}</i></td>
+<!--					<td nowrap align="right" class="line2"><i>{LN_PLAYERS_ONLYLISTED} ({LN_PLAYERS_WITHMINPLAY}: <b>{web_mintime}</b> {LN_PLAYERS_SECANDMINKILLS}: <b>{web_minkills}</b>)</i></td>-->
 				</tr>
 				</table>
 				<!-- ENDIF mostkills_pagerenabled="true" -->
@@ -81,9 +80,9 @@
 
 				<!-- BEGIN mostkills -->
 				<tr>
-					<td align="right" class="{cssclass}"><B>{Number}</B></td>
-					<td class="{cssclass}"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</B></td>
-					<td align="right" class="{cssclass}"><B>{AllKills}</B>&nbsp;</td>
+					<td align="right" class="{cssclass}"><b>{Number}</b></td>
+					<td class="{cssclass}"><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</b></td>
+					<td align="right" class="{cssclass}"><b>{AllKills}</b>&nbsp;</td>
 					<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 
 				</tr>
@@ -93,7 +92,7 @@
 
 			<!-- ENDIF mostkillssenabled="true" -->
 				<br>
-			
+
 			</td>
 		</tr>
 		</table>

@@ -1,4 +1,583 @@
 /* Generic Style definitions */
+
+/*
+ * Phase 4.1 — shared CSS variables for defaults.css utilities (modernisation helpers).
+ * Themes keep their own palettes in themes/*/main.css; consume these where aliases help.
+ */
+:root
+{
+	--us-color-error: #ff0000;
+	--us-color-info-blue: #0000ff;
+	--us-color-bar-positive: #007700;
+	--us-color-bar-negative: #770000;
+	--us-color-bar-neutral: #005577;
+	--us-color-admin-surface: #dddddd;
+	--us-color-credit-nick-fg: #ffff00;
+	--us-color-credit-nick-bg: #000000;
+	--us-color-damage-pct-zero: #ffff55;
+	/* Phase 4.3a — admin parser SSE log panel (embedded parser.php) */
+	--us-parser-log-bg: #1a1a1a;
+	--us-parser-log-border: #444444;
+	--us-parser-sse-col-fg: #c8c8c8;
+	--us-parser-sse-col-bg: #2a1a1a;
+	--us-parser-pre-fg: #e0e0e0;
+	--us-parser-pre-stripe-a: #161b22;
+	--us-parser-pre-stripe-b: #1c222c;
+	--us-parser-done-fg: #0a1a0a;
+	--us-parser-done-grad-top: #4caf50;
+	--us-parser-done-grad-bottom: #2e7d32;
+	--us-parser-done-border-top: #81c784;
+	--us-parser-done-link: #0d1f0d;
+	--us-parser-done-link-hover: #000000;
+	--us-parser-done-shadow: rgba(0, 0, 0, 0.35);
+	/* Embedded parser destructive-confirm banner (Phase 6 / 4.2 tokens) */
+	--us-parser-confirm-border: #c44;
+	--us-parser-confirm-bg: #321818;
+	--us-parser-confirm-fg: #f0f0f0;
+	--us-parser-confirm-heading: #ffb4b4;
+	--us-parser-confirm-primary-bg: #4a3a18;
+	--us-parser-ftp-border: #aa7733;
+	--us-parser-ftp-bg: #2a2418;
+	--us-parser-ftp-fg: #f5f0e8;
+	--us-parser-ftp-heading: #ffc966;
+	--us-parser-ftp-link-bg: #4a3a18;
+	--us-parser-ftp-link-fg: #ffffff;
+	/* Parser debug grid + emergency strip (Phase 4.2 dedupe) */
+	--us-parser-debug-grid-bg: #777777;
+	--us-priority-emergency-fg: #ffffff;
+	--us-priority-emergency-bg: #ff4444;
+	--us-debug-border-color: #999999 #555555 #555555 #999999;
+	--us-debugerror-fg: #ffffff;
+	--us-debugerror-bg: #c1003c;
+	--us-debugwarn-fg: #000000;
+	--us-debugwarn-bg: #f6b15a;
+	--us-debuginfo-fg: #000000;
+	--us-debuginfo-bg: #63a4ed;
+	--us-debugdebug-fg: #ffffff;
+	--us-debugdebug-bg: #09589f;
+	--us-debugultradebug-fg: #ffffff;
+	--us-debugultradebug-bg: #127c2a;
+
+	/* Phase 4.2 completion: auto-tokenized remaining hardcoded colors */
+	--us-defaults-c-cccccc: #cccccc;
+	/* Phase 4.4 — shared outer chrome shell tokens (theme-overridable) */
+	--us-chrome-max-width: 1360px;
+	--us-chrome-radius: 10px;
+	--us-chrome-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* Embedded parser SSE/JS destructive confirm + FTP helper panels share layout tokens above */
+.us-parser-confirm-banner
+{
+	box-sizing: border-box;
+	width: 100%;
+	margin: 12px 0;
+	padding: 16px 18px;
+	border: 2px solid var(--us-parser-confirm-border);
+	background: var(--us-parser-confirm-bg);
+	color: var(--us-parser-confirm-fg);
+	font-size: 14px;
+	line-height: 1.45;
+	border-radius: 4px;
+}
+.us-parser-confirm-banner .us-parser-confirm-heading
+{
+	color: var(--us-parser-confirm-heading);
+	margin-bottom: 14px;
+	font-weight: 600;
+}
+.us-parser-confirm-banner .us-parser-confirm-buttons
+{
+	margin-top: 8px;
+}
+.us-parser-confirm-banner .us-parser-confirm-buttons button.us-parser-confirm-yes,
+.us-parser-confirm-banner .us-parser-confirm-buttons button.us-parser-confirm-no
+{
+	padding: 8px 18px;
+	margin-bottom: 8px;
+	cursor: pointer;
+}
+.us-parser-confirm-banner .us-parser-confirm-buttons button.us-parser-confirm-yes
+{
+	margin-right: 12px;
+	font-weight: bold;
+}
+.us-parser-ftp-password-box
+{
+	box-sizing: border-box;
+	width: 100%;
+	margin: 12px 0;
+	padding: 16px 18px;
+	border: 2px solid var(--us-parser-ftp-border);
+	background: var(--us-parser-ftp-bg);
+	color: var(--us-parser-ftp-fg);
+	font-size: 14px;
+	line-height: 1.45;
+	border-radius: 4px;
+}
+.us-parser-ftp-password-title
+{
+	color: var(--us-parser-ftp-heading);
+	margin-bottom: 10px;
+	font-weight: 600;
+}
+.us-parser-ftp-password-hint
+{
+	margin-bottom: 14px;
+	opacity: 0.95;
+}
+.us-parser-ftp-password-link
+{
+	display: inline-block;
+	padding: 10px 16px;
+	background: var(--us-parser-ftp-link-bg);
+	color: var(--us-parser-ftp-link-fg);
+	text-decoration: none;
+	border-radius: 4px;
+	font-weight: 600;
+}
+
+/* Narrow header: stack the 400px logo and right-side selectors instead of forcing page-level overflow. */
+@media (max-width: 760px)
+{
+	.us-chrome-top
+	{
+		display: block;
+		width: min(96%, var(--us-chrome-max-width)) !important;
+	}
+
+	.us-chrome-top > tbody,
+	.us-chrome-top > tbody > tr,
+	.us-chrome-top > tbody > tr > td
+	{
+		display: block;
+		width: 100% !important;
+		height: auto !important;
+		box-sizing: border-box;
+	}
+
+	.us-chrome-top .us-header-logo-cell
+	{
+		text-align: center;
+	}
+
+	.us-chrome-top img[name="HeaderLogo"]
+	{
+		display: block;
+		width: min(100%, 400px);
+		max-width: 100%;
+		height: auto;
+		margin: 0 auto;
+	}
+
+	.us-chrome-top .us-header-control-cell
+	{
+		padding: 1px 4px;
+	}
+
+	.us-chrome-top .us-header-control-table
+	{
+		width: 100% !important;
+		max-width: 350px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.us-chrome-top .us-header-control-table td.cellmenu1
+	{
+		width: 45% !important;
+		white-space: normal;
+	}
+
+	.us-chrome-top .us-header-control-table td.cellmenu2
+	{
+		width: 55% !important;
+	}
+
+	.us-chrome-top .us-form-select-medium
+	{
+		width: 100%;
+		max-width: 180px;
+	}
+
+	.us-chrome-top .us-header-spacer-cell
+	{
+		display: none !important;
+	}
+}
+
+/*
+ * Phase 3.3 — replaces legacy <body> margin attributes (topmargin, leftmargin, marginwidth, marginheight) on public/admin/install shells.
+ */
+body
+{
+	margin: 0;
+}
+
+/* Phase 4.4 — outer page chrome modernization (keeps table contracts, modern shell). */
+.us-chrome-top,
+.us-chrome-body
+{
+	width: min(96%, var(--us-chrome-max-width)) !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.us-chrome-top
+{
+	margin-top: 10px;
+	border-radius: var(--us-chrome-radius) var(--us-chrome-radius) 0 0;
+	overflow: visible;
+	box-shadow: var(--us-chrome-shadow);
+}
+
+.us-chrome-body
+{
+	border-radius: 0 0 var(--us-chrome-radius) var(--us-chrome-radius);
+	overflow: visible;
+	box-shadow: var(--us-chrome-shadow);
+}
+
+.us-chrome-footer
+{
+	width: 100% !important;
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 8px;
+	border-radius: var(--us-chrome-radius);
+	overflow: visible;
+	box-shadow: var(--us-chrome-shadow);
+}
+
+/* Admin top menu row uses its own include; keep it aligned with chrome shell width. */
+.us-admin-menu-chrome
+{
+	width: min(96%, var(--us-chrome-max-width)) !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.us-chrome-pager
+{
+	width: min(96%, var(--us-chrome-max-width)) !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.us-admin-update-banner
+{
+	width: min(96%, 980px) !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.us-admin-summary-table
+{
+	width: min(96%, 520px) !important;
+}
+
+.us-admin-config-table
+{
+	width: min(96%, 1120px) !important;
+}
+
+.us-admin-warning-box
+{
+	width: min(96%, 600px) !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.us-admin-responsive-panel
+{
+	max-width: 100%;
+}
+
+.us-public-responsive-panel
+{
+	max-width: 100%;
+}
+
+/* Narrow viewport safety: keep shell width stable while allowing wide legacy tables to scroll inside. */
+@media (max-width: 1100px)
+{
+	.us-chrome-body
+	{
+		display: block;
+		width: min(96%, var(--us-chrome-max-width)) !important;
+		margin-left: auto;
+		margin-right: auto;
+		overflow-x: auto;
+		overflow-y: visible;
+	}
+}
+
+@media (max-width: 760px)
+{
+	.us-fixed-w-400,
+	.us-fixed-w-600,
+	.us-fixed-w-800,
+	.us-public-responsive-panel
+	{
+		width: calc(100vw - 48px) !important;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	table.us-public-scroll-strip
+	{
+		display: block;
+		width: calc(100vw - 48px) !important;
+		max-width: 100%;
+		overflow-x: auto;
+		overflow-y: visible;
+		box-sizing: border-box;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	table.us-public-scroll-strip > tbody
+	{
+		display: table;
+		min-width: 100%;
+	}
+
+	.us-public-responsive-panel > tbody > tr > td[width="10"]
+	{
+		display: none;
+	}
+
+	.us-public-responsive-panel > tbody > tr > td[width="100%"]
+	{
+		display: block;
+		width: 100% !important;
+		box-sizing: border-box;
+	}
+
+	table.us-public-search-table,
+	table.us-public-search-table > tbody,
+	table.us-public-search-table > tbody > tr,
+	table.us-public-search-table > tbody > tr > td
+	{
+		display: block;
+		width: calc(100vw - 48px) !important;
+		max-width: 100%;
+		box-sizing: border-box;
+		text-align: center;
+		white-space: normal;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	table.us-public-search-table input[type="text"],
+	table.us-public-search-table select
+	{
+		width: 100%;
+		max-width: 18rem;
+		box-sizing: border-box;
+	}
+
+	table.us-public-search-table input[type="submit"]
+	{
+		margin-top: 4px;
+	}
+
+	.us-admin-summary-table,
+	.us-admin-config-table,
+	.us-admin-warning-box,
+	.us-admin-responsive-panel
+	{
+		width: calc(100vw - 48px) !important;
+		max-width: 100%;
+		box-sizing: border-box;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+	}
+
+	.us-admin-config-table td,
+	.us-admin-summary-table td,
+	.us-admin-table-surface td
+	{
+		white-space: normal;
+	}
+
+	.us-admin-config-table
+	{
+		display: block;
+	}
+
+	.us-admin-config-table > tbody,
+	.us-admin-config-table > tbody > tr,
+	.us-admin-config-table > tbody > tr > td
+	{
+		display: block;
+		width: 100% !important;
+		box-sizing: border-box;
+	}
+
+	.us-admin-config-table td.line0,
+	.us-admin-config-table td.line1,
+	.us-admin-config-table td.line2
+	{
+		text-align: left;
+	}
+
+	.us-admin-summary-table table,
+	.us-admin-summary-metrics
+	{
+		width: 100% !important;
+		table-layout: fixed;
+	}
+
+	.us-admin-summary-table td[width="150"]
+	{
+		width: 45% !important;
+	}
+
+	.us-admin-summary-table td[width="100%"]
+	{
+		width: 55% !important;
+	}
+
+	.us-admin-filter-table,
+	.us-admin-filter-table > tbody,
+	.us-admin-filter-table > tbody > tr,
+	.us-admin-filter-table > tbody > tr > td
+	{
+		display: block;
+		width: 100% !important;
+		box-sizing: border-box;
+		text-align: center;
+		white-space: normal;
+	}
+
+	.us-admin-filter-table input[type="text"],
+	.us-admin-filter-table input[type="textbox"]
+	{
+		width: 100%;
+		max-width: 18rem;
+		box-sizing: border-box;
+	}
+
+	.us-admin-filter-table input[type="submit"]
+	{
+		margin-top: 4px;
+	}
+
+	.us-admin-config-table input[type="text"],
+	.us-admin-config-table select,
+	.us-admin-table-surface input[type="text"],
+	.us-admin-table-surface input[type="password"],
+	.us-admin-table-surface textarea,
+	.us-admin-table-surface select
+	{
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	table.us-admin-scroll-strip
+	{
+		display: block;
+		width: calc(100vw - 48px) !important;
+		max-width: 100%;
+		overflow-x: auto;
+		overflow-y: visible;
+		box-sizing: border-box;
+	}
+
+	table.us-admin-scroll-strip > tbody
+	{
+		display: table;
+		min-width: 100%;
+	}
+}
+
+/*
+ * Phase 4.2 — structural rules shared by all themes; themes/*/main.css supplies colours (e.g. TD text colour).
+ */
+TD
+{
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 8pt;
+}
+
+img
+{
+	border: 0;
+}
+
+font
+{
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 8pt;
+}
+
+/*
+ * Phase 4.2b — section title rows + list/zebra cells: structure here; themes/*/main.css keep colours and background images.
+ */
+.title
+{
+	font: bold 11px Arial, Verdana, Helvetica, sans-serif;
+	height: 20px;
+	text-align: center;
+	vertical-align: middle;
+	background-repeat: repeat-x;
+}
+
+.titleSecond
+{
+	font: bold 10px Arial, Verdana, Helvetica, sans-serif;
+	height: 18px;
+	text-align: center;
+	vertical-align: middle;
+	background-repeat: repeat-x;
+}
+
+.line0,
+.line1,
+.line2,
+.tableBackground
+{
+	font-size: 8pt;
+}
+
+/* Phase 3.3 — replaces obsolete <center> in templates */
+.us-center
+{
+	text-align: center;
+}
+
+/* Phase 3.3 — classic parser iframe debug grid chrome (PrintDebugInfoHeader / PrintHTMLDebugInfo) */
+.us-parser-debug-grid
+{
+	background-color: var( --us-parser-debug-grid-bg );
+}
+
+/* Phase 4.3 — admin players list filter row (inner toolbar; outer table chrome unchanged) */
+.us-admin-player-filter-bar
+{
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+	justify-content: center;
+}
+.us-admin-player-filter-count
+{
+	flex: 1 1 auto;
+	text-align: center;
+	min-width: 12rem;
+}
+
+/* Homepage top players: keep played-time labels and values on one line. */
+.us-main-topplayers .us-main-topplayers-time
+{
+	white-space: nowrap;
+	min-width: 8.5em;
+}
+
 .ExpansionPlus
 {
 	background-image: url("../images/icons/navigate_plus.png");
@@ -45,13 +624,13 @@
 .ErrorMsg 
 {
 	font: bold 12px Verdana, Arial, Helvetica, sans-serif; 
-	COLOR: #FF0000;
+	COLOR: var( --us-color-error );
 }
 
 .PriorityEmergency
 {
-	color: #FFFFFF;
-	background-color: #ff4444;
+	color: var( --us-priority-emergency-fg );
+	background-color: var( --us-priority-emergency-bg );
 	border-top: black 1px solid;
 	border-bottom: black 1px solid;
 	border-right: gray 1px solid;
@@ -61,37 +640,226 @@
 .debugerror
 {
 	border:1px solid;
-	border-color: #999999 #555555 #555555 #999999;
-	color: #FFFFFF;
-	background-color: #C1003C;
+	border-color: var( --us-debug-border-color );
+	color: var( --us-debugerror-fg );
+	background-color: var( --us-debugerror-bg );
 }
 .debugwarn
 {
 	border:1px solid;
-	border-color: #999999 #555555 #555555 #999999;
-	color: #000000;
-	background-color: #F6B15A;
+	border-color: var( --us-debug-border-color );
+	color: var( --us-debugwarn-fg );
+	background-color: var( --us-debugwarn-bg );
 }
 .debuginfo
 {
 	border:1px solid;
-	border-color: #999999 #555555 #555555 #999999;
-	color: #000000;
-	background-color: #63A4ED;
+	border-color: var( --us-debug-border-color );
+	color: var( --us-debuginfo-fg );
+	background-color: var( --us-debuginfo-bg );
 }
 .debugdebug
 {
 	border:1px solid;
-	border-color: #999999 #555555 #555555 #999999;
-	color: #FFFFFF;
-	background-color: #09589F;
+	border-color: var( --us-debug-border-color );
+	color: var( --us-debugdebug-fg );
+	background-color: var( --us-debugdebug-bg );
 }
 .debugultradebug
 {
 	border:1px solid;
-	border-color: #999999 #555555 #555555 #999999;
-	color: #FFFFFF;
-	background-color: #127C2A;
+	border-color: var( --us-debug-border-color );
+	color: var( --us-debugultradebug-fg );
+	background-color: var( --us-debugultradebug-bg );
+}
+
+.us-parser-body
+{
+	background-color: var( --us-parser-log-bg );
+	color: var( --us-parser-pre-fg );
+}
+
+.us-form-select-wide
+{
+	width: 250px;
+}
+
+.us-form-select-medium
+{
+	width: 190px;
+}
+
+.us-inline-block
+{
+	display: inline-block;
+}
+
+.us-inline-form
+{
+	display: inline;
+}
+
+.us-hidden
+{
+	display: none;
+}
+
+.us-pad-2
+{
+	padding: 2px;
+}
+
+.us-pad-5
+{
+	padding: 5px;
+}
+
+.us-pad-7
+{
+	padding: 7px;
+}
+
+.us-fixed-w-400
+{
+	width: 400px;
+}
+
+.us-fixed-w-600
+{
+	width: 600px;
+}
+
+.us-fixed-w-800
+{
+	width: 800px;
+}
+
+.us-max-w-600
+{
+	max-width: 600px;
+}
+
+.us-margin-12-auto
+{
+	margin: 12px auto;
+}
+
+.us-text-indent-0
+{
+	text-indent: 0;
+}
+
+.us-font-size-11
+{
+	font-size: 11px;
+}
+
+.us-form-select-100
+{
+	width: 100px;
+}
+
+.us-parser-embed-toolbar
+{
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin: 10px 0;
+}
+
+.us-parser-stream-status
+{
+	margin: 0;
+	color: var(--us-defaults-c-cccccc);
+	font-size: 12px;
+}
+
+.us-parser-cancel-btn
+{
+	display: none;
+	padding: 4px 10px;
+	cursor: pointer;
+}
+
+/* Info maps/detail two-column block: keep side-by-side on desktop, stack on narrow layouts. */
+.us-map-detail-layout
+{
+	table-layout: fixed;
+}
+
+.us-map-detail-layout .us-map-detail-col
+{
+	width: 50%;
+	vertical-align: top;
+}
+
+/* Keep info-maps last-rounds table inside chrome width on long localized text. */
+table.us-info-maps-lastrounds
+{
+	table-layout: fixed;
+	width: 100%;
+}
+
+table.us-info-maps-lastrounds td:nth-child(1)
+{
+	width: 28px;
+}
+
+table.us-info-maps-lastrounds td:nth-child(2)
+{
+	width: 36%;
+}
+
+table.us-info-maps-lastrounds td:nth-child(3)
+{
+	width: 22%;
+}
+
+table.us-info-maps-lastrounds td:nth-child(4)
+{
+	width: 30%;
+}
+
+table.us-info-maps-lastrounds td
+{
+	overflow-wrap: anywhere;
+	word-break: break-word;
+}
+
+table.us-info-maps-lastrounds td.us-lastrounds-whencell,
+table.us-info-maps-lastrounds td.us-lastrounds-gametype,
+table.us-info-maps-lastrounds td.us-lastrounds-mapcell
+{
+	white-space: normal;
+}
+
+table.us-info-maps-lastrounds .us-lastrounds-datetime,
+table.us-info-maps-lastrounds .us-lastrounds-detailink
+{
+	white-space: normal;
+}
+
+table.us-info-maps-lastrounds .us-lastrounds-maprow
+{
+	flex-wrap: wrap;
+}
+
+@media (max-width: 1100px)
+{
+	.us-map-detail-layout,
+	.us-map-detail-layout tbody,
+	.us-map-detail-layout tr,
+	.us-map-detail-layout td
+	{
+		display: block;
+		width: 100% !important;
+	}
+
+	.us-map-detail-layout td.us-map-detail-col
+	{
+		margin-bottom: 10px;
+	}
 }
 
 /*
@@ -172,8 +940,8 @@
 	min-width: 260px;
 	min-height: 200px;
 	overflow: auto;
-	background-color: #1a1a1a;
-	border: 1px solid #444444;
+	background-color: var( --us-parser-log-bg );
+	border: 1px solid var( --us-parser-log-border );
 	text-align: left;
 	/* Cap height so the rest of the admin page stays visible; inner scroll for log */
 	max-height: min( 52vh, 600px );
@@ -187,10 +955,10 @@
 	width: 100%;
 	font-family: Consolas, "Lucida Console", monospace;
 	font-size: 11px;
-	color: #c8c8c8;
+	color: var( --us-parser-sse-col-fg );
 	padding: 0.35rem 0.5rem 0.25rem;
-	border-bottom: 1px solid #444444;
-	background-color: #2a1a1a;
+	border-bottom: 1px solid var( --us-parser-log-border );
+	background-color: var( --us-parser-sse-col-bg );
 }
 #parser-log-wrap pre.parser-sse-pre
 {
@@ -202,17 +970,17 @@
 	line-height: 1.4em;
 	white-space: pre-wrap;
 	word-break: break-word;
-	color: #e0e0e0;
+	color: var( --us-parser-pre-fg );
 	border: 0;
 	width: 100%;
 	box-sizing: border-box;
 	min-height: 2em;
 	background: repeating-linear-gradient(
 		180deg,
-		#161b22 0,
-		#161b22 1.4em,
-		#1c222c 1.4em,
-		#1c222c 2.8em
+		var( --us-parser-pre-stripe-a ) 0,
+		var( --us-parser-pre-stripe-a ) 1.4em,
+		var( --us-parser-pre-stripe-b ) 1.4em,
+		var( --us-parser-pre-stripe-b ) 2.8em
 	);
 	background-attachment: local;
 }
@@ -231,15 +999,15 @@
 	font-size: 13px;
 	font-weight: 700;
 	letter-spacing: 0.08em;
-	color: #0a1a0a;
-	background: linear-gradient( 180deg, #4caf50 0%, #2e7d32 100% );
-	border-top: 1px solid #81c784;
+	color: var( --us-parser-done-fg );
+	background: linear-gradient( 180deg, var( --us-parser-done-grad-top ) 0%, var( --us-parser-done-grad-bottom ) 100% );
+	border-top: 1px solid var( --us-parser-done-border-top );
 	text-align: center;
-	box-shadow: 0 -4px 12px rgba( 0, 0, 0, 0.35 );
+	box-shadow: 0 -4px 12px var( --us-parser-done-shadow );
 }
 #parser-log-wrap .parser-done-banner a.parser-done-banner-link
 {
-	color: #0d1f0d;
+	color: var( --us-parser-done-link );
 	font-weight: 800;
 	text-decoration: underline;
 	text-underline-offset: 2px;
@@ -247,7 +1015,7 @@
 #parser-log-wrap .parser-done-banner a.parser-done-banner-link:hover,
 #parser-log-wrap .parser-done-banner a.parser-done-banner-link:focus
 {
-	color: #000;
+	color: var( --us-parser-done-link-hover );
 	text-decoration-thickness: 2px;
 }
 #parser-log-wrap .parser-done-banner[hidden]
@@ -262,4 +1030,369 @@
 		max-height: min( 52dvh, 600px );
 		height: clamp( 200px, 45dvh, 600px );
 	}
+}
+
+/*
+ * Phase 3.3 — replace legacy <font color> / table bgcolor (same hex values as inline markup).
+ */
+.us-error-text
+{
+	color: var( --us-color-error );
+}
+
+/* Install wizard step 2 — writable/not indicator (replaces td bgcolor; hex matches former inline colors). */
+.us-install-perm-cell
+{
+	width: 25px;
+	font-size: 1px;
+	line-height: 1px;
+}
+.us-install-perm-ok
+{
+	background-color: var( --us-color-bar-positive );
+}
+.us-install-perm-fail
+{
+	background-color: var( --us-color-bar-negative );
+}
+.us-info-blue
+{
+	color: var( --us-color-info-blue );
+}
+.us-stat-bar-negative
+{
+	background-color: var( --us-color-bar-negative );
+}
+.us-stat-bar-positive
+{
+	background-color: var( --us-color-bar-positive );
+}
+.us-stat-bar-neutral
+{
+	background-color: var( --us-color-bar-neutral );
+}
+.us-admin-table-surface
+{
+	background-color: var( --us-color-admin-surface );
+}
+.us-credit-nick
+{
+	color: var( --us-color-credit-nick-fg );
+	background-color: var( --us-color-credit-nick-bg );
+}
+
+/* Hit-location hover popup: damage % (players-detail.php HoverPopup body HTML). */
+.us-damage-pct
+{
+	font-weight: bold;
+}
+.us-damage-pct-zero
+{
+	color: var( --us-color-damage-pct-zero );
+	font-weight: bold;
+}
+
+/* Player detail — hit-zone panels (two columns): gutter between halves; tighter stats columns.
+ * The character sprite grid is a legacy 220px-wide nested table — do not squeeze it (fixed
+ * layout + border-box padding once clipped it below 220px and separated the slice images). */
+.us-hitloc-panel
+{
+	padding-right: 12px;
+	vertical-align: top;
+	box-sizing: border-box;
+}
+.us-hitloc-panel.us-hitloc-panel--next
+{
+	padding-right: 0;
+	padding-left: 12px;
+}
+table.us-hitloc-inner
+{
+	width: 100%;
+	table-layout: auto;
+}
+.us-hitloc-chart
+{
+	vertical-align: top;
+	/* Nested figure table is width="220"; keep content box ≥220px (padding is outside for sizing). */
+	box-sizing: content-box;
+	min-width: 220px;
+	width: 220px;
+	padding-right: 10px;
+}
+
+/* CoD4 hit-location sprite grid (nested 220px table): collapse cell borders; block images remove baseline gaps.
+ * Do not set table-layout:fixed here — colspan/rowspan widths are calibrated for auto layout. */
+table.us-hitloc-figure
+{
+	width: 220px;
+	border-collapse: separate;
+	border-spacing: 0;
+	empty-cells: show;
+}
+table.us-hitloc-figure td
+{
+	padding: 0;
+	border: 0;
+	vertical-align: top;
+}
+table.us-hitloc-figure img
+{
+	display: block;
+	vertical-align: top;
+}
+
+.us-hitloc-stats-cell
+{
+	vertical-align: top;
+	padding-left: 6px;
+	box-sizing: border-box;
+}
+table.us-hitloc-stats-table
+{
+	width: 100%;
+	table-layout: fixed;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+.us-hitloc-stats-table .us-hitloc-col-num
+{
+	width: 2.25rem;
+	text-align: center !important;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+.us-hitloc-stats-table .us-hitloc-col-zone
+{
+	text-align: left !important;
+	white-space: normal !important;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	padding-left: 6px;
+	padding-right: 8px;
+}
+.us-hitloc-stats-table .us-hitloc-col-kills
+{
+	width: 4.5rem;
+	text-align: right !important;
+	padding-left: 6px;
+	padding-right: 6px;
+	white-space: nowrap !important;
+}
+
+/*
+ * Main horizontal nav (include_menu.html only — admin_menu.html has no us-top-menu):
+ * Legacy HTML td widths (75–135px) clip long labels in standards mode, so we use
+ * width:auto. Without a minimum, columns can shrink below the label and nowrap text
+ * paints into the next cell (overlap) when the table is width:100% and translations
+ * are long (e.g. German). min-width: max-content keeps each item column at least as
+ * wide as its text. Table width: max-content with min-width: 100% sizes columns by
+ * content without squeezing below it, fills the viewport when content is narrower,
+ * and allows horizontal overflow when translations are very long.
+ * Icons use align=left/right (UA maps to float): cancel float and flex top-level
+ * menu rows so label+icon stay inside the cell.
+ */
+table.us-top-menu
+{
+	width: min(96%, var(--us-chrome-max-width)) !important;
+	max-width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	table-layout: fixed;
+}
+table.us-top-menu td.topmenu1,
+table.us-top-menu td.topmenu1begin,
+table.us-top-menu td.topmenu1end
+{
+	white-space: normal;
+	min-width: 0;
+	overflow: hidden;
+	height: auto;
+	min-height: 22px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	vertical-align: middle;
+}
+table.us-top-menu td.topmenu1 > .menu
+{
+	min-width: 0;
+	overflow: hidden;
+}
+/* About link column: absorb leftover width when labels are short; spacer cell stays narrow */
+table.us-top-menu tr > td.topmenu1end:nth-last-child(2)
+{
+	width: 100% !important;
+	max-width: none;
+	white-space: nowrap;
+}
+table.us-top-menu tr > td.topmenu1end:last-child
+{
+	width: auto !important;
+	min-width: 10px;
+}
+table.us-top-menu img[align="left"],
+table.us-top-menu img[align="right"]
+{
+	float: none;
+	vertical-align: middle;
+}
+table.us-top-menu .menu > ul > li
+{
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	column-gap: 2px;
+	min-width: 0;
+}
+table.us-top-menu .menu > ul > li > a.topmenu1_link,
+table.us-top-menu .menu > ul > li > a.topmenu2_link
+{
+	display: inline-block;
+}
+table.us-top-menu td.topmenu1 > a.topmenu1_link,
+table.us-top-menu td.topmenu1end > a.topmenu1_link
+{
+	display: inline-flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	column-gap: 2px;
+}
+table.us-top-menu a.topmenu1_link,
+table.us-top-menu a.topmenu2_link
+{
+	white-space: nowrap;
+	height: auto;
+	min-height: 16px;
+	line-height: 16px;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+@media (max-width: 760px)
+{
+	table.us-top-menu
+	{
+		display: block;
+		overflow-x: auto;
+		overflow-y: visible;
+		width: min(96%, var(--us-chrome-max-width)) !important;
+		max-width: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	table.us-top-menu > tbody
+	{
+		display: table;
+		width: max-content;
+		min-width: 100%;
+	}
+
+	table.us-admin-menu-chrome
+	{
+		display: block;
+		overflow-x: auto;
+		overflow-y: visible;
+		width: min(96%, var(--us-chrome-max-width)) !important;
+		max-width: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	table.us-admin-menu-chrome > tbody
+	{
+		display: table;
+		width: max-content;
+		min-width: 100%;
+	}
+
+	table.us-chrome-pager
+	{
+		display: block;
+		overflow-x: auto;
+		overflow-y: visible;
+		width: min(96%, var(--us-chrome-max-width)) !important;
+		max-width: 100%;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	table.us-chrome-pager > tbody
+	{
+		display: table;
+		width: max-content;
+		min-width: 100%;
+	}
+}
+
+/*
+ * Last played rounds (players-detail, info-maps, info-gametypes, serverstats):
+ * date/time + Details on one row (like legacy two-cell row); gametype + map columns; wrap if narrow.
+ */
+table.us-lastrounds
+{
+	width: 100%;
+}
+table.us-lastrounds td.us-lastrounds-whencell
+{
+	vertical-align: middle;
+	padding: 1px 4px;
+}
+.us-lastrounds-when-row
+{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	column-gap: 8px;
+	row-gap: 0;
+	line-height: 1.15;
+}
+.us-lastrounds-datetime,
+.us-lastrounds-detailink
+{
+	display: inline-flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 3px;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+.us-lastrounds-inline-icon
+{
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+}
+.us-lastrounds-time-text
+{
+	white-space: nowrap;
+}
+table.us-lastrounds td.us-lastrounds-gametype
+{
+	vertical-align: middle;
+	word-wrap: break-word;
+	padding: 1px 4px;
+}
+table.us-lastrounds td.us-lastrounds-mapcell
+{
+	vertical-align: middle;
+	padding: 1px 4px;
+}
+.us-lastrounds-maprow
+{
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+	gap: 4px;
+	line-height: 1.15;
+}
+.us-lastrounds-mapthumb
+{
+	flex-shrink: 0;
+	display: block;
+}
+.us-lastrounds-mapname
+{
+	word-break: break-word;
+	min-width: 0;
 }

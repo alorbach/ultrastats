@@ -89,13 +89,13 @@ if ( isset($_GET['search']) )
 		else
 		{
 			$content['chatsfound'] = "false";
-			$content['chatserror'] = GetAndReplaceLangStr($content["LN_SEARCH_CHATNOTFOUND"], $content['searchfor']);
+			$content['ERROR_DETAILS'] = GetAndReplaceLangStr($content["LN_SEARCH_CHATNOTFOUND"], $content['searchfor']);
 		}
 	}
 	else
 	{
 		$content['chatsfound'] = "false";
-		$content['chatserror'] = $content["LN_SEARCH_CHATTOSHORT"];
+		$content['ERROR_DETAILS'] = $content["LN_SEARCH_CHATTOSHORT"];
 	}
 }
 else

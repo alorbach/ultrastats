@@ -266,7 +266,7 @@ $content['LN_CFG_DBSTORAGEENGINE_HELP'] = "InnoDB (recommended) supports transac
 $content['LN_CFG_GAMEVER'] = "Gameversion";
 $content['LN_INSTALL_TITLETOP'] = "Installing UltraStats Version %1 - Step %2";
 $content['LN_INSTALL_TITLE'] = "Installer Step %1";
-$content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats is already configured/installed!<br><br> If you want to reinstall UltraStats, either delete the current <B>config.php</B> or replace it with an empty file.<br>Click <A HREF="index.php">here</A> to return to UltraStats start page.';
+$content['LN_INSTALL_ERRORINSTALLED'] = 'UltraStats is already configured/installed!<br><br> If you want to reinstall UltraStats, either delete the current <b>config.php</b> or replace it with an empty file.<br>Click <a href="index.php">here</a> to return to UltraStats start page.';
 $content['LN_INSTALL_FILEORDIRNOTWRITEABLE'] = "At least one file or directory (or more) is not writeable, please check the file permissions.<br>On Linux you can use this commands:<br>Create an empty config.php: '%1'<br>Set write access to config.php: '%2'<br>Set write access to directories: '%3'";
 $content['LN_INSTALL_SAMPLECONFIGMISSING'] = "The sample configuration file '%1' is missing. You may have not fully uploaded UltraStats.";
 $content['LN_INSTALL_ERRORCONNECTFAILED'] = "Database connect to '%1' failed! Please check Servername, Port, User and Password!";
@@ -284,7 +284,7 @@ $content['LN_INSTALL_STEP5'] = "Step 5 - Check SQL Results";
 $content['LN_INSTALL_STEP6'] = "Step 6 - Creating the firts Adminuser";
 $content['LN_INSTALL_STEP7'] = "Step 7 - Done";
 $content['LN_INSTALL_STEP1_TEXT'] = 'Before you start installing UltraStats, the Installer setup has to check a few things first.<br>You may have to correct some file permissions. <br><br>Click on <input type="submit" value="Next"> to start the Test!';
-$content['LN_INSTALL_STEP2_TEXT'] = "The following file permissions have been checked. Verify the results below! <br>You may use the <B>configure.sh</B> script from the <B>contrib</B> folder to set the permissions for you.";
+$content['LN_INSTALL_STEP2_TEXT'] = "The following file permissions have been checked. Verify the results below! <br>You may use the <b>configure.sh</b> script from the <b>contrib</b> folder to set the permissions for you.";
 $content['LN_INSTALL_STEP3_TEXT'] = "In this step, you have to configure the basic database settings for UltraStats. <br>Without this database connection, you cannot step further in the installation of UltraStats!";
 $content['LN_INSTALL_STEP4_TEXT'] = 'If you reached this step, the database connection has been successfully verified!<br><br> The next step will create the necessary database tables used by UltraStats. This might take a while!<br> <b>WARNING</b>, if you have an existing UltraStats installation in this database with the same tableprefix, all your data will be <b>OVERWRITTEN</b>! Make sure you are using a fresh database, or you want to overwrite your old UltraStats database. <br><br><b>Click on <input type="submit" value="Next"> to start the creation of the tables</b>';
 $content['LN_INSTALL_STEP5_TEXT'] = "All tables have been created. Check the List below for possible Error's.";

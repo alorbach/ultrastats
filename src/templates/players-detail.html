@@ -2,26 +2,19 @@
 
 <!-- IF iserror="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF iserror="true" -->
 
 <!-- IF playerenabled="true" -->
-<script>
-	function OutPlayerImage( myref, ImageBaseName, MyLevel, elementref, myTeam )
-	{
-		myref.src = "{BASEPATH}images/player/" + myTeam + "/" + MyLevel + "/" + ImageBaseName + ".png";
-		elementref.innerHTML = "{LN_PLAYER_HITLMOUSEHELP}";
-	}
-</script>
 
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-public-scroll-strip">
 <tr>
 	<td width="10" valign="top" rowspan="4" nowrap>&nbsp;</td>
 	<td width="50%" valign="top">
@@ -36,40 +29,40 @@
 		<td width="100%" nowrap valign="top">
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
-				<td width="100%" colspan="2" class="line0" align="center" nowrap><A HREF="players-detail.php?id={playerguid}{additional_url}" title="{Alias}">{AliasAsHtml}</A></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
+				<td width="100%" colspan="2" class="line0" align="center" nowrap><a href="players-detail.php?id={playerguid}{additional_url}" title="{Alias}">{AliasAsHtml}</a></td>
 			</tr>
 			<!-- IF EnableShowPBGuid="true" -->
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_PBGUID}</B></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_PBGUID}</b></td>
 				
-				<td width="100%" colspan="2" class="line1" align="center" nowrap><A HREF="http://www.punksbusted.com/cgi-bin/membership/rpi.cgi?par={PBGuid}&limit=20&query=Search" title="{Alias}">... {PBGuid} </a><i>({LN_TOPPLAY_PBGUIDLAST8})</i></td>
+				<td width="100%" colspan="2" class="line1" align="center" nowrap><a href="http://www.punksbusted.com/cgi-bin/membership/rpi.cgi?par={PBGuid}&limit=20&query=Search" title="{Alias}">... {PBGuid} </a><i>({LN_TOPPLAY_PBGUIDLAST8})</i></td>
 			</tr>
 			<!-- ENDIF EnableShowPBGuid="true" -->
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_KILLS}</B></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_KILLS}</b></td>
 				<td width="100%" colspan="2" class="line0" align="center" nowrap><b>{Kills}</b></td>
 			</tr>
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_Deaths}</B></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_Deaths}</b></td>
 				<td width="100%" colspan="2" class="line1" align="center" nowrap><b>{Deaths}</b></td>
 			</tr>
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_TeamKills}</B></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_TeamKills}</b></td>
 				<td width="100%" colspan="2" class="line0" align="center" nowrap><b>{Teamkills}</b></td>
 			</tr>
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_Suicides}</B></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_Suicides}</b></td>
 				<td width="100%" colspan="2" class="line1" align="center" nowrap><b>{Suicides}</b></td>
 			</tr>
 			<tr>
-				<td width="150" class="cellmenu1_naked" align="center" nowrap><B>{LN_TOPPLAY_KillRatio}</B></td>
-				<td colspan="2" class="line0" align="center" nowrap OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{KillRatioWidthPlusText}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
+				<td width="150" class="cellmenu1_naked" align="center" nowrap><b>{LN_TOPPLAY_KillRatio}</b></td>
+				<td colspan="2" class="line0 us-popup-help" align="center" nowrap data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{KillRatioWidthPlusText}">
 					<b>{KillRatio}</b>
 					<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
 					<tr>
-						<td bgcolor="#770000"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" alt="" aria-hidden="true"></td>
-						<td bgcolor="#007700">
+						<td class="us-stat-bar-negative"><img align="left" src="{BarImageKillRatioMinus}" width="{KillRatioWidthMinus}%" height="9" alt="" aria-hidden="true"></td>
+						<td class="us-stat-bar-positive">
 						<!-- IF KillRatioWidthPlusText!="" -->
 						<img align="left" src="{BarImageKillRatioPlus}" width="{KillRatioWidthPlus}%" height="9" alt="" aria-hidden="true">
 						<!-- ENDIF KillRatioWidthPlusText!="" -->
@@ -79,8 +72,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="150" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_PlayedTime}</B></td>
-				<td width="100%" colspan="2"class="line1" align="center" nowrap><b>{TimePlayedString}</b></td>
+				<td width="150" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_PlayedTime}</b></td>
+				<td width="100%" colspan="2" class="line1" align="center" nowrap><b>{TimePlayedString}</b></td>
 			</tr>
 			</table>
 
@@ -89,16 +82,16 @@
 <!-- IF isfavmap="true" -->
 			<table width="90%" cellpadding="0" cellspacing="1" border="0" align="right" class="with_border">
 			<tr>
-				<td class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_FAVMAP}</B></td>
+				<td class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_FAVMAP}</b></td>
 			</tr>
 			<tr>
-				<td class="line1" align="center" nowrap><A HREF="info-maps.php?id={PLAYER_MAPNAME}{additional_url}"><img src="{PLAYER_MapImage}" width="100" alt="{PLAYER_FinalMapDisplayName}" class="imageborder"></A></td>
+				<td class="line1" align="center" nowrap><a href="info-maps.php?id={PLAYER_MAPNAME}{additional_url}"><img src="{PLAYER_MapImage}" width="100" alt="{PLAYER_FinalMapDisplayName}" class="imageborder"></a></td>
 			</tr>
 			<tr>
-				<td class="line2" align="center" nowrap><A HREF="info-maps.php?id={PLAYER_MAPNAME}{additional_url}">{PLAYER_FinalMapDisplayName}</A></td>
+				<td class="line2" align="center" nowrap><a href="info-maps.php?id={PLAYER_MAPNAME}{additional_url}">{PLAYER_FinalMapDisplayName}</a></td>
 			</tr>
 			<tr>
-				<td class="line1" align="center" nowrap>{LN_PLAYER_PLAYED} <B>{PLAYER_MAPCOUNT}</B></A></td>
+				<td class="line1" align="center" nowrap>{LN_PLAYER_PLAYED} <b>{PLAYER_MAPCOUNT}</b></a></td>
 			</tr>
 			</table>
 <!-- ENDIF isfavmap="true" -->
@@ -117,13 +110,13 @@
 
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
-				<td width="50" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_ALIASCOUNT}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_ALIAS}</B></td>
+				<td width="50" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_ALIASCOUNT}</b></td>
+				<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_ALIAS}</b></td>
 			</tr>
 			<!-- BEGIN aliases -->
 			<tr>
-				<td class="{cssclass}" align="center" nowrap><B>{Count}</B></td>
-				<td class="{cssclass}" align="center" nowrap><B>{Aliases_AliasAsHtml}</B></td>
+				<td class="{cssclass}" align="center" nowrap><b>{Count}</b></td>
+				<td class="{cssclass}" align="center" nowrap><b>{Aliases_AliasAsHtml}</b></td>
 			</tr>
 			<!-- END aliases -->
 			</table>
@@ -134,16 +127,16 @@
 <!-- IF isfavweapon="true" -->
 			<table width="90%" cellpadding="0" cellspacing="1" border="0" align="right" class="with_border">
 			<tr>
-				<td class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_FAVWEAPON}</B></td>
+				<td class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_FAVWEAPON}</b></td>
 			</tr>
 			<tr>
-				<td class="line1" align="center" nowrap><A HREF="weapons.php?id={PLAYER_WEAPONID}{additional_url}"><img src="{PLAYER_WeaponImage}" width="100" alt="{PLAYER_FinalWeaponDisplayName}" class="imageborder"></A></td>
+				<td class="line1" align="center" nowrap><a href="weapons.php?id={PLAYER_WEAPONID}{additional_url}"><img src="{PLAYER_WeaponImage}" width="100" alt="{PLAYER_FinalWeaponDisplayName}" class="imageborder"></a></td>
 			</tr>
 			<tr>
-				<td class="line2" align="center" nowrap><A HREF="weapons.php?id={PLAYER_WEAPONID}{additional_url}">{PLAYER_FinalWeaponDisplayName}</A></td>
+				<td class="line2" align="center" nowrap><a href="weapons.php?id={PLAYER_WEAPONID}{additional_url}">{PLAYER_FinalWeaponDisplayName}</a></td>
 			</tr>
 			<tr>
-				<td class="line1" align="center" nowrap>{LN_PLAYER_KILLED} <B>{PLAYER_WEAPONCOUNT}</B></A></td>
+				<td class="line1" align="center" nowrap>{LN_PLAYER_KILLED} <b>{PLAYER_WEAPONCOUNT}</b></a></td>
 			</tr>
 			</table>
 <!-- ENDIF isfavweapon="true" -->
@@ -160,20 +153,25 @@
 			<td class="title" width="400" nowrap>{LN_PLAYER_LASTROUNDS}</td>
 		</tr>
 		</table>
-		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
+		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border us-lastrounds">
 		<tr>
-			<td width="25" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-			<td colspan="2" width="210" class="cellmenu1" align="center" nowrap><B>{LN_LROUNDS_TIME}</B></td>
-			<td colspan="2" width="100%" class="cellmenu1" align="center" nowrap><B>{LN_LROUNDS_DETAILS}</B></td>
+			<td width="25" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_TIME}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_GAMETYPE}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_MAPNAME}</b></td>
 		</tr>
 
 		<!-- BEGIN lastrounds -->
 		<tr>
-			<td class="{cssclass}" align="center"><B>{Number}</B></td>
-			<td class="{cssclass}" nowrap><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left" alt="" aria-hidden="true">{TimePlayed}</td>
-			<td class="{cssclass}" align="center"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" align="left" alt="" aria-hidden="true"><A HREF="rounds-detail.php?id={ID}{additional_url}">{LN_PLAYER_DETAILS}</A></td>
-			<td class="{cssclass}" align="left"><A HREF="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</A></td>
-			<td class="{cssclass}" align="left"><A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="20" alt="{FinalMapDisplayName}"></A>&nbsp;<B>{FinalMapDisplayName}</B></td>
+			<td class="{cssclass}" align="center"><b>{Number}</b></td>
+			<td class="{cssclass} us-lastrounds-whencell">
+				<div class="us-lastrounds-when-row">
+					<span class="us-lastrounds-datetime"><img src="{BASEPATH}images/icons/date-time.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><span class="us-lastrounds-time-text">{TimePlayed}</span></span>
+					<span class="us-lastrounds-detailink"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><a href="rounds-detail.php?id={ID}{additional_url}">{LN_PLAYER_DETAILS}</a></span>
+				</div>
+			</td>
+			<td class="{cssclass} us-lastrounds-gametype" align="left"><a href="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</a></td>
+			<td class="{cssclass} us-lastrounds-mapcell" align="left"><div class="us-lastrounds-maprow"><a href="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="20" height="20" alt="{FinalMapDisplayName}" class="us-lastrounds-mapthumb"></a><span class="us-lastrounds-mapname"><b>{FinalMapDisplayName}</b></span></div></td>
 		</tr>
 		<!-- END lastrounds -->
 
@@ -185,12 +183,12 @@
 	<!-- IF ischatlog="true" -->
 		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
 		<tr>
-			<td colspan="2" class="title" width="400" align="center" nowrap><B>{LN_PLAYER_LASTQUOTES}</B></td>
+			<td colspan="2" class="title" width="400" align="center" nowrap><b>{LN_PLAYER_LASTQUOTES}</b></td>
 		</tr>
 		<!-- BEGIN ChatLog -->
 		<tr>
-			<td class="{cssclass}" align="center" width="40" nowrap><A HREF="rounds-detail.php?id={ROUNDID}{additional_url}" title="{LN_LROUNDS_DETAILS}"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" alt="" aria-hidden="true"></A></td>
-			<td class="{cssclass}" align="left" width="100%">&nbsp;<B>{TextSaidAsHtml}</B>&nbsp;</td>
+			<td class="{cssclass}" align="center" width="40" nowrap><a href="rounds-detail.php?id={ROUNDID}{additional_url}" title="{LN_LROUNDS_DETAILS}"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" alt="" aria-hidden="true"></a></td>
+			<td class="{cssclass}" align="left" width="100%">&nbsp;<b>{TextSaidAsHtml}</b>&nbsp;</td>
 		</tr>
 		<!-- END ChatLog -->
 		</table>
@@ -211,15 +209,15 @@
 		<td width="100%" nowrap valign="top">
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center">
 			<tr>
-				<td width="200" class="cellmenu1" align="center" colspan="2" nowrap><B>{LN_PLAYER_WEAPON}</B></td>
-				<td width="35" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_KILLS}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_RATIO}</B></td>
+				<td width="200" class="cellmenu1" align="center" colspan="2" nowrap><b>{LN_PLAYER_WEAPON}</b></td>
+				<td width="35" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_KILLS}</b></td>
+				<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_RATIO}</b></td>
 			</tr>
 			<!-- BEGIN weaponstats -->
 			<tr>
-				<td class="{cssclass}" align="right" nowrap><a HREF="weapons.php?id={INGAMENAME}{additional_url}"><img src="{WeaponImage}" height="18" alt="" aria-hidden="true"></a></td>
-				<td class="{cssclass}" align="left" nowrap><A HREF="weapons.php?id={INGAMENAME}{additional_url}">{DisplayName}</a></td>
-				<td class="{cssclass}" align="center" nowrap><B>{TotalKills}</B></td>
+				<td class="{cssclass}" align="right" nowrap><a href="weapons.php?id={INGAMENAME}{additional_url}"><img src="{WeaponImage}" height="18" alt="" aria-hidden="true"></a></td>
+				<td class="{cssclass}" align="left" nowrap><a href="weapons.php?id={INGAMENAME}{additional_url}">{DisplayName}</a></td>
+				<td class="{cssclass}" align="center" nowrap><b>{TotalKills}</b></td>
 				<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 			</tr>
 			<!-- END weaponstats -->
@@ -241,16 +239,16 @@
 		<td width="100%" nowrap valign="top">
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center">
 			<tr>
-				<td width="40" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_MAP}</B></td>
-				<td width="100" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_MAPNAME}</B></td>
-				<td width="85" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_COUNT}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_RATIO}</B></td>
+				<td width="40" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_MAP}</b></td>
+				<td width="100" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_MAPNAME}</b></td>
+				<td width="85" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_COUNT}</b></td>
+				<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_RATIO}</b></td>
 			</tr>
 			<!-- BEGIN mapstats -->
 			<tr>
-				<td class="{cssclass}" align="left" nowrap><A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="35" alt="{FinalMapDisplayName}"></A></td>
-				<td class="{cssclass}" align="left" nowrap><A HREF="info-maps.php?id={MAPNAME}{additional_url}">{FinalMapDisplayName}</A></td>
-				<td class="{cssclass}" align="center" nowrap><B>{mapcount}</B></td>
+				<td class="{cssclass}" align="left" nowrap><a href="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="35" alt="{FinalMapDisplayName}"></a></td>
+				<td class="{cssclass}" align="left" nowrap><a href="info-maps.php?id={MAPNAME}{additional_url}">{FinalMapDisplayName}</a></td>
+				<td class="{cssclass}" align="center" nowrap><b>{mapcount}</b></td>
 				<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 			</tr>
 			<!-- END mapstats -->
@@ -273,14 +271,14 @@
 		<td width="100%" nowrap valign="top">
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center">
 			<tr>
-				<td width="175" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_VICTIM_NAME}</B></td>
-				<td width="35" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_KILLS}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_RATIO}</B></td>
+				<td width="175" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_VICTIM_NAME}</b></td>
+				<td width="35" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_KILLS}</b></td>
+				<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_RATIO}</b></td>
 			</tr>
 			<!-- BEGIN victimstats -->
 			<tr>
-				<td class="{cssclass}" align="left" nowrap><A HREF="players-detail.php?id={ENEMYID}{additional_url}" title="{EnemyAlias}">{EnemyAliasHtml}</A></td>
-				<td class="{cssclass}" align="center" nowrap><B>{TotalKills}</B></td>
+				<td class="{cssclass}" align="left" nowrap><a href="players-detail.php?id={ENEMYID}{additional_url}" title="{EnemyAlias}">{EnemyAliasHtml}</a></td>
+				<td class="{cssclass}" align="center" nowrap><b>{TotalKills}</b></td>
 				<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 			</tr>
 			<!-- END victimstats -->
@@ -288,7 +286,7 @@
 		</td>
 	</tr>
 	</table>
-<!-- ENDIF isweaponstats="true" -->
+<!-- ENDIF isvictimstats="true" -->
 	</td>
 
 	<td width="50%" valign="top">
@@ -301,14 +299,14 @@
 		<td width="100%" nowrap valign="top">
 			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center">
 			<tr>
-				<td width="175" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_KILLER_NAME}</B></td>
-				<td width="35" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_KILLS}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_RATIO}</B></td>
+				<td width="175" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_KILLER_NAME}</b></td>
+				<td width="35" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_KILLS}</b></td>
+				<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_PLAYER_RATIO}</b></td>
 			</tr>
 			<!-- BEGIN killedstats -->
 			<tr>
-				<td class="{cssclass}" align="left" nowrap><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{KillerAlias}">{KillerAliasHtml}</A></td>
-				<td class="{cssclass}" align="center" nowrap><B>{TotalKills}</B></td>
+				<td class="{cssclass}" align="left" nowrap><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{KillerAlias}">{KillerAliasHtml}</a></td>
+				<td class="{cssclass}" align="center" nowrap><b>{TotalKills}</b></td>
 				<td class="{cssclass}" align="left" nowrap>&nbsp;<img src="{BarImageLeft}" width="" height="9" alt="" aria-hidden="true"><img src="{BarImageMiddle}" width="{KillBarWidth}%" height="9" alt="" aria-hidden="true"><img src="{BarImageRight}" width="" height="9" alt="" aria-hidden="true">&nbsp;</td>
 			</tr>
 			<!-- END killedstats -->
@@ -322,7 +320,7 @@
 </tr>
 
 <tr>
-	<td width="50%" valign="top">
+	<td width="50%" valign="top" class="us-hitloc-panel">
 
 <!-- BEGIN KILLEDDETAILS -->
 	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate">
@@ -330,11 +328,11 @@
 		<td colspan="2" class="title" width="400" nowrap>{LN_PLAYER_TOPHITLOCATIONS}</td>
 	</tr>
 	</table>
-	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center">
+	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="us-hitloc-inner">
 	<tr>
-		<td nowrap valign="top" class="table_with_border_second">
+		<td nowrap valign="top" class="table_with_border_second us-hitloc-chart">
 
-		<table border="0" cellpadding="0" cellspacing="0" width="220">
+		<table border="0" cellpadding="0" cellspacing="0" width="220" class="us-hitloc-figure">
 		<tr>
 			<td colspan="20"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_1.png" width="220" border="0" height="4"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="4"></td>
@@ -342,27 +340,21 @@
 		<tr>
 			<td colspan="8"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_2.png" width="88" border="0" height="41"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{head_level}/{head}.png" width="45" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{head_hovertxt}', '{head_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{head}', {head_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{head_hovertxt}" data-popup-image="{head_image}" data-out-src="{BASEPATH}images/player/{modelname}/{head_level}/{head}.png" data-out-legend="popupdetails"></td>
 			<td colspan="8"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_4.png" width="87" border="0" height="41"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="41"></td>
 		</tr>
 		<tr>
 			<td colspan="9"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_5.png" width="100" border="0" height="8"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/{neck_level}/{neck}.png" width="21" border="0" height="8" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{neck_hovertxt}', '{neck_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{neck}', {neck_level}, 'playerlegend', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{neck_hovertxt}" data-popup-image="{neck_image}" data-out-src="{BASEPATH}images/player/{modelname}/{neck_level}/{neck}.png" data-out-legend="playerlegend"></td>
 			<td colspan="9"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_7.png" width="99" border="0" height="8"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="8"></td>
 		</tr>
 		<tr>
 			<td colspan="7"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_8.png" width="80" border="0" height="6"></td>
 			<td colspan="6" rowspan="4"><img src="{BASEPATH}images/player/{modelname}/{torso_upper_level}/{torso_upper}.png" width="62" border="0" height="47" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{torso_upper_hovertxt}', '{torso_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{torso_upper}', {torso_upper_level}, 'playerlegend', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{torso_upper_hovertxt}" data-popup-image="{torso_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{torso_upper_level}/{torso_upper}.png" data-out-legend="playerlegend"></td>
 			<td colspan="7"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_10.png" width="78" border="0" height="6"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="6"></td>
 		</tr>
@@ -371,54 +363,40 @@
 			<td rowspan="4"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_12.png" width="5" border="0" height="49"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_13.png" width="28" border="0" height="13"></td>
 			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{left_arm_upper_level}/{left_arm_upper}.png" width="19" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_arm_upper_hovertxt}', '{left_arm_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_arm_upper}', {left_arm_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_arm_upper_hovertxt}" data-popup-image="{left_arm_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_arm_upper_level}/{left_arm_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{right_arm_upper_level}/{right_arm_upper}.png" width="19" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_arm_upper_hovertxt}', '{right_arm_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_arm_upper}', {right_arm_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_arm_upper_hovertxt}" data-popup-image="{right_arm_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_arm_upper_level}/{right_arm_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_16.png" width="29" border="0" height="14"></td>
 			<td colspan="2" rowspan="5"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_17.png" width="30" border="0" height="50"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="13"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{left_arm_lower_level}/{left_arm_lower}.png" width="28" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_arm_lower_hovertxt}', '{left_arm_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_arm_lower}', {left_arm_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_arm_lower_hovertxt}" data-popup-image="{left_arm_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_arm_lower_level}/{left_arm_lower}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="1"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{right_arm_lower_level}/{right_arm_lower}.png" width="29" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_arm_lower_hovertxt}', '{right_arm_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_arm_lower}', {right_arm_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_arm_lower_hovertxt}" data-popup-image="{right_arm_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_arm_lower_level}/{right_arm_lower}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="27"></td>
 		</tr>
 		<tr>
 			<td rowspan="3"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_20.png" width="6" border="0" height="29"></td>
 			<td colspan="10" rowspan="4"><img src="{BASEPATH}images/player/{modelname}/{torso_lower_level}/{torso_lower}.png" width="87" border="0" height="53" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{torso_lower_hovertxt}', '{torso_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{torso_lower}', {torso_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{torso_lower_hovertxt}" data-popup-image="{torso_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{torso_lower_level}/{torso_lower}.png" data-out-legend="popupdetails"></td>
 			<td rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_22.png" width="7" border="0" height="9"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="8"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/{modelname}/{left_hand_level}/{left_hand}.png" width="28" border="0" height="21" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_hand_hovertxt}', '{left_hand_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_hand}', {left_hand_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_hand_hovertxt}" data-popup-image="{left_hand_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_hand_level}/{left_hand}.png" data-out-legend="popupdetails"></td>
 			<td rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_24.png" width="5" border="0" height="21"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="1"></td>
 		</tr>
 		<tr>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_25.png" width="12" border="0" height="20"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/{right_hand_level}/{right_hand}.png" width="28" border="0" height="20" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_hand_hovertxt}', '{right_hand_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_hand}', {right_hand_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_hand_hovertxt}" data-popup-image="{right_hand_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_hand_level}/{right_hand}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_27.png" width="26" border="0" height="20"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="20"></td>
 		</tr>
@@ -430,39 +408,27 @@
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_30.png" width="73" border="0" height="34"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_leg_upper_level}/{left_leg_upper}.png" width="38" border="0" height="34" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_leg_upper_hovertxt}', '{left_leg_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_leg_upper}', {left_leg_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_leg_upper_hovertxt}" data-popup-image="{left_leg_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_leg_upper_level}/{left_leg_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_leg_upper_level}/{right_leg_upper}.png" width="37" border="0" height="34" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_leg_upper_hovertxt}', '{right_leg_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_leg_upper}', {right_leg_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_leg_upper_hovertxt}" data-popup-image="{right_leg_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_leg_upper_level}/{right_leg_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_33.png" width="72" border="0" height="34"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="34"></td>
 		</tr>
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_34.png" width="73" border="0" height="36"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_leg_lower_level}/{left_leg_lower}.png" width="38" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_leg_lower_hovertxt}', '{left_leg_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_leg_lower}', {left_leg_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_leg_lower_hovertxt}" data-popup-image="{left_leg_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_leg_lower_level}/{left_leg_lower}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_leg_lower_level}/{right_leg_lower}.png" width="37" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_leg_lower_hovertxt}', '{right_leg_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_leg_lower}', {right_leg_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_leg_lower_hovertxt}" data-popup-image="{right_leg_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_leg_lower_level}/{right_leg_lower}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_37.png" width="72" border="0" height="36"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="36"></td>
 		</tr>
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_38.png" width="73" border="0" height="54"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_foot_level}/{left_foot}.png" width="38" border="0" height="54" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_foot_hovertxt}', '{left_foot_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_foot}', {left_foot_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_foot_hovertxt}" data-popup-image="{left_foot_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_foot_level}/{left_foot}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_foot_level}/{right_foot}.png" width="37" border="0" height="54" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_foot_hovertxt}', '{right_foot_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_foot}', {right_foot_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_foot_hovertxt}" data-popup-image="{right_foot_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_foot_level}/{right_foot}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_41.png" width="72" border="0" height="54"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="54"></td>
 		</tr>
@@ -497,19 +463,18 @@
 
 		</td>
 	
-		<td width="100%" nowrap valign="top" class="table_with_border_second">
-			<br>
-			<table width="90%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<td nowrap valign="top" class="table_with_border_second us-hitloc-stats-cell">
+			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate us-hitloc-stats-table">
 			<tr>
-				<td width="35" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_HITLOCATION}</B></td>
-				<td width="50" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_HITLKILLSCOUNT}</B></td>
+				<td class="cellmenu1 us-hitloc-col-num" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+				<td class="cellmenu1 us-hitloc-col-zone" align="left" nowrap><b>{LN_PLAYER_HITLOCATION}</b></td>
+				<td class="cellmenu1 us-hitloc-col-kills" align="right" nowrap><b>{LN_PLAYER_HITLKILLSCOUNT}</b></td>
 			</tr>
 			<!-- BEGIN hitlocations -->
 			<tr>
-				<td class="{cssclass}" align="left" nowrap><B>{Number}</B></td>
-				<td class="{cssclass}" align="center" nowrap><B>{DisplayName}</B></td>
-				<td class="{cssclass}" align="right" nowrap><B>{TotalKills}</B></td>
+				<td class="{cssclass} us-hitloc-col-num" align="center" nowrap><b>{Number}</b></td>
+				<td class="{cssclass} us-hitloc-col-zone" align="left" nowrap><b>{DisplayName}</b></td>
+				<td class="{cssclass} us-hitloc-col-kills" align="right" nowrap><b>{TotalKills}</b></td>
 			</tr>
 			<!-- END hitlocations -->
 			</table>
@@ -521,7 +486,7 @@
 <!-- END KILLEDDETAILS -->
 
 	</td>
-	<td width="50%" valign="top">
+	<td width="50%" valign="top" class="us-hitloc-panel us-hitloc-panel--next">
 
 <!-- BEGIN KILLEDBYDETAILS -->
 	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate">
@@ -529,11 +494,11 @@
 		<td colspan="2" class="title" width="400" nowrap>{LN_PLAYER_TOPHITLOCATIONS_KILLED}</td>
 	</tr>
 	</table>
-	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center">
+	<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="us-hitloc-inner">
 	<tr>
-		<td nowrap valign="top" class="table_with_border_second">
+		<td nowrap valign="top" class="table_with_border_second us-hitloc-chart">
 
-		<table border="0" cellpadding="0" cellspacing="0" width="220">
+		<table border="0" cellpadding="0" cellspacing="0" width="220" class="us-hitloc-figure">
 		<tr>
 			<td colspan="20"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_1.png" width="220" border="0" height="4"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="4"></td>
@@ -541,27 +506,21 @@
 		<tr>
 			<td colspan="8"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_2.png" width="88" border="0" height="41"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{head_level}/{head}.png" width="45" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{head_hovertxt}', '{head_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{head}', {head_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{head_hovertxt}" data-popup-image="{head_image}" data-out-src="{BASEPATH}images/player/{modelname}/{head_level}/{head}.png" data-out-legend="popupdetails"></td>
 			<td colspan="8"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_4.png" width="87" border="0" height="41"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="41"></td>
 		</tr>
 		<tr>
 			<td colspan="9"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_5.png" width="100" border="0" height="8"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/{neck_level}/{neck}.png" width="21" border="0" height="8" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{neck_hovertxt}', '{neck_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{neck}', {neck_level}, 'playerlegend', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{neck_hovertxt}" data-popup-image="{neck_image}" data-out-src="{BASEPATH}images/player/{modelname}/{neck_level}/{neck}.png" data-out-legend="playerlegend"></td>
 			<td colspan="9"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_7.png" width="99" border="0" height="8"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="8"></td>
 		</tr>
 		<tr>
 			<td colspan="7"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_8.png" width="80" border="0" height="6"></td>
 			<td colspan="6" rowspan="4"><img src="{BASEPATH}images/player/{modelname}/{torso_upper_level}/{torso_upper}.png" width="62" border="0" height="47" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{torso_upper_hovertxt}', '{torso_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{torso_upper}', {torso_upper_level}, 'playerlegend', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{torso_upper_hovertxt}" data-popup-image="{torso_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{torso_upper_level}/{torso_upper}.png" data-out-legend="playerlegend"></td>
 			<td colspan="7"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_10.png" width="78" border="0" height="6"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="6"></td>
 		</tr>
@@ -570,54 +529,40 @@
 			<td rowspan="4"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_12.png" width="5" border="0" height="49"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_13.png" width="28" border="0" height="13"></td>
 			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{left_arm_upper_level}/{left_arm_upper}.png" width="19" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_arm_upper_hovertxt}', '{left_arm_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_arm_upper}', {left_arm_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_arm_upper_hovertxt}" data-popup-image="{left_arm_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_arm_upper_level}/{left_arm_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{right_arm_upper_level}/{right_arm_upper}.png" width="19" border="0" height="41" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_arm_upper_hovertxt}', '{right_arm_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_arm_upper}', {right_arm_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_arm_upper_hovertxt}" data-popup-image="{right_arm_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_arm_upper_level}/{right_arm_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_16.png" width="29" border="0" height="14"></td>
 			<td colspan="2" rowspan="5"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_17.png" width="30" border="0" height="50"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="13"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{left_arm_lower_level}/{left_arm_lower}.png" width="28" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_arm_lower_hovertxt}', '{left_arm_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_arm_lower}', {left_arm_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_arm_lower_hovertxt}" data-popup-image="{left_arm_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_arm_lower_level}/{left_arm_lower}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="1"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/{modelname}/{right_arm_lower_level}/{right_arm_lower}.png" width="29" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_arm_lower_hovertxt}', '{right_arm_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_arm_lower}', {right_arm_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_arm_lower_hovertxt}" data-popup-image="{right_arm_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_arm_lower_level}/{right_arm_lower}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="27"></td>
 		</tr>
 		<tr>
 			<td rowspan="3"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_20.png" width="6" border="0" height="29"></td>
 			<td colspan="10" rowspan="4"><img src="{BASEPATH}images/player/{modelname}/{torso_lower_level}/{torso_lower}.png" width="87" border="0" height="53" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{torso_lower_hovertxt}', '{torso_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{torso_lower}', {torso_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{torso_lower_hovertxt}" data-popup-image="{torso_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{torso_lower_level}/{torso_lower}.png" data-out-legend="popupdetails"></td>
 			<td rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_22.png" width="7" border="0" height="9"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="8"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/{modelname}/{left_hand_level}/{left_hand}.png" width="28" border="0" height="21" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_hand_hovertxt}', '{left_hand_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_hand}', {left_hand_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_hand_hovertxt}" data-popup-image="{left_hand_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_hand_level}/{left_hand}.png" data-out-legend="popupdetails"></td>
 			<td rowspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_24.png" width="5" border="0" height="21"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="1"></td>
 		</tr>
 		<tr>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_25.png" width="12" border="0" height="20"></td>
 			<td colspan="2"><img src="{BASEPATH}images/player/{modelname}/{right_hand_level}/{right_hand}.png" width="28" border="0" height="20" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_hand_hovertxt}', '{right_hand_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_hand}', {right_hand_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_hand_hovertxt}" data-popup-image="{right_hand_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_hand_level}/{right_hand}.png" data-out-legend="popupdetails"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_27.png" width="26" border="0" height="20"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="20"></td>
 		</tr>
@@ -629,39 +574,27 @@
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_30.png" width="73" border="0" height="34"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_leg_upper_level}/{left_leg_upper}.png" width="38" border="0" height="34" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_leg_upper_hovertxt}', '{left_leg_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_leg_upper}', {left_leg_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_leg_upper_hovertxt}" data-popup-image="{left_leg_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_leg_upper_level}/{left_leg_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_leg_upper_level}/{right_leg_upper}.png" width="37" border="0" height="34" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_leg_upper_hovertxt}', '{right_leg_upper_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_leg_upper}', {right_leg_upper_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_leg_upper_hovertxt}" data-popup-image="{right_leg_upper_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_leg_upper_level}/{right_leg_upper}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_33.png" width="72" border="0" height="34"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="34"></td>
 		</tr>
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_34.png" width="73" border="0" height="36"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_leg_lower_level}/{left_leg_lower}.png" width="38" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_leg_lower_hovertxt}', '{left_leg_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_leg_lower}', {left_leg_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_leg_lower_hovertxt}" data-popup-image="{left_leg_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_leg_lower_level}/{left_leg_lower}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_leg_lower_level}/{right_leg_lower}.png" width="37" border="0" height="36" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_leg_lower_hovertxt}', '{right_leg_lower_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_leg_lower}', {right_leg_lower_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_leg_lower_hovertxt}" data-popup-image="{right_leg_lower_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_leg_lower_level}/{right_leg_lower}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_37.png" width="72" border="0" height="36"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="36"></td>
 		</tr>
 		<tr>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_38.png" width="73" border="0" height="54"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{left_foot_level}/{left_foot}.png" width="38" border="0" height="54" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{left_foot_hovertxt}', '{left_foot_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{left_foot}', {left_foot_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{left_foot_hovertxt}" data-popup-image="{left_foot_image}" data-out-src="{BASEPATH}images/player/{modelname}/{left_foot_level}/{left_foot}.png" data-out-legend="popupdetails"></td>
 			<td colspan="4"><img src="{BASEPATH}images/player/{modelname}/{right_foot_level}/{right_foot}.png" width="37" border="0" height="54" 
-					OnMouseOver="HoverPopup(this, '{LN_PLAYER_HITLMOUSEHELP}', '{right_foot_hovertxt}', '{right_foot_image}');" 
-					OnMouseMove="movePopupWindow(event,'popupdetails', this);"
-					OnMouseOut="FinishPopupWindow(); OutPlayerImage(this, '{right_foot}', {right_foot_level}, 'popupdetails', '{modelname}');"></td>
+				 class="us-player-popup-part" data-popup-title="{LN_PLAYER_HITLMOUSEHELP}" data-popup-content="{right_foot_hovertxt}" data-popup-image="{right_foot_image}" data-out-src="{BASEPATH}images/player/{modelname}/{right_foot_level}/{right_foot}.png" data-out-legend="popupdetails"></td>
 			<td colspan="6"><img src="{BASEPATH}images/player/{modelname}/allmodels-v2_41.png" width="72" border="0" height="54"></td>
 			<td><img src="{BASEPATH}images/player/{modelname}/space.gif" width="1" border="0" height="54"></td>
 		</tr>
@@ -702,7 +635,7 @@
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/axis/allmodels_2.png" width="24" border="0" height="57"></td>
-			<td colspan="5" rowspan="2"><img src="{BASEPATH}images/player/axis/{head_level}/{head}.png" width="84" border="0" height="42" onmouseover="HoverPlayerImage(this, '{head}', '{head_display}', {head_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{head}', {head_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="5" rowspan="2"><img src="{BASEPATH}images/player/axis/{head_level}/{head}.png" width="84" border="0" height="42" class="us-player-legend-part" data-hover-display="{head_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{head_level}/{head}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td colspan="5"><img src="{BASEPATH}images/player/axis/allmodels_4.png" width="112" border="0" height="10"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="10"></td>
 		</tr>
@@ -713,23 +646,23 @@
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="32"></td>
 		</tr>
 		<tr>
-			<td colspan="5"><img src="{BASEPATH}images/player/axis/{neck_level}/{neck}.png" width="84" border="0" height="15" onmouseover="HoverPlayerImage(this, '{neck}', '{neck_display}', {neck_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{neck}', {neck_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="5"><img src="{BASEPATH}images/player/axis/{neck_level}/{neck}.png" width="84" border="0" height="15" class="us-player-legend-part" data-hover-display="{neck_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{neck_level}/{neck}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="15"></td>
 		</tr>
 		<tr>
 			<td><img src="{BASEPATH}images/player/axis/allmodels_9.png" width="8" border="0" height="36"></td>
-			<td colspan="2"><img src="{BASEPATH}images/player/axis/{left_arm_upper_level}/{left_arm_upper}.png" width="37" border="0" height="36" onmouseover="HoverPlayerImage(this, '{left_arm_upper}', '{left_arm_upper_display}', {left_arm_upper_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_arm_upper}', {left_arm_upper_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="3"><img src="{BASEPATH}images/player/axis/{torso_upper_level}/{torso_upper}.png" width="47" border="0" height="36" onmouseover="HoverPlayerImage(this, '{torso_upper}', '{torso_upper_display}', {torso_upper_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{torso_upper}', {torso_upper_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="2"><img src="{BASEPATH}images/player/axis/{right_arm_upper_level}/{right_arm_upper}.png" width="28" border="0" height="36" onmouseover="HoverPlayerImage(this, '{right_arm_upper}', '{right_arm_upper_display}', {right_arm_upper_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_arm_upper}', {right_arm_upper_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="2"><img src="{BASEPATH}images/player/axis/{left_arm_upper_level}/{left_arm_upper}.png" width="37" border="0" height="36" class="us-player-legend-part" data-hover-display="{left_arm_upper_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_arm_upper_level}/{left_arm_upper}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="3"><img src="{BASEPATH}images/player/axis/{torso_upper_level}/{torso_upper}.png" width="47" border="0" height="36" class="us-player-legend-part" data-hover-display="{torso_upper_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{torso_upper_level}/{torso_upper}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="2"><img src="{BASEPATH}images/player/axis/{right_arm_upper_level}/{right_arm_upper}.png" width="28" border="0" height="36" class="us-player-legend-part" data-hover-display="{right_arm_upper_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_arm_upper_level}/{right_arm_upper}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/allmodels_13.png" width="13" border="0" height="36"></td>
 			<td><img src="{BASEPATH}images/player/axis/allmodels_14.png" width="13" border="0" height="36"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="36"></td>
 		</tr>
 		<tr>
 			<td rowspan="5"><img src="{BASEPATH}images/player/axis/allmodels_15.png" width="8" border="0" height="59"></td>
-			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/axis/{left_arm_lower_level}/{left_arm_lower}.png" width="37" border="0" height="41" onmouseover="HoverPlayerImage(this, '{left_arm_lower}', '{left_arm_lower_display}', {left_arm_lower_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_arm_lower}', {left_arm_lower_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/axis/{left_hand_level}/{left_hand}.png" width="47" border="0" height="41" onmouseover="HoverPlayerImage(this, '{left_hand}', '{left_hand_display}', {left_hand_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_hand}', {left_hand_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/axis/{right_arm_lower_level}/{right_arm_lower}.png" width="28" border="0" height="20" onmouseover="HoverPlayerImage(this, '{right_arm_lower}', '{right_arm_lower_display}', {right_arm_lower_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_arm_lower}', {right_arm_lower_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/axis/{left_arm_lower_level}/{left_arm_lower}.png" width="37" border="0" height="41" class="us-player-legend-part" data-hover-display="{left_arm_lower_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_arm_lower_level}/{left_arm_lower}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="3" rowspan="3"><img src="{BASEPATH}images/player/axis/{left_hand_level}/{left_hand}.png" width="47" border="0" height="41" class="us-player-legend-part" data-hover-display="{left_hand_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_hand_level}/{left_hand}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/axis/{right_arm_lower_level}/{right_arm_lower}.png" width="28" border="0" height="20" class="us-player-legend-part" data-hover-display="{right_arm_lower_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_arm_lower_level}/{right_arm_lower}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/allmodels_19.png" width="13" border="0" height="12"></td>
 			<td><img src="{BASEPATH}images/player/axis/allmodels_20.png" width="13" border="0" height="12"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="12"></td>
@@ -739,12 +672,12 @@
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="8"></td>
 		</tr>
 		<tr>
-			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/axis/{right_hand_level}/{right_hand}.png" width="28" border="0" height="28" onmouseover="HoverPlayerImage(this, '{right_hand}', '{right_hand_display}', {right_hand_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_hand}', {right_hand_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/axis/{right_hand_level}/{right_hand}.png" width="28" border="0" height="28" class="us-player-legend-part" data-hover-display="{right_hand_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_hand_level}/{right_hand}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="21"></td>
 		</tr>
 		<tr>
 			<td colspan="2" rowspan="2"><img src="{BASEPATH}images/player/axis/allmodels_23.png" width="37" border="0" height="18"></td>
-			<td colspan="3" rowspan="2"><img src="{BASEPATH}images/player/axis/{torso_lower_level}/{torso_lower}.png" width="47" border="0" height="18" onmouseover="HoverPlayerImage(this, '{torso_lower}', '{torso_lower_display}', {torso_lower_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{torso_lower}', {torso_lower_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="3" rowspan="2"><img src="{BASEPATH}images/player/axis/{torso_lower_level}/{torso_lower}.png" width="47" border="0" height="18" class="us-player-legend-part" data-hover-display="{torso_lower_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{torso_lower_level}/{torso_lower}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="7"></td>
 		</tr>
 		<tr>
@@ -753,20 +686,20 @@
 		</tr>
 		<tr>
 			<td rowspan="3"><img src="{BASEPATH}images/player/axis/allmodels_26.png" width="8" border="0" height="115"></td>
-			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_leg_upper_level}/{left_leg_upper}.png" width="55" border="0" height="24" onmouseover="HoverPlayerImage(this, '{left_leg_upper}', '{left_leg_upper_display}', {left_leg_upper_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_leg_upper}', {left_leg_upper_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_leg_upper_level}/{left_leg_upper}.png" width="55" border="0" height="24" class="us-player-legend-part" data-hover-display="{left_leg_upper_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_leg_upper_level}/{left_leg_upper}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td rowspan="3"><img src="{BASEPATH}images/player/axis/allmodels_28.png" width="16" border="0" height="115"></td>
-			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_leg_upper_level}/{right_leg_upper}.png" width="66" border="0" height="24" onmouseover="HoverPlayerImage(this, '{right_leg_upper}', '{right_leg_upper_display}', {right_leg_upper_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_leg_upper}', {right_leg_upper_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_leg_upper_level}/{right_leg_upper}.png" width="66" border="0" height="24" class="us-player-legend-part" data-hover-display="{right_leg_upper_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_leg_upper_level}/{right_leg_upper}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td colspan="2" rowspan="3"><img src="{BASEPATH}images/player/axis/allmodels_30.png" width="75" border="0" height="115"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="24"></td>
 		</tr>
 		<tr>
-			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_leg_lower_level}/{left_leg_lower}.png" width="55" border="0" height="24" onmouseover="HoverPlayerImage(this, '{left_leg_lower}', '{left_leg_lower_display}', {left_leg_lower_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_leg_lower}', {left_leg_lower_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_leg_lower_level}/{right_leg_lower}.png" width="66" border="0" height="24" onmouseover="HoverPlayerImage(this, '{right_leg_lower}', '{right_leg_lower_display}', {right_leg_lower_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_leg_lower}', {right_leg_lower_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_leg_lower_level}/{left_leg_lower}.png" width="55" border="0" height="24" class="us-player-legend-part" data-hover-display="{left_leg_lower_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_leg_lower_level}/{left_leg_lower}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_leg_lower_level}/{right_leg_lower}.png" width="66" border="0" height="24" class="us-player-legend-part" data-hover-display="{right_leg_lower_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_leg_lower_level}/{right_leg_lower}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="24"></td>
 		</tr>
 		<tr>
-			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_foot_level}/{left_foot}.png" width="55" border="0" height="67" onmouseover="HoverPlayerImage(this, '{left_foot}', '{left_foot_display}', {left_foot_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{left_foot}', {left_foot_level}, document.all('playerlegend_killedby'), 'axis');"></td>
-			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_foot_level}/{right_foot}.png" width="66" border="0" height="67" onmouseover="HoverPlayerImage(this, '{right_foot}', '{right_foot_display}', {right_foot_level}, document.all('playerlegend_killedby'), 'axis');" onmouseout="OutPlayerImage(this, '{right_foot}', {right_foot_level}, document.all('playerlegend_killedby'), 'axis');"></td>
+			<td colspan="3"><img src="{BASEPATH}images/player/axis/{left_foot_level}/{left_foot}.png" width="55" border="0" height="67" class="us-player-legend-part" data-hover-display="{left_foot_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{left_foot_level}/{left_foot}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
+			<td colspan="5"><img src="{BASEPATH}images/player/axis/{right_foot_level}/{right_foot}.png" width="66" border="0" height="67" class="us-player-legend-part" data-hover-display="{right_foot_display}" data-legend-target="playerlegend_killedby" data-out-src="{BASEPATH}images/player/axis/{right_foot_level}/{right_foot}.png" data-out-text="{LN_PLAYER_HITLMOUSEHELP}"></td>
 			<td><img src="{BASEPATH}images/player/axis/space.gif" width="1" border="0" height="67"></td>
 		</tr>
 		<tr>
@@ -793,19 +726,18 @@
 
 		</td>
 	
-		<td width="100%" nowrap valign="top" class="table_with_border_second">
-			<br>
-			<table width="90%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<td nowrap valign="top" class="table_with_border_second us-hitloc-stats-cell">
+			<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate us-hitloc-stats-table">
 			<tr>
-				<td width="35" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-				<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_HITLOCATION}</B></td>
-				<td width="50" class="cellmenu1" align="center" nowrap><B>{LN_PLAYER_HITLKILLSCOUNT}</B></td>
+				<td class="cellmenu1 us-hitloc-col-num" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+				<td class="cellmenu1 us-hitloc-col-zone" align="left" nowrap><b>{LN_PLAYER_HITLOCATION}</b></td>
+				<td class="cellmenu1 us-hitloc-col-kills" align="right" nowrap><b>{LN_PLAYER_HITLKILLSCOUNT}</b></td>
 			</tr>
 			<!-- BEGIN hitlocations -->
 			<tr>
-				<td class="{cssclass}" align="left" nowrap><B>{Number}</B></td>
-				<td class="{cssclass}" align="center" nowrap><B>{DisplayName}</B></td>
-				<td class="{cssclass}" align="right" nowrap><B>{TotalKills}</B></td>
+				<td class="{cssclass} us-hitloc-col-num" align="center" nowrap><b>{Number}</b></td>
+				<td class="{cssclass} us-hitloc-col-zone" align="left" nowrap><b>{DisplayName}</b></td>
+				<td class="{cssclass} us-hitloc-col-kills" align="right" nowrap><b>{TotalKills}</b></td>
 			</tr>
 			<!-- END hitlocations -->
 			</table>

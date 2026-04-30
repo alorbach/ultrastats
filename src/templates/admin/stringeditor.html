@@ -1,30 +1,30 @@
 <!-- INCLUDE admin/admin_header.html --> 
 
 <!-- IF ISERROR="true" -->
-<center>
-<h3><font color="red">{ERROR_MSG}</font></h3>
-</center>
+<div class="us-center">
+<h3 class="ErrorMsg" role="alert" aria-live="assertive">{ERROR_MSG}</h3>
+</div>
 <!-- ENDIF ISERROR="true" -->
 
-<table cellpadding="0" cellspacing="0" border="0" width="750" align="center" class="with_border_alternate">
+<table cellpadding="0" cellspacing="0" border="0" width="750" align="center" class="with_border_alternate us-admin-responsive-panel">
 <tr>
 	<td colspan="10" align="center" valign="top" class="title">
 	<strong>{LN_ADMIN_STREDITOR}</strong></td>
 </tr>
 </table>
-<table cellpadding="0" cellspacing="0" border="0" width="750" align="center" class="with_border">
+<table cellpadding="0" cellspacing="0" border="0" width="750" align="center" class="with_border us-admin-responsive-panel">
 <tr>
 	<td align="center" class="tableBackground">
 
 <!-- IF LISTSTRINGS="true" -->
 
-		<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" class="us-admin-filter-table">
 		<tr> 
-			<td class="cellmenu1" nowrap><label for="admin-string-filter"><B>&nbsp;{LN_STRING_FILTER}&nbsp;</B></label></td>
+			<td class="cellmenu1" nowrap><label for="admin-string-filter"><b>&nbsp;{LN_STRING_FILTER}&nbsp;</b></label></td>
 			<td class="line0" align="center" nowrap>
 				<form action="" method="get">
 				<input type="hidden" name="start" value="{current_pagebegin}">
-				<input type="textbox" id="admin-string-filter" size="40" name="strfilter" value="{strfilter}">
+				<input type="text" id="admin-string-filter" size="40" name="strfilter" value="{strfilter}">
 				<input type="submit" value="{LN_STRED_DOFILTER}">
 			</td>
 			<td class="line1" width="100%" align="center">&nbsp;</td>
@@ -33,18 +33,18 @@
 		</table>
 
 		<!-- IF string_pagerenabled="true" -->
-		<table width="100%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
+		<table width="100%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border us-admin-scroll-strip">
 		<tr>
-			<td class="cellmenu2" nowrap><B>Pages: &nbsp; </B></td>
+			<td class="cellmenu2" nowrap><b>Pages: &nbsp; </b></td>
 		<!-- BEGIN STRINGPAGES -->
 			<td class="{cssclass}" nowrap><a href="?playerfilter={playerfilter}&start={mypagebegin}" target="_top">{mypagenumber}</a>&nbsp;</td>
 		<!-- END STRINGPAGES -->
-			<td nowrap width="100%"class="line2">&nbsp;</td>
+			<td nowrap width="100%" class="line2">&nbsp;</td>
 		</tr>
 		</table>
 		<!-- ENDIF string_pagerenabled="true" -->
 
-		<table border="0" cellpadding="2" cellspacing="1" bgcolor="#DDDDDD">
+		<table border="0" cellpadding="2" cellspacing="1" class="us-admin-table-surface us-admin-scroll-strip">
 		<tr>
 			<td align="center" width="100" class="cellmenu1"><b>{LN_STRED_LANG}</b></td>
 			<td align="center" width="200" class="cellmenu1"><b>{LN_STRED_STRINGID}</b></td>
@@ -58,7 +58,7 @@
 			<td align="left" class="{cssclass}">{TEXT_TRUNS}</td>
 			<td align="center" class="{cssclass}">
 				&nbsp;<a href="stringeditor.php?op=edit&id={STRINGID}&lang={LANG}" aria-label="{LN_ADMINEDIT}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}" alt="" aria-hidden="true"></a>
-				&nbsp;<a href="stringeditor.php?strfilter={strfilter}&start={current_pagebegin}&op=delete&id={STRINGID}&lang={LANG}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
+				&nbsp;<a href="stringeditor.php?strfilter={strfilter}&start={current_pagebegin}&op=delete&id={STRINGID}&lang={LANG}" class="us-confirm-nav" data-confirm-message="{LN_WARNING_DELETESTRING}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
 			</td>
 		</tr>
 		<!-- END STRINGS -->
@@ -72,15 +72,15 @@
 
 <!-- IF ISEDITSTRING="true" -->
 		<form action="" method="post">
-			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="100%">
+			<table border="0" cellpadding="1" cellspacing="1" class="us-admin-table-surface" width="100%">
 			<tr>
 				<td align="left" class="cellmenu1" width="150" nowrap><label for="admin-string-id"><b>{LN_STRED_STRINGID}</b></label></td>
-				<td align="right" class="line0" width="100%"><input type="textbox" id="admin-string-id" size="40" name="id" value="{STRINGID}"></td>
+				<td align="right" class="line0" width="100%"><input type="text" id="admin-string-id" size="40" name="id" value="{STRINGID}" required autocomplete="off"></td>
 			</tr>
 			<tr>
 				<td align="left" class="cellmenu1" nowrap><label for="admin-string-langcode"><b>{LN_STRED_LANG}</b></label></td>
 				<td align="right" class="line1">
-				<select id="admin-string-langcode" name="langcode" size="1" STYLE="width: 190px">
+				<select id="admin-string-langcode" name="langcode" size="1" class="us-form-select-medium">
 					<!-- BEGIN FORM_LANGUAGES -->
 					<option {is_selected} value="{langcode}">{DisplayName}</option>
 					<!-- END FORM_LANGUAGES -->
@@ -107,31 +107,40 @@
 <!-- IF ISDELETESTRING="true" -->
 	<br>
 	<!-- IF ISVERIFY="true" -->
-			<table width="600" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border_alternate">
+			<table width="600" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border_alternate us-admin-responsive-panel">
 			<tr>
-				<td colspan="10" align="center" valign="top" class="title"><strong><FONT COLOR="red">{LN_WARNING_DELETESTRING}</FONT></strong></td>
+				<td colspan="10" align="center" valign="top" class="title"><strong class="us-error-text">{LN_WARNING_DELETESTRING}</strong></td>
 			</tr>
 			</table>
-			<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
+			<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border us-admin-responsive-panel">
 			<tr>
 				<td align="center" class="line0" width="50%">
 					<br>
-					<A HREF="stringeditor.php?strfilter={strfilter}&start={current_pagebegin}&op=delete&id={STRINGID}&lang={LANG}&verify=yes" aria-label="{LN_ADMINDELETE}">
+					<form action="stringeditor.php" method="post">
+					<input type="hidden" name="op" value="delete">
+					<input type="hidden" name="id" value="{STRINGID}">
+					<input type="hidden" name="lang" value="{LANG}">
+					<input type="hidden" name="admin_confirm_string_delete" value="1">
+					<input type="hidden" name="strfilter" value="{strfilter}">
+					<input type="hidden" name="start" value="{current_pagebegin}">
+					<input type="hidden" name="ultrastats_csrf" value="{ULTRASTATS_CSRF_VALUE}">
+					<button type="submit" class="borderless" aria-label="{LN_ADMINDELETE}">
 					<img src="{BASEPATH}images/icons/check.png" width="16" alt="" aria-hidden="true"><br>
-					Yes, delete stringid '{STRINGID}' </A>
+					Yes, delete stringid '{STRINGID}' </button>
+					</form>
 				</td>
 				<td align="center" class="line1" width="50%">
-					<A HREF="javascript:history.back();" aria-label="{LN_STRING_BACKSTRINGLIST}">
+					<a href="stringeditor.php?strfilter={strfilter}&start={current_pagebegin}" class="us-history-back" aria-label="{LN_STRING_BACKSTRINGLIST}">
 					<br>
 					<img src="{BASEPATH}images/icons/redo.png" width="16" alt="" aria-hidden="true"><br>
-					No, go back</A>
+					No, go back</a>
 				</td>
 			</tr>
 			</table>
 	<!-- ENDIF ISVERIFY="true" -->
 
 	<!-- IF ISVERIFY="false" -->
-		<table border="0" cellpadding="2" cellspacing="1" bgcolor="#DDDDDD">
+		<table border="0" cellpadding="2" cellspacing="1" class="us-admin-table-surface us-admin-scroll-strip">
 		<tr>
 			<td align="center" class="line1"><b>{STRING_DELETEDSTRING}</b></td>
 		</tr>

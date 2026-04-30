@@ -339,7 +339,7 @@ if ( isset($content['roundsonly']) )
 			$content['ROUNDPAGES'][$i]['mypagebegin'] = ($i * $content['web_toprounds']);
 
 			if ($content['current_pagebegin'] == $content['ROUNDPAGES'][$i]['mypagebegin'])
-				$content['ROUNDPAGES'][$i]['mypagenumber'] = "<B>-> ".($i+1)." <-</B>";
+				$content['ROUNDPAGES'][$i]['mypagenumber'] = "<b>-> ".($i+1)." <-</b>";
 			else
 				$content['ROUNDPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -355,7 +355,10 @@ if ( isset($content['roundsonly']) )
 
 }
 else
-	$content['roundsenabled'] = "false";
+{
+	$content['roundsenabled']  = "false";
+	$content['ERROR_DETAILS'] = $content['LN_ERROR_NOSTATSDATAFOUND'];
+}
 
 // --- 
 

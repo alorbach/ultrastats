@@ -79,7 +79,7 @@ if ( isset($_GET['op']) )
 		else
 		{
 			$content['ISERROR'] = "true";
-			$content['ERROR_MSG'] = "*Error, Server with ID '$serverid' not found in database";
+			$content['ERROR_MSG'] = "*Error, Server with ID '" . $content['serverid'] . "' not found in database";
 		}
 	}
 	else if ( 
@@ -101,6 +101,9 @@ if ( isset($_GET['op']) )
 	}
 }
 // --- 
+
+if ( isset($content['ISERROR']) && isset($content['ERROR_MSG']) )
+	$content['ERROR_MSG'] = UltraStats_h($content['ERROR_MSG']);
 
 // --- Parsen and Output
 InitTemplateParser();

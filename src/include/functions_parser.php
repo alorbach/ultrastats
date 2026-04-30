@@ -425,7 +425,7 @@ function server_login($connid, $username, $password)
 /*
 *	Function to reset the LastlogLine
 */
-function ResetLastLine()
+function ResetLastLine( $skip_user_confirm = false )
 {
 	global $ParserStart, $myserver, $content;
 	global $RUNMODE;
@@ -443,7 +443,18 @@ function ResetLastLine()
 		return;
 	}
 
-	// --- Set the last FilePosition to 0 
+	if ( ! $skip_user_confirm && $RUNMODE == RUNMODE_WEBSERVER )
+	{
+		$nonce = isset( $_GET['parser_confirm_nonce'] ) ? (string) $_GET['parser_confirm_nonce'] : '';
+		$data  = UltraStats_ParserConfirmNonceConsume( $nonce );
+		if ( ! is_array( $data ) || $data['op'] !== 'resetlastlogline' || $data['id'] !== (int) $myserver['ID'] )
+		{
+			PrintSecureUserCheckLegacy( $content['LN_WARNINGRESETLASTLOGLINE'], $content['LN_DELETEYES'], $content['LN_DELETENO'], 'resetlastlogline' );
+			return;
+		}
+	}
+
+	// --- Set the last FilePosition to 0
 	$result = DB_Query("UPDATE " . STATS_SERVERS . " SET LastLogLine = 0, PlayedSeconds = 0, LastLogLineChecksum = 0 WHERE ID = " . $myserver['ID']);
 	DB_FreeQuery($result);
 
@@ -473,16 +484,20 @@ function DeleteServer()
 		return;
 	}
 
-	if ( !isset($_GET['verify']) || $_GET['verify'] != "yes" )
+	if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		// Print form and return from function
-		PrintSecureUserCheckLegacy( $content['LN_WARNINGDELETE'], $content['LN_DELETEYES'], $content['LN_DELETENO'], "delete" );
-		return;
+		$nonce = isset( $_GET['parser_confirm_nonce'] ) ? (string) $_GET['parser_confirm_nonce'] : '';
+		$data  = UltraStats_ParserConfirmNonceConsume( $nonce );
+		if ( ! is_array( $data ) || $data['op'] !== 'delete' || $data['id'] !== (int) $myserver['ID'] )
+		{
+			PrintSecureUserCheckLegacy( $content['LN_WARNINGDELETE'], $content['LN_DELETEYES'], $content['LN_DELETENO'], 'delete' );
+			return;
+		}
 	}
 	// ---
 
 	// First of all delete the Server Stats!
-	DeleteServerStats();
+	DeleteServerStats( true );
 
 	// Dbg
 	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Deleting ServerentryID'" . $myserver['ID'] . "' ...");
@@ -494,7 +509,7 @@ function DeleteServer()
 /*
 *	Function to delete the stats of a server
 */
-function DeleteServerStats()
+function DeleteServerStats( $skip_user_confirm = false )
 {
 	global $content, $ParserStart, $myserver;
 	global $RUNMODE;
@@ -516,11 +531,15 @@ function DeleteServerStats()
 	}
 
 	// --- Ask for deletion first!
-	if ( (!isset($_GET['verify']) || $_GET['verify'] != "yes") )
+	if ( ! $skip_user_confirm && $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		// Print form and return from function
-		PrintSecureUserCheckLegacy( GetAndReplaceLangStr($content['LN_WARNINGDELETE_STATS'], $myserver['Name'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'], "deletestats" );
-		return;
+		$nonce = isset( $_GET['parser_confirm_nonce'] ) ? (string) $_GET['parser_confirm_nonce'] : '';
+		$data  = UltraStats_ParserConfirmNonceConsume( $nonce );
+		if ( ! is_array( $data ) || $data['op'] !== 'deletestats' || $data['id'] !== (int) $myserver['ID'] )
+		{
+			PrintSecureUserCheckLegacy( GetAndReplaceLangStr( $content['LN_WARNINGDELETE_STATS'], $myserver['Name'] ), $content['LN_DELETEYES'], $content['LN_DELETENO'], 'deletestats' );
+			return;
+		}
 	}
 	// ---
 
@@ -564,7 +583,7 @@ function DeleteServerStats()
 	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Deleted '" . GetRowsAffected() . "' Consolidationed ( '" . STATS_WEAPONS_PERSERVER . "' table ) ...");
 	
 	// Also delete lastLogLine
-	ResetLastLine();
+	ResetLastLine( true );
 	// ---
 	
 	PrintHTMLDebugInfo( DEBUG_INFO, "Parser", "Finished Delete process");
@@ -800,7 +819,7 @@ function RunParserNow()
 			$db_lastplayedseconds = 0;
 
 			// Reset LastLogline now!
-			ResetLastLine();
+			ResetLastLine( true );
 			
 			// Draw Javascript reload (HTML) or SSE reconnect (embedded parser log).
 			define('RELOADPARSER', true);
@@ -818,10 +837,9 @@ function RunParserNow()
 					)
 				);
 			} else {
-				print ( '<br><center><B>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</B><br>
-					Please click <B><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</A></B> to resume the update process.
-					This site will automatically reload in 5 seconds.<br></center>
-					<script>function usParserReloadSame() { location.replace("' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '"); } setTimeout(usParserReloadSame, 5000);</script>' );
+				print ( '<br><div class="us-center us-auto-reload" data-reload-url="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '" data-reload-delay="5000"><b>The LastLogline has been reseted, the Parser need to be reloaded to restart parsing!</b><br>
+					Please click <b><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</a></b> to resume the update process.
+					This site will automatically reload in 5 seconds.<br></div>' );
 			}
 
 			// Return from the function
@@ -1062,10 +1080,9 @@ function RunParserNow()
 												)
 											);
 										} else {
-											print ( '<br><center><B>Timelimit hit (' . $MaxExecutionTime . ' seconds).</B><br>
-												Please click <B><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</A></B> to resume the update process.
-												This site will automatically reload in 5 seconds.<br></center>
-												<script>function usParserReloadSame() { location.replace("' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '"); } setTimeout(usParserReloadSame, 5000);</script>' );
+											print ( '<br><div class="us-center us-auto-reload" data-reload-url="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '" data-reload-delay="5000"><b>Timelimit hit (' . $MaxExecutionTime . ' seconds).</b><br>
+												Please click <b><a href="' . htmlspecialchars( $resumeUrl, ENT_QUOTES, 'UTF-8' ) . '">here</a></b> to resume the update process.
+												This site will automatically reload in 5 seconds.<br></div>' );
 										}
 
 										// Run an update of the LastUpdate Time

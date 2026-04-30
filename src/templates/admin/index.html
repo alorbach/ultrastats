@@ -1,16 +1,16 @@
 <!-- INCLUDE admin/admin_header.html --> 
 
-<table width="400" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border_alternate">
+<table width="400" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border_alternate us-admin-summary-table">
 <tr>
 	<td colspan="10" align="center" valign="top" class="title">
 	<strong>{LN_ADMINCENTER}</strong></td>
 </tr>
 </table>
-<table width="400" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
+<table width="400" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border us-admin-summary-table">
 <tr>
 	<td align="center">
 
-		<table cellpadding="1" cellspacing="1" border="0" >
+		<table cellpadding="1" cellspacing="1" border="0" class="us-admin-summary-metrics">
 		<tr>
 			<td align="right" width="150" class="cellmenu2" nowrap><b>{LN_NUMSERVERS}</b></td>
 			<td align="center" width="100%" class="line1">{NUMSERVERS}</td>
@@ -32,17 +32,17 @@
 <br><br>
 
 <form id="admin-gen-form" action="" method="post">
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate us-admin-config-table">
 	<tr>
 		<td colspan="2" align="center" valign="top" class="title">
 		<strong>{LN_ADMINGENCONFIG}</strong></td>
 	</tr>
 	</table>
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border us-admin-config-table">
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-gen-lang"><b>{LN_GEN_LANGUAGE}</b></label></td>
 		<td align="right" class="line1" width="100%">
-			<select id="admin-gen-lang" name="gen_lang" size="1" STYLE="width: 250px">
+			<select id="admin-gen-lang" name="gen_lang" size="1" class="us-form-select-wide">
 				<!-- BEGIN LANGUAGES -->
 				<option {selected}>{langcode}</option>
 				<!-- END LANGUAGES -->
@@ -52,7 +52,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-gen-gameversion"><b>{LN_GEN_GAMEVERSION}</b></label></td>
 		<td align="right" class="line2" width="100%">
-			<select id="admin-gen-gameversion" name="gen_gameversion" size="1" STYLE="width: 250px">
+			<select id="admin-gen-gameversion" name="gen_gameversion" size="1" class="us-form-select-wide">
 				<!-- BEGIN GAMEVERSIONS -->
 				<option {selected} value="{gamever}">{gamevertitle}</option>
 				<!-- END GAMEVERSIONS -->
@@ -62,7 +62,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-gen-parseby"><b>{LN_GEN_PARSEBYTYPE}</b></label></td>
 		<td align="right" class="line1">
-			<select id="admin-gen-parseby" name="gen_parseby" size="1" STYLE="width: 250px">
+			<select id="admin-gen-parseby" name="gen_parseby" size="1" class="us-form-select-wide">
 				<!-- BEGIN PARSEBYTYPES -->
 				<option {selected} value="{parsebytype}">{parsebytypetitle}</option>
 				<!-- END PARSEBYTYPES -->
@@ -89,17 +89,17 @@
 
 	<br>
 
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate us-admin-config-table">
 	<tr>
 		<td align="center" valign="top" class="title">
 		<strong>{LN_ADMINFRONTEND}</strong></td>
 	</tr>
 	</table>
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border us-admin-config-table">
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-web-theme"><b>{LN_GEN_WEB_STYLE}</b></label></td>
 		<td align="right" class="line1" width="100%">
-			<select id="admin-web-theme" name="web_theme" size="1" STYLE="width: 250px">
+			<select id="admin-web-theme" name="web_theme" size="1" class="us-form-select-wide">
 				<!-- BEGIN STYLES -->
 				<option {selected}>{StyleName}</option>
 				<!-- END STYLES -->
@@ -109,7 +109,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-mainpageplayers"><b>{LN_GEN_WEB_MAINTPPLAYERS}</b></label></td>
 		<td align="right" class="line2" >
-			<select id="admin-web-mainpageplayers" name="web_mainpageplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-mainpageplayers" name="web_mainpageplayers" size="1" class="us-form-select-wide">
 				<!-- BEGIN MAINPAGEPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END MAINPAGEPLAYERS -->
@@ -119,7 +119,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-topplayers"><b>{LN_GEN_WEB_TOPPLAYERS}</b></label></td>
 		<td align="right" class="line2" >
-			<select id="admin-web-topplayers" name="web_topplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-topplayers" name="web_topplayers" size="1" class="us-form-select-wide">
 				<!-- BEGIN TOPPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPPLAYERS -->
@@ -129,7 +129,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-detaillistsplayers"><b>{LN_GEN_WEB_DETAILLISTTOPPLAYERS}</b></label></td>
 		<td align="right" class="line1" >
-			<select id="admin-web-detaillistsplayers" name="web_detaillistsplayers" size="1" STYLE="width: 250px">
+			<select id="admin-web-detaillistsplayers" name="web_detaillistsplayers" size="1" class="us-form-select-wide">
 				<!-- BEGIN TOPLISTPLAYERS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPLISTPLAYERS -->
@@ -139,7 +139,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-toprounds"><b>{LN_GEN_WEB_TOPROUNDS}</b></label></td>
 		<td align="right" class="line2" >
-			<select id="admin-web-toprounds" name="web_toprounds" size="1" STYLE="width: 250px">
+			<select id="admin-web-toprounds" name="web_toprounds" size="1" class="us-form-select-wide">
 				<!-- BEGIN TOPROUNDS -->
 				<option {selected}>{Number}</option>
 				<!-- END TOPROUNDS -->
@@ -150,7 +150,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-maxpages"><b>{LN_GEN_WEB_MAXPAGES}</b></label></td>
 		<td align="right" class="line1" >
-			<select id="admin-web-maxpages" name="web_maxpages" size="1" STYLE="width: 250px">
+			<select id="admin-web-maxpages" name="web_maxpages" size="1" class="us-form-select-wide">
 				<!-- BEGIN WEBMAXPAGES -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXPAGES -->
@@ -160,7 +160,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-maxmapsperpage"><b>{LN_GEN_WEB_MAXMAPSPERPAGE}</b></label></td>
 		<td align="right" class="line2" >
-			<select id="admin-web-maxmapsperpage" name="web_maxmapsperpage" size="1" STYLE="width: 250px">
+			<select id="admin-web-maxmapsperpage" name="web_maxmapsperpage" size="1" class="us-form-select-wide">
 				<!-- BEGIN WEBMAXMAPSPERPAGE -->
 				<option {selected}>{Number}</option>
 				<!-- END WEBMAXMAPSPERPAGE -->
@@ -210,17 +210,17 @@
 
 	<br>
 
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate us-admin-config-table">
 	<tr>
 		<td colspan="2" align="center" valign="top" class="title">
 		<strong>{LN_ADMINPLAYERDETAILS}</strong></td>
 	</tr>
 	</table>
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border us-admin-config-table">
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-web-playermodel-killer"><b>{LN_GEN_PD_KILLERMODEL}</b></label></td>
 		<td align="right" class="line1" >
-			<select id="admin-web-playermodel-killer" name="web_playermodel_killer" size="1" STYLE="width: 250px">
+			<select id="admin-web-playermodel-killer" name="web_playermodel_killer" size="1" class="us-form-select-wide">
 				<!-- BEGIN PLAYERMODELKILLER -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLER -->
@@ -230,7 +230,7 @@
 	<tr>
 		<td align="left" class="cellmenu2" nowrap><label for="admin-web-playermodel-killedby"><b>{LN_GEN_PD_KILLEDBYMODEL}</b></label></td>
 		<td align="right" class="line2" >
-			<select id="admin-web-playermodel-killedby" name="web_playermodel_killedby" size="1" STYLE="width: 250px">
+			<select id="admin-web-playermodel-killedby" name="web_playermodel_killedby" size="1" class="us-form-select-wide">
 				<!-- BEGIN PLAYERMODELKILLEDBY -->
 				<option value="{ModelName}" {selected}>{ModelDisplayname}</option>
 				<!-- END PLAYERMODELKILLEDBY -->
@@ -243,17 +243,17 @@
 
 	<br>
 
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate us-admin-config-table">
 	<tr>
 		<td colspan="2" align="center" valign="top" class="title">
 		<strong>{LN_ADMINPARSER}</strong></td>
 	</tr>
 	</table>
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border us-admin-config-table">
 	<tr>
 		<td align="left" class="cellmenu2" width="350" nowrap><label for="admin-parser-debugmode"><b>{LN_PARSER_DEBUGMODE}</b></label></td>
 		<td align="right" class="line2" width="100%">
-			<select id="admin-parser-debugmode" name="parser_debugmode" size="1" STYLE="width: 250px">
+			<select id="admin-parser-debugmode" name="parser_debugmode" size="1" class="us-form-select-wide">
 				<!-- BEGIN DBGMODES -->
 				<option {selected}>{DisplayName}</option>
 				<!-- END DBGMODES -->
@@ -272,13 +272,13 @@
 
 	<br>
 
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border_alternate us-admin-config-table">
 	<tr>
 		<td colspan="2" align="center" valign="top" class="title">
 		<strong>{LN_ADMINMEDALS}</strong></td>
 	</tr>
 	</table>
-	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border">
+	<table border="0" cellpadding="1" cellspacing="1" width="700" align="center" class="with_border us-admin-config-table">
 	<!-- IF medalsadmingrouppro="true" -->
 	<tr>
 		<td align="left" class="line2" width="350" nowrap><label for="admin-medal-group-pro"><b>{LN_ADMINMEDALSGROUP_PRO}</b></label></td>
@@ -317,7 +317,7 @@
 	<!-- END medals_admin_custom -->
 
 	<tr>
-		<td align="center" colspan="2" class="line1" id="medal-autorecalc-status">&nbsp;</td>
+		<td align="center" colspan="2" class="line1" id="medal-autorecalc-status" data-msg-saving="{LN_ADMINMEDAL_AUTOSAVE_SAVING}" data-msg-recalc="{LN_ADMINMEDAL_AUTOSAVE_RECALC}" data-msg-done="{LN_ADMINMEDAL_AUTOSAVE_DONE}" data-msg-error="{LN_ADMINMEDAL_AUTOSAVE_ERR}" data-recalc-url="parser-sse.php?op=calcmedalsonly" data-debounce-ms="500">&nbsp;</td>
 	</tr>
 	<tr>
 		<td align="center" colspan="2">
@@ -327,143 +327,6 @@
 	</tr>
 	</table>
 
-<script type="text/javascript">
-/* Medal admin: group toggles all checkboxes in that group; per-medal changes sync the group box (incl. indeterminate). */
-(function () {
-	var G = { pro:1, anti:1, custom:1 };
-	function q(sel) { return document.querySelectorAll(sel); }
-	function syncGroup(g) {
-		var masters = q('input.us-medal-group-toggle[data-us-medal-group="' + g + '"]');
-		var cbs = q('input.us-medal-cb[data-us-medal-group="' + g + '"]');
-		if (!masters.length || !cbs.length) return;
-		var master = masters[0];
-		var n = 0, on = 0, i;
-		for (i = 0; i < cbs.length; i++) { n++; if (cbs[i].checked) on++; }
-		master.indeterminate = (on > 0 && on < n);
-		if (on === 0) { master.checked = false; } else if (on === n) { master.checked = true; } else { master.checked = false; }
-	}
-	function onMaster(e) {
-		var t = e.target; if (!t || !t.classList || !t.classList.contains('us-medal-group-toggle')) return;
-		var g = t.getAttribute('data-us-medal-group');
-		if (!G[g]) return;
-		t.indeterminate = false;
-		var cbs = q('input.us-medal-cb[data-us-medal-group="' + g + '"]');
-		for (var i = 0; i < cbs.length; i++) cbs[i].checked = t.checked;
-	}
-	function onChild(e) {
-		var t = e.target; if (!t || !t.classList || !t.classList.contains('us-medal-cb')) return;
-		var g = t.getAttribute('data-us-medal-group');
-		if (g) syncGroup(g);
-	}
-	function init() {
-		for (var g in G) { syncGroup(g); }
-		var m = q('input.us-medal-group-toggle');
-		for (var i = 0; i < m.length; i++) m[i].addEventListener('change', onMaster, false);
-		document.getElementById('admin-gen-form').addEventListener('change', onChild, true);
-	}
-	if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, false);
-	else init();
-})();
-</script>
-<script type="text/javascript">
-/* After medal option changes: save full form (AJAX), then run parser-sse medal recalc. */
-(function () {
-	var form = document.getElementById('admin-gen-form');
-	if (!form) return;
-	var statusEl = document.getElementById('medal-autorecalc-status');
-	var msgSaving = '{LN_ADMINMEDAL_AUTOSAVE_SAVING}';
-	var msgRecalc = '{LN_ADMINMEDAL_AUTOSAVE_RECALC}';
-	var msgDone = '{LN_ADMINMEDAL_AUTOSAVE_DONE}';
-	var msgErr = '{LN_ADMINMEDAL_AUTOSAVE_ERR}';
-	var debounceMs = 500;
-	var debTimer = null;
-	var doneHide = null;
-	var inFlight = false;
-	var pending = false;
-	var es = null;
-	function setStatus(t) {
-		if (statusEl) { statusEl.textContent = t || '\u00a0'; }
-	}
-	function isMedalOptionTarget(t) {
-		if (!t) return false;
-		if (t.classList && t.classList.contains('us-medal-group-toggle')) return true;
-		if (t.classList && t.classList.contains('us-medal-cb')) return true;
-		var n = t.name;
-		if (typeof n === 'string' && n.indexOf('medal_') === 0) return true;
-		return false;
-	}
-	function closeEs() {
-		if (es) { try { es.close(); } catch (e1) {} es = null; }
-	}
-	function startRecalcThenFinish() {
-		closeEs();
-		setStatus(msgRecalc);
-		var recalcEnded = false;
-		function endRecalc(ok) {
-			if (recalcEnded) return;
-			recalcEnded = true;
-			closeEs();
-			if (ok) {
-				setStatus(msgDone);
-				try { if (doneHide) clearTimeout(doneHide); } catch (e2) {}
-				doneHide = window.setTimeout(function () { setStatus(''); doneHide = null; }, 4000);
-			} else {
-				setStatus(msgErr);
-			}
-			finishCycle();
-		}
-		es = new EventSource('parser-sse.php?op=calcmedalsonly');
-		es.addEventListener('done', function () { endRecalc(true); });
-		es.addEventListener('parser_error', function () { endRecalc(false); });
-		es.addEventListener('error', function () {
-			if (!es) return;
-			if (es.readyState === EventSource.CONNECTING) return;
-			if (recalcEnded) return;
-			if (es.readyState === EventSource.OPEN) return;
-			endRecalc(false);
-		});
-	}
-	function finishCycle() {
-		inFlight = false;
-		if (pending) {
-			pending = false;
-			runSaveAndRecalc();
-		}
-	}
-	function runSaveAndRecalc() {
-		if (inFlight) { pending = true; return; }
-		inFlight = true;
-		setStatus(msgSaving);
-		var fd = new FormData(form);
-		fd.set('ajax_save', '1');
-		fetch(form.action || 'index.php', { method: 'POST', body: fd, credentials: 'same-origin' })
-			.then(function (r) {
-				if (!r.ok) throw new Error('http');
-				return r.json();
-			})
-			.then(function (j) {
-				if (!j || j.ok !== true) throw new Error('json');
-				startRecalcThenFinish();
-			})
-			.catch(function () {
-				setStatus(msgErr);
-				finishCycle();
-			});
-	}
-	function onFormChange(e) {
-		if (!isMedalOptionTarget(e.target)) return;
-		if (debTimer) { try { clearTimeout(debTimer); } catch (e3) {} debTimer = null; }
-		debTimer = window.setTimeout(function () {
-			debTimer = null;
-			if (inFlight) { pending = true; return; }
-			runSaveAndRecalc();
-		}, debounceMs);
-	}
-	if (form.addEventListener) {
-		form.addEventListener('change', onFormChange, false);
-	}
-})();
-</script>
 
 </form>
 

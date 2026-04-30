@@ -193,6 +193,7 @@ $content['LN_PARSER_DONE'] = "DONE";
 $content['LN_PARSER_RETURN_SERVERLIST'] = "Return to server list";
 $content['LN_WARNINGDELETE'] = "Warning! If you delete the Server, all it's stats will be deleted as well!";
 $content['LN_WARNINGDELETE_STATS'] = "Warning! All Stats for the Server '%1' will be deleted. Do you want to continue?";
+$content['LN_WARNINGRESETLASTLOGLINE'] = "Warning! The parser will restart from the beginning of the log file after resetting the saved position for this server. Continue?";
 $content['LN_DELETEYES'] = "Click here to continue deleting";
 $content['LN_DELETENO'] = "Click here to return to the previous page";
 $content['LN_FTPLOGINFAILED'] = "FTP Login failed, or no password given.";

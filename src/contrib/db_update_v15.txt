@@ -1,0 +1,15 @@
+-- --------------------------------------------------------
+-- Database internal version 15: CoD4 weapon description seed updates
+-- Only populate new text when the row is missing or currently empty.
+
+INSERT IGNORE INTO `stats_language_strings` (`LANG`,`STRINGID`,`TEXT`) VALUES
+('EN','weapon_cobra_20mm_mp','<p>The M61 Vulcan is a hydraulically, electrically, or pneumatically driven, six-barrel, air-cooled, electrically fired Gatling-style rotary cannon which fires 20 mm caliber rounds at an extremely high rate (typically 6,000 rounds per minute). The M61 and its derivatives have been the principal cannon armament of United States military fixed-wing aircraft for over forty years, as of the turn of century.\r\n\r\nDesigned in 1946 by General Electric, the Vulcan entered service with the U.S. military in 1959. As of 2000, it was produced by General Dynamics. It is also manufactured under license in Japan by Sumitomo Heavy Industries for Japan''s Self-Defense Force[3] and by SNT Dynamics in South Korea.'),
+('EN','weapon_destructible_car','Car explosions are environmental hazards capable of killing players, often triggered by shooting them until they catch fire or using explosives like C4. Vehicles take a certain amount of bullets to catch fire before exploding. Cars are present in several maps as destructible objects.');
+
+UPDATE `stats_language_strings`
+SET `TEXT` = '<p>The M61 Vulcan is a hydraulically, electrically, or pneumatically driven, six-barrel, air-cooled, electrically fired Gatling-style rotary cannon which fires 20 mm caliber rounds at an extremely high rate (typically 6,000 rounds per minute). The M61 and its derivatives have been the principal cannon armament of United States military fixed-wing aircraft for over forty years, as of the turn of century.\r\n\r\nDesigned in 1946 by General Electric, the Vulcan entered service with the U.S. military in 1959. As of 2000, it was produced by General Dynamics. It is also manufactured under license in Japan by Sumitomo Heavy Industries for Japan''s Self-Defense Force[3] and by SNT Dynamics in South Korea.'
+WHERE `LANG` = 'EN' AND `STRINGID` = 'weapon_cobra_20mm_mp' AND `TEXT` = '';
+
+UPDATE `stats_language_strings`
+SET `TEXT` = 'Car explosions are environmental hazards capable of killing players, often triggered by shooting them until they catch fire or using explosives like C4. Vehicles take a certain amount of bullets to catch fire before exploding. Cars are present in several maps as destructible objects.'
+WHERE `LANG` = 'EN' AND `STRINGID` = 'weapon_destructible_car' AND `TEXT` = '';

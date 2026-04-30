@@ -1,4 +1,4 @@
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_with_border">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_with_border us-chrome-pager">
 <tr>		
 	<td class="topmenu2begin" nowrap align="center"><img align="left" src="{MENU_BULLET_YELLOW}" width="16" height="16" vspace="0"></td>
 	<!-- IF pagermenuenabled="true" -->
@@ -22,10 +22,10 @@
 		<form action="userchange.php" method="get" name="yearidform">
 		<table border="0" cellspacing="0" cellpadding="0" align="right">
 		<tr> 
-			<td class="cellmenu1" nowrap width="125"><B>&nbsp;{LN_MAIN_SELECTTIMESPAN}&nbsp;</B></td>
+			<td class="cellmenu1" nowrap width="125"><b>&nbsp;{LN_MAIN_SELECTTIMESPAN}&nbsp;</b></td>
 			<td align="right" class="cellmenu2" width="100">
 				<input type="hidden" name="op" value="changeyear">
-				<select name="newyear" size="1" OnChange="document.yearidform.submit();" STYLE="width: 100px">
+				<select name="newyear" size="1" class="us-autosubmit-select us-form-select-100">
 					<option selected value="ALL_YEARS">-- All Years --</option>
 					<!-- BEGIN TIMEYEARS -->
 					<option {selected} value="{ID}">{DisplayName}</option>
@@ -44,7 +44,7 @@
 		<tr> 
 			<td align="right" class="cellmenu2">
 				<input type="hidden" name="op" value="changemonth">
-				<select name="newmonth" size="1" OnChange="document.monthidform.submit();" STYLE="width: 100px">
+				<select name="newmonth" size="1" class="us-autosubmit-select us-form-select-100">
 					<option selected value="ALL_MONTHS">-- All Months --</option>
 					<!-- BEGIN TIMEMONTHS -->
 					<option {selected} value="{ID}">{DisplayName}</option>

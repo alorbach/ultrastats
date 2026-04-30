@@ -1,9 +1,9 @@
 <!-- INCLUDE admin/admin_header.html --> 
 
 <!-- IF ISERROR="true" -->
-<center>
-<h3 class="ErrorMsg" role="alert" aria-live="assertive"><font color="red">{ERROR_MSG}</font></h3>
-</center>
+<div class="us-center">
+<h3 class="ErrorMsg" role="alert" aria-live="assertive">{ERROR_MSG}</h3>
+</div>
 <!-- ENDIF ISERROR="true" -->
 
 <table width="90%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border">
@@ -19,7 +19,7 @@
 
 	<tr>
 		<td align="center">
-			<table border="0" cellpadding="2" cellspacing="1" bgcolor="#DDDDDD">
+			<table border="0" cellpadding="2" cellspacing="1" class="us-admin-table-surface">
 			<tr>
 				<td align="center" width="150" class="line1" nowrap><b>{LN_SERVERNAME}</b></td>
 				<td align="center" width="100%" class="line1">{Name}</td>
@@ -28,12 +28,12 @@
 				<td align="center" width="150" class="line1" nowrap><b>{LN_SERVERTOOLS}</b></td>
 				<td colspan="2" align="center" class="line0">
 					&nbsp;<a href="servers.php?op=edit&id={ID}" aria-label="{LN_ADMINEDIT}"><img src="{BASEPATH}images/icons/edit.png" width="16" title="{LN_ADMINEDIT}" alt="" aria-hidden="true"></a>
-					&nbsp;<a href="parser.php?op=delete&id={ID}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
+					&nbsp;<a href="parser.php?op=delete&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGDELETE}" aria-label="{LN_ADMINDELETE}"><img src="{BASEPATH}images/icons/delete.png" width="16" title="{LN_ADMINDELETE}" alt="" aria-hidden="true"></a>
 					&nbsp;<a href="parser.php?op=updatestats&id={ID}" aria-label="{LN_ADMINPARSESTATS}"><img src="{BASEPATH}images/icons/gears_run.png" width="16" title="{LN_ADMINPARSESTATS}" alt="" aria-hidden="true"></a>
 					&nbsp;<a href="parser.php?op=createaliases&id={ID}" aria-label="{LN_ADMINCREATEALIASES}"><img src="{BASEPATH}images/icons/businessmen.png" width="16" title="{LN_ADMINCREATEALIASES}" alt="" aria-hidden="true"></a>
 					&nbsp;<a href="servers.php?op=dbstats&id={ID}" aria-label="{LN_ADMINDBSTATS}"><img src="{BASEPATH}images/icons/line-chart.png" width="16" title="{LN_ADMINDBSTATS}" alt="" aria-hidden="true"></a>
-					&nbsp;<a href="parser.php?op=resetlastlogline&id={ID}" aria-label="{LN_ADMINRESETLASTLOGLINE}"><img src="{BASEPATH}images/icons/recycle.png" width="16" title="{LN_ADMINRESETLASTLOGLINE}" alt="" aria-hidden="true"></a>
-					&nbsp;<a href="parser.php?op=deletestats&id={ID}" aria-label="{LN_ADMINDELETESTATS}"><img src="{BASEPATH}images/icons/garbage_empty.png" width="16" title="{LN_ADMINDELETESTATS}" alt="" aria-hidden="true"></a>
+					&nbsp;<a href="parser.php?op=resetlastlogline&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGRESETLASTLOGLINE}" aria-label="{LN_ADMINRESETLASTLOGLINE}"><img src="{BASEPATH}images/icons/recycle.png" width="16" title="{LN_ADMINRESETLASTLOGLINE}" alt="" aria-hidden="true"></a>
+					&nbsp;<a href="parser.php?op=deletestats&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGDELETE_STATS}" aria-label="{LN_ADMINDELETESTATS}"><img src="{BASEPATH}images/icons/garbage_empty.png" width="16" title="{LN_ADMINDELETESTATS}" alt="" aria-hidden="true"></a>
 					&nbsp;<a href="parser.php?op=getnewlogfile&id={ID}" aria-label="{LN_ADMINGETNEWLOG}"><img src="{BASEPATH}images/icons/download.png" width="16" title="{LN_ADMINGETNEWLOG}" alt="" aria-hidden="true"></a>
 				</td>
 			</tr>
@@ -68,329 +68,15 @@
 		</tr>
 	</table>
 
-	<div class="parser-embed-toolbar" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0;">
-		<p id="parser-stream-status" role="status" aria-live="polite" style="margin:0; color:#cccccc; font-size:12px;">Running…</p>
-		<button type="button" id="parser-cancel-btn" class="line0" aria-label="{LN_PARSER_CANCEL}" aria-controls="parser-log-wrap" style="display:none;padding:4px 10px;cursor:pointer;">{LN_PARSER_CANCEL}</button>
+	<div class="parser-embed-toolbar us-parser-embed-toolbar">
+		<p id="parser-stream-status" class="us-parser-stream-status" role="status" aria-live="polite">Running…</p>
+		<button type="button" id="parser-cancel-btn" class="line0 us-parser-cancel-btn" aria-label="{LN_PARSER_CANCEL}" aria-controls="parser-log-wrap">{LN_PARSER_CANCEL}</button>
 	</div>
 	<div id="parser-log-wrap" role="region" aria-label="{LN_EMBEDDED_PARSER}" data-parser-op="{parseroperation}" data-parser-id="{serverid}" data-msg-cancelling="{LN_PARSER_CANCELLING}" data-msg-cancelled="{LN_PARSER_CANCELLED_STATUS}" data-msg-done="{LN_PARSER_DONE}" data-msg-return-serverlist="{LN_PARSER_RETURN_SERVERLIST}" data-parser-serverlist-href="servers.php">
-		<div id="parser-log-header" class="parser-sse-cols" style="display:none;"></div>
+		<div id="parser-log-header" class="parser-sse-cols us-hidden"></div>
 		<pre id="parser-log-pre" class="parser-sse-pre" role="log" aria-live="polite" aria-relevant="additions text" spellcheck="false"></pre>
 		<div id="parser-done-banner" class="parser-done-banner" role="status" aria-live="polite" hidden></div>
 	</div>
-	<script>
-	(function () {
-		var wrap = document.getElementById('parser-log-wrap');
-		var pre = document.getElementById('parser-log-pre');
-		var logHeader = document.getElementById('parser-log-header');
-		var statusEl = document.getElementById('parser-stream-status');
-		var cancelBtn = document.getElementById('parser-cancel-btn');
-		var doneBanner = document.getElementById('parser-done-banner');
-		/** Batched plain-text log: fewer DOM nodes than one &lt;tr&gt; per line (huge logs stay responsive). */
-		var lineBuf = [];
-		var LOG_FLUSH = 100;
-		if (!wrap || !pre) { return; }
-		var op = wrap.getAttribute('data-parser-op') || '';
-		var sid = wrap.getAttribute('data-parser-id') || '';
-		var es = null;
-		var pendingRunTotals = null;
-		var streamEndedCancelled = false;
-
-		if (cancelBtn && sid) {
-			cancelBtn.addEventListener('click', function () {
-				if (!cancelBtn.disabled) {
-					cancelBtn.disabled = true;
-					if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = wrap.getAttribute('data-msg-cancelling') || 'Cancelling…'; }
-				}
-				fetch('parser-cancel.php?id=' + encodeURIComponent(sid), { method: 'POST', credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
-					.then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
-					.then(function (j) {
-						if (!j || j.ok === false) { cancelBtn.disabled = false; if (statusEl) { statusEl.textContent = 'Running…'; } }
-					})
-					.catch(function () { cancelBtn.disabled = false; if (statusEl) { statusEl.textContent = 'Running…'; } });
-			});
-		}
-
-		function oneLine(s) {
-			return String(s || '').replace(/\r\n|\n|\r/g, ' \u21b5 ');
-		}
-		function fmtLogLine(d) {
-			var n = String(d.n != null ? d.n : '');
-			if (typeof n.padStart === 'function') {
-				n = n.padStart(5, ' ');
-			} else {
-				while (n.length < 5) { n = ' ' + n; }
-			}
-			return n + '  ' + oneLine(d.lvl) + '  ' + oneLine(d.fac) + '  ' + oneLine(d.msg);
-		}
-		function flushLogBuf() {
-			if (!lineBuf.length) { return; }
-			pre.appendChild(document.createTextNode(lineBuf.join('\n') + '\n'));
-			lineBuf.length = 0;
-			wrap.scrollTop = wrap.scrollHeight;
-		}
-		function hideDoneBanner() {
-			if (!doneBanner) { return; }
-			doneBanner.setAttribute('hidden', '');
-			doneBanner.innerHTML = '';
-		}
-		function showDoneBanner(doneData) {
-			if (!doneBanner) { return; }
-			var label = wrap.getAttribute('data-msg-done') || 'DONE';
-			var sec = doneData && doneData.seconds != null && doneData.seconds !== '' ? String(doneData.seconds) : '';
-			var returnLbl = wrap.getAttribute('data-msg-return-serverlist') || 'Server list';
-			var listHref = wrap.getAttribute('data-parser-serverlist-href') || 'servers.php';
-			hideDoneBanner();
-			doneBanner.removeAttribute('hidden');
-			var main = document.createElement('span');
-			main.className = 'parser-done-banner-main';
-			main.textContent = sec ? (label + '  ·  ' + sec + 's') : label;
-			doneBanner.appendChild(main);
-			doneBanner.appendChild(document.createTextNode('  '));
-			var a = document.createElement('a');
-			a.className = 'parser-done-banner-link';
-			a.href = listHref;
-			a.textContent = returnLbl;
-			a.setAttribute('aria-label', returnLbl);
-			doneBanner.appendChild(a);
-			try { wrap.scrollTop = wrap.scrollHeight; } catch (eSc) {}
-		}
-		function appendLogRow(d) {
-			if (!d || d.t !== 'log') { return; }
-			lineBuf.push(fmtLogLine(d));
-			if (lineBuf.length >= LOG_FLUSH) { flushLogBuf(); }
-			if (statusEl) { statusEl.style.display = 'none'; }
-		}
-
-		function buildThead(d) {
-			if (!d || d.t !== 'header' || !d.cols || !logHeader) { return; }
-			logHeader.textContent = d.cols.join('    ');
-			logHeader.style.display = 'block';
-		}
-
-		/** FTP password must be entered on classic parser-core (POST); link user there from SSE. */
-		function renderParserFtpPasswordPanel(d) {
-			if (!d || d.t !== 'ftp_password' || !wrap || !wrap.parentNode) { return; }
-			var ex = document.getElementById('parser-ftp-password-box');
-			if (ex) { try { ex.remove(); } catch (eRem) {} }
-			var box = document.createElement('div');
-			box.id = 'parser-ftp-password-box';
-			box.setAttribute('role', 'alert');
-			box.style.cssText = 'box-sizing:border-box;width:100%;margin:12px 0;padding:16px 18px;border:2px solid #a73;background:#2a2418;color:#f5f0e8;font-size:14px;line-height:1.45;border-radius:4px;';
-			var title = document.createElement('div');
-			title.style.color = '#ffc966';
-			title.style.marginBottom = '10px';
-			title.style.fontWeight = '600';
-			title.textContent = d.message || '';
-			box.appendChild(title);
-			if (d.hint) {
-				var hint = document.createElement('div');
-				hint.style.marginBottom = '14px';
-				hint.style.opacity = '0.95';
-				hint.textContent = d.hint;
-				box.appendChild(hint);
-			}
-			var a = document.createElement('a');
-			a.href = d.classicUrl || '#';
-			a.textContent = d.linkLabel || 'Get New Logfile';
-			a.setAttribute('aria-label', d.linkLabel || 'Get New Logfile');
-			a.style.cssText = 'display:inline-block;padding:10px 16px;background:#4a3a18;color:#fff;text-decoration:none;border-radius:4px;font-weight:600;';
-			a.addEventListener('click', function () {
-				try { box.remove(); } catch (eL) {}
-			});
-			box.appendChild(a);
-			wrap.parentNode.insertBefore(box, wrap);
-			try {
-				box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			} catch (eScroll) {
-				try { box.scrollIntoView(true); } catch (e2) {}
-			}
-		}
-
-		/** Shown above the log (not below) so it stays visible; also used from `done` if `confirm_action` is missed. */
-		function renderParserConfirmPanel(d) {
-			if (!d || d.t !== 'confirm' || !wrap || !wrap.parentNode) { return; }
-			var ex = document.getElementById('parser-confirm-box');
-			if (ex) { try { ex.remove(); } catch (eRem) {} }
-			var box = document.createElement('div');
-			box.id = 'parser-confirm-box';
-			box.setAttribute('role', 'alert');
-			box.style.cssText = 'box-sizing:border-box;width:100%;margin:12px 0;padding:16px 18px;border:2px solid #c44;background:#321818;color:#f0f0f0;font-size:14px;line-height:1.45;border-radius:4px;';
-			var w = document.createElement('div');
-			w.style.color = '#ffb4b4';
-			w.style.marginBottom = '14px';
-			w.style.fontWeight = '600';
-			w.textContent = d.warning || '';
-			box.appendChild(w);
-			var btnRow = document.createElement('div');
-			btnRow.style.marginTop = '8px';
-			var yes = document.createElement('button');
-			yes.type = 'button';
-			yes.textContent = d.confirmLabel || 'Yes';
-			yes.setAttribute('aria-label', d.confirmLabel || 'Yes');
-			yes.style.cssText = 'padding:8px 18px;margin-right:12px;margin-bottom:8px;cursor:pointer;font-weight:bold;';
-			yes.addEventListener('click', function () {
-				if (d.confirmUrl) { startParserStream(d.confirmUrl); }
-			});
-			var no = document.createElement('button');
-			no.type = 'button';
-			no.textContent = d.cancelLabel || 'No';
-			no.setAttribute('aria-label', d.cancelLabel || 'No');
-			no.style.cssText = 'padding:8px 18px;margin-bottom:8px;cursor:pointer;';
-			no.addEventListener('click', function () {
-				if (statusEl) { statusEl.textContent = 'Cancelled.'; }
-				try { box.remove(); } catch (eN) {}
-				window.history.back();
-			});
-			btnRow.appendChild(yes);
-			btnRow.appendChild(no);
-			box.appendChild(btnRow);
-			wrap.parentNode.insertBefore(box, wrap);
-			try {
-				box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-			} catch (eScroll) {
-				try { box.scrollIntoView(true); } catch (e2) {}
-			}
-		}
-
-		function startParserStream(url) {
-			hideDoneBanner();
-			if (es) { try { es.close(); } catch (e) {} }
-			var oldBox = document.getElementById('parser-confirm-box');
-			if (oldBox) { try { oldBox.remove(); } catch (e0) {} }
-			var oldFtp = document.getElementById('parser-ftp-password-box');
-			if (oldFtp) { try { oldFtp.remove(); } catch (eFtp) {} }
-			streamEndedCancelled = false;
-			var opMatch = /[?&]op=([^&]+)/.exec(url);
-			var streamOp = opMatch ? decodeURIComponent(opMatch[1]) : (op || '');
-			if (cancelBtn) {
-				if (streamOp === 'updatestats' && sid) {
-					cancelBtn.style.display = 'inline-block';
-					cancelBtn.disabled = false;
-				} else {
-					cancelBtn.style.display = 'none';
-				}
-			}
-			es = new EventSource(url);
-			if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = 'Running…'; }
-
-			es.addEventListener('message', function (ev) {
-				try {
-					var d = JSON.parse(ev.data);
-					if (d.t === 'log') { appendLogRow(d); }
-					else if (d.t === 'confirm') {
-						if (statusEl) {
-							statusEl.style.display = 'block';
-							statusEl.textContent = 'Confirmation required — choose an action below.';
-						}
-						renderParserConfirmPanel(d);
-					} else if (d.t === 'ftp_password') {
-						if (statusEl) {
-							statusEl.style.display = 'block';
-							statusEl.textContent = 'FTP login failed — use the link below to enter your password on the classic page.';
-						}
-						renderParserFtpPasswordPanel(d);
-					}
-				} catch (err) { /* ignore */ }
-			});
-			es.addEventListener('table_header', function (ev) {
-				try { buildThead(JSON.parse(ev.data)); } catch (err) { }
-			});
-			es.addEventListener('confirm_action', function (ev) {
-				try {
-					if (statusEl) {
-						statusEl.style.display = 'block';
-						statusEl.textContent = 'Confirmation required — choose an action below.';
-					}
-					renderParserConfirmPanel(JSON.parse(ev.data));
-				} catch (eConf) { /* ignore */ }
-			});
-			es.addEventListener('password_prompt', function (ev) {
-				try {
-					if (statusEl) {
-						statusEl.style.display = 'block';
-						statusEl.textContent = 'FTP login failed — use the link below to enter your password on the classic page.';
-					}
-					renderParserFtpPasswordPanel(JSON.parse(ev.data));
-				} catch (ePw) { /* ignore */ }
-			});
-			es.addEventListener('need_resume', function (ev) {
-				var d = JSON.parse(ev.data);
-				if (es) { try { es.close(); } catch (e2) {} es = null; }
-				flushLogBuf();
-				if (d.message) {
-					appendLogRow({ t: 'log', n: '—', lvl: 'Info', fac: 'Parser', msg: d.message, fc: 'line0', lc: 'line0', mc: 'cellmenu1' });
-					flushLogBuf();
-				}
-				if (d.url) { setTimeout(function () { startParserStream(d.url); }, 0); }
-			});
-			es.addEventListener('parser_error', function (ev) {
-				var d = JSON.parse(ev.data);
-				flushLogBuf();
-				if (es) { try { es.close(); } catch (e4) {} es = null; }
-				hideDoneBanner();
-				if (statusEl) { statusEl.textContent = d.message || 'Error'; }
-			});
-			es.addEventListener('cancelled', function (ev) {
-				try {
-					var d = JSON.parse(ev.data);
-					flushLogBuf();
-					streamEndedCancelled = true;
-					hideDoneBanner();
-					if (statusEl) {
-						statusEl.style.display = 'block';
-						statusEl.textContent = d.message || wrap.getAttribute('data-msg-cancelled') || 'Cancelled.';
-					}
-				} catch (e5) { }
-			});
-			es.addEventListener('runtotals_next', function (ev) {
-				pendingRunTotals = JSON.parse(ev.data);
-			});
-			es.addEventListener('error', function (ev) {
-				if (es && es.readyState === EventSource.CLOSED) { return; }
-			});
-			es.addEventListener('done', function (ev) {
-				flushLogBuf();
-				if (es) { try { es.close(); } catch (e3) {} es = null; }
-				if (cancelBtn) { cancelBtn.style.display = 'none'; }
-				var doneData = {};
-				try { doneData = JSON.parse(ev.data); } catch (eDone) {}
-				var willChainRunTotals = pendingRunTotals && pendingRunTotals.url;
-				if (statusEl) {
-					if (doneData.awaitingConfirm) {
-						hideDoneBanner();
-						statusEl.textContent = 'Confirmation required — choose an action below.';
-						if (doneData.confirm) {
-							renderParserConfirmPanel(doneData.confirm);
-						}
-					} else if (doneData.awaitingPassword) {
-						hideDoneBanner();
-						statusEl.textContent = 'FTP login failed — use the link below to enter your password on the classic page.';
-						if (doneData.passwordForm) {
-							renderParserFtpPasswordPanel(doneData.passwordForm);
-						}
-					} else {
-						statusEl.textContent = streamEndedCancelled ? (statusEl.textContent) : 'Done.';
-					}
-				}
-				if (willChainRunTotals) {
-					hideDoneBanner();
-					var del = Math.max(0, parseInt(pendingRunTotals.delayMs, 10) || 0);
-					var u = pendingRunTotals.url;
-					var p = pendingRunTotals;
-					pendingRunTotals = null;
-					if (p.label && statusEl) { statusEl.textContent = p.label + ' in ' + (del / 1000) + 's…'; }
-					setTimeout(function () { startParserStream(u); }, del);
-				} else if (!doneData.awaitingConfirm && !doneData.awaitingPassword && !streamEndedCancelled) {
-					showDoneBanner(doneData);
-				}
-			});
-		}
-
-		if (op) {
-			startParserStream('parser-sse.php?op=' + encodeURIComponent(op) + (sid ? '&id=' + encodeURIComponent(sid) : ''));
-		}
-	})();
-	</script>
 	</div>
 
 <!-- ENDIF RUNPARSER="true" -->

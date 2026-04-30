@@ -235,7 +235,7 @@ if ( isset($content['players']) )
 			$content['PLAYERPAGES'][$i]['mypagebegin'] = ($i * $content['web_topplayers']);
 
 			if ($content['current_pagebegin'] == $content['PLAYERPAGES'][$i]['mypagebegin'])
-				$content['PLAYERPAGES'][$i]['mypagenumber'] = "<B>-> ".($i+1)." <-</B>";
+				$content['PLAYERPAGES'][$i]['mypagenumber'] = "<b>-> ".($i+1)." <-</b>";
 			else
 				$content['PLAYERPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -251,7 +251,10 @@ if ( isset($content['players']) )
 //	PLAYERS_MOREPAGES
 }
 else
+{
 	$content['playersenabled'] = "false";
+	$content['ERROR_DETAILS']   = $content['LN_ERROR_NOSTATSDATAFOUND'];
+}
 // --- 
 
 // --- Parsen and Output

@@ -1,29 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="themes/{user_theme}/main.css" type="text/css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{TITLE}</title>
+	<link rel="stylesheet" href="css/defaults.css">
+	<link rel="stylesheet" href="themes/{user_theme}/main.css">
 </head>
-<body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<body>
 
 <!-- IF iserror="true" -->
-<div class="table_with_border_second ErrorMsg" style="max-width:600px;margin:12px auto" role="alert" aria-live="assertive">
+<div class="table_with_border_second ErrorMsg us-max-w-600 us-margin-12-auto" role="alert" aria-live="assertive">
 	<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-	<p>{LN_ROUNDS_ROUNDNOTFOUND}</p>
+	<p>{ERROR_DETAILS}</p>
 </div>
 <!-- ENDIF iserror="true" -->
 
 <!-- IF roundschatlog="true" -->
 <table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
 <tr>
-	<td colspan="2" width="200" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
-	<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_ROUNDS_CHATENTRY}</B></td>
+	<td colspan="2" width="200" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
+	<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_ROUNDS_CHATENTRY}</b></td>
 </tr>
 <!-- BEGIN ChatLog -->
 <tr>
-	<td align="right" class="{cssclass} playertext"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}" target="_top">{AliasAsHtml}</a>&nbsp;</td>
-	<td class="{cssclass}" align="center" nowrap><B>{LN_ROUNDS_SAID}</B></td>
-	<td class="{cssclass}" align="left">&nbsp;&nbsp;<B>{TextSaidAsHtml}</B>&nbsp;</td>
+	<td align="right" class="{cssclass} playertext"><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}" target="_top">{AliasAsHtml}</a>&nbsp;</td>
+	<td class="{cssclass}" align="center" nowrap><b>{LN_ROUNDS_SAID}</b></td>
+	<td class="{cssclass}" align="left">&nbsp;&nbsp;<b>{TextSaidAsHtml}</b>&nbsp;</td>
 </tr>
 <!-- END ChatLog -->
 </table>

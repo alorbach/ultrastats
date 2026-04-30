@@ -183,7 +183,7 @@ if ( isset($_GET['id']) )
 					$content['MOSTKILLSPAGES'][$i]['mypagebegin'] = ($i * $content['web_detaillistsplayers']);
 
 					if ($content['current_mostkills_pagebegin'] == $content['MOSTKILLSPAGES'][$i]['mypagebegin'])
-						$content['MOSTKILLSPAGES'][$i]['mypagenumber'] = "<B>-> ".($i+1)." <-</B>";
+						$content['MOSTKILLSPAGES'][$i]['mypagenumber'] = "<b>-> ".($i+1)." <-</b>";
 					else
 						$content['MOSTKILLSPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -199,13 +199,17 @@ if ( isset($_GET['id']) )
 		// --- 
 	}
 	else
+	{
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDMEDAL'];
+	}
 	// ---
 }
 else
 {
 	// Invalid ID!
 	$content['iserror'] = "true";
+	$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDMEDAL'];
 }
 // --- 
 

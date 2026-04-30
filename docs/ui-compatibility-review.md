@@ -1,24 +1,24 @@
-# UI compatibility review (no code changes in this pass)
+# UI compatibility review
 
-**Scope:** static review of the legacy front end as of modernization. **No** HTML/CSS/JS was modified; this is a record for a future UI refresh.
+**Scope:** current compatibility notes for the modernized legacy front end. This file now tracks the direction of travel: modern browser usability and responsive CSS over IE-era parity.
 
 **CSP note:** UltraStats does not enable **Content-Security-Policy** by default; operational guidance and a staged rollout outline are in [SECURITY.md](../SECURITY.md#content-security-policy).
 
 ## Document type and doctype
 
-- **HTML 4.01** (`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">` in e.g. `src/templates/include_header.html`) with table-based layout.
-- Browsers will use **standards** or **almost standards** mode depending on doctype; very old `BODY` attributes like `TOPMARGIN`, `MARGINWIDTH` are deprecated; visual impact is usually minor in current Chromium/Firefox/Safari.
+- **HTML5** (`<!DOCTYPE html>`) on shared shells such as `src/templates/include_header.html`, with explicit `<meta charset="utf-8">` and a basic viewport meta for mobile scaling; legacy **table-based** layout remains.
+- Very old `BODY` attributes like `TOPMARGIN`, `MARGINWIDTH` are deprecated; visual impact is usually minor in current Chromium/Firefox/Safari.
 
 ## Layout and CSS
 
-- **Table layouts** and fixed table widths; risk of **horizontal scroll** on narrow viewports. No responsive breakpoints.
+- **Table layouts** and fixed table widths remain on many route bodies. Shared header, public/admin menu, public pager, dense admin list-table, representative public content/list-table, and player/round detail-shell overflow is contained on narrow viewports; deeper detail-page redesign remains route-specific.
 - **Themes** use `src/themes/{user_theme}/main.css` plus `src/css/defaults.css`, `menu.css`. Assumes **desktop** pixel widths.
 - **Print / zoom:** User font scaling can break fixed table columns; not tested in this pass.
 
 ## JavaScript
 
-- **Vanilla** `src/js/common.js` for menus and small helpers (legacy **DOM** patterns, IE-era branches). The repository no longer ships unused third-party script bundles. Monitor the browser console for strict-mode or CSP issues if you tighten headers later.
-- **Inline handlers** (e.g. `OnChange="document.serveridform.submit();"`) remain valid in HTML4 but are discouraged for CSP if you add `script-src` restrictions later.
+- **Vanilla** `src/js/common.js` for menus and small helpers. Active IE-specific branches have been removed; keep new code on modern DOM APIs and verify in current Chromium/Firefox/Safari-style browsers.
+- **Inline handlers/scripts:** active templates have been migrated to delegated/external JavaScript in `src/js/common.js`; keep new UI work on the same CSP-friendly path.
 
 ## External assets and mixed content
 
@@ -31,9 +31,9 @@
 
 ## Recommended follow-ups (when changing UI)
 
-1. Adopt a single **doctype** (HTML5) and one grid/flex layout strategy.
-2. Harden or replace **common.js** (legacy patterns) with modern, CSP-friendly code if needed; add **CSP** incrementally and test.
-3. Add **viewport** meta and responsive rules if mobile matters.
+1. Continue replacing dense table layout with scoped grid/flex wrappers where it improves usability.
+2. Harden **common.js** with modern, CSP-friendly code; add **CSP** incrementally and test.
+3. Expand responsive rules for mobile and narrow desktop use.
 4. Re-test **admin** and **parser** flows after any global CSS change.
 
 ## Out of scope (confirmed)

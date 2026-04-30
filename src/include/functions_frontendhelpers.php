@@ -350,7 +350,8 @@ function CreateServerListArray()
 	else
 	{
 		// No Servers - display warning!
-		$content['error_noserver'] = "true";
+		$content['error_noserver']    = "true";
+		$content['ERROR_DETAILS']     = $content['LN_ERROR_NOSERVERS'];
 	}
 }
 

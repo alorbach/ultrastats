@@ -135,6 +135,9 @@ else
 	$content['IGNORECOLORCODES_CHECKED'] = "";
 // --- 
 
+if ( isset($_GET['search']) && isset($content['playersfound']) && $content['playersfound'] === "false" )
+	$content['ERROR_DETAILS'] = $content['LN_SEARCH_NOPLAYERFOUND'];
+
 // --- Parsen and Output
 InitTemplateParser();
 $page -> parser($content, "find-players.html");

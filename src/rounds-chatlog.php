@@ -103,7 +103,9 @@ else
 	// Invalid ID!
 	$content['iserror'] = "true";
 }
-// --- 
+
+if ( isset($content['iserror']) && $content['iserror'] === "true" )
+	$content['ERROR_DETAILS'] = $content['LN_ROUNDS_ROUNDNOTFOUND'];
 
 // --- Parsen and Output
 InitTemplateParser();

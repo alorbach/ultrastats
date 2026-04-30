@@ -72,6 +72,52 @@ else
 // --- 
 
 // --- BEGIN Custom Code
+
+if ( ( isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : '' ) === 'POST'
+	&& isset( $_POST['op'], $_POST['id'], $_POST['lang'], $_POST['admin_confirm_string_delete'] )
+	&& $_POST['op'] === 'delete'
+	&& $_POST['admin_confirm_string_delete'] === '1' ) {
+
+	if ( ! UltraStats_AdminCsrfPostedTokenMatches() ) {
+		DieWithFriendlyErrorMsg( 'Invalid session security token — please reopen the string delete confirmation from the list.' );
+	}
+	UltraStats_AdminCsrfEnsureToken( true );
+
+	$content['STRINGID'] = DB_RemoveBadChars( $_POST['id'] );
+	$content['LANG']     = DB_RemoveBadChars( $_POST['lang'] );
+	if ( isset( $_POST['strfilter'] ) && strlen( (string) $_POST['strfilter'] ) > 0 ) {
+		$content['strfilter'] = DB_RemoveBadChars( $_POST['strfilter'] );
+	} else {
+		$content['strfilter'] = '';
+	}
+	$content['current_pagebegin'] = isset( $_POST['start'] ) ? intval( DB_RemoveBadChars( $_POST['start'] ) ) : 0;
+
+	if ( ! isset( $content['STRINGID'] ) || strlen( (string) $content['STRINGID'] ) <= 0 ) {
+		$content['ISERROR']   = 'true';
+		$content['ERROR_MSG'] = $content['LN_STRING_ERROR_IDEMPTY'];
+	} else {
+		$result = DB_QueryBound(
+			'SELECT STRINGID FROM ' . STATS_LANGUAGE_STRINGS . ' WHERE STRINGID = ? AND LANG = ?',
+			'ss',
+			array( $content['STRINGID'], $content['LANG'] )
+		);
+		$myrow = DB_GetSingleRow( $result, true );
+		if ( ! is_array( $myrow ) || ! isset( $myrow['STRINGID'] ) ) {
+			$content['ISERROR']   = 'true';
+			$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] );
+		} else {
+			DB_ExecBound(
+				'DELETE FROM ' . STATS_LANGUAGE_STRINGS . ' WHERE STRINGID = ? AND LANG = ?',
+				'ss',
+				array( $content['STRINGID'], $content['LANG'] ),
+				false
+			);
+			$redir = 'stringeditor.php?strfilter=' . rawurlencode( $content['strfilter'] ) . '&start=' . (int) $content['current_pagebegin'];
+			RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_DELETEDSTRING'], $content['STRINGID'] ), $redir );
+		}
+	}
+}
+
 if ( isset($_GET['op']) )
 {
 	if ($_GET['op'] == "add") 
@@ -149,35 +195,28 @@ if ( isset($_GET['op']) )
 	}
 	else if ($_GET['op'] == "delete") 
 	{
-		// Set Mode to edit
-		$content['ISDELETESTRING'] = "true";
-
 		if ( isset($_GET['id'])  && isset($_GET['lang']) )
 		{
-			//PreInit these values 
 			$content['STRINGID'] = DB_RemoveBadChars($_GET['id']);
-			$content['LANG'] = DB_RemoveBadChars($_GET['lang']);
+			$content['LANG']   = DB_RemoveBadChars($_GET['lang']);
 
-			if ( isset($_GET['verify']) && $_GET['verify'] == "yes" )
-			{
-				// Disable Verify few
-				$content['ISVERIFY'] = "false";
-
-				// Start Deleting the string row
-				DB_ExecBound(
-					"DELETE FROM " . STATS_LANGUAGE_STRINGS . " WHERE STRINGID = ? AND LANG = ?",
-					'ss',
-					array( $content['STRINGID'], $content['LANG'] ),
-					false
-				);
-
-				// For confirmation
-				RedirectResult( GetAndReplaceLangStr( $content['LN_STRING_DELETEDSTRING'], $content['STRINGID'] ), "stringeditor.php?strfilter=" . $content['strfilter'] . "&start=" . $content['current_pagebegin'] );
-			}
-			else
-			{
-				// Enable Verify few
-				$content['ISVERIFY'] = "true";
+			$sqlquery = 'SELECT ' .
+						STATS_LANGUAGE_STRINGS . '.LANG, ' .
+						STATS_LANGUAGE_STRINGS . '.STRINGID ' .
+						' FROM ' . STATS_LANGUAGE_STRINGS .
+						' WHERE ' . STATS_LANGUAGE_STRINGS . '.STRINGID = ? ' .
+						' AND ' . STATS_LANGUAGE_STRINGS . '.LANG = ? ';
+			$result = DB_QueryBound( $sqlquery, 'ss', array( $content['STRINGID'], $content['LANG'] ) );
+			$myrow  = DB_GetSingleRow( $result, true );
+			if ( ! isset( $myrow['STRINGID'] ) ) {
+				$content['ISERROR']   = 'true';
+				$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_STRING_ERROR_NOTFOUND'], $content['STRINGID'] );
+			} else {
+				$content['ISDELETESTRING']       = 'true';
+				$content['LANG']                 = $myrow['LANG'];
+				$content['STRINGID']             = $myrow['STRINGID'];
+				$content['ISVERIFY']             = 'true';
+				$content['ULTRASTATS_CSRF_VALUE'] = UltraStats_AdminCsrfEnsureToken();
 			}
 		}
 		else
@@ -187,7 +226,7 @@ if ( isset($_GET['op']) )
 		}
 	}
 
-	if ( isset($_POST['op']) )
+	if ( isset($_POST['op']) && $_POST['op'] !== 'delete' )
 	{
 		if ( isset ($_POST['id']) ) { $content['STRINGID'] = DB_RemoveBadChars($_POST['id']); } else {$content['STRINGID'] = ""; }
 		if ( isset ($_POST['langcode']) ) { $content['LANG'] = DB_RemoveBadChars($_POST['langcode']); } else {$content['LANG'] = "EN"; }
@@ -375,7 +414,7 @@ else
 			$content['STRINGPAGES'][$i]['mypagebegin'] = ($i * $content['admin_maxplayers']);
 
 			if ($content['current_pagebegin'] == $content['STRINGPAGES'][$i]['mypagebegin'])
-				$content['STRINGPAGES'][$i]['mypagenumber'] = "<B>".($i+1)."</B>";
+				$content['STRINGPAGES'][$i]['mypagenumber'] = "<b>".($i+1)."</b>";
 			else
 				$content['STRINGPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -390,6 +429,10 @@ else
 }
 
 // --- END Custom Code
+
+if ( isset( $content['ISERROR'] ) && $content['ISERROR'] === 'true' && isset( $content['ERROR_MSG'] ) ) {
+	$content['ERROR_MSG'] = UltraStats_h( $content['ERROR_MSG'] );
+}
 
 // --- Parsen and Output
 InitTemplateParser();

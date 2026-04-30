@@ -58,6 +58,7 @@ function UltraStats_HashUserPassword( $plain ) {
 function CheckForUserLogin( $isloginpage, $isUpgradePage = false )
 {
 	global $content; 
+	$content['isupdateavailable'] = false;
 
 	if ( isset($_SESSION['SESSION_LOGGEDIN']) )
 	{
@@ -69,10 +70,18 @@ function CheckForUserLogin( $isloginpage, $isUpgradePage = false )
 			$content['SESSION_USERNAME'] = $_SESSION['SESSION_USERNAME'];
 		}
 
+		$httpHost = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+		$isLocalHost = ( strpos( $httpHost, '127.0.0.1' ) !== false || stripos( $httpHost, 'localhost' ) !== false );
+		if ( $isLocalHost ) {
+			$_SESSION['UPDATEAVAILABLE'] = false;
+			unset( $_SESSION['UPDATEVERSION'] );
+			unset( $_SESSION['UPDATELINK'] );
+		}
+
 		if ( isset($_SESSION['UPDATEAVAILABLE']) && $_SESSION['UPDATEAVAILABLE'] ) 
 		{
 			// Check Version numbers again to avoid update notification if update was done during meantime!
-			if ( CompareVersionNumbers($content['BUILDNUMBER'], $_SESSION['UPDATEVERSION']) )
+			if ( isset($_SESSION['UPDATEVERSION']) && CompareVersionNumbers($content['BUILDNUMBER'], $_SESSION['UPDATEVERSION']) )
 			{
 				$content['isupdateavailable'] = true;
 				$content['isupdateavailable_updatelink'] = $_SESSION['UPDATELINK'];
@@ -146,7 +155,7 @@ function CheckUserLogin( $username, $password )
 	$rows = DB_GetAllRows( $result, true );
 	if ( ! is_array( $rows ) || count( $rows ) !== 1 ) {
 		if ( (int) $CFG['ShowDebugMsg'] === 1 ) {
-			DieWithFriendlyErrorMsg( "Debug Error: Could not login user '" . $username . "' <br><br><B>Sessionarray</B> <pre>" . var_export( $_SESSION, true ) . '</pre>' );
+			DieWithFriendlyErrorMsg( "Debug Error: Could not login user '" . $username . "' <br><br><b>Sessionarray</b> <pre>" . var_export( $_SESSION, true ) . '</pre>' );
 		}
 		return false;
 	}
@@ -166,15 +175,30 @@ function CheckUserLogin( $username, $password )
 	if ( function_exists( 'session_regenerate_id' ) ) {
 		@session_regenerate_id( true );
 	}
+	UltraStats_AdminCsrfEnsureToken( true );
 	$_SESSION['SESSION_LOGGEDIN']   = true;
 	$_SESSION['SESSION_USERNAME']   = $username;
 	$_SESSION['SESSION_ACCESSLEVEL'] = $row['access_level'];
+	$_SESSION['UPDATEAVAILABLE']    = false;
+	unset( $_SESSION['UPDATEVERSION'] );
+	unset( $_SESSION['UPDATELINK'] );
 
 	$content['SESSION_LOGGEDIN']   = "true";
 	$content['SESSION_USERNAME']   = $username;
 
-	// --- Now we check for an UltraStats Update
-	$myHandle = @fopen( $content['UPDATEURL'], "r" );
+	$httpHost = isset( $_SERVER['HTTP_HOST'] ) ? (string) $_SERVER['HTTP_HOST'] : '';
+	if ( strpos( $httpHost, '127.0.0.1' ) !== false || stripos( $httpHost, 'localhost' ) !== false ) {
+		return true;
+	}
+
+	// --- Now we check for an UltraStats Update.
+	// In local dev checkouts prefer the repo-local version.txt to avoid stale remote cache/noise.
+	$updateSource = (string) $content['UPDATEURL'];
+	$localVersionFile = dirname( __DIR__, 2 ) . '/doc-site/docs/version.txt';
+	if ( $localVersionFile !== '' && file_exists( $localVersionFile ) ) {
+		$updateSource = $localVersionFile;
+	}
+	$myHandle = @fopen( $updateSource, "r" );
 
 	if ( $myHandle ) {
 		$myBuffer = "";
@@ -185,9 +209,10 @@ function CheckUserLogin( $username, $password )
 
 		$myLines = explode( "\n", $myBuffer );
 
-		if ( isset( $myLines[0] ) && CompareVersionNumbers( $content['BUILDNUMBER'], $myLines[0] ) ) {
+		$detectedVersion = isset( $myLines[0] ) ? trim( (string) $myLines[0] ) : '';
+		if ( $detectedVersion !== '' && CompareVersionNumbers( $content['BUILDNUMBER'], $detectedVersion ) ) {
 			$_SESSION['UPDATEAVAILABLE'] = true;
-			$_SESSION['UPDATEVERSION']   = $myLines[0];
+			$_SESSION['UPDATEVERSION']   = $detectedVersion;
 			if ( isset( $myLines[1] ) ) {
 				$_SESSION['UPDATELINK'] = $myLines[1];
 			} else {
@@ -238,14 +263,43 @@ function PrintSecureUserCheck( $warningtext, $yesmsg, $nomsg )
 	$content['yesmsg'] = $yesmsg;
 	$content['nomsg'] = $nomsg;
 
-	// Handle GET and POST input!
-	$content['form_url'] = $_SERVER['SCRIPT_NAME'] . "?";
-	foreach ($_GET as $varname => $varvalue)
-		$content['form_url'] .= $varname . "=" . $varvalue . "&";
-	$content['form_url'] .= "verify=yes"; // Append verify!
+	$content['POST_VARIABLES'] = array();
 
-	foreach ($_POST as $varname => $varvalue)
-		$content['POST_VARIABLES'][] = array( "varname" => $varname, "varvalue" => $varvalue );
+	$basename = basename( isset( $_SERVER['SCRIPT_NAME'] ) ? (string) $_SERVER['SCRIPT_NAME'] : '' );
+	if ( $basename === '' || $basename === '.' || $basename === '..' ) {
+		$basename = 'users.php';
+	}
+	$content['form_url'] = $basename;
+	$content['cancel_url'] = $basename;
+
+	foreach ( $_GET as $varname => $varvalue ) {
+		if ( $varname === 'verify' ) {
+			continue;
+		}
+		$content['POST_VARIABLES'][] = array(
+			'varname'  => DB_RemoveBadChars( (string) $varname ),
+			'varvalue' => is_array( $varvalue ) ? '' : DB_RemoveBadChars( (string) $varvalue ),
+		);
+	}
+
+	foreach ( $_POST as $varname => $varvalue ) {
+		if ( isset( $_GET[ $varname ] ) || $varname === US_ADMIN_CSRF_POST_FIELD || $varname === 'admin_confirm_delete' ) {
+			continue;
+		}
+		$content['POST_VARIABLES'][] = array(
+			'varname'  => DB_RemoveBadChars( (string) $varname ),
+			'varvalue' => is_array( $varvalue ) ? '' : DB_RemoveBadChars( (string) $varvalue ),
+		);
+	}
+
+	$content['POST_VARIABLES'][] = array(
+		'varname'  => US_ADMIN_CSRF_POST_FIELD,
+		'varvalue' => UltraStats_AdminCsrfEnsureToken(),
+	);
+	$content['POST_VARIABLES'][] = array(
+		'varname'  => 'admin_confirm_delete',
+		'varvalue' => '1',
+	);
 
 	// --- BEGIN CREATE TITLE
 	$content['TITLE'] = InitPageTitle();

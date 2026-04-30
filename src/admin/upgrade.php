@@ -182,6 +182,9 @@ else
 if ( isset($content['ISERROR']) )
 	$content['UPGRADE_RUNNING'] = "0";
 
+if ( isset( $content['ISERROR'] ) && isset( $content['ERROR_MSG'] ) )
+	$content['ERROR_MSG'] = UltraStats_h( $content['ERROR_MSG'] );
+
 // --- END Custom Code
 
 // --- Parsen and Output

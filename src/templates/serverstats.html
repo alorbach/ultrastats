@@ -2,28 +2,28 @@
 
 <!-- IF iserror="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-		<p>{LN_ERROR_NOSERVERMAPS}</p>
+		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF iserror="true" -->
 
 <!-- IF serverlistenabled="true" -->
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-public-responsive-panel">
 <tr>
 	<td width="10" valign="top">&nbsp;</td>
 	<td>
 
-	<table width="100%" cellpadding="1" cellspacing="1" border="0" align="center" class="with_border_alternate">
+	<table width="100%" cellpadding="1" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-responsive-panel">
 	<tr>
 		<td colspan="5" class="title" width="350" nowrap>{LN_GLOBAL_SERVERLIST}</td>
 	</tr>
 	</table>
-	<table width="100%" cellpadding="1" cellspacing="1" border="0" align="center" class="with_border">
+	<table width="100%" cellpadding="1" cellspacing="1" border="0" align="center" class="with_border us-public-scroll-strip">
 	<tr>
 		<td colspan="2" align="center" width="200" class="cellmenu1" nowrap><b>{LN_SERVER_NAME}</b></td>
 		<td align="center" width="150" class="cellmenu1" nowrap><b>{LN_SERVER_IP}</b></td>
@@ -34,7 +34,7 @@
 	<tr>
 		<td width="16" align="left" class="{cssclass}" nowrap><img src="{BASEPATH}images/icons/server.png" width="16" align="left" alt="" aria-hidden="true"></td>
 		<td align="left" class="{cssclass}" nowrap><a href="serverstats.php?serverid={ServerID}">{ServerName}</a></td>
-		<td align="center" class="{cssclass}" nowrap><A HREF="hlsw://{ServerIP}:{ServerPort}">{ServerIP}:{ServerPort}</A></td>
+		<td align="center" class="{cssclass}" nowrap><a href="hlsw://{ServerIP}:{ServerPort}">{ServerIP}:{ServerPort}</a></td>
 		<td align="center" class="{cssclass}" nowrap><b>{LastUpdate_Formatted}</b></td>
 		<td align="left" class="{cssclass}" nowrap>{ServerDescription}</td>
 	</tr>
@@ -72,11 +72,11 @@
 		<!-- IF maps_pagerenabled="true" -->
 		<table width="100%" align="center" border="0" cellpadding="1" cellspacing="1" class="with_border">
 		<tr>
-			<td class="cellmenu2" nowrap><B>Pages: &nbsp; </B></td>
+			<td class="cellmenu2" nowrap><b>Pages: &nbsp; </b></td>
 		<!-- BEGIN PLAYERPAGES -->
 			<td class="{cssclass}" nowrap><a href="?start={mypagebegin}{additional_url}" target="_top">{mypagenumber}</a>&nbsp;</td>
 		<!-- END PLAYERPAGES -->
-			<td nowrap width="100%"class="line2"><I>&nbsp;{MAPS_MOREPAGES}</I></td>
+			<td nowrap width="100%" class="line2"><i>&nbsp;{MAPS_MOREPAGES}</i></td>
 		</tr>
 		</table>
 		<!-- ENDIF maps_pagerenabled="true" -->
@@ -88,31 +88,31 @@
 
 				<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center">
 				<tr>
-					<td width="50" class="cellmenu1" align="center" nowrap><B>No. {Number}</B></td>
-					<td width="100%" class="cellmenu1" align="center"><B>{LN_SERVER_MAPDETAILS} '{MapDisplayName}'</B></td>
+					<td width="50" class="cellmenu1" align="center" nowrap><b>No. {Number}</b></td>
+					<td width="100%" class="cellmenu1" align="center"><b>{LN_SERVER_MAPDETAILS} '{MapDisplayName}'</b></td>
 				</tr>
 				</table>
 
 				<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" >
 				<tr>
 					<td width="209" nowrap valign="top">
-					<A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img class="imageborder" src="{MapImage}" alt="{MapDisplayName}"></A>
+					<a href="info-maps.php?id={MAPNAME}{additional_url}"><img class="imageborder" src="{MapImage}" alt="{MapDisplayName}"></a>
 					</td>
 					<td width="100%" nowrap valign="top" rowspan="3">
 						<br>
 
 						<table width="95%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border">
 						<tr>
-							<td nowrap width="150" align="center" class="cellmenu2"><B>{LN_MAP_INGAMENAME}</B></td>
-							<td nowrap width="100%" align="center" valign="top" class="line0"><A HREF="info-maps.php?id={MAPNAME}{additional_url}">{MAPNAME}</A></td>
+							<td nowrap width="150" align="center" class="cellmenu2"><b>{LN_MAP_INGAMENAME}</b></td>
+							<td nowrap width="100%" align="center" valign="top" class="line0"><a href="info-maps.php?id={MAPNAME}{additional_url}">{MAPNAME}</a></td>
 						</tr>
 						<tr>
-							<td nowrap width="150" align="center" class="cellmenu2"><B>{LN_SERVER_PLAYEDCOUNT}</B></td>
-							<td nowrap width="100%" align="center" valign="top" class="line1"><B>{MapCount}</B></td>
+							<td nowrap width="150" align="center" class="cellmenu2"><b>{LN_SERVER_PLAYEDCOUNT}</b></td>
+							<td nowrap width="100%" align="center" valign="top" class="line1"><b>{MapCount}</b></td>
 						</tr>
 						<tr>
-							<td nowrap width="150" align="center" class="cellmenu2"><B>{LN_SERVER_MOSTGAMETYPE}</B></td>
-							<td nowrap width="100%" align="center" valign="top" class="line2"><A HREF="info-gametypes.php?id={GameTypeName}{additional_url}">{GameTypeDisplayName}</A> ({GameTypeCount} times)</td>
+							<td nowrap width="150" align="center" class="cellmenu2"><b>{LN_SERVER_MOSTGAMETYPE}</b></td>
+							<td nowrap width="100%" align="center" valign="top" class="line2"><a href="info-gametypes.php?id={GameTypeName}{additional_url}">{GameTypeDisplayName}</a> ({GameTypeCount} times)</td>
 						</tr>
 						</table>
 
@@ -126,24 +126,28 @@
 			<!-- IF lastroundsenable="true" -->
 				<table width="100%" cellpadding="2" cellspacing="1" border="0" align="center">
 				<tr>
-					<td class="cellmenu1" align="center" nowrap><B>{LN_SERVER_LASTROUNDS}</B></td>
+					<td class="cellmenu1" align="center" nowrap><b>{LN_SERVER_LASTROUNDS}</b></td>
 				</tr>
 				</table>
 
 				<br>
-				<table width="95%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
+				<table width="95%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border us-lastrounds">
 				<tr>
-					<td width="25" class="cellmenu2" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-					<td colspan="2" class="cellmenu2" width="210" align="center" nowrap><B>{LN_LROUNDS_TIME}</B></td>
-					<td width="100%" class="cellmenu2" align="center" nowrap><B>{LN_LROUNDS_DETAILS}</B></td>
+					<td width="25" class="cellmenu2" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+					<td class="cellmenu2" align="center" nowrap><b>{LN_LROUNDS_TIME}</b></td>
+					<td class="cellmenu2" align="center" nowrap><b>{LN_LROUNDS_GAMETYPE}</b></td>
 				</tr>
 
 				<!-- BEGIN lastrounds -->
 				<tr>
-					<td class="{sub_cssclass}" align="center"><B>{LRNumber}</B></td>
-					<td class="{sub_cssclass}"><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left" alt="" aria-hidden="true">{TimePlayed}</td>
-					<td class="{sub_cssclass}" align="center"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" align="left" alt="" aria-hidden="true"><A HREF="rounds-detail.php?id={ROUNDID}{additional_url}">{LN_PLAYER_DETAILS}</A></td>
-					<td class="{sub_cssclass}" align="left"><A HREF="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</A></td>
+					<td class="{sub_cssclass}" align="center"><b>{LRNumber}</b></td>
+					<td class="{sub_cssclass} us-lastrounds-whencell">
+						<div class="us-lastrounds-when-row">
+							<span class="us-lastrounds-datetime"><img src="{BASEPATH}images/icons/date-time.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><span class="us-lastrounds-time-text">{TimePlayed}</span></span>
+							<span class="us-lastrounds-detailink"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><a href="rounds-detail.php?id={ROUNDID}{additional_url}">{LN_PLAYER_DETAILS}</a></span>
+						</div>
+					</td>
+					<td class="{sub_cssclass} us-lastrounds-gametype" align="left"><a href="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</a></td>
 				</tr>
 				<!-- END lastrounds -->
 

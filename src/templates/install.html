@@ -1,17 +1,19 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{TITLE}</title>
 
-	<link rel="stylesheet" href="css/defaults.css" type="text/css">
-	<link rel="stylesheet" href="themes/{user_theme}/main.css" type="text/css">
-	<script type='text/javascript' src='{BASEPATH}js/common.js'></script>
+	<link rel="stylesheet" href="css/defaults.css">
+	<link rel="stylesheet" href="themes/{user_theme}/main.css">
+	<script src='{BASEPATH}js/common.js'></script>
 </head>
-<body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<body>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="2" class="mainheader">
 <tr> 
-	<td width="400" align="left"><a href="index.php"><img src="{BASEPATH}images/main/Header-Logo.png" style="filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='{BASEPATH}images/main/Header-Logo.png', sizingMethod='scale')" width="297" height="100" name="HeaderLogo"></a><script>CheckAlphaPNGImage('HeaderLogo', '{BASEPATH}images/main/space.gif');</script></td>
+	<td width="400" align="left"><a href="index.php"><img src="{BASEPATH}images/main/Header-Logo.png" width="297" height="100" name="HeaderLogo" alt=""></a></td>
 	<td width="100%" align="center" valign="top" height="100%">&nbsp;</td>
 </tr>
 </table>
@@ -37,7 +39,7 @@
 		<tr>
 			<td class="tableBackground ErrorMsg" align="center" role="alert" aria-live="assertive">
 				<br>
-				<h3><font color="red">ERROR: {errormsg}</font></h3>
+				<h3 class="us-error-text">ERROR: {errormsg}</h3>
 				<br>
 			</td>
 		</tr>
@@ -77,9 +79,9 @@
 				<table width="300" class="with_border_alternate" cellpadding="2" cellspacing="1" border="0" align="center">
 				<!-- BEGIN fileperm -->
 				<tr>
-					<td width="200" nowrap class="{cssclass}">{FILE_TYPE} '<B>{FILE_NAME}</B>'</td>
-					<td width="25" bgcolor="{BGCOLOR}">&nbsp;</td>
-					<td width="125" nowrap class="{cssclass}" align="center"><B>{ISSUCCESS}</B></td>
+					<td width="200" nowrap class="{cssclass}">{FILE_TYPE} '<b>{FILE_NAME}</b>'</td>
+					<td width="25" class="us-install-perm-cell {PERMCELLCLASS}">&nbsp;</td>
+					<td width="125" nowrap class="{cssclass}" align="center"><b>{ISSUCCESS}</b></td>
 				</tr>
 				<!-- END fileperm -->
 				</table>
@@ -103,7 +105,7 @@
 			</p>
 			<p>&nbsp;</p>
 
-				<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="500" align="center">
+				<table border="0" cellpadding="1" cellspacing="1" class="us-admin-table-surface" width="500" align="center">
 				<tr>
 					<td colspan="2" align="left" class="cellmenu1" nowrap><b>{LN_CFG_DATABASE}</b></td>
 				</tr>
@@ -138,7 +140,7 @@
 							<option value="InnoDB" {DB_SE_INNODB_SEL}>InnoDB</option>
 							<option value="MyISAM" {DB_SE_MYISAM_SEL}>MyISAM</option>
 						</select>
-						<br><br><span style="font-size: 11px;">{LN_CFG_DBSTORAGEENGINE_HELP}</span>
+						<br><br><span class="us-font-size-11">{LN_CFG_DBSTORAGEENGINE_HELP}</span>
 					</td>
 				</tr>
 				<tr>
@@ -193,8 +195,8 @@
 			{LN_INSTALL_STEP5_TEXT}
 			<br><br>
 			<ul>
-			<li>{LN_INSTALL_SUCCESSSTATEMENTS} <B>{sql_sucess}</B><br>
-			<li>{LN_INSTALL_FAILEDSTATEMENTS} <B>{sql_failed}</B> <br>
+			<li>{LN_INSTALL_SUCCESSSTATEMENTS} <b>{sql_sucess}</b><br>
+			<li>{LN_INSTALL_FAILEDSTATEMENTS} <b>{sql_failed}</b> <br>
 			</ul>
 			
 			<!-- IF showsqlresults="true" -->
@@ -205,11 +207,11 @@
 				<!-- IF sql_failed!="0" -->
 					<table width="700" class="with_border_alternate" cellpadding="2" cellspacing="1" border="0" align="center">
 					<tr>
-						<td colspan="2" nowrap class="cellmenu1" align="center"><B>{LN_INSTALL_STEP5_TEXT_FAILED}</B></td>
+						<td colspan="2" nowrap class="cellmenu1" align="center"><b>{LN_INSTALL_STEP5_TEXT_FAILED}</b></td>
 					</tr>
 					<tr>
 						<td width="400" class="cellmenu1">{LN_INSTALL_ERRORMSG}</td>
-						<td width="300" class="cellmenu1" align="center"><B>{LN_INSTALL_SQLSTATEMENT}</B></td>
+						<td width="300" class="cellmenu1" align="center"><b>{LN_INSTALL_SQLSTATEMENT}</b></td>
 					</tr>
 					<!-- BEGIN failedstatements -->
 					<tr>
@@ -237,7 +239,7 @@
 			{LN_INSTALL_STEP6_TEXT}
 			<br><br>
 
-				<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="500" align="center">
+				<table border="0" cellpadding="1" cellspacing="1" class="us-admin-table-surface" width="500" align="center">
 				<tr><td align="center" class="cellmenu1" colspan="2"><b>{LN_INSTALL_CREATEUSER}</b></td></tr>
 				<tr>
 					<td align="left" class="cellmenu1" width="150" nowrap><b>{LN_INSTALL_USERNAME}</b></td>
@@ -272,7 +274,7 @@
 		<tr>
 			<td class="line2" align="center">
 				<br>
-				<h3><font color="red">{LN_INSTALL_SUCCESSCREATED} '{MAIN_Username}'.</font></h3>
+				<h3 class="us-error-text">{LN_INSTALL_SUCCESSCREATED} '{MAIN_Username}'.</h3>
 				<br>
 			</td>
 		</tr>
@@ -298,9 +300,9 @@
 		<tr>
 			<td class="cellmenu1" width="50%">
 			</td>
-			<td class="line0" width="100" nowrap><B>{LN_INSTALL_PROGRESS}</B></td>
+			<td class="line0" width="100" nowrap><b>{LN_INSTALL_PROGRESS}</b></td>
 			<td class="line0" width="300" nowrap>
-				<table width="100%" bgcolor="#007700" cellpadding="0" cellspacing="0" border="0" align="center">
+				<table width="100%" class="us-stat-bar-positive" cellpadding="0" cellspacing="0" border="0" align="center">
 				<tr>
 					<td width="100%" align="left" nowrap><img src="{BarImageLeft}" width="8" height="17"><img src="{BarImagePlus}" width="{WidthPlus}%" height="17" title="{WidthPlusText}"><img src="{BarImageRight}" width="9" height="17"></td>
 				</tr>

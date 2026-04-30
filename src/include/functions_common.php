@@ -37,6 +37,45 @@ require_once($gl_root_path . 'include/functions_db.php');
 require_once($gl_root_path . 'include/class_template.php');
 // --- 
 
+/**
+ * Escape plain text for HTML (body text and double-quoted attributes).
+ * Project standard for string output; see docs/template-variable-trust.md (Phase 7.2a).
+ */
+function UltraStats_h( $value )
+{
+	return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );
+}
+
+/** POST field name for admin CSRF synchronizer tokens (Phase 6). */
+define( 'US_ADMIN_CSRF_POST_FIELD', 'ultrastats_csrf' );
+
+/**
+ * Create or reuse a per-session CSRF token for authenticated admin POST actions.
+ *
+ * @param bool $rotate If true, replaces any existing token (e.g. after login).
+ */
+function UltraStats_AdminCsrfEnsureToken( $rotate = false )
+{
+	if ( $rotate || empty( $_SESSION['US_ADMIN_CSRF_TOKEN'] ) ) {
+		$_SESSION['US_ADMIN_CSRF_TOKEN'] = bin2hex( random_bytes( 16 ) );
+	}
+	return $_SESSION['US_ADMIN_CSRF_TOKEN'];
+}
+
+/**
+ * Validate {@see US_ADMIN_CSRF_POST_FIELD} in the current POST request against the session token.
+ */
+function UltraStats_AdminCsrfPostedTokenMatches()
+{
+	if ( ! isset( $_POST[ US_ADMIN_CSRF_POST_FIELD ] ) || $_POST[ US_ADMIN_CSRF_POST_FIELD ] === '' ) {
+		return false;
+	}
+	if ( empty( $_SESSION['US_ADMIN_CSRF_TOKEN'] ) ) {
+		return false;
+	}
+	return hash_equals( (string) $_SESSION['US_ADMIN_CSRF_TOKEN'], (string) $_POST[ US_ADMIN_CSRF_POST_FIELD ] );
+}
+
 // --- Define Basic vars
 $RUNMODE = RUNMODE_WEBSERVER;
 $DEBUGMODE = DEBUG_INFO;
@@ -71,7 +110,7 @@ $content['additional_url'] = "";
 // --- Check PHP version (7.4+; mysqli required)
 if ( version_compare( PHP_VERSION, '7.4.0', '<' ) ) {
 	@header( 'Content-Type: text/html; charset=utf-8' );
-	die( 'UltraStats requires <b>PHP 7.4.0</b> or higher. This server reports PHP <b>' . htmlspecialchars( PHP_VERSION, ENT_QUOTES, 'UTF-8' ) . '</b>.' );
+	die( 'UltraStats requires <b>PHP 7.4.0</b> or higher. This server reports PHP <b>' . UltraStats_h( PHP_VERSION ) . '</b>.' );
 }
 if ( ! extension_loaded( 'mysqli' ) ) {
 	@header( 'Content-Type: text/html; charset=utf-8' );
@@ -83,10 +122,20 @@ if ( ! extension_loaded( 'mysqli' ) ) {
 function InitBasicUltraStats()
 {
 	// Needed to make global
-	global $CFG, $gl_root_path, $content;
+	global $CFG, $gl_root_path, $content, $RUNMODE;
 
 	// check RunMode first!
 	CheckAndSetRunMode();
+
+	// HTTP + string handling: language files and templates are UTF-8; DB runtime uses utf8mb4 (see functions_db.php).
+	if ( $RUNMODE == RUNMODE_WEBSERVER && ! headers_sent() ) {
+		if ( ! defined( 'IS_PARSER_SSE' ) || ! IS_PARSER_SSE ) {
+			header( 'Content-Type: text/html; charset=utf-8' );
+		}
+	}
+	if ( function_exists( 'mb_internal_encoding' ) ) {
+		@mb_internal_encoding( 'UTF-8' );
+	}
 
 	// Get and Set RunTime Informations
 	InitRuntimeInformations();
@@ -168,12 +217,12 @@ function CheckForInstallPhp()
 	// Check for installscript!
 	if ( file_exists($content['BASEPATH'] . "install.php") ) 
 		$strinstallmsg = '<br><br>' 
-						. '<center><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br>'
-						. 'If you need help for the installation process, you should take a look into the <B>INSTALL</B> document!<br>'
+						. '<div class="us-center"><b>Click <a href="' . $content['BASEPATH'] . 'install.php">here</a> to Install UltraStats!</b><br>'
+						. 'If you need help for the installation process, you should take a look into the <b>INSTALL</b> document!<br>'
 //						. '<a href="docs/installation.htm" target="_blank">English Installation Guide</a>&nbsp;|&nbsp;'
 //						. '<a href="docs/installation_de.htm" target="_blank">German Installation Guide</a><br><br>' 
 //						. 'Also take a look to the <a href="doc/en/readme.md" target="_blank">Readme</a> for some basics around UltraStats!<br>'
-						. '</center>';
+						. '</div>';
 	else
 		$strinstallmsg = "";
 	DieWithErrorMsg( 'Error, main configuration file is missing!' . $strinstallmsg );
@@ -765,6 +814,52 @@ function CheckUrlOrIP($ip)
 		return true; 
 }
 
+/**
+ * Escape potentially untrusted error text for safe HTML rendering.
+ * Keeps line breaks readable without allowing HTML/script execution.
+ */
+function UltraStats_EscapeErrorTextForHtml( $text )
+{
+	$safe = UltraStats_h( $text );
+	return nl2br( $safe, false );
+}
+
+/**
+ * Minimal HTML5 document for DieWithErrorMsg / DieWithFriendlyErrorMsg (defaults.css + theme main.css).
+ *
+ * @param string $errHtml Already escaped detail HTML (e.g. from UltraStats_EscapeErrorTextForHtml).
+ */
+function UltraStats_RenderStandaloneErrorDocumentHtml( $errHtml, $critical )
+{
+	global $gl_root_path;
+	$cssDefaultsHref = UltraStats_h( $gl_root_path . 'css/defaults.css' );
+	$cssRel            = $critical ? 'themes/codww/main.css' : 'themes/default/main.css';
+	$cssHref           = UltraStats_h( $gl_root_path . $cssRel );
+	if ( $critical ) {
+		$title = 'UltraStats :: Critical Error occured';
+		$h3    = 'Critical Error occured';
+		$hcls  = 'PriorityError';
+	} else {
+		$title = 'UltraStats :: Error occured';
+		$h3    = 'Error occured';
+		$hcls  = 'PriorityWarning';
+	}
+	return '<!DOCTYPE html><html><head>'
+		. '<meta charset="utf-8">'
+		. '<meta name="viewport" content="width=device-width, initial-scale=1">'
+		. '<title>' . UltraStats_h( $title ) . '</title>'
+		. '<link rel="stylesheet" href="' . $cssDefaultsHref . '">'
+		. '<link rel="stylesheet" href="' . $cssHref . '">'
+		. '</head><body><br><br>'
+		. '<table width="600" align="center" class="with_border_alternate ErrorMsg"><tr>'
+		. '<td class="' . $hcls . '" align="center" colspan="2">'
+		. '<h3>' . UltraStats_h( $h3 ) . '</h3>'
+		. '</td></tr>'
+		. '<tr><td class="cellmenu1_naked" align="left">Errordetails:</td>'
+		. '<td class="tableBackground" align="left">' . $errHtml . '</td></tr></table>'
+		. '</body></html>';
+}
+
 function DieWithErrorMsg( $szerrmsg )
 {
 	global $RUNMODE, $content, $gl_root_path;
@@ -783,18 +878,8 @@ function DieWithErrorMsg( $szerrmsg )
 			);
 			exit;
 		}
-		echo 
-			"<html><title>UltraStats :: Critical Error occured</title><head>" . 
-			"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/codww/main.css\" type=\"text/css\"></head><body><br><br>" .
-			"<table width=\"600\" align=\"center\" class=\"with_border_alternate ErrorMsg\"><tr>". 
-			"<td class=\"PriorityError\" align=\"center\" colspan=\"2\">" . 
-			"<H3>Critical Error occured</H3>" . 
-			"</td></tr>" . 
-			"<tr><td class=\"cellmenu1_naked\" align=\"left\">Errordetails:</td>" . 
-			"<td class=\"tableBackground\" align=\"left\">" . 
-			$szerrmsg . 
-			"</td></tr></table>" . 
-			"</body></html>";
+		$errHtml = UltraStats_EscapeErrorTextForHtml( $szerrmsg );
+		echo UltraStats_RenderStandaloneErrorDocumentHtml( $errHtml, true );
 		exit;
 	}
 
@@ -804,19 +889,8 @@ function DieWithErrorMsg( $szerrmsg )
 
 function DieWithFriendlyErrorMsg( $szerrmsg )
 {
-	global $gl_root_path;
-	echo 
-		"<html><title>UltraStats :: Error occured</title><head>" . 
-		"<link rel=\"stylesheet\" href=\"" . $gl_root_path . "themes/default/main.css\" type=\"text/css\"></head><body><br><br>" .
-		"<table width=\"600\" align=\"center\" class=\"with_border_alternate ErrorMsg\"><tr>". 
-		"<td class=\"PriorityWarning\" align=\"center\" colspan=\"2\">" . 
-		"<H3>Error occured</H3>" . 
-		"</td></tr>" . 
-		"<tr><td class=\"cellmenu1_naked\" align=\"left\">Errordetails:</td>" . 
-		"<td class=\"tableBackground\" align=\"left\">" . 
-		$szerrmsg . 
-		"</td></tr></table>" . 
-		"</body></html>";
+	$errHtml = UltraStats_EscapeErrorTextForHtml( $szerrmsg );
+	echo UltraStats_RenderStandaloneErrorDocumentHtml( $errHtml, false );
 	exit;
 }
 
@@ -855,6 +929,7 @@ function IncludeLanguageFile( $langfile )
 
 /**
  * Allow only in-app relative targets (no scheme, no //host); blocks open redirects.
+ * Rejects javascript:/data:/etc. (scheme without //), quotes, angle brackets, and control chars for safe use in Location, meta refresh, and href.
  */
 function UltraStats_SanitizeRedirectTarget( $url )
 {
@@ -863,6 +938,14 @@ function UltraStats_SanitizeRedirectTarget( $url )
 		return 'index.php';
 	}
 	if ( strpbrk( $url, "\r\n" ) !== false ) {
+		return 'index.php';
+	}
+	// Block attribute / markup injection in meta refresh and href contexts.
+	if ( preg_match( '/[\x00-\x1f"\'<>\\\\]/', $url ) ) {
+		return 'index.php';
+	}
+	// Block scheme-based URLs (https:, javascript:, data:, etc.) — only relative targets allowed.
+	if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.\-]*:#', $url ) ) {
 		return 'index.php';
 	}
 	if ( preg_match( '#^[a-zA-Z][a-zA-Z0-9+.-]*://#', $url ) ) {
@@ -1025,7 +1108,7 @@ function GetPlayerNameAsHTML($myName)
 			$finished = true;
 
 		$colorcode = substr($myName, $strposbegin, 2);
-		$tempreplace = "<font color=\"".GetColourNameFromCode($colorcode)."\">";
+		$tempreplace = '<span class="us-playername-color" style="color:' . GetColourNameFromCode( $colorcode ) . ';">';
 
 		if ($finished)		
 			$tempstr = substr($myName, $strposbegin+2);								// Whole string
@@ -1033,7 +1116,7 @@ function GetPlayerNameAsHTML($myName)
 			$tempstr = substr($myName, $strposbegin+2, $strend - $strposbegin -2);	// Only Part of string
 		
 		$tempreplace .= $tempstr;
-		$tempreplace .= "</font>";
+		$tempreplace .= "</span>";
 
 		$myHtmlName = str_replace($colorcode.$tempstr, $tempreplace, $myHtmlName);
 		$strposbegin++;

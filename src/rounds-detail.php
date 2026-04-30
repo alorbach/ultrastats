@@ -379,7 +379,9 @@ else
 	// Invalid ID!
 	$content['iserror'] = "true";
 }
-// --- 
+
+if ( !isset($content['roundsenabled']) || $content['roundsenabled'] !== "true" )
+	$content['ERROR_DETAILS'] = $content['LN_ROUNDS_ROUNDNOTFOUND'];
 
 // --- Parsen and Output
 InitTemplateParser();

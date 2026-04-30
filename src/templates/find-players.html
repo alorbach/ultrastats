@@ -2,25 +2,25 @@
 
 <br>
 
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-public-responsive-panel">
 <tr>
 	<td rowspan="2" width="10" valign="top" nowrap>&nbsp;</td>
 	<td width="100%" valign="top" align="center">
 
 		<form action="" method="GET">
-		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-responsive-panel">
 		<tr>
 			<td colspan="3" class="title" width="400" nowrap>{LN_SEARCH_TITLE}</td>
 		</tr>
 		</table>
-		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
+		<table width="600" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border us-public-search-table">
 		<tr>
-			<td class="cellmenu1"><label for="search-query"><B>{LN_SEARCH_STRING}</B></label></td>
+			<td class="cellmenu1"><label for="search-query"><b>{LN_SEARCH_STRING}</b></label></td>
 			<td class="line1"><input type="text" id="search-query" name="search" value="{searchfor}" size="40" maxlength="32"></td>
 			<td class="line0" rowspan="3" valign="middle" width="100" align="center"><input type="submit" value="Search"></td>
 		</tr>
 		<tr>
-			<td class="cellmenu1"><label for="search-type"><B>{LN_SEARCH_BY}</B>:</label></td>
+			<td class="cellmenu1"><label for="search-type"><b>{LN_SEARCH_BY}</b>:</label></td>
 			<td class="line1">
 				<select id="search-type" name="searchtype">
 					<option value="1" {searchtype_selected_1}>{LN_SEARCH_PLAYERID}</option>
@@ -30,7 +30,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="cellmenu1"><label for="ignore-color-codes"><B>{LN_SEARCH_IGNORECOLORCODES}</B></label></td>
+			<td class="cellmenu1"><label for="ignore-color-codes"><b>{LN_SEARCH_IGNORECOLORCODES}</b></label></td>
 			<td align="left" class="line0"><input type="checkbox" id="ignore-color-codes" name="ignorecolorcodes" value="yes" {IGNORECOLORCODES_CHECKED}></td>
 		</tr>
 		</table>
@@ -42,30 +42,31 @@
 <tr>
 	<td width="100%" valign="top" align="center">
 	<!-- IF playersfound="false" -->
-	<center>
-		<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
-			<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-			<p>{LN_SEARCH_NOPLAYERFOUND}</p>
-			</div>
-		<br><br>
-	</center>
 	<br><br>
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
+		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
+		<p>{ERROR_DETAILS}</p>
+		</div>
+	<br><br>
+</div>
+<br><br>
 	<!-- ENDIF playersfound="false" -->
 
 	<!-- IF playersfound="true" -->
-		<table width="600" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate">
+		<table width="600" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border_alternate us-public-scroll-strip">
 		<tr>
 			<td colspan="2" class="title" width="400" nowrap>{LN_SEARCH_FOUND} '{searchfor}'</td>
 		</tr>
 		<tr>
-			<td width="20" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-			<td width="100%" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NAME}</B></td>
+			<td width="20" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+			<td width="100%" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NAME}</b></td>
 		</tr>
 
 		<!-- BEGIN playersresults -->
 		<tr>
-			<td align="right" class="{cssclass}"><B>{Number}</B></td>
-			<td class="{cssclass}"><A HREF="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</A></td>
+			<td align="right" class="{cssclass}"><b>{Number}</b></td>
+			<td class="{cssclass}"><a href="players-detail.php?id={PLAYERID}{additional_url}" title="{Alias}">{AliasAsHtml}</a></td>
 		</tr>
 		<!-- END playersresults -->
 

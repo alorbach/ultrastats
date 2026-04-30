@@ -104,8 +104,105 @@ else
 	$content['received_referer'] = "";
 // --- 
 
+/**
+ * Execute bound deletes for one player GUID; fills $content['DeletedData'] and sets ISVERIFY to false.
+ */
+function UltraStats_AdminPlayersRunDeleteChain( $del_guid ) {
+	global $content;
+	$del_guid = (int) $del_guid;
+	$content['ISVERIFY'] = 'false';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_ALIASES . ' WHERE PLAYERID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][0]['SQL_CMD']         = 'DELETE FROM ' . STATS_ALIASES . ' WHERE PLAYERID = ' . $del_guid;
+	$content['DeletedData'][0]['NAME']          = STATS_ALIASES;
+	$content['DeletedData'][0]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][0]['cssclass']       = 'line1';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_CHAT . ' WHERE PLAYERID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][1]['SQL_CMD']         = 'DELETE FROM ' . STATS_CHAT . ' WHERE PLAYERID = ' . $del_guid;
+	$content['DeletedData'][1]['NAME']          = STATS_CHAT;
+	$content['DeletedData'][1]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][1]['cssclass']       = 'line2';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_PLAYER_KILLS . ' WHERE PLAYERID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][2]['SQL_CMD']         = 'DELETE FROM ' . STATS_PLAYER_KILLS . ' WHERE PLAYERID = ' . $del_guid;
+	$content['DeletedData'][2]['NAME']          = STATS_PLAYER_KILLS;
+	$content['DeletedData'][2]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][2]['cssclass']       = 'line1';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_PLAYER_KILLS . ' WHERE ENEMYID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][3]['SQL_CMD']         = 'DELETE FROM ' . STATS_PLAYER_KILLS . ' WHERE ENEMYID = ' . $del_guid;
+	$content['DeletedData'][3]['NAME']          = STATS_PLAYER_KILLS;
+	$content['DeletedData'][3]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][3]['cssclass']       = 'line2';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_PLAYERS . ' WHERE GUID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][4]['SQL_CMD']         = 'DELETE FROM ' . STATS_PLAYERS . ' WHERE GUID = ' . $del_guid;
+	$content['DeletedData'][4]['NAME']          = STATS_PLAYERS;
+	$content['DeletedData'][4]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][4]['cssclass']       = 'line1';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_PLAYERS_STATIC . ' WHERE GUID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][5]['SQL_CMD']         = 'DELETE FROM ' . STATS_PLAYERS_STATIC . ' WHERE GUID = ' . $del_guid;
+	$content['DeletedData'][5]['NAME']          = STATS_PLAYERS_STATIC;
+	$content['DeletedData'][5]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][5]['cssclass']       = 'line2';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_PLAYERS_TOPALIASES . ' WHERE GUID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][6]['SQL_CMD']         = 'DELETE FROM ' . STATS_PLAYERS_TOPALIASES . ' WHERE GUID = ' . $del_guid;
+	$content['DeletedData'][6]['NAME']          = STATS_PLAYERS_TOPALIASES;
+	$content['DeletedData'][6]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][6]['cssclass']       = 'line1';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_ROUNDACTIONS . ' WHERE PLAYERID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][7]['SQL_CMD']         = 'DELETE FROM ' . STATS_ROUNDACTIONS . ' WHERE PLAYERID = ' . $del_guid;
+	$content['DeletedData'][7]['NAME']          = STATS_ROUNDACTIONS;
+	$content['DeletedData'][7]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][7]['cssclass']       = 'line2';
+
+	DB_ExecBound( 'DELETE FROM ' . STATS_TIME . ' WHERE PLAYERID = ?', 'i', array( $del_guid ), false );
+	$content['DeletedData'][8]['SQL_CMD']         = 'DELETE FROM ' . STATS_TIME . ' WHERE PLAYERID = ' . $del_guid;
+	$content['DeletedData'][8]['NAME']          = STATS_TIME;
+	$content['DeletedData'][8]['DELETED_RECORD'] = GetRowsAffected();
+	$content['DeletedData'][8]['cssclass']       = 'line1';
+}
 
 // --- BEGIN Custom Code
+
+$ultrastats_players_post_delete_result = false;
+
+if ( ( isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : '' ) === 'POST'
+	&& isset( $_POST['op'], $_POST['id'], $_POST['admin_confirm_player_delete'] )
+	&& $_POST['op'] === 'delete'
+	&& $_POST['admin_confirm_player_delete'] === '1' ) {
+
+	if ( ! UltraStats_AdminCsrfPostedTokenMatches() ) {
+		DieWithFriendlyErrorMsg( 'Invalid session security token — please reopen the player delete confirmation from the list.' );
+	}
+	UltraStats_AdminCsrfEnsureToken( true );
+
+	$del_guid = (int) DB_RemoveBadChars( $_POST['id'] );
+	if ( $del_guid <= 0 ) {
+		$content['ISERROR']   = 'true';
+		$content['ERROR_MSG'] = $content['LN_PLAYER_ERROR_INVID'];
+	} else {
+		$result = DB_QueryBound( 'SELECT GUID FROM ' . STATS_PLAYERS_STATIC . ' WHERE GUID = ?', 'i', array( $del_guid ) );
+		$myrow  = DB_GetSingleRow( $result, true );
+		if ( ! isset( $myrow['GUID'] ) ) {
+			$content['ISERROR']   = 'true';
+			$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_NOTFOUND'], (string) $del_guid );
+		} else {
+			$content['playerfilter']        = isset( $_POST['playerfilter'] ) ? DB_RemoveBadChars( $_POST['playerfilter'] ) : '';
+			$content['current_pagebegin']   = isset( $_POST['start'] ) ? intval( DB_RemoveBadChars( $_POST['start'] ) ) : 0;
+			$content['GUID']                = (string) $del_guid;
+			$content['AliasName']           = GetPlayerHtmlNameFromID( $content['GUID'] );
+			$content['ISDELETEPLAYER']      = 'true';
+			UltraStats_AdminPlayersRunDeleteChain( $del_guid );
+			$ultrastats_players_post_delete_result = true;
+		}
+	}
+}
+
 if ( isset($_GET['op']) )
 {
 	if ($_GET['op'] == "edit") 
@@ -163,88 +260,32 @@ if ( isset($_GET['op']) )
 			$content['ERROR_MSG'] = $content['LN_PLAYER_ERROR_INVID'];
 		}
 	}
-	else if ($_GET['op'] == "delete") 
+	else if ($_GET['op'] == "delete" )
 	{
-		// Set Mode to edit
-		$content['ISDELETEPLAYER'] = "true";
-
 		if ( isset($_GET['id']) && is_numeric($_GET['id']) )
 		{
-			//PreInit these values 
 			$content['GUID'] = DB_RemoveBadChars($_GET['id']);
-			$content['AliasName'] = GetPlayerHtmlNameFromID( $content['GUID'] );
-
-			if ( isset($_GET['verify']) && $_GET['verify'] == "yes" )
-			{
-				// Disable Verify few
-				$content['ISVERIFY'] = "false";
-
-				$delGuid = (int) $content['GUID'];
-
-				// Start Deleting the User stats! (bound deletes; SQL_CMD kept for display with numeric id)
-				DB_ExecBound( "DELETE FROM " . STATS_ALIASES . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][0]['SQL_CMD'] = "DELETE FROM " . STATS_ALIASES . " WHERE PLAYERID = " . $delGuid;
-				$content['DeletedData'][0]['NAME'] = STATS_ALIASES;
-				$content['DeletedData'][0]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][0]['cssclass'] = "line1";
-
-				DB_ExecBound( "DELETE FROM " . STATS_CHAT . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][1]['SQL_CMD'] = "DELETE FROM " . STATS_CHAT . " WHERE PLAYERID = " . $delGuid;
-				$content['DeletedData'][1]['NAME'] = STATS_CHAT;
-				$content['DeletedData'][1]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][1]['cssclass'] = "line2";
-
-				DB_ExecBound( "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][2]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE PLAYERID = " . $delGuid;
-				$content['DeletedData'][2]['NAME'] = STATS_PLAYER_KILLS;
-				$content['DeletedData'][2]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][2]['cssclass'] = "line1";
-
-				DB_ExecBound( "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE ENEMYID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][3]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYER_KILLS . " WHERE ENEMYID = " . $delGuid;
-				$content['DeletedData'][3]['NAME'] = STATS_PLAYER_KILLS;
-				$content['DeletedData'][3]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][3]['cssclass'] = "line2";
-
-				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS . " WHERE GUID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][4]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS . " WHERE GUID = " . $delGuid;
-				$content['DeletedData'][4]['NAME'] = STATS_PLAYERS;
-				$content['DeletedData'][4]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][4]['cssclass'] = "line1";
-
-				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][5]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_STATIC . " WHERE GUID = " . $delGuid;
-				$content['DeletedData'][5]['NAME'] = STATS_PLAYERS_STATIC;
-				$content['DeletedData'][5]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][5]['cssclass'] = "line2";
-
-				DB_ExecBound( "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][6]['SQL_CMD'] = "DELETE FROM " . STATS_PLAYERS_TOPALIASES . " WHERE GUID = " . $delGuid;
-				$content['DeletedData'][6]['NAME'] = STATS_PLAYERS_TOPALIASES;
-				$content['DeletedData'][6]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][6]['cssclass'] = "line1";
-
-				DB_ExecBound( "DELETE FROM " . STATS_ROUNDACTIONS . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][7]['SQL_CMD'] = "DELETE FROM " . STATS_ROUNDACTIONS . " WHERE PLAYERID = " . $delGuid;
-				$content['DeletedData'][7]['NAME'] = STATS_ROUNDACTIONS;
-				$content['DeletedData'][7]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][7]['cssclass'] = "line2";
-
-				DB_ExecBound( "DELETE FROM " . STATS_TIME . " WHERE PLAYERID = ?", 'i', array( $delGuid ), false );
-				$content['DeletedData'][8]['SQL_CMD'] = "DELETE FROM " . STATS_TIME . " WHERE PLAYERID = " . $delGuid;
-				$content['DeletedData'][8]['NAME'] = STATS_TIME;
-				$content['DeletedData'][8]['DELETED_RECORD'] = GetRowsAffected();
-				$content['DeletedData'][8]['cssclass'] = "line1";
+			$guid_try         = (int) $content['GUID'];
+			$result           = DB_QueryBound( 'SELECT GUID FROM ' . STATS_PLAYERS_STATIC . ' WHERE GUID = ?', 'i', array( $guid_try ) );
+			$row_chk          = DB_GetSingleRow( $result, true );
+			if ( ! isset( $row_chk['GUID'] ) ) {
+				$content['ISERROR']   = 'true';
+				$content['ERROR_MSG'] = GetAndReplaceLangStr( $content['LN_PLAYER_ERROR_NOTFOUND'], $content['GUID'] );
+			} else {
+				$content['ISDELETEPLAYER']       = 'true';
+				$content['AliasName']            = GetPlayerHtmlNameFromID( $content['GUID'] );
+				$content['ISVERIFY']             = 'true';
+				$content['ULTRASTATS_CSRF_VALUE'] = UltraStats_AdminCsrfEnsureToken();
 			}
-			else
-			{
-				// Enable Verify few
-				$content['ISVERIFY'] = "true";
-			}
+		}
+		else
+		{
+			$content['ISERROR']   = 'true';
+			$content['ERROR_MSG'] = $content['LN_PLAYER_ERROR_INVID'];
 		}
 	}
 
-	if ( isset($_POST['op']) )
+	if ( isset($_POST['op']) && $_POST['op'] !== 'delete' )
 	{
 		if ( isset ($_POST['id']) ) { $content['GUID'] = DB_RemoveBadChars($_POST['id']); } else {$content['GUID'] = 0; }
 
@@ -299,6 +340,9 @@ if ( isset($_GET['op']) )
 }
 else
 {
+	if ( $ultrastats_players_post_delete_result ) {
+		// POST delete already populated $content (result table); skip list query.
+	} else {
 	// Default Mode = List Players
 	$content['LISTPLAYERS'] = "true";
 
@@ -437,7 +481,7 @@ else
 			$content['PLAYERPAGES'][$i]['mypagebegin'] = ($i * $content['admin_maxplayers']);
 
 			if ($content['current_pagebegin'] == $content['PLAYERPAGES'][$i]['mypagebegin'])
-				$content['PLAYERPAGES'][$i]['mypagenumber'] = "<B>-> ".($i+1)." <-</B>";
+				$content['PLAYERPAGES'][$i]['mypagenumber'] = "<b>-> ".($i+1)." <-</b>";
 			else
 				$content['PLAYERPAGES'][$i]['mypagenumber'] = $i+1;
 
@@ -449,9 +493,14 @@ else
 			// --- 
 		}
 	// ---
+	}
 }
 
 // --- END Custom Code
+
+if ( isset( $content['ISERROR'] ) && $content['ISERROR'] === 'true' && isset( $content['ERROR_MSG'] ) ) {
+	$content['ERROR_MSG'] = UltraStats_h( $content['ERROR_MSG'] );
+}
 
 // --- Parsen and Output
 InitTemplateParser();

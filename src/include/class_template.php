@@ -140,7 +140,7 @@ function load_file($fname)
 	else
 	{
 // BEGIN DELTA MOD
-		DieWithErrorMsg( "Could not find the template <B>".$fname."</B>");
+		DieWithErrorMsg( "Could not find the template <b>".$fname."</b>");
 // END DELTA MOD
 	}
 }

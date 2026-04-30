@@ -156,12 +156,16 @@ if ( isset($_GET['id']) )
 		// --- 
 	}
 	else
+	{
 		$content['iserror'] = "true";
+		$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDMAP'];
+	}
 }
 else
 {
 	// Invalid ID!
 	$content['iserror'] = "true";
+	$content['ERROR_DETAILS'] = $content['LN_ERROR_INVALIDMAP'];
 }
 // --- 
 

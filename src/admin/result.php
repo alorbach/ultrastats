@@ -40,23 +40,36 @@ $content['REDIRSECONDS'] = 1;
 // ***					*** //
 
 // --- BEGIN Custom Code
-if ( isset($_GET['redir']) )
-{
-	$content['EXTRA_METATAGS'] = '<meta HTTP-EQUIV="REFRESH" CONTENT="' . $content['REDIRSECONDS'] . '; URL=' . urldecode($_GET['redir']) . '">';
-	$content['SZREDIR'] = urldecode($_GET['redir']);
+$hadRedirParam = isset( $_GET['redir'] );
+$redirRaw      = $hadRedirParam ? urldecode( (string) $_GET['redir'] ) : 'index.php';
+$safeRedir     = UltraStats_SanitizeRedirectTarget( $redirRaw );
+if ( ! $hadRedirParam ) {
+	$_GET['redir'] = $safeRedir;
 }
-else
-{
-	$_GET['redir'] = "index.php";
+$content['SZREDIR'] = $safeRedir;
+
+$sec = (int) $content['REDIRSECONDS'];
+if ( $sec < 1 ) {
+	$sec = 1;
+}
+if ( $sec > 120 ) {
+	$sec = 120;
+}
+$content['REDIRSECONDS'] = $sec;
+
+if ( $hadRedirParam ) {
+	$metaUrl = UltraStats_h( $safeRedir );
+	$content['EXTRA_METATAGS'] = '<meta http-equiv="refresh" content="' . $sec . '; url=' . $metaUrl . '">';
 }
 
-if ( isset($_GET['msg']) )
-	$content['SZMSG'] = urldecode($_GET['msg']);
-else
-	$content['SZMSG'] = "*Unknown State";
+if ( isset( $_GET['msg'] ) ) {
+	$content['SZMSG'] = UltraStats_h( urldecode( (string) $_GET['msg'] ) );
+} else {
+	$content['SZMSG'] = '*Unknown State';
+}
 
-// Create redir txt
-$content['RESULT_REDIRTXT'] = GetAndReplaceLangStr( $content['LN_RESULT_REDIRTXT'], $content['SZREDIR'], $content['REDIRSECONDS']); 
+$hrefEsc = UltraStats_h( $safeRedir );
+$content['RESULT_REDIRTXT'] = GetAndReplaceLangStr( $content['LN_RESULT_REDIRTXT'], $hrefEsc, (string) $sec );
 // --- 
 
 // --- BEGIN CREATE TITLE

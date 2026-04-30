@@ -64,27 +64,21 @@ function CreateHTMLHeader()
 	$currentclass = "line0";
 	$currentmenuclass = "cellmenu1";
 
-	$parserBodyStyle = ( defined( 'IS_PARSERPAGE' ) && IS_PARSERPAGE )
-		? ' style="background-color:#1a1a1a;color:#e0e0e0;"'
+	$parserBodyClass = ( defined( 'IS_PARSERPAGE' ) && IS_PARSERPAGE )
+		? ' class="us-parser-body"'
 		: '';
 
-	print ('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+	print ('<!DOCTYPE html>
 			<html>
 			<head>
-			<link rel="stylesheet" href="' . $gl_root_path . 'css/defaults.css" type="text/css">
-			<link rel="stylesheet" href="' . $gl_root_path . 'css/menu.css" type="text/css">
-			<link rel="stylesheet" href="' . $gl_root_path . 'themes/' . $content['web_theme'] . '/main.css" type="text/css">
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="stylesheet" href="' . $gl_root_path . 'css/defaults.css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'css/menu.css">
+			<link rel="stylesheet" href="' . $gl_root_path . 'themes/' . $content['web_theme'] . '/main.css">
+			<script src="' . $gl_root_path . 'js/common.js"></script>
 			</head>
-			<SCRIPT language="JavaScript">
-				var g_intervalID;
-				function scrolldown()
-				{
-					scrollTo(0, 1000000);
-				}
-				// Always scroll down
-				g_intervalID = setInterval(scrolldown, 250);
-			</SCRIPT>
-			<body TOPMARGIN="0" LEFTMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0"' . $parserBodyStyle . ' OnLoad="scrolldown(); clearInterval(g_intervalID);"><br>
+			<body' . $parserBodyClass . ' data-parser-autoscroll="true"><br>
 			');
 }
 
@@ -108,60 +102,110 @@ function PrintDebugInfoHeader()
 		);
 	} else if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-	print('	<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" bgcolor="#777777">
+	print('	<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" class="us-parser-debug-grid">
 			<tr> 
-				<td class="' . $currentmenuclass . '" width="50" align="center" nowrap><B>Number</B></td>
-				<td class="' . $currentmenuclass . '" width="100" align="center" nowrap><B>DebugLevel</B></td>
-				<td class="' . $currentmenuclass . '" width="150" align="center" nowrap><B>Facility</B></td>
-				<td class="' . $currentmenuclass . '" width="100%" align="center" ><B>DebugMessage</B></td>
+				<td class="' . $currentmenuclass . '" width="50" align="center" nowrap><b>Number</b></td>
+				<td class="' . $currentmenuclass . '" width="100" align="center" nowrap><b>DebugLevel</b></td>
+				<td class="' . $currentmenuclass . '" width="150" align="center" nowrap><b>Facility</b></td>
+				<td class="' . $currentmenuclass . '" width="100%" align="center" ><b>DebugMessage</b></td>
 			</tr>
 			</table>');
 	}
+}
+
+/**
+ * Issue a single-use nonce for authenticated parser confirmations (classic + SSE URLs).
+ *
+ * Replaces naive {@code verify=yes} links — mitigates CSRF on destructive parser GETs while keeping EventSource-compatible GET resume.
+ */
+function UltraStats_ParserConfirmNonceIssue( $operation, $server_id )
+{
+	$nonce                               = bin2hex( random_bytes( 16 ) );
+	$_SESSION[ 'us_pc_' . $nonce ]       = array(
+		'op' => (string) $operation,
+		'id' => (int) $server_id,
+		't'  => time(),
+	);
+	return $nonce;
+}
+
+/**
+ * @param string $nonce Hex nonce from GET.
+ * @return array{op:string,id:int}|null Payload if valid (entry is consumed).
+ */
+function UltraStats_ParserConfirmNonceConsume( $nonce )
+{
+	$nonce = is_string( $nonce ) ? trim( $nonce ) : '';
+	if ( $nonce === '' || strlen( $nonce ) > 64 || preg_match( '/[^a-fA-F0-9]/', $nonce ) ) {
+		return null;
+	}
+	$key = 'us_pc_' . $nonce;
+	if ( ! isset( $_SESSION[ $key ] ) || ! is_array( $_SESSION[ $key ] ) ) {
+		return null;
+	}
+	$data = $_SESSION[ $key ];
+	unset( $_SESSION[ $key ] );
+	if ( ! isset( $data['op'], $data['id'], $data['t'] ) ) {
+		return null;
+	}
+	if ( time() - (int) $data['t'] > 3600 ) {
+		return null;
+	}
+	return array(
+		'op' => (string) $data['op'],
+		'id' => (int) $data['id'],
+	);
 }
 
 function PrintSecureUserCheckLegacy( $warningtext, $yesmsg, $nomsg, $operation )
 {
 	global $content, $myserver;
 
+	$nonce     = UltraStats_ParserConfirmNonceIssue( $operation, (int) $myserver['ID'] );
+	$nonce_esc = rawurlencode( $nonce );
+	$core_base = defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE ? 'parser-sse.php' : 'parser-core.php';
+
 	if ( defined( 'IS_PARSER_SSE' ) && IS_PARSER_SSE && function_exists( 'UltraStats_ParserSseEmitEvent' ) ) {
 		$GLOBALS['ultrastats_parser_sse_awaiting_confirm'] = true;
-		$opEsc = rawurlencode( (string) $operation );
-		$sid   = (int) $myserver['ID'];
-		$GLOBALS['ultrastats_parser_sse_confirm_payload'] = array(
-			't'             => 'confirm',
-			'warning'       => $warningtext,
-			'confirmUrl'    => 'parser-sse.php?op=' . $opEsc . '&id=' . $sid . '&verify=yes',
-			'confirmLabel'  => $yesmsg,
-			'cancelLabel'   => $nomsg,
+		$opEsc                                             = rawurlencode( (string) $operation );
+		$sid                                               = (int) $myserver['ID'];
+		$GLOBALS['ultrastats_parser_sse_confirm_payload']  = array(
+			't'            => 'confirm',
+			'warning'      => $warningtext,
+			'confirmUrl'   => 'parser-sse.php?op=' . $opEsc . '&id=' . $sid . '&parser_confirm_nonce=' . $nonce_esc,
+			'confirmLabel' => $yesmsg,
+			'cancelLabel'  => $nomsg,
 		);
 		UltraStats_ParserSseEmitEvent( 'confirm_action', $GLOBALS['ultrastats_parser_sse_confirm_payload'] );
 		return;
 	}
 
 	// Show Accept FORM!
-	print('<br><br>
+	print(
+		'<br><br>
 			<table width="700" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td colspan="10" align="center" valign="top" class="title"><strong><FONT COLOR="red">' . $warningtext . '</FONT></strong></td>
+				<td colspan="10" align="center" valign="top" class="title"><strong class="us-error-text">' . htmlspecialchars( (string) $warningtext, ENT_QUOTES, 'UTF-8' ) . '</strong></td>
 			</tr>
 			</table>
 			<table width="700" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
 			<tr>
 				<td align="center" class="line1">
 					<br>
-					<A HREF="parser-core.php?op=' . $operation . '&id=' . $myserver['ID'] . '&verify=yes">
-					<img src="' . $content['BASEPATH'] . 'images/icons/check.png" width="16"><br>
-					' . $yesmsg . '</A>
+					<a href="' . $core_base . '?op=' . htmlspecialchars( (string) $operation, ENT_QUOTES, 'UTF-8' ) . '&amp;id=' . (int) $myserver['ID'] . '&amp;parser_confirm_nonce=' . htmlspecialchars( $nonce, ENT_QUOTES, 'UTF-8' ) . '">
+					<img src="' . $content['BASEPATH'] . 'images/icons/check.png" width="16" alt=""><br>
+					' . $yesmsg . '</a>
 				</td>
 				<td align="center" class="line1">
-					<A HREF="javascript:history.back;">
+					<a href="parser.php" class="us-history-back" aria-label="' . htmlspecialchars( (string) $nomsg, ENT_QUOTES, 'UTF-8' ) . '">
 					<br>
-					<img src="' . $content['BASEPATH'] . 'images/icons/redo.png" width="16"><br>
-					' . $nomsg . '</A>
+					<img src="' . $content['BASEPATH'] . 'images/icons/redo.png" width="16" alt=""><br>
+					' . $nomsg . '</a>
 				</td>
 			</tr>
 			</table>
-			');
+			'
+	);
 }
 
 function PrintPasswordRequest()
@@ -188,7 +232,7 @@ function PrintPasswordRequest()
 			<form action="parser-core.php?op=getnewlogfile&id=' . $myserver['ID'] . '" method="post">
 			<table width="400" cellpadding="2" cellspacing="0" border="0" align="center" class="with_border">
 			<tr>
-				<td colspan="10" align="center" valign="top" class="title"><strong><FONT COLOR="red">' . $content['LN_FTPLOGINFAILED'] . '</FONT></strong></td>
+				<td colspan="10" align="center" valign="top" class="title"><strong class="us-error-text">' . htmlspecialchars( (string) $content['LN_FTPLOGINFAILED'], ENT_QUOTES, 'UTF-8' ) . '</strong></td>
 			</tr>
 			</table>
 			<table width="400" cellpadding="2" cellspacing="1" border="0" align="center" class="with_border">
@@ -247,11 +291,11 @@ function PrintHTMLDebugInfo( $facility, $fromwhere, $szDbgInfo )
 	}
 	else if ( $RUNMODE == RUNMODE_WEBSERVER )
 	{
-		print ('<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" bgcolor="#777777">
+		print ('<table width="100%" border="0" cellspacing="1" cellpadding="1" align="center" class="us-parser-debug-grid">
 				<tr> 
-					<td class="' . $currentmenuclass . '" width="50" align="center" nowrap><B>' . $gldbgcounter . '</B></td>
-					<td class="' . GetDebugClassFacilityAsString($facility) . '" width="100" align="center" nowrap><B>' . GetFacilityAsString($facility) . '</B></td>
-					<td class="' . $currentclass . '" width="150" align="center" nowrap><B>' . $fromwhere . '</B></td>
+					<td class="' . $currentmenuclass . '" width="50" align="center" nowrap><b>' . $gldbgcounter . '</b></td>
+					<td class="' . GetDebugClassFacilityAsString($facility) . '" width="100" align="center" nowrap><b>' . GetFacilityAsString($facility) . '</b></td>
+					<td class="' . $currentclass . '" width="150" align="center" nowrap><b>' . $fromwhere . '</b></td>
 					<td class="' . $currentclass . '" width="100%">&nbsp;&nbsp;' . $szDbgInfo . '</td>
 				</tr>
 				</table>');
@@ -372,11 +416,11 @@ function CreateHTMLFooter()
 		return;
 	}
 
-	print ('<br><center><h3>Finished</h3>
+	print ('<br><div class="us-center"><h3>Finished</h3>
 			Total running time was ' . $RenderTime . ' seconds
 			<br><br>
 			<br>
-			</center>
+			</div>
 			</body> 
 			</html>');
 }

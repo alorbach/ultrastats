@@ -127,12 +127,12 @@ if ( $content['INSTALL_STEP'] == 2 )
 			$iswriteable = (($perms & 0x0004) ? true : false) && (($perms & 0x0002) ? true : false);
 			if ( $iswriteable ) 
 			{
-				$content['fileperm'][$i]['BGCOLOR'] = "#007700";
+				$content['fileperm'][$i]['PERMCELLCLASS'] = "us-install-perm-ok";
 				$content['fileperm'][$i]['ISSUCCESS'] = "Writeable"; 
 			}
 			else
 			{
-				$content['fileperm'][$i]['BGCOLOR'] = "#770000";
+				$content['fileperm'][$i]['PERMCELLCLASS'] = "us-install-perm-fail";
 				$content['fileperm'][$i]['ISSUCCESS'] = "NOT Writeable"; 
 				$bSuccess = false;
 			}
@@ -149,12 +149,12 @@ if ( $content['INSTALL_STEP'] == 2 )
 
 			if ( is_writable($content['fileperm'][$i]['FILE_NAME']) ) 
 			{
-				$content['fileperm'][$i]['BGCOLOR'] = "#007700";
+				$content['fileperm'][$i]['PERMCELLCLASS'] = "us-install-perm-ok";
 				$content['fileperm'][$i]['ISSUCCESS'] = "Writeable"; 
 			}
 			else
 			{
-				$content['fileperm'][$i]['BGCOLOR'] = "#770000";
+				$content['fileperm'][$i]['PERMCELLCLASS'] = "us-install-perm-fail";
 				$content['fileperm'][$i]['ISSUCCESS'] = "NOT Writeable"; 
 				$bSuccess = false;
 			}

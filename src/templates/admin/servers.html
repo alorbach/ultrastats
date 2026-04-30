@@ -2,39 +2,39 @@
 
 <!-- IF ISERROR="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-admin-warning-box" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
 		<p>{ERROR_MSG}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF ISERROR="true" -->
 
 <!-- IF FTP_IS_ENABLED!="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-admin-warning-box">
 		<div class="PriorityWarning">{LN_WARN_DETAILS}</div>
 		<p>{LN_WARN_NOFTPEXTENSIONS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF FTP_IS_ENABLED!="true" -->
 
-<table cellpadding="0" cellspacing="0" border="0" width="600" align="center" class="with_border_alternate">
+<table cellpadding="0" cellspacing="0" border="0" width="600" align="center" class="with_border_alternate us-admin-responsive-panel">
 <tr>
 	<td colspan="10" align="center" valign="top" class="title"><strong>{LN_ADMINCENTER_SERVER}</strong></td>
 </tr>
 </table>
-<table cellpadding="0" cellspacing="0" border="0" width="600" align="center" class="with_border">
+<table cellpadding="0" cellspacing="0" border="0" width="600" align="center" class="with_border us-admin-responsive-panel">
 <tr>
 	<td align="center">
 
 <!-- IF LISTSERVERS="true" -->
-		<table border="0" cellpadding="2" cellspacing="1" width="600" class="tableBackground">
+		<table border="0" cellpadding="2" cellspacing="1" width="600" class="tableBackground us-admin-scroll-strip">
 		<tr>
 			<td align="center" width="50" class="cellmenu1"><b>{LN_SERVERNUMBER}</b></td>
 			<td align="center" width="300" class="cellmenu1"><b>{LN_SERVERNAME}</b></td>
@@ -45,14 +45,14 @@
 			<td align="center" class="{CSS_CLASS}"><b>{ID}</b></td>
 			<td align="center" class="{CSS_CLASS}"><a href="servers.php?op=dbstats&id={ID}">{Name}</a></td>
 			<td align="center" class="{CSS_CLASS}">
-				&nbsp;<a href="servers.php?op=edit&id={ID}" aria-label="{LN_ADMINEDIT_TEXT}"><img src="{BASEPATH}images/icons/edit.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINEDIT_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=delete&id={ID}" aria-label="{LN_ADMINDELETE_TEXT}"><img src="{BASEPATH}images/icons/delete.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINDELETE_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=updatestats&id={ID}" aria-label="{LN_ADMINPARSESTATS_TEXT}"><img src="{BASEPATH}images/icons/gears_run.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINPARSESTATS_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=createaliases&id={ID}" aria-label="{LN_ADMINCREATEALIASES_TEXT}"><img src="{BASEPATH}images/icons/businessmen.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINCREATEALIASES_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="servers.php?op=dbstats&id={ID}" aria-label="{LN_ADMINDBSTATS_TEXT}"><img src="{BASEPATH}images/icons/line-chart.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINDBSTATS_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=resetlastlogline&id={ID}" aria-label="{LN_ADMINRESETLASTLOGLINE_TEXT}"><img src="{BASEPATH}images/icons/recycle.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINRESETLASTLOGLINE_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=deletestats&id={ID}" aria-label="{LN_ADMINDELETESTATS_TEXT}"><img src="{BASEPATH}images/icons/garbage_empty.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINDELETESTATS_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
-				&nbsp;<a href="parser.php?op=getnewlogfile&id={ID}" aria-label="{LN_ADMINGETNEWLOG_TEXT}"><img src="{BASEPATH}images/icons/download.png" width="16" alt="" aria-hidden="true" OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINGETNEWLOG_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"></a>
+				&nbsp;<a href="servers.php?op=edit&id={ID}" aria-label="{LN_ADMINEDIT_TEXT}"><img src="{BASEPATH}images/icons/edit.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINEDIT_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=delete&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGDELETE}" aria-label="{LN_ADMINDELETE_TEXT}"><img src="{BASEPATH}images/icons/delete.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINDELETE_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=updatestats&id={ID}" aria-label="{LN_ADMINPARSESTATS_TEXT}"><img src="{BASEPATH}images/icons/gears_run.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINPARSESTATS_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=createaliases&id={ID}" aria-label="{LN_ADMINCREATEALIASES_TEXT}"><img src="{BASEPATH}images/icons/businessmen.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINCREATEALIASES_TEXT}"></a>
+				&nbsp;<a href="servers.php?op=dbstats&id={ID}" aria-label="{LN_ADMINDBSTATS_TEXT}"><img src="{BASEPATH}images/icons/line-chart.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINDBSTATS_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=resetlastlogline&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGRESETLASTLOGLINE}" aria-label="{LN_ADMINRESETLASTLOGLINE_TEXT}"><img src="{BASEPATH}images/icons/recycle.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINRESETLASTLOGLINE_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=deletestats&id={ID}" class="us-confirm-nav" data-confirm-message="{LN_WARNINGDELETE_STATS}" aria-label="{LN_ADMINDELETESTATS_TEXT}"><img src="{BASEPATH}images/icons/garbage_empty.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINDELETESTATS_TEXT}"></a>
+				&nbsp;<a href="parser.php?op=getnewlogfile&id={ID}" aria-label="{LN_ADMINGETNEWLOG_TEXT}"><img src="{BASEPATH}images/icons/download.png" width="16" alt="" aria-hidden="true" class="us-popup-help" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINGETNEWLOG_TEXT}"></a>
 			</td>
 		</tr>
 		<!-- END SERVERS -->
@@ -64,76 +64,76 @@
 		<tr>
 			<td align="center" colspan="3" class="cellmenu1"><b>{LN_ADDITIONALFUNCTIONS}</b></td>
 		</tr>
-		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=databaseopt" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_DATABASEOPT_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/line-chart.png">&nbsp;{LN_DATABASEOPT}</a></td></tr>
-		<tr><td align="left" colspan="3" class="line2"><a href="parser.php?op=runtotals" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_RUNTOTALUPDATE_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/gears_run.png" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_RUNTOTALUPDATE_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">&nbsp;{LN_RUNTOTALUPDATE}</a></td></tr>
-		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcdamagetypekills" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_RUNDAMAGETYPEKILLS_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_RUNDAMAGETYPEKILLS}</a></td></tr>
-		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcweaponkills" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_RUNWEAPONKILLS_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_RUNWEAPONKILLS}</a></td></tr>
-		<tr><td align="left" colspan="3" class="line2"><a href="parser.php?op=createaliases" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_CREATEALIASES_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_CREATEALIASES}</a></td></tr>
-		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcmedalsonly" OnMouseOver="HoverPopup(null, '{LN_DETAIL_INFO}', '{LN_CALCMEDALSONLY_MORE}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_CALCMEDALSONLY}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=databaseopt" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_DATABASEOPT_MORE}"><img src="{BASEPATH}images/icons/line-chart.png">&nbsp;{LN_DATABASEOPT}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line2"><a href="parser.php?op=runtotals" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_RUNTOTALUPDATE_MORE}"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_RUNTOTALUPDATE}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcdamagetypekills" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_RUNDAMAGETYPEKILLS_MORE}"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_RUNDAMAGETYPEKILLS}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcweaponkills" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_RUNWEAPONKILLS_MORE}"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_RUNWEAPONKILLS}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line2"><a href="parser.php?op=createaliases" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_CREATEALIASES_MORE}"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_CREATEALIASES}</a></td></tr>
+		<tr><td align="left" colspan="3" class="line1"><a href="parser.php?op=calcmedalsonly" class="us-popup-help" data-popup-title="{LN_DETAIL_INFO}" data-popup-content="{LN_CALCMEDALSONLY_MORE}"><img src="{BASEPATH}images/icons/gears_run.png">&nbsp;{LN_CALCMEDALSONLY}</a></td></tr>
 		</table>
 <!-- ENDIF LISTSERVERS="true" -->
 
 <!-- IF ISEDITORNEWSERVER="true" -->
 		<form action="" method="post">
-			<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="100%">
+			<table border="0" cellpadding="1" cellspacing="1" class="us-admin-table-surface" width="100%">
 			<tr>
-				<td align="left" class="cellmenu1" width="150" nowrap><b>{LN_SERVERNAME}</b></td>
-				<td align="left" class="line2" width="100%"><input type="text" name="servername" size="50" maxlength="255" value="{SERVERNAME}"></td>
+				<td align="left" class="cellmenu1" width="150" nowrap><label for="admin-server-name"><b>{LN_SERVERNAME}</b></label></td>
+				<td align="left" class="line2" width="100%"><input type="text" id="admin-server-name" name="servername" size="50" maxlength="255" value="{SERVERNAME}" required></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_SERVERIP}</b></td>
-				<td align="left" class="line1"><input type="text" name="serverip" size="50" maxlength="16" value="{SERVERIP}"></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-server-ip"><b>{LN_SERVERIP}</b></label></td>
+				<td align="left" class="line1"><input type="text" id="admin-server-ip" name="serverip" size="50" maxlength="16" value="{SERVERIP}" required></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_PORT}</b></td>
-				<td align="left" class="line2"><input type="text" name="port" size="50" maxlength="7" value="{PORT}"></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-port"><b>{LN_PORT}</b></label></td>
+				<td align="left" class="line2"><input type="number" id="admin-server-port" name="port" min="0" max="65534" step="1" inputmode="numeric" value="{PORT}" required></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2_naked" nowrap><b>{LN_DESCRIPTION}</b></td>
-				<td align="left" class="line1"><textarea name="description" cols="49" rows="5">{DESCRIPTION}</textarea></td>
+				<td align="left" class="cellmenu2_naked" nowrap><label for="admin-server-description"><b>{LN_DESCRIPTION}</b></label></td>
+				<td align="left" class="line1"><textarea id="admin-server-description" name="description" cols="49" rows="5">{DESCRIPTION}</textarea></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_MODNAME}</b></td>
-				<td align="left" class="line2"><input type="text" name="modname" size="50" maxlength="32" value="{MODNAME}"></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-modname"><b>{LN_MODNAME}</b></label></td>
+				<td align="left" class="line2"><input type="text" id="admin-server-modname" name="modname" size="50" maxlength="32" value="{MODNAME}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_ADMINNAME}</b></td>
-				<td align="left" class="line1"><input type="text" name="adminname" size="50" maxlength="255" value="{ADMINNAME}"></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-server-adminname"><b>{LN_ADMINNAME}</b></label></td>
+				<td align="left" class="line1"><input type="text" id="admin-server-adminname" name="adminname" size="50" maxlength="255" value="{ADMINNAME}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_CLANNAME}</b></td>
-				<td align="left" class="line2"><input type="text" name="clanname" size="50" maxlength="255" value="{CLANNAME}"></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-clanname"><b>{LN_CLANNAME}</b></label></td>
+				<td align="left" class="line2"><input type="text" id="admin-server-clanname" name="clanname" size="50" maxlength="255" value="{CLANNAME}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_ADMINEMAIL}</b></td>
-				<td align="left" class="line1"><input type="text" name="adminemail" size="50" maxlength="255" value="{ADMINEMAIL}"></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-server-adminemail"><b>{LN_ADMINEMAIL}</b></label></td>
+				<td align="left" class="line1"><input type="text" id="admin-server-adminemail" name="adminemail" size="50" maxlength="255" value="{ADMINEMAIL}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_GAMELOGLOCATION}</b></td>
-				<td align="left" class="line2"><input type="text" name="gameloglocation" size="50" maxlength="255" value="{GAMELOGLOCATION}"></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-gameloglocation"><b>{LN_GAMELOGLOCATION}</b></label></td>
+				<td align="left" class="line2"><input type="text" id="admin-server-gameloglocation" name="gameloglocation" size="50" maxlength="255" value="{GAMELOGLOCATION}" required></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_REMOTEGAMELOGLOCATION}</b></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-remotegameloglocation"><b>{LN_REMOTEGAMELOGLOCATION}</b></label></td>
 				<td align="left" class="line1">
-				<input type="text" name="remotegameloglocation" size="35" maxlength="255" value="{REMOTEGAMELOGLOCATION}">
-				<input type="button" value="{LN_BUILDFTPSTRING}" {BUILDFTP_DISABLED} OnClick="NewWindow('servers-ftpbuilder.php?id={SERVERID}', 'BuildFTP', 500, 500, '');"  OnMouseOver="HoverPopup(null, '{LN_ADMIN_POPUPHELP}', '{LN_ADMINCREATEFTP_TEXT}', '');" OnMouseMove="movePopupWindow(event,'popupdetails', this);" OnMouseOut="FinishPopupWindow();">
+				<input type="text" id="admin-server-remotegameloglocation" name="remotegameloglocation" size="35" maxlength="255" value="{REMOTEGAMELOGLOCATION}">
+				<input type="button" class="us-open-popup us-popup-help" data-popup-url="servers-ftpbuilder.php?id={SERVERID}" data-popup-name="BuildFTP" data-popup-width="500" data-popup-height="500" data-popup-options="" data-popup-title="{LN_ADMIN_POPUPHELP}" data-popup-content="{LN_ADMINCREATEFTP_TEXT}" value="{LN_BUILDFTPSTRING}" {BUILDFTP_DISABLED}>
 				</td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_FTPPASSIVEENABLED}</b></td>
-				<td align="left" class="line2"><input type="checkbox" name="ftppassiveenabled" value="yes" {FTPPASSIVEENABLED_CHECKED}></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-ftppassiveenabled"><b>{LN_FTPPASSIVEENABLED}</b></label></td>
+				<td align="left" class="line2"><input type="checkbox" id="admin-server-ftppassiveenabled" name="ftppassiveenabled" value="yes" {FTPPASSIVEENABLED_CHECKED}></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_SERVERLOGO}</b></td>
-				<td align="left" class="line1"><input type="text" name="serverlogo" size="50" maxlength="255" value="{SERVERLOGO}"></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-logo"><b>{LN_SERVERLOGO}</b></label></td>
+				<td align="left" class="line1"><input type="text" id="admin-server-logo" name="serverlogo" size="50" maxlength="255" value="{SERVERLOGO}"></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu2" nowrap><b>{LN_SERVERENABLED}</b></td>
-				<td align="left" class="line2"><input type="checkbox" name="serverenabled" value="yes" {SERVERENABLED_CHECKED}></td>
+				<td align="left" class="cellmenu2" nowrap><label for="admin-server-enabled"><b>{LN_SERVERENABLED}</b></label></td>
+				<td align="left" class="line2"><input type="checkbox" id="admin-server-enabled" name="serverenabled" value="yes" {SERVERENABLED_CHECKED}></td>
 			</tr>
 			<tr>
-				<td align="left" class="cellmenu1" nowrap><b>{LN_PARSINGENABLED}</b></td>
-				<td align="left" class="line1"><input type="checkbox" name="parsingenabled" value="yes" {PARSINGENABLED_CHECKED}></td>
+				<td align="left" class="cellmenu1" nowrap><label for="admin-server-parsingenabled"><b>{LN_PARSINGENABLED}</b></label></td>
+				<td align="left" class="line1"><input type="checkbox" id="admin-server-parsingenabled" name="parsingenabled" value="yes" {PARSINGENABLED_CHECKED}></td>
 			</tr>
 			<tr>
 				<td align="center" colspan="2" class="tableBackground">
@@ -147,7 +147,7 @@
 <!-- ENDIF ISEDITORNEWSERVER="true" -->
 
 <!-- IF ISDBSTATS="true" -->
-	<table border="0" cellpadding="1" cellspacing="1" bgcolor="#DDDDDD" width="100%">
+	<table border="0" cellpadding="1" cellspacing="1" class="us-admin-table-surface" width="100%">
 	<tr>
 		<td align="left" class="cellmenu1" width="150"  nowrap><b>{LN_STATSALIASES}</b></td>
 		<td align="right" class="line2" width="100%">{STATSALIASES}</td>

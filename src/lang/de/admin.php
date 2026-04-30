@@ -192,6 +192,7 @@ $content['LN_PARSER_DONE'] = "FERTIG";
 $content['LN_PARSER_RETURN_SERVERLIST'] = "Zurueck zur Serverliste";
 $content['LN_WARNINGDELETE'] = "Warnung! Beim lÿschen des Servers werden auch die Statistiken gelÿscht!";
 $content['LN_WARNINGDELETE_STATS'] = "Warnung! Alle Statistiken fÿr Server '%1' werden gelÿscht. Willst du dies wirklich tun?";
+$content['LN_WARNINGRESETLASTLOGLINE'] = "Warnung! Nach dem Zuruecksetzen der gespeicherten Position startet das Parsing der Logdatei fuer diesen Server von vorn. Fortfahren?";
 $content['LN_DELETEYES'] = "Hier klicken um das Lÿschen des Servers zu Bestÿtigen";
 $content['LN_DELETENO'] = "Hier klicken um auf die vorherige Seite zu gelangen";
 $content['LN_FTPLOGINFAILED'] = "FTP Login gescheitert, oder kein Passwort vergeben.";

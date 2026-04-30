@@ -1,22 +1,22 @@
-<!-- INCLUDE include_header.html --> 
+<!-- INCLUDE include_header.html -->
 
 <!-- IF iserror="true" -->
 <br><br>
-<center>
-	<div class="table_with_border_second ErrorMsg" style="width:600px" role="alert" aria-live="assertive">
+<div class="us-center">
+	<div class="table_with_border_second ErrorMsg us-fixed-w-600" role="alert" aria-live="assertive">
 		<div class="PriorityError">{LN_ERROR_DETAILS}</div>
-		<p>{LN_ERROR_INVALIDMAP}</p>
+		<p>{ERROR_DETAILS}</p>
 		</div>
 	<br><br>
-</center>
+</div>
 <br><br>
 <!-- ENDIF iserror="true" -->
 
 <!-- IF mapsenabled="true" -->
-<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center">
+<table width="100%" cellpadding="0" cellspacing="5" border="0" align="center" class="us-map-detail-layout">
 <tr>
 	<td width="10" valign="top" nowrap>&nbsp;</td>
-	<td width="50%" valign="top">
+	<td width="50%" valign="top" class="us-map-detail-col">
 
 		<table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" class="with_border_alternate">
 		<tr>
@@ -28,9 +28,9 @@
 			<td width="207" nowrap valign="top" class="line1">
 			<img src="{MapImage}" alt="{MapDisplayName}">
 			</td>
-			<td width="100%" nowrap valign="top" class="tableBackground" rowspan="3">
+			<td width="100%" valign="top" class="tableBackground" rowspan="3">
 				<table width="100%" cellpadding="2" cellspacing="0" border="0" align="center" >
-				<tr><td width="100%" class="cellmenu2" align="center"><B>{LN_MAP_DESCRIPTION}</B></td></tr>
+				<tr><td width="100%" class="cellmenu2" align="center"><b>{LN_MAP_DESCRIPTION}</b></td></tr>
 				</table>
 				<table width="100%" cellpadding="5" cellspacing="0" border="0" align="center" >
 				<tr>
@@ -40,7 +40,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td nowrap align="center" class="cellmenu2"><B>{LN_MAP_INGAMENAME}</B></td>
+			<td nowrap align="center" class="cellmenu2"><b>{LN_MAP_INGAMENAME}</b></td>
 		</tr>
 		<tr>
 			<td nowrap valign="top" align="center" class="line1">{MAPNAME}</td>
@@ -51,28 +51,33 @@
 
 	<td width="10" valign="top" nowrap>&nbsp;</td>
 
-	<td width="50%" valign="top">
-			
+	<td width="50%" valign="top" class="us-map-detail-col">
+
 	<!-- IF lastroundsenable="true" -->
 		<table width="100%" cellpadding="1" cellspacing="0" border="0" align="center" class="with_border_alternate">
 		<tr>
 			<td class="title" nowrap>{LN_MAP_LASTROUNDS} '{MapDisplayName}'</td>
 		</tr>
 		</table>
-		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border">
+		<table width="100%" cellpadding="0" cellspacing="1" border="0" align="center" class="with_border us-lastrounds us-info-maps-lastrounds">
 		<tr>
-			<td width="25" class="cellmenu1" align="center" nowrap><B>{LN_TOPPLAY_NUM}</B></td>
-			<td colspan="2" width="210" class="cellmenu1" align="center" nowrap><B>{LN_LROUNDS_TIME}</B></td>
-			<td colspan="2" width="100%" class="cellmenu1" align="center" nowrap><B>{LN_LROUNDS_DETAILS}</B></td>
+			<td width="25" class="cellmenu1" align="center" nowrap><b>{LN_TOPPLAY_NUM}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_TIME}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_GAMETYPE}</b></td>
+			<td class="cellmenu1" align="center" nowrap><b>{LN_LROUNDS_MAPNAME}</b></td>
 		</tr>
 
 		<!-- BEGIN lastrounds -->
 		<tr>
-			<td class="{cssclass}" align="center"><B>{Number}</B></td>
-			<td class="{cssclass}"><img src="{BASEPATH}images/icons/date-time.png" width="16" align="left" alt="" aria-hidden="true">{TimePlayed}</td>
-			<td class="{cssclass}" align="center"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" align="left" alt="" aria-hidden="true"><A HREF="rounds-detail.php?id={ID}{additional_url}">{LN_PLAYER_DETAILS}</A></td>
-			<td class="{cssclass}" align="left"><A HREF="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</A></td>
-			<td class="{cssclass}" align="left"><A HREF="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="20" alt="{FinalMapDisplayName}"></A>&nbsp;<B>{FinalMapDisplayName}</B></td>
+			<td class="{cssclass}" align="center"><b>{Number}</b></td>
+			<td class="{cssclass} us-lastrounds-whencell">
+				<div class="us-lastrounds-when-row">
+					<span class="us-lastrounds-datetime"><img src="{BASEPATH}images/icons/date-time.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><span class="us-lastrounds-time-text">{TimePlayed}</span></span>
+					<span class="us-lastrounds-detailink"><img src="{BASEPATH}images/icons/arrow_right_blue.png" width="16" height="16" alt="" aria-hidden="true" class="us-lastrounds-inline-icon"><a href="rounds-detail.php?id={ID}{additional_url}">{LN_PLAYER_DETAILS}</a></span>
+				</div>
+			</td>
+			<td class="{cssclass} us-lastrounds-gametype" align="left"><a href="info-gametypes.php?id={GameTypeName}{additional_url}">{FinalGameTypeDisplayName}</a></td>
+			<td class="{cssclass} us-lastrounds-mapcell" align="left"><div class="us-lastrounds-maprow"><a href="info-maps.php?id={MAPNAME}{additional_url}"><img src="{MapImage}" width="20" height="20" alt="{FinalMapDisplayName}" class="us-lastrounds-mapthumb"></a><span class="us-lastrounds-mapname"><b>{FinalMapDisplayName}</b></span></div></td>
 		</tr>
 		<!-- END lastrounds -->
 
