@@ -22,11 +22,10 @@ test.describe('admin visual baseline (Phase 1.5)', () => {
     expect(response!.status(), 'unexpected status for /admin/index.php').toBeLessThan(500);
 
     await expect(page.locator('body')).toBeVisible();
-    const png = await page.screenshot({ fullPage: true, animations: 'disabled' });
+    const png = await page.screenshot({ animations: 'disabled' });
     expect(png.byteLength, 'admin index screenshot should be non-trivial').toBeGreaterThan(12_000);
 
     await expect(page).toHaveScreenshot('admin-index.png', {
-      fullPage: true,
       maxDiffPixels: 50_000,
       maxDiffPixelRatio: 0.02,
       animations: 'disabled',

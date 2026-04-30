@@ -75,11 +75,10 @@ test.describe('full route visual artifacts', () => {
       expect(response!.status(), `unexpected status for ${route}`).toBeLessThan(500);
       await expect(page.locator('body')).toBeVisible();
 
-      const png = await page.screenshot({ fullPage: true, animations: 'disabled' });
+      const png = await page.screenshot({ animations: 'disabled' });
       expect(png.byteLength, `screenshot bytes too small for ${route}`).toBeGreaterThan(12_000);
 
       await expect(page).toHaveScreenshot(`admin-${slug(route)}.png`, {
-        fullPage: true,
         animations: 'disabled',
         maxDiffPixels: 50_000,
         maxDiffPixelRatio: 0.05,
