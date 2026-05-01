@@ -2,6 +2,16 @@
 
 UltraStats is a log parser and web front-end for **Call of Duty** game server logs. It reads match logs, stores statistics in MySQL, and serves rankings, player pages, round history, and an admin area (parser, config, users).
 
+## Handbook
+
+**Start here:** [UltraStats Handbook](https://alorbach.github.io/ultrastats/) — install, Docker demo, Admin Center walkthroughs, parser notes, upgrades, theming, and release history.
+
+<p>
+  <a href="https://alorbach.github.io/ultrastats/admin-center/"><img src="doc-site/docs/images/admin-center/02-server-admin-list.png" alt="Server Admin list" width="240"></a>
+  <a href="https://alorbach.github.io/ultrastats/admin-center-server/"><img src="doc-site/docs/images/admin-center/03-add-server-form.png" alt="Add Server form" width="240"></a>
+  <a href="https://alorbach.github.io/ultrastats/admin-center-parser/"><img src="doc-site/docs/images/admin-center/05-parser-complete.png" alt="Parser complete screen" width="240"></a>
+</p>
+
 **Version:** see **`$content['BUILDNUMBER']`** in [`src/include/functions_common.php`](src/include/functions_common.php) (also the first line of [`doc-site/docs/version.txt`](doc-site/docs/version.txt) for the admin update check).
 
 **License:** See [LICENSE](LICENSE) and [COPYING](COPYING) (GPL-3.0+).
@@ -65,7 +75,7 @@ Bundled reference docs in **`src/doc/en/`** are **Markdown** ([readme](src/doc/e
 
 ## Sample gamelogs
 
-Example logs ship under `src/gamelogs/`. You can add more logs locally and point the parser at that directory (or bind-mount a host folder in Docker).
+Example logs ship under `src/gamelogs/`. In a deployed install, `src/` is the app root, so a log stored in the deployed `gamelogs/` folder is configured as `gamelogs/<filename>.log` in **Server Admin**. You can also bind-mount another readable folder in Docker or use a full filesystem path on a live server.
 
 ## Plain-text `README` in the root
 

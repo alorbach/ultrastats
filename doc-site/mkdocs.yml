@@ -57,7 +57,11 @@ nav:
   - Install & first run: install.md
   - Upgrading: upgrading.md
   - Docker (local dev): docker.md
-  - Admin & parser: admin-parser.md
+  - Admin Center:
+    - Overview: admin-center.md
+    - Add or edit a server: admin-center-server.md
+    - Process gamelogs: admin-center-parser.md
+    - Parser technical notes: admin-parser.md
   - Theme & navigation: customization.md
   - Whiner & anti medals: whiner-medal.md
   - Custom medals: custom-medals.md

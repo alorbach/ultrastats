@@ -1,9 +1,11 @@
 # Admin, parser, and live log (SSE)
 
+This page is technical background for the parser stream, proxy behavior, and cancel flow. For step-by-step operator instructions, start with the [Admin Center guide](admin-center.md).
+
 ## Running the parser
 
 - From the **Server admin** area, use the **Run parser** (or equivalent) action for a server. The parser reads the gamelog path configured for that server and updates the database.
-- Very large logs may hit **PHP time limits** on the web host. The [`src/contrib/`](https://github.com/alorbach/ultrastats/tree/main/src/contrib) folder contains helper scripts; you can also run the parser in a way that matches your host’s batch/CLI setup (see [install.md](install.md)).
+- Very large logs may hit **PHP time limits** on the web host. The source [`src/contrib/`](https://github.com/alorbach/ultrastats/tree/main/src/contrib) folder is deployed as `contrib/` when you upload the contents of `src/`; it contains helper scripts you can use in a host-specific batch/CLI setup (see [install.md](install.md)).
 
 ## Server-Sent Events (SSE) live log
 

@@ -15,7 +15,8 @@
 | First install & gamelog / parser flow | [Install & first run](install.md) |
 | Already installed? new version? | [Upgrading](upgrading.md) |
 | Local Docker | [Docker](docker.md) |
-| Parser, SSE, cancel | [Admin & parser](admin-parser.md) |
+| Admin Center workflow | [Admin Center guide](admin-center.md) |
+| Parser, SSE, cancel | [Parser technical notes](admin-parser.md) |
 | Logos, menu, theme UI | [Theme & navigation](customization.md) |
 | Whiner / anti medals | [Whiner & anti medals](whiner-medal.md) |
 | config-driven weapon medals | [Custom medals](custom-medals.md) |
